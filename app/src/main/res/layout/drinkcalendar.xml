@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/drinkCalendar_layoutPadding"
+    android:background="@drawable/roundbox_white"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <!--Upper bar-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <ImageView
+                android:id="@+id/drinkCalendar_left"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_launcher"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                />
+
+            <TextView
+                android:id="@+id/drinkCalendar_month"
+                android:layout_width="0dp"
+                android:layout_weight="5"
+                android:layout_height="match_parent"
+                android:textColor="#000000"
+                android:textSize="15sp"
+                android:text="8월"
+                android:gravity="center"
+                />
+
+            <ImageView
+                android:id="@+id/drinkCalendar_right"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/ic_launcher"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                />
+
+        </LinearLayout>
+
+        <!--Day of the week-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textColor="@color/drinkCalendar_DayOfWeek"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:text="S"
+                />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textColor="@color/drinkCalendar_DayOfWeek"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:text="M"
+                />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textColor="@color/drinkCalendar_DayOfWeek"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:text="T"
+                />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textColor="@color/drinkCalendar_DayOfWeek"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:text="W"
+                />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textColor="@color/drinkCalendar_DayOfWeek"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:text="T"
+                />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textColor="@color/drinkCalendar_DayOfWeek"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:text="F"
+                />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textColor="@color/drinkCalendar_DayOfWeek"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:text="S"
+                />
+
+        </LinearLayout>
+
+        <!--Calendar-->
+
+        <LinearLayout
+            android:id="@+id/drinkCalendar_calendarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            >
+
+
+        </LinearLayout>
+
+
+
+        <!--Lower bar-->
+
+        <TextView
+            android:id="@+id/drinkCalendar_lowerText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>
