@@ -8,44 +8,146 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="match_parent"
         android:layout_centerInParent="true"
         >
-
         <com.nhn.android.maps.NMapView
             android:id="@+id/locationViewer_mapView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             />
 
-        <TextView
+        <RelativeLayout
+            android:id="@+id/locationViewer_upperBar"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="#FFFFFF"
+            android:layout_height="@dimen/upperBar"
+            android:background="@color/white"
             android:layout_alignParentTop="true"
-            />
+            >
 
-        <TextView
+            <ImageView
+                android:id="@+id/locationViewer_back"
+                android:layout_width="@dimen/upperBarIconWidth"
+                android:layout_height="match_parent"
+                android:src="@mipmap/ic_launcher"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                />
+            <TextView
+                android:id="@+id/locationViewer_upperBarMainText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_centerVertical="true"
+                android:textColor="@color/black"
+                android:text="신촌"
+                android:textSize="@dimen/upperBar_MainFontSize"
+                android:layout_toRightOf="@id/locationViewer_back"
+                android:layout_marginRight="5dp"
+                />
+
+            <ImageView
+                android:id="@+id/locationViewer_myLocation"
+                android:layout_width="@dimen/upperBarIconWidth"
+                android:layout_height="match_parent"
+                android:src="@mipmap/ic_launcher"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:layout_alignParentRight="true"
+                />
+
+        </RelativeLayout>
+<!--
+
+        <View
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:background="#FFFFFF"
-            android:layout_alignParentBottom="true"
+            android:layout_height="0.5dp"
+            android:background="@color/upperBarGrayColor"
+            android:layout_below="@id/locationViewer_upperBar"
             />
+-->
+
+
+        <LinearLayout
+            android:id="@+id/locationViewer_pubInfoLayout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/locationViewer_pubInfoHeight"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            android:background="@color/white"
+            >
+            <ImageView
+                android:id="@+id/locationViewer_pubImage"
+                android:layout_width="@dimen/locationViewer_pubInfoHeight"
+                android:layout_height="match_parent"
+                android:src="@drawable/test"
+                android:scaleType="centerCrop"
+                />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                >
+
+                <TextView
+                    android:id="@+id/locationViewer_pubText1"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/locationViewer_pubitem_text1"
+                    android:textColor="@color/black"
+                    android:text="우메 이자카야, 0.7km"
+                    android:textStyle="bold"
+                    android:gravity="center_vertical"
+                    />
+
+                <TextView
+                    android:id="@+id/locationViewer_pubText2"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/locationViewer_pubitem_text2"
+                    android:textColor="@color/gray"
+                    android:text="이자카야"
+                    android:gravity="center_vertical"
+                    />
+
+                <TextView
+                    android:id="@+id/locationViewer_pubText3"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/locationViewer_pubitem_text3"
+                    android:textColor="@color/gray"
+                    android:text="서울시 서대문구 연희동사거리 794-9"
+                    android:gravity="center_vertical"
+                    />
+
+                <TextView
+                    android:id="@+id/locationViewer_pubText4"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:textSize="@dimen/locationViewer_pubitem_text4"
+                    android:textColor="@color/gray"
+                    android:text="해피아워 : PM 5:00 ~ PM 7:00"
+                    android:gravity="center_vertical"
+                    />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
 
     </RelativeLayout>
 
-
-
-    <TextView
-        android:id="@+id/textTest"
+    <kotel.hanzan.view.Loading
+        android:id="@+id/locationViewer_loading"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_alignParentBottom="true"
-        android:background="#000000"
-        android:text="BLACK"
-        android:textColor="#FFFFFF"
-        android:layout_margin="10dp"
-        />
-
-
+        android:layout_height="match_parent"/>
 </RelativeLayout>

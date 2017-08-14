@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:layout_marginTop="10dp"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <ImageView
+            android:id="@+id/pubitem_image"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/test"
+            />
+
+        <TextView
+            android:id="@+id/pubitem_text1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="우주술집펍 0.2km"
+            android:textColor="@color/black"
+            android:textSize="@dimen/pubitem_text1"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="10dp"
+            />
+
+        <TextView
+            android:id="@+id/pubitem_text2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="이자카야"
+            android:textColor="@color/black"
+            android:textSize="@dimen/pubitem_text2"
+            android:layout_marginBottom="5dp"
+            />
+
+        <TextView
+            android:id="@+id/pubitem_text3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="서울시 서대문구 연희동사거리 794-9"
+            android:textSize="@dimen/pubitem_text3"
+            />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/pubitem_favorite"
+        android:layout_width="@dimen/pubitem_favorite"
+        android:layout_height="@dimen/pubitem_favorite"
+        android:layout_alignParentRight="true"
+        android:layout_margin="5dp"
+        android:src="@drawable/favorite"
+        />
+
+</RelativeLayout>

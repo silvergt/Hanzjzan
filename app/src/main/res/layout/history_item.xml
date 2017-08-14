@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+    
+    <ImageView
+        android:id="@+id/historyItem_image"
+        android:layout_width="@dimen/history_itemHeight"
+        android:layout_height="@dimen/history_itemHeight"
+        android:paddingTop="@dimen/historyItem_padding"
+        android:paddingBottom="@dimen/historyItem_padding"
+        android:paddingRight="20dp"
+        android:src="@drawable/test"
+        android:scaleType="centerCrop"
+        />
+
+    <TextView
+        android:id="@+id/historyItem_dateAndDrink"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="7월8일에 맥주한병"
+        android:textColor="@color/black"
+        android:textSize="@dimen/history_subFontSize"
+        android:layout_toRightOf="@id/historyItem_image"
+        android:paddingTop="@dimen/historyItem_padding"
+        />
+
+
+    <TextView
+        android:id="@+id/historyItem_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="주소"
+        android:textColor="@color/black"
+        android:textSize="@dimen/history_subFontSize"
+        android:layout_toRightOf="@id/historyItem_image"
+        android:layout_alignBottom="@id/historyItem_image"
+        android:paddingBottom="@dimen/historyItem_padding"
+        />
+
+    <TextView
+        android:id="@+id/historyItem_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="우메 이자카야"
+        android:textColor="@color/black"
+        android:textSize="@dimen/history_subFontSize"
+        android:layout_toRightOf="@id/historyItem_image"
+        android:layout_above="@id/historyItem_address"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/grayBackground"
+        android:layout_below="@id/historyItem_image"
+        />
+
+</RelativeLayout>

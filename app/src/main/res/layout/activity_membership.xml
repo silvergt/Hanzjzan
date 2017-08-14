@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="kotel.hanzan.Membership"
+    android:background="@color/white"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/upperBar"
+            android:orientation="horizontal"
+            >
+
+            <ImageView
+                android:id="@+id/membership_back"
+                android:layout_width="@dimen/upperBarIconWidth"
+                android:layout_height="match_parent"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:src="@mipmap/ic_launcher"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/upperBar_MainFontSize"
+                android:textColor="@color/black"
+                android:text="멤버쉽 가입"
+                android:paddingLeft="5dp"
+                />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/membership_itemHeight"
+            android:paddingLeft="@dimen/leftRightMargin"
+            android:paddingRight="@dimen/leftRightMargin"
+            >
+            <ImageView
+                android:layout_width="@dimen/membership_itemHeight"
+                android:layout_height="match_parent"
+                android:src="@drawable/test"
+                />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                >
+                <TextView
+                    android:id="@+id/membership_item1_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="한잔 멤버쉽 1달"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/membership_fontSize"
+                    />
+                <TextView
+                    android:id="@+id/membership_item1_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1.1 ~ 1.31"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/membership_fontSize"
+                    />
+                <TextView
+                    android:id="@+id/membership_item1_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="12,000원"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/membership_fontSize"
+                    />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/gray"
+            android:layout_marginLeft="@dimen/leftRightMargin"
+            android:layout_marginRight="@dimen/leftRightMargin"
+            />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/membership_itemHeight"
+            android:paddingLeft="@dimen/leftRightMargin"
+            android:paddingRight="@dimen/leftRightMargin"
+            >
+            <ImageView
+                android:layout_width="@dimen/membership_itemHeight"
+                android:layout_height="match_parent"
+                android:src="@drawable/test"
+                />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                >
+                <TextView
+                    android:id="@+id/membership_item2_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="한잔 멤버쉽 6달"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/membership_fontSize"
+                    />
+                <TextView
+                    android:id="@+id/membership_item2_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1.1 ~ 1.31"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/membership_fontSize"
+                    />
+                <TextView
+                    android:id="@+id/membership_item2_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="12,000원"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/membership_fontSize"
+                    />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/gray"
+            android:layout_marginLeft="@dimen/leftRightMargin"
+            android:layout_marginRight="@dimen/leftRightMargin"
+            />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/membership_itemHeight"
+            android:paddingLeft="@dimen/leftRightMargin"
+            android:paddingRight="@dimen/leftRightMargin"
+            >
+            <ImageView
+                android:layout_width="@dimen/membership_itemHeight"
+                android:layout_height="match_parent"
+                android:src="@drawable/test"
+                />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                >
+                <TextView
+                    android:id="@+id/membership_item3_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="한잔 멤버쉽 12달"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/membership_fontSize"
+                    />
+                <TextView
+                    android:id="@+id/membership_item3_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1.1 ~ 1.31"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/membership_fontSize"
+                    />
+                <TextView
+                    android:id="@+id/membership_item3_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="12,000원"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/membership_fontSize"
+                    />
+            </LinearLayout>
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+</RelativeLayout>

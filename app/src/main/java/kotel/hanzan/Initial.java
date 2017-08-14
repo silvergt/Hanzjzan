@@ -7,8 +7,8 @@ import android.util.DisplayMetrics;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import kotel.hanzan.Data.StaticData;
 import kotel.hanzan.function.AssetImageHelper;
-import kotel.hanzan.function.StaticData;
 import kotel.hanzan.view.DrinkCalendar;
 
 public class Initial extends AppCompatActivity {
@@ -28,8 +28,8 @@ public class Initial extends AppCompatActivity {
         AssetImageHelper.loadDrinkImage(this,"test").into(image);
 
 
-        cal=(DrinkCalendar)findViewById(R.id.drinkcalendartest);
-        cal.setCalendar();
+        cal = (DrinkCalendar) findViewById(R.id.drinkcalendartest);
+//        cal.setCalendar();
         cal.setListener((year, monthInNormal) -> {
             if(year == 2017 && monthInNormal == 8){
                 cal.setDateChecked(new int[]{1,4,5,7,11,15});
@@ -41,7 +41,7 @@ public class Initial extends AppCompatActivity {
         params.addRule(RelativeLayout.CENTER_IN_PARENT);
         cal.setLayoutParams(params);
 
-        Intent intent=new Intent(Initial.this,LocationViewer.class);
+        Intent intent=new Intent(Initial.this,Home.class);
         startActivity(intent);
         finish();
     }

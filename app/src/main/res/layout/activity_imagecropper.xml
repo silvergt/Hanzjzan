@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_imagecropper"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="kotel.hanzan.ImageCropper">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/upperBar"
+            >
+
+            <ImageView
+                android:id="@+id/cropper_back"
+                android:layout_width="@dimen/upperBar"
+                android:layout_height="@dimen/upperBar"
+                android:src="@mipmap/ic_launcher"
+                android:padding="15dp"
+                android:layout_alignParentRight="true"
+                />
+
+            <ImageView
+                android:id="@+id/cropper_rotate"
+                android:layout_width="@dimen/upperBar"
+                android:layout_height="@dimen/upperBar"
+                android:layout_toLeftOf="@id/cropper_back"
+                android:src="@mipmap/ic_launcher"
+                android:padding="12dp"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:padding="15dp"
+                android:src="@mipmap/ic_launcher"
+                android:adjustViewBounds="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                />
+        </RelativeLayout>
+<!--
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/darkGrayColor"
+            />
+-->
+
+
+        <com.theartofdev.edmodo.cropper.CropImageView
+            xmlns:custom="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/cropper_cropper"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            custom:cropGuidelines="onTouch"
+            custom:cropAutoZoomEnabled="false"
+            custom:cropInitialCropWindowPaddingRatio="0"
+            android:background="#77222222"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/upperBar"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:id="@+id/portion1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="1:1"
+                android:gravity="center"
+                android:textColor="@color/black"
+                />
+            <TextView
+                android:id="@+id/portion2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="4:3"
+                android:gravity="center"
+                android:textColor="@color/black"
+                />
+            <TextView
+                android:id="@+id/portion3"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="size 3"
+                android:gravity="center"
+                android:textColor="@color/black"
+                />
+            <TextView
+                android:id="@+id/portion4"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="free size"
+                android:gravity="center"
+                android:textColor="@color/black"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/cropper_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/upperBar"
+            android:text="확인"
+            android:textSize="15sp"
+            android:textColor="@color/white"
+            android:background="@color/mainColor_medium"
+            android:gravity="center"
+            />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

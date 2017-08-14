@@ -115,6 +115,8 @@ public class DrinkCalendar extends RelativeLayout{
         });
 
         addView(layout);
+
+        setCalendar();
     }
 
     public void setCalendar(){
