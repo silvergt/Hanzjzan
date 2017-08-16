@@ -16,22 +16,22 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class ServerConnectionHelper {
-    private final static String serverIP="";
+    private final static String serverIP="ec2-54-191-235-127.us-west-2.compute.amazonaws.com";
     private int connectTimeout=10000;
 
     public static HashMap<String,String> connect(String recognizer, String phpAddress, HashMap<String,String> data, String imageName, byte[] image){
-        return new ServerConnectionHelper().sendInfoToServer(recognizer,phpAddress,data,imageName,image);
+        return new ServerConnectionHelper().interactWithServer(recognizer,phpAddress,data,imageName,image);
     }
 
     public static HashMap<String,String> connect(String recognizer, String phpAddress, HashMap<String,String> data){
-        return new ServerConnectionHelper().sendInfoToServer(recognizer,phpAddress,data,null,null);
+        return new ServerConnectionHelper().interactWithServer(recognizer,phpAddress,data,null,null);
     }
     
     public static HashMap<String,String> connect(String phpAddress,HashMap<String,String> data){
-        return new ServerConnectionHelper().sendInfoToServer("NO RECOGNIZER",phpAddress,data,null,null);
+        return new ServerConnectionHelper().interactWithServer("NO RECOGNIZER",phpAddress,data,null,null);
     }
 
-    private HashMap<String,String> sendInfoToServer(String recognizer,String phpAddress,HashMap<String,String> data, @Nullable String imageName, @Nullable byte[] image){
+    private HashMap<String,String> interactWithServer(String recognizer,String phpAddress,HashMap<String,String> data, @Nullable String imageName, @Nullable byte[] image){
         final HashMap<String, String> returnedValue = new HashMap<>();
         Thread th = new Thread(() -> {
             JLog.v("<"+recognizer+">");
@@ -72,7 +72,8 @@ public class ServerConnectionHelper {
                     String temp;
                     while ((temp = BR.readLine()) != null) {
                         String[] map = temp.split(" ",2);
-                        JLog.v("<"+recognizer+"> returned : ", map[0] + " -> " + map[1]);
+                        if(map.length!=2){continue;}
+                        JLog.v("<"+recognizer+"> returned ", map[0] + " -> " + map[1]);
                         returnedValue.put(map[0],map[1]);
                     }
 

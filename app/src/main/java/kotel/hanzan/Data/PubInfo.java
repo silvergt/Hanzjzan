@@ -1,12 +1,15 @@
 package kotel.hanzan.Data;
 
-public class PubInfo{
-    long id;
-    String name,address,businessType,imageAddress;
-    boolean favorite;
-    double latitude,longitude;
+import java.io.Serializable;
 
-    public PubInfo(long id, String name, String address, String businessType, String imageAddress, boolean favorite, double latitude, double longitude) {
+public class PubInfo implements Serializable{
+    public long id;
+    public String name,address,businessType,phone;
+    public boolean favorite;
+    public double latitude,longitude;
+    public String[] imageAddress;
+
+    public PubInfo(long id, String name, String address, String businessType, String[] imageAddress, boolean favorite, double latitude, double longitude) {
         this.id = id;
         this.name = name;
         this.address = address;

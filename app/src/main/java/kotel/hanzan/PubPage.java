@@ -19,11 +19,19 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+import com.stfalcon.frescoimageviewer.ImageViewer;
+
+import kotel.hanzan.Data.PubInfo;
 import kotel.hanzan.Data.StaticData;
 import kotel.hanzan.view.DrinkSelector;
 
 public class PubPage extends AppCompatActivity {
+    public static int RESULT_FAVORITECHANGED=1;
+
     private DrinkSelector drinkSelector;
+
+    private PubInfo pubInfo;
 
     private String[] drinkType;
     private String[][] drinkList;
@@ -34,10 +42,21 @@ public class PubPage extends AppCompatActivity {
     private Dialog drinkSelectorDialog;
     private boolean isNowFirstStep=true;
 
+
+
+    //*****************Dialog*****************
+    private ImageView drinkImage;
+    private TextView dialogText1;
+    private TextView dialogText2;
+    private TextView button1;
+    private TextView button2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pubpage);
+
+        pubInfo = (PubInfo) getIntent().getSerializableExtra("info");
 
         drinkSelector = (DrinkSelector) findViewById(R.id.pubpage_drinkSelector);
         upperTitle = (TextView) findViewById(R.id.pubpage_upperTitle);
@@ -57,8 +76,25 @@ public class PubPage extends AppCompatActivity {
         LinearLayout.LayoutParams pubImageParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, StaticData.displayWidth / 2);
         pubImage.setLayoutParams(pubImageParams);
 
+        Picasso.with(this).load(pubInfo.imageAddress[0]).into(pubImage);
+
+        upperTitle.setText(pubInfo.name);
+        title.setText(pubInfo.name);
+        address.setText(pubInfo.address);
+        phoneNumber.setText(pubInfo.phone);
+        if(pubInfo.favorite){
+            favorite.setImageResource(R.drawable.favorite_clicked);
+        }else{
+            favorite.setImageResource(R.drawable.favorite);
+        }
 
         back.setOnClickListener(view -> finish());
+
+        location.setOnClickListener(view -> {
+            Intent intent = new Intent(PubPage.this,LocationViewer.class);
+            intent.putExtra("info",pubInfo);
+            startActivity(intent);
+        });
 
         call.setOnClickListener(view -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
@@ -66,9 +102,20 @@ public class PubPage extends AppCompatActivity {
                 requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, 2);
                 return;
             } else {
-                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "010911187680"));
-                startActivity(intent);
+                try {
+                    String phoneNumberString = phoneNumber.getText().toString().replace("-","");
+                    Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNumberString));
+                    startActivity(intent);
+                }catch (Exception e){e.printStackTrace();}
             }
+        });
+
+        pubImage.setOnClickListener(view -> {
+            ImageViewer.Builder builder = new ImageViewer.Builder(this, new String[]{"https://cdn.pixabay.com/photo/2015/12/09/04/27/a-single-person-1084191_1280.jpg",
+                    "https://cdn.pixabay.com/photo/2013/04/06/11/50/image-editing-101040_1280.jpg",
+                    "https://cdn.pixabay.com/photo/2013/02/16/16/34/crystal-82296_1280.jpg"
+            });
+            builder.show();
         });
 
 
@@ -101,11 +148,11 @@ public class PubPage extends AppCompatActivity {
         ViewGroup.LayoutParams dialogParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,StaticData.displayHeight*7/10);
         RelativeLayout dialogLayout = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.drinkselector_popup,null);
 
-        ImageView drinkImage = (ImageView)dialogLayout.findViewById(R.id.drinkSelectorDialog_drinkImage);
-        TextView dialogText1 = (TextView)dialogLayout.findViewById(R.id.drinkSelectorDialog_text1);
-        TextView dialogText2 = (TextView)dialogLayout.findViewById(R.id.drinkSelectorDialog_text2);
-        TextView button1 = (TextView)dialogLayout.findViewById(R.id.drinkSelectorDialog_button1);
-        TextView button2 = (TextView)dialogLayout.findViewById(R.id.drinkSelectorDialog_button2);
+        drinkImage = (ImageView)dialogLayout.findViewById(R.id.drinkSelectorDialog_drinkImage);
+        dialogText1 = (TextView)dialogLayout.findViewById(R.id.drinkSelectorDialog_text1);
+        dialogText2 = (TextView)dialogLayout.findViewById(R.id.drinkSelectorDialog_text2);
+        button1 = (TextView)dialogLayout.findViewById(R.id.drinkSelectorDialog_button1);
+        button2 = (TextView)dialogLayout.findViewById(R.id.drinkSelectorDialog_button2);
 
         dialogText1.setText(title.getText().toString() + "에서 제공하는\n"+drinkName+"로 하시곘습니까?");
         dialogText2.setText(drinkName+"\n"+"한잔 주세요!");
@@ -113,6 +160,7 @@ public class PubPage extends AppCompatActivity {
 
         button1.setOnClickListener(view -> {
             if(isNowFirstStep){
+                drinkImage.setVisibility(View.VISIBLE);
                 dialogText1.setVisibility(View.INVISIBLE);
                 dialogText2.setVisibility(View.VISIBLE);
                 button1.setText("직원 확인");

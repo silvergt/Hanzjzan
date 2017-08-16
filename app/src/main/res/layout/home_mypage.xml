@@ -5,216 +5,227 @@
     android:background="@color/grayBackground"
     >
 
-    <ScrollView
+    <kotel.hanzan.view.SmoothEdgeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="never"
-        android:scrollbars="none"
-        >
-        <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:overScrollMode="never"
+            android:scrollbars="none"
             >
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/mypage_profileHeight"
-                android:orientation="horizontal"
-                android:background="@color/white"
-                >
-
-                <kotel.hanzan.view.ProfileCircleImageView
-                    android:id="@+id/mypage_profileImage"
-                    android:scaleType="centerCrop"
-                    android:layout_width="@dimen/mypage_profileHeight"
-                    android:layout_height="match_parent"
-                    android:padding="18dp"
-                    android:src="@drawable/test"
-                    />
-
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    >
-                    <TextView
-                        android:id="@+id/mypage_profileText1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:text="조주현"
-                        android:textSize="@dimen/mypage_profileMainTextFontSize"
-                        />
-                    <TextView
-                        android:id="@+id/mypage_profileText2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:text="jjcop0501"
-                        android:textSize="@dimen/mypage_profileSubTextFontSize"
-                        />
-                    <TextView
-                        android:id="@+id/mypage_profileText3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:text="jjcop0501@gmail.com"
-                        android:textSize="@dimen/mypage_profileSubTextFontSize"
-                        />
-
-                </LinearLayout>
-
-                <ImageView
-                    android:id="@+id/mypage_currentMembership"
-                    android:layout_width="@dimen/mypage_itemWidth"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/test"
-                    android:layout_margin="15dp"
-                    />
-
-            </LinearLayout>
-
-            <RelativeLayout
-                android:id="@+id/mypage_calendarContainer"
-                android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:padding="@dimen/mypage_calendarPadding"
-                >
-
-                <kotel.hanzan.view.DrinkCalendar
-                    android:id="@+id/mypage_calendar"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    />
-
-
-            </RelativeLayout>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:background="@color/white"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
                 >
 
                 <LinearLayout
-                    android:id="@+id/mypage_joinMembership"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/mypage_itemHeight"
+                    android:layout_height="@dimen/mypage_profileHeight"
                     android:orientation="horizontal"
+                    android:background="@color/white"
                     >
-                    <ImageView
-                        android:layout_width="@dimen/mypage_itemWidth"
+
+                    <kotel.hanzan.view.ProfileCircleImageView
+                        android:id="@+id/mypage_profileImage"
+                        android:scaleType="centerCrop"
+                        android:layout_width="@dimen/mypage_profileHeight"
                         android:layout_height="match_parent"
+                        android:padding="18dp"
                         android:src="@drawable/test"
-                        android:padding="5dp"
                         />
-                    <TextView
+
+                    <LinearLayout
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
-                        android:textSize="@dimen/mypage_itemFontSize"
-                        android:text="멤버십 가입"
-                        android:textColor="@color/black"
-                        android:paddingLeft="5dp"
-                        />
+                        android:orientation="vertical"
+                        >
+                        <TextView
+                            android:id="@+id/mypage_profileText1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:text="조주현"
+                            android:textSize="@dimen/mypage_profileMainTextFontSize"
+                            />
+                        <TextView
+                            android:id="@+id/mypage_profileText2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:text="jjcop0501"
+                            android:textSize="@dimen/mypage_profileSubTextFontSize"
+                            />
+                        <TextView
+                            android:id="@+id/mypage_profileText3"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/black"
+                            android:text="jjcop0501@gmail.com"
+                            android:textSize="@dimen/mypage_profileSubTextFontSize"
+                            />
+
+                    </LinearLayout>
+
                     <ImageView
+                        android:id="@+id/mypage_currentMembership"
                         android:layout_width="@dimen/mypage_itemWidth"
                         android:layout_height="match_parent"
                         android:src="@drawable/test"
-                        android:padding="5dp"
+                        android:layout_margin="15dp"
                         />
+
                 </LinearLayout>
-                <View
+<!--
+
+                <RelativeLayout
+                    android:id="@+id/mypage_calendarContainer"
                     android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="@color/grayBackground"
-                    android:layout_marginLeft="@dimen/mypage_dividerMargin"
-                    android:layout_marginRight="@dimen/mypage_dividerMargin"
+                    android:layout_height="wrap_content"
+                    >
+
+
+                </RelativeLayout>
+-->
+
+
+                <kotel.hanzan.view.DrinkCalendar
+                    android:id="@+id/mypage_calendar"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:background="@color/white"
                     />
 
-
                 <LinearLayout
-                    android:id="@+id/mypage_inquire"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/mypage_itemHeight"
-                    android:orientation="horizontal"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@color/white"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
                     >
-                    <ImageView
-                        android:layout_width="@dimen/mypage_itemWidth"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/test"
-                        android:padding="5dp"
+
+                    <LinearLayout
+                        android:id="@+id/mypage_joinMembership"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/mypage_itemHeight"
+                        android:orientation="horizontal"
+                        >
+                        <ImageView
+                            android:layout_width="@dimen/mypage_itemWidth"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/membership_purchase"
+                            android:padding="5dp"
+                            />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:textSize="@dimen/mypage_itemFontSize"
+                            android:text="멤버십 가입"
+                            android:textColor="@color/black"
+                            android:paddingLeft="5dp"
+                            />
+                        <ImageView
+                            android:layout_width="@dimen/mypage_itemWidth"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/arrow_right"
+                            android:padding="5dp"
+                            />
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/grayBackground"
+                        android:layout_marginLeft="@dimen/mypage_dividerMargin"
+                        android:layout_marginRight="@dimen/mypage_dividerMargin"
                         />
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:textSize="@dimen/mypage_itemFontSize"
-                        android:text="문의하기"
-                        android:textColor="@color/black"
-                        android:paddingLeft="5dp"
-                        />
-                    <ImageView
-                        android:layout_width="@dimen/mypage_itemWidth"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/test"
-                        android:padding="5dp"
-                        />
-                </LinearLayout>
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="@color/grayBackground"
-                    android:layout_marginLeft="@dimen/mypage_dividerMargin"
-                    android:layout_marginRight="@dimen/mypage_dividerMargin"
-                    />
 
 
-                <LinearLayout
-                    android:id="@+id/mypage_setting"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/mypage_itemHeight"
-                    android:orientation="horizontal"
-                    >
-                    <ImageView
-                        android:layout_width="@dimen/mypage_itemWidth"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/test"
-                        android:padding="5dp"
+                    <LinearLayout
+                        android:id="@+id/mypage_inquire"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/mypage_itemHeight"
+                        android:orientation="horizontal"
+                        >
+                        <ImageView
+                            android:layout_width="@dimen/mypage_itemWidth"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/pub"
+                            android:padding="5dp"
+                            />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:textSize="@dimen/mypage_itemFontSize"
+                            android:text="문의하기"
+                            android:textColor="@color/black"
+                            android:paddingLeft="5dp"
+                            />
+                        <ImageView
+                            android:layout_width="@dimen/mypage_itemWidth"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/arrow_right"
+                            android:padding="5dp"
+                            />
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/grayBackground"
+                        android:layout_marginLeft="@dimen/mypage_dividerMargin"
+                        android:layout_marginRight="@dimen/mypage_dividerMargin"
                         />
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical"
-                        android:textSize="@dimen/mypage_itemFontSize"
-                        android:text="설정"
-                        android:textColor="@color/black"
-                        android:paddingLeft="5dp"
-                        />
-                    <ImageView
-                        android:layout_width="@dimen/mypage_itemWidth"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/test"
-                        android:padding="5dp"
-                        />
+
+
+                    <LinearLayout
+                        android:id="@+id/mypage_setting"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/mypage_itemHeight"
+                        android:orientation="horizontal"
+                        >
+                        <ImageView
+                            android:layout_width="@dimen/mypage_itemWidth"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/setting"
+                            android:padding="5dp"
+                            />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:textSize="@dimen/mypage_itemFontSize"
+                            android:text="설정"
+                            android:textColor="@color/black"
+                            android:paddingLeft="5dp"
+                            />
+                        <ImageView
+                            android:layout_width="@dimen/mypage_itemWidth"
+                            android:layout_height="match_parent"
+                            android:src="@drawable/arrow_right"
+                            android:padding="5dp"
+                            />
+                    </LinearLayout>
+
+
                 </LinearLayout>
 
 
             </LinearLayout>
 
 
-        </LinearLayout>
+        </ScrollView>
 
-
-    </ScrollView>
+    </kotel.hanzan.view.SmoothEdgeLayout>
 
 </RelativeLayout>

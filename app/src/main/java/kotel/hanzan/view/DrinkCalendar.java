@@ -1,24 +1,19 @@
 package kotel.hanzan.view;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 
 import kotel.hanzan.R;
 import kotel.hanzan.listener.DrinkCalendarListener;
 
-public class DrinkCalendar extends RelativeLayout{
+public class DrinkCalendar extends RelativeLayout {
     private Context context;
 
     private RelativeLayout layout;
@@ -26,51 +21,12 @@ public class DrinkCalendar extends RelativeLayout{
     private LinearLayout calendarLayout;
     private LinearLayout[] calendarRow;
     private Calendar calendar;
-    private ImageView leftButton,rightButton;
+    private ImageView leftButton, rightButton;
 
-    private CalendarCell[] cells;
+    private RelativeLayout[] cells;
 
     private DrinkCalendarListener listener;
-
-    private class CalendarCell extends RelativeLayout{
-        private ImageView image;
-        private TextView dateText;
-        public CalendarCell(Context context) {
-            super(context);
-            init();
-        }
-
-        public void init(){
-            image=new ImageView(context);
-            dateText=new TextView(context);
-
-            LinearLayout.LayoutParams layoutParams=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
-            layoutParams.setMargins(10,10,10,10);
-            layoutParams.weight=1;
-            setLayoutParams(layoutParams);
-
-            RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            image.setLayoutParams(params);
-            dateText.setLayoutParams(params);
-
-            addView(dateText);
-            addView(image);
-        }
-
-        public void setDate(int date){
-            dateText.setText(Integer.toString(date));
-            dateText.setTextColor(Color.BLACK);
-            dateText.setGravity(Gravity.CENTER);
-        }
-
-        public void setFrontImage(int res){
-            Picasso.with(context).load(res).into(image);
-        }
-
-        public void setBackImage(int res){
-            dateText.setBackgroundResource(res);
-        }
-    }
+    
 
     public DrinkCalendar(Context context) {
         super(context);
@@ -82,120 +38,144 @@ public class DrinkCalendar extends RelativeLayout{
         init(context);
     }
 
-    public void init(Context context){
-        this.context=context;
-        calendar=Calendar.getInstance();
-        calendar.set(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),1);
+    private void init(Context context) {
+        this.context = context;
+        layout = (RelativeLayout) LayoutInflater.from(context).inflate(R.layout.drinkcalendar, null);
+        monthText = (TextView) layout.findViewById(R.id.drinkCalendar_month);
+        calendarLayout = (LinearLayout) layout.findViewById(R.id.drinkCalendar_calendarLayout);
+        lowerText = (TextView) layout.findViewById(R.id.drinkCalendar_lowerText);
+        leftButton = (ImageView) layout.findViewById(R.id.drinkCalendar_left);
+        rightButton = (ImageView) layout.findViewById(R.id.drinkCalendar_right);
 
-        layout=(RelativeLayout) LayoutInflater.from(context).inflate(R.layout.drinkcalendar,null);
-        monthText=(TextView) layout.findViewById(R.id.drinkCalendar_month);
-        calendarLayout=(LinearLayout) layout.findViewById(R.id.drinkCalendar_calendarLayout);
-        lowerText=(TextView)layout.findViewById(R.id.drinkCalendar_lowerText);
-        leftButton=(ImageView)layout.findViewById(R.id.drinkCalendar_left);
-        rightButton=(ImageView)layout.findViewById(R.id.drinkCalendar_right);
-
-
-        calendarRow=new LinearLayout[7];
-        for(int i=0;i<calendarRow.length;i++){
-            calendarRow[i]=new LinearLayout(context);
-            LinearLayout.LayoutParams params=new LinearLayout.LayoutParams(1, ViewGroup.LayoutParams.MATCH_PARENT);
-            calendarRow[i].setOrientation(LinearLayout.VERTICAL);
-            params.weight=1;
-            calendarLayout.addView(calendarRow[i],params);
-        }
 
         leftButton.setOnClickListener(view -> {
-            calendar.set(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH)-1,1);
+            calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) - 1, 1);
             updateCalendar();
         });
 
         rightButton.setOnClickListener(view -> {
-            calendar.set(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH)+1,1);
+            calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, 1);
             updateCalendar();
         });
 
+/*
+
+        new Thread(() -> {
+            calendar = Calendar.getInstance();
+            calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), 1);
+
+            calendarRow = new LinearLayout[6];
+            cells = new RelativeLayout[42];
+
+            JLog.v("3");
+            for (int i = 0; i < calendarLayout.getChildCount(); i++) {
+                calendarRow[i] = (LinearLayout) calendarLayout.getChildAt(i);
+                for (int j = 0; j < 7; j++) {
+                    cells[i * 7 + j] = (RelativeLayout) calendarRow[i].getChildAt(j);
+                }
+            }
+            JLog.v("4");
+            new Handler(Looper.getMainLooper()).post(this::setCalendar);
+
+        }).start();
+*/
+
+        calendar = Calendar.getInstance();
+        calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), 1);
+
+        calendarRow = new LinearLayout[6];
+        cells = new RelativeLayout[42];
+
+        for (int i = 0; i < calendarLayout.getChildCount(); i++) {
+            calendarRow[i] = (LinearLayout) calendarLayout.getChildAt(i);
+            for (int j = 0; j < 7; j++) {
+                cells[i * 7 + j] = (RelativeLayout) calendarRow[i].getChildAt(j);
+            }
+        }
+        setCalendar();
+
+
         addView(layout);
 
-        setCalendar();
     }
 
-    public void setCalendar(){
+    public void setCalendar() {
         updateCalendar();
     }
 
-    public void setCalendar(int year, int monthInNormal){
-        calendar.set(year,monthInNormal-1,1);
+    public void setCalendar(int year, int monthInNormal) {
+        calendar.set(year, monthInNormal - 1, 1);
         updateCalendar();
     }
 
-    public void setListener(DrinkCalendarListener listener){
-        this.listener=listener;
+    public void setListener(DrinkCalendarListener listener) {
+        this.listener = listener;
     }
 
-    public void setDateChecked(int[] date){
-        for(int i=0;i<date.length;i++){
-            cells[date[i]-1].setFrontImage(R.mipmap.ic_launcher);
+    public void setDateChecked(int[] date) {
+        for (int i = 0; i < date.length; i++) {
+            ((ImageView)cells[date[i] - 1].getChildAt(0)).setImageResource(R.mipmap.ic_launcher);
         }
     }
 
-    public int getViewingYear(){
+    public int getViewingYear() {
         return calendar.get(Calendar.YEAR);
     }
 
-    public int getViewingMonthInNormal(){
-        return calendar.get(Calendar.MONTH)+1;
+    public int getViewingMonthInNormal() {
+        return calendar.get(Calendar.MONTH) + 1;
     }
 
-    public void setLowerText(String str){
+    public void setLowerText(String str) {
         lowerText.setText(str);
     }
 
 
-
-
-    private void setTodayChecked(){
-        Calendar todayCalendar=Calendar.getInstance();
-        if(todayCalendar.get(Calendar.YEAR)==calendar.get(Calendar.YEAR) && todayCalendar.get(Calendar.MONTH)==calendar.get(Calendar.MONTH)){
-            cells[todayCalendar.get(Calendar.DATE)-1].setBackgroundResource(R.mipmap.ic_launcher);
+    private void setTodayChecked() {
+        Calendar todayCalendar = Calendar.getInstance();
+        if (todayCalendar.get(Calendar.YEAR) == calendar.get(Calendar.YEAR) && todayCalendar.get(Calendar.MONTH) == calendar.get(Calendar.MONTH)) {
+            ((ImageView)cells[todayCalendar.get(Calendar.DATE) - 1].getChildAt(0)).setImageResource(R.mipmap.ic_launcher);
         }
     }
 
-    private void updateCalendar(){
-        monthText.setText(Integer.toString(calendar.get(Calendar.YEAR))+"년 "+Integer.toString(calendar.get(Calendar.MONTH)+1)+"월");
-
-        for(int i=0;i<calendarRow.length;i++){
-            calendarRow[i].removeAllViews();
+    private void updateCalendar() {
+        for(int i=0; i<cells.length;i++){
+            ((ImageView)cells[i].getChildAt(0)).setImageResource(0);
         }
 
-        cells=new CalendarCell[calendar.getActualMaximum(Calendar.DATE)];
+        monthText.setText(Integer.toString(calendar.get(Calendar.YEAR)) + "년 " + Integer.toString(calendar.get(Calendar.MONTH) + 1) + "월");
 
-        int columnToAdd=0;
-        int i=0;
-        while(i<calendar.getActualMaximum(Calendar.WEEK_OF_MONTH)*7){
-            if(columnToAdd==7)columnToAdd=0;
+        switch (calendar.getActualMaximum(Calendar.WEEK_OF_MONTH)) {
+            case 4:
+                calendarRow[4].setVisibility(GONE);
+                calendarRow[5].setVisibility(GONE);
+                break;
+            case 5:
+                calendarRow[4].setVisibility(VISIBLE);
+                calendarRow[5].setVisibility(GONE);
+                break;
+            case 6:
+                calendarRow[4].setVisibility(VISIBLE);
+                calendarRow[5].setVisibility(VISIBLE);
+                break;
+        }
 
-            if(i<calendar.get(Calendar.DAY_OF_WEEK)-1||i>calendar.get(Calendar.DAY_OF_WEEK)+cells.length-2){
-                //달력 시작 전 부분
-                CalendarCell buffer = new CalendarCell(context);
-                calendarRow[columnToAdd++].addView(buffer);
-                i++;
+        int i = 0;
+        while (i < calendar.getActualMaximum(Calendar.WEEK_OF_MONTH) * 7) {
+
+            if (i < calendar.get(Calendar.DAY_OF_WEEK) - 1 || i > calendar.get(Calendar.DAY_OF_WEEK) + calendar.getActualMaximum(Calendar.DATE) - 2) {
+                ((TextView)cells[i++].getChildAt(1)).setText("");
             }else{
-                for(int j=0;j<cells.length;j++){
-                    if(columnToAdd==7)columnToAdd=0;
-                    cells[j] = new CalendarCell(context);
-                    cells[j].setDate(j + 1);
-                    calendarRow[columnToAdd++].addView(cells[j]);
-                    i++;
+                for (int j = 0; j < calendar.getActualMaximum(Calendar.DATE); j++) {
+                    ((TextView)cells[i++].getChildAt(1)).setText(Integer.toString(j+1));
                 }
             }
 
         }
 
-        if(listener!=null){
-            listener.movedToAnotherMonth(calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH)+1);
+        if (listener != null) {
+            listener.movedToAnotherMonth(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1);
         }
-
         setTodayChecked();
-
     }
 }

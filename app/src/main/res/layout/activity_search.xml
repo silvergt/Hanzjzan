@@ -24,9 +24,9 @@
                 android:id="@+id/search_back"
                 android:layout_width="@dimen/upperBarIconWidth"
                 android:layout_height="match_parent"
-                android:src="@mipmap/ic_launcher"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
+                android:src="@drawable/back"
+                android:paddingTop="@dimen/backButtonPadding"
+                android:paddingBottom="@dimen/backButtonPadding"
                 />
 
             <TextView
@@ -51,8 +51,8 @@
                 android:id="@+id/search_searchIcon"
                 android:layout_width="@dimen/search_searchBarHeight"
                 android:layout_height="match_parent"
-                android:src="@mipmap/ic_launcher"
-                android:padding="10dp"
+                android:src="@drawable/search"
+                android:padding="12dp"
                 />
 
             <EditText
@@ -84,27 +84,36 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             >
-            <com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView
+
+            <kotel.hanzan.view.JRecyclerView
                 android:id="@+id/search_recycler"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:overScrollMode="never"
                 android:scrollbars="none"
                 android:layout_marginLeft="@dimen/leftRightMargin"
-                android:layout_marginRight="@dimen/leftRightMargin"
-                />
+                android:layout_marginRight="@dimen/leftRightMargin"/>
 
-            <TextView
+            <LinearLayout
                 android:id="@+id/search_initialPanel"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/leftRightMargin"
                 android:layout_marginRight="@dimen/leftRightMargin"
                 android:background="@color/white"
-                android:text="원하는 술집 이름 혹은 지역 이름을\n입력해 주세요"
-                android:textAlignment="center"
+                android:orientation="vertical"
                 android:paddingTop="@dimen/leftRightMargin"
-                />
+                >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="원하는 술집 이름 혹은 지역 이름을\n입력해 주세요"
+                    android:textAlignment="center"
+                    android:paddingTop="10dp"
+                    />
+            </LinearLayout>
+
 
         </RelativeLayout>
 

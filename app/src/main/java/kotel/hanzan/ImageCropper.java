@@ -43,17 +43,15 @@ public class ImageCropper extends AppCompatActivity {
         back=(ImageView)findViewById(R.id.cropper_back);
         rotate=(ImageView)findViewById(R.id.cropper_rotate);
         cropper=(CropImageView)findViewById(R.id.cropper_cropper);
-        ratios=new TextView[4];
+        ratios=new TextView[3];
         ratios[0]=(TextView)findViewById(R.id.portion1);
         ratios[1]=(TextView)findViewById(R.id.portion2);
         ratios[2]=(TextView)findViewById(R.id.portion3);
-        ratios[3]=(TextView)findViewById(R.id.portion4);
         confirm=(TextView)findViewById(R.id.cropper_confirm);
 
         ratios[0].setOnClickListener(v -> cropper.setAspectRatio(1,1));
         ratios[1].setOnClickListener(v -> cropper.setAspectRatio(4,3));
-        ratios[2].setOnClickListener(v -> cropper.setAspectRatio(1,1));
-        ratios[3].setOnClickListener(v -> cropper.clearAspectRatio());
+        ratios[2].setOnClickListener(v -> cropper.clearAspectRatio());
 
         back.setOnClickListener(v -> {
             setResult(CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE);

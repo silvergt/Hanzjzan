@@ -21,28 +21,20 @@
             >
 
             <ImageView
-                android:id="@+id/cropper_back"
+                android:id="@+id/cropper_rotate"
                 android:layout_width="@dimen/upperBar"
                 android:layout_height="@dimen/upperBar"
-                android:src="@mipmap/ic_launcher"
-                android:padding="15dp"
+                android:src="@drawable/rotate"
+                android:padding="@dimen/backButtonPadding"
                 android:layout_alignParentRight="true"
                 />
 
             <ImageView
-                android:id="@+id/cropper_rotate"
-                android:layout_width="@dimen/upperBar"
-                android:layout_height="@dimen/upperBar"
-                android:layout_toLeftOf="@id/cropper_back"
-                android:src="@mipmap/ic_launcher"
-                android:padding="12dp"
-                />
-
-            <ImageView
+                android:id="@+id/cropper_back"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:padding="15dp"
-                android:src="@mipmap/ic_launcher"
+                android:padding="@dimen/backButtonPadding"
+                android:src="@drawable/back"
                 android:adjustViewBounds="true"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
@@ -96,15 +88,6 @@
                 />
             <TextView
                 android:id="@+id/portion3"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:text="size 3"
-                android:gravity="center"
-                android:textColor="@color/black"
-                />
-            <TextView
-                android:id="@+id/portion4"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

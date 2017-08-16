@@ -21,24 +21,12 @@
             />
 -->
 
-        <com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout
-            android:id="@+id/home_favoriteRecyclerContainer"
+        <kotel.hanzan.view.JRecyclerView
+            android:id="@+id/home_favoriteRecycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/leftRightMargin"
-            android:layout_marginRight="@dimen/leftRightMargin"
-            >
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/home_favoriteRecycler"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:overScrollMode="never"
-                android:scrollbars="none"
-                >
-
-            </android.support.v7.widget.RecyclerView>
-
-        </com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout>
+            android:layout_marginRight="@dimen/leftRightMargin"/>
 
     </LinearLayout>
 

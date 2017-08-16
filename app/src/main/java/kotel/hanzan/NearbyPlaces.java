@@ -21,14 +21,11 @@ import com.nhn.android.maps.overlay.NMapPOIdata;
 import com.nhn.android.maps.overlay.NMapPOIitem;
 import com.nhn.android.mapviewer.overlay.NMapOverlayManager;
 import com.nhn.android.mapviewer.overlay.NMapResourceProvider;
-import com.squareup.picasso.Picasso;
 
-import kotel.hanzan.Data.PubInfo;
-import kotel.hanzan.function.GeoHelper;
 import kotel.hanzan.function.JLog;
 import kotel.hanzan.view.Loading;
 
-public class LocationViewer extends NMapActivity {
+public class NearbyPlaces extends NMapActivity {
     final private String LOCATION_MYLOCATION="LOCATION_MYLOCATION";
 
     private NMapView mapView;// 지도 화면 View
@@ -37,17 +34,18 @@ public class LocationViewer extends NMapActivity {
     private NMapOverlayManager overlayManager;
     private NMapLocationManager locationManager;
     private NMapPOIdata poiData;
-    private NGeoPoint myLocation,pubLocation;
-    private PubInfo pubInfo;
+    private NGeoPoint myLocation;
 
-    private Drawable pubMarker,myLocationMarker;
+    private NMapOverlayItem currentlyFocusedMarker;
+
+    private Drawable selected,unselected;
 
     private int drawableSize;
 
     private Loading loading;
     private ImageView myLocationButton,back,pubImage;
     private LinearLayout pubInfoLayout;
-    private TextView upperText,pubText1,pubText2,pubText3,pubText4;
+    private TextView pubText1,pubText2,pubText3,pubText4;
 
 
     @Override
@@ -59,8 +57,6 @@ public class LocationViewer extends NMapActivity {
     }
 
     private void init(){
-        pubInfo = (PubInfo)getIntent().getSerializableExtra("info");
-
         drawableSize=(int)getResources().getDimension(R.dimen.locationViewer_markerSize);
 
         locationManager = new NMapLocationManager(this);
@@ -68,6 +64,7 @@ public class LocationViewer extends NMapActivity {
             @Override
             public boolean onLocationChanged(NMapLocationManager nMapLocationManager, NGeoPoint nGeoPoint) {
                 onMyLocationUpdated(nGeoPoint);
+                getNearbyPubs(nGeoPoint);
                 locationManager.disableMyLocation();
                 loading.setLoadingCompleted();
                 return true;
@@ -89,7 +86,6 @@ public class LocationViewer extends NMapActivity {
         back = (ImageView)findViewById(R.id.locationViewer_back);
         pubInfoLayout = (LinearLayout)findViewById(R.id.locationViewer_pubInfoLayout);
         pubImage=(ImageView)findViewById(R.id.locationViewer_pubImage);
-        upperText=(TextView)findViewById(R.id.locationViewer_upperBarMainText);
         pubText1=(TextView)findViewById(R.id.locationViewer_pubText1);
         pubText2=(TextView)findViewById(R.id.locationViewer_pubText2);
         pubText3=(TextView)findViewById(R.id.locationViewer_pubText3);
@@ -203,19 +199,13 @@ public class LocationViewer extends NMapActivity {
         overlayManager = new NMapOverlayManager(this,mapView,provider);
         poiData = new NMapPOIdata(2, provider);
 
-//        overlayManager.setOnCalloutOverlayListener((nMapOverlay, nMapOverlayItem, rect) -> {
-//            onMarkerClicked(nMapOverlayItem);
-//            return null;
-//        });
+        overlayManager.setOnCalloutOverlayListener((nMapOverlay, nMapOverlayItem, rect) -> {
+            onMarkerClicked(nMapOverlayItem);
+            return null;
+        });
 
         pubInfoLayout.setVisibility(View.INVISIBLE);
 
-        upperText.setText(pubInfo.name);
-        Picasso.with(this).load(pubInfo.imageAddress[0]).into(pubImage);
-        pubText1.setText(pubInfo.name);
-        pubText2.setText(pubInfo.businessType);
-        pubText3.setText(pubInfo.address);
-        pubText4.setText("");
 
         myLocationButton.setOnClickListener(view ->{
             getMyLocation();
@@ -225,18 +215,11 @@ public class LocationViewer extends NMapActivity {
             finish();
         });
 
-        pubMarker = getResources().getDrawable(R.drawable.loading_front,null);
-        pubMarker.setBounds(-drawableSize/2,-drawableSize,drawableSize/2,0);
+        selected = getResources().getDrawable(R.drawable.loading_front,null);
+        selected.setBounds(-drawableSize/2,-drawableSize,drawableSize/2,0);
 
-        myLocationMarker = getResources().getDrawable(R.drawable.loading_front,null);
-        myLocationMarker.setBounds(-drawableSize/2,-drawableSize,drawableSize/2,0);
-
-        pubInfoLayout.setVisibility(View.VISIBLE);
-
-        pubLocation = new NGeoPoint(pubInfo.latitude,pubInfo.longitude);
-
-        addMarkerTo(pubLocation,false);
-        mapView.getMapController().setMapCenter(pubLocation,13);
+        unselected = getResources().getDrawable(R.drawable.loading_back,null);
+        unselected.setBounds(-drawableSize/2,-drawableSize,drawableSize/2,0);
 
         requestGPSPermission();
     }
@@ -265,23 +248,71 @@ public class LocationViewer extends NMapActivity {
             if(!locationManager.isMyLocationEnabled()) {
                 locationManager.enableMyLocation(false);
             }
-        }catch (Exception e){e.printStackTrace();}
+        }catch (Exception e){
+            JLog.v("Loading map without my location");
+            NGeoPoint geo=new NGeoPoint();
+            geo.latitude=37.518775;
+            geo.longitude=127.050081;
+
+            mapView.getMapController().setMapCenter(geo,13);
+            loading.setLoadingCompleted();
+        }
 
     }
 
+
+    private void addMarkerTo(double lat, double lng){
+        NGeoPoint geo=new NGeoPoint();
+        geo.latitude=lat;
+        geo.longitude=lng;
+
+        poiData.beginPOIdata(1);
+        poiData.addPOIitem(geo, "Pizza 777-111", unselected,1);
+        poiData.endPOIdata();
+
+        overlayManager.clearOverlays();
+        overlayManager.createPOIdataOverlay(poiData, null);
+
+    }
 
     private void addMarkerTo(NGeoPoint geoPoint,boolean isMyLocation){
 
         poiData.beginPOIdata(1);
         if(isMyLocation) {
-            poiData.addPOIitem(geoPoint, LOCATION_MYLOCATION, myLocationMarker, 2);
+            poiData.addPOIitem(geoPoint, LOCATION_MYLOCATION, unselected, 2);
         }else{
-            poiData.addPOIitem(geoPoint, pubInfo.name, pubMarker, 1);
+            poiData.addPOIitem(geoPoint, "tttt", unselected, 1);
         }
         poiData.endPOIdata();
 
         overlayManager.clearOverlays();
         overlayManager.createPOIdataOverlay(poiData, null);
+    }
+
+    private void onMarkerClicked(NMapOverlayItem nMapOverlayItem){
+        JLog.v(nMapOverlayItem.getTitle());
+        JLog.v(Double.toString(nMapOverlayItem.getPoint().getLatitude()));
+        JLog.v(Double.toString(nMapOverlayItem.getPoint().getLongitude()));
+
+//        mapView.getMapController().animateTo(nMapOverlayItem.getPoint());
+
+        if(nMapOverlayItem.getTitle().equals(LOCATION_MYLOCATION)){
+            return;
+        }
+
+        if(currentlyFocusedMarker!=null){
+            currentlyFocusedMarker.setMarker(unselected);
+        }
+
+
+        currentlyFocusedMarker = nMapOverlayItem;
+
+        currentlyFocusedMarker.setMarker(selected);
+
+        pubInfoLayout.setVisibility(View.VISIBLE);
+
+//        Intent intent=new Intent(LocationViewer.this,Home.class);
+//        startActivity(intent);
     }
 
     private void onMyLocationUpdated(NGeoPoint geoPoint){
@@ -292,15 +323,18 @@ public class LocationViewer extends NMapActivity {
 
         poiData.removeAllPOIdata();
 
-//        mapView.getMapController().animateTo(myLocation);
+        mapView.getMapController().animateTo(myLocation);
         addMarkerTo(myLocation,true);
+    }
 
-        double distance = GeoHelper.getActualKilometer(myLocation.getLatitude(),myLocation.getLongitude(),pubInfo.latitude,pubInfo.longitude);
-        String distanceString = Double.toString(distance);
-        distanceString = distanceString.substring(0,distanceString.indexOf(".")+2);
+    private void getNearbyPubs(NGeoPoint geopoint){
 
-        pubText1.setText(pubInfo.name+","+distanceString);
-
+        addMarkerTo(37.518775,127.050081);
+        addMarkerTo(37.518875,127.050081);
+        addMarkerTo(37.518975,127.050081);
+        addMarkerTo(37.519075,127.050081);
+        addMarkerTo(37.519175,127.050081);
+        addMarkerTo(37.538775,127.050081);
     }
 
 }

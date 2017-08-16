@@ -1,5 +1,6 @@
 package kotel.hanzan.view;
 
+import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.graphics.Color;
@@ -116,10 +117,8 @@ public class TapBar extends RelativeLayout{
 
             itemLayout.setPadding(itemMargin,itemMargin,itemMargin,itemMargin);
             itemLayout.setOnClickListener(view -> {
-                setFocusedItem(number);
-                setItemToClicked(number);
-                if(listener!=null){
-                    listener.onClick(title[number],number);
+                if(currentlyFocusedTapNumber!=number) {
+                    setFocusedItem(number);
                 }
             });
 
@@ -128,6 +127,10 @@ public class TapBar extends RelativeLayout{
             container.addView(itemLayout,itemParams);
 
         }
+    }
+
+    public int getCurrentlyFocusedTapNumber(){
+        return currentlyFocusedTapNumber;
     }
 
 
@@ -139,9 +142,40 @@ public class TapBar extends RelativeLayout{
     }
 
     public void setFocusedItem(int number){
+        if(listener!=null){
+            listener.onClickStated(title[number],number);
+        }
+
         int itemCount = title.length;
         setItemToClicked(number);
-        ObjectAnimator.ofFloat(top,"X",top.getX(),number*StaticData.displayWidth/itemCount).setDuration(100).start();
+
+        ObjectAnimator animator = ObjectAnimator.ofFloat(top,"X",top.getX(),number*StaticData.displayWidth/itemCount).setDuration(100);
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animator) {
+                top.setX(number*StaticData.displayWidth/itemCount);
+                if(listener!=null){
+                    listener.onClick(title[number],number);
+                }
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animator) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animator) {
+
+            }
+        });
+        animator.start();
+
     }
 
     private void setItemToClicked(int number){

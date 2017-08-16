@@ -23,9 +23,9 @@
                 android:id="@+id/membership_back"
                 android:layout_width="@dimen/upperBarIconWidth"
                 android:layout_height="match_parent"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:src="@mipmap/ic_launcher"
+                android:paddingTop="@dimen/backButtonPadding"
+                android:paddingBottom="@dimen/backButtonPadding"
+                android:src="@drawable/back"
                 />
             <TextView
                 android:layout_width="match_parent"
@@ -40,6 +40,7 @@
         </LinearLayout>
 
         <RelativeLayout
+            android:id="@+id/membership_item1"
             android:layout_width="match_parent"
             android:layout_height="@dimen/membership_itemHeight"
             android:paddingLeft="@dimen/leftRightMargin"
@@ -94,6 +95,7 @@
             />
 
         <RelativeLayout
+            android:id="@+id/membership_item2"
             android:layout_width="match_parent"
             android:layout_height="@dimen/membership_itemHeight"
             android:paddingLeft="@dimen/leftRightMargin"
@@ -116,7 +118,7 @@
                     android:id="@+id/membership_item2_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="한잔 멤버쉽 6달"
+                    android:text="한잔 멤버쉽 3달"
                     android:textColor="@color/black"
                     android:textSize="@dimen/membership_fontSize"
                     />
@@ -148,6 +150,7 @@
             />
 
         <RelativeLayout
+            android:id="@+id/membership_item3"
             android:layout_width="match_parent"
             android:layout_height="@dimen/membership_itemHeight"
             android:paddingLeft="@dimen/leftRightMargin"
@@ -170,7 +173,7 @@
                     android:id="@+id/membership_item3_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="한잔 멤버쉽 12달"
+                    android:text="한잔 멤버쉽 6달"
                     android:textColor="@color/black"
                     android:textSize="@dimen/membership_fontSize"
                     />
@@ -192,6 +195,62 @@
                     />
             </LinearLayout>
         </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/gray"
+            android:layout_marginLeft="@dimen/leftRightMargin"
+            android:layout_marginRight="@dimen/leftRightMargin"
+            />
+
+        <RelativeLayout
+            android:id="@+id/membership_item4"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/membership_itemHeight"
+            android:paddingLeft="@dimen/leftRightMargin"
+            android:paddingRight="@dimen/leftRightMargin"
+            >
+            <ImageView
+                android:layout_width="@dimen/membership_itemHeight"
+                android:layout_height="match_parent"
+                android:src="@drawable/test"
+                />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                >
+                <TextView
+                    android:id="@+id/membership_item4_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="한잔 멤버쉽 12달"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/membership_fontSize"
+                    />
+                <TextView
+                    android:id="@+id/membership_item4_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1.1 ~ 1.31"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/membership_fontSize"
+                    />
+                <TextView
+                    android:id="@+id/membership_item4_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="12,000원"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/membership_fontSize"
+                    />
+            </LinearLayout>
+        </RelativeLayout>
+
 
 
     </LinearLayout>

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,21 +12,21 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
 import java.util.ArrayList;
 
 import kotel.hanzan.Data.PubInfo;
 import kotel.hanzan.Data.StaticData;
+import kotel.hanzan.view.JRecyclerView;
 
 public class Search extends AppCompatActivity {
     private ImageView back, searchIcon, deleteText;
     private EditText searchEditText;
-    private TextView initialPanel;
-    private PullLoadMoreRecyclerView recyclerView;
+    private LinearLayout initialPanel;
+    private JRecyclerView recyclerView;
 
     private InputMethodManager inputMethodManager;
 
@@ -81,8 +82,8 @@ public class Search extends AppCompatActivity {
         searchIcon = (ImageView)findViewById(R.id.search_searchIcon);
         deleteText = (ImageView)findViewById(R.id.search_searchDeleteText);
         searchEditText = (EditText)findViewById(R.id.search_searchEditText);
-        initialPanel = (TextView)findViewById(R.id.search_initialPanel);
-        recyclerView = (PullLoadMoreRecyclerView)findViewById(R.id.search_recycler);
+        initialPanel = (LinearLayout)findViewById(R.id.search_initialPanel);
+        recyclerView = (JRecyclerView)findViewById(R.id.search_recycler);
 
 
         searchIcon.setOnClickListener(view -> search(searchEditText.getText().toString()));
@@ -113,30 +114,8 @@ public class Search extends AppCompatActivity {
         pubInfoArray.add(new PubInfo()); //TEST
 
         SearchRecyclerViewAdapter adapter = new SearchRecyclerViewAdapter();
-        recyclerView.setLinearLayout();
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-        recyclerView.getRecyclerView().setOverScrollMode(View.OVER_SCROLL_NEVER);
-        recyclerView.getFooterViewLayout().setVisibility(View.INVISIBLE);
-
-        recyclerView.setOnPullLoadMoreListener(new PullLoadMoreRecyclerView.PullLoadMoreListener() {
-            @Override
-            public void onRefresh() {
-                /**
-                 * REFRESH METHOD HERE
-                 */
-                adapter.notifyDataSetChanged();
-                recyclerView.setPullLoadMoreCompleted();
-            }
-
-            @Override
-            public void onLoadMore() {
-                /**
-                 * LOAD MORE METHOD HERE
-                 */
-                adapter.notifyDataSetChanged();
-                recyclerView.setPullLoadMoreCompleted();
-            }
-        });
 
     }
 }
