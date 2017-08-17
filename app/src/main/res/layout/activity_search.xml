@@ -70,11 +70,23 @@
                 />
 
             <ImageView
+                android:id="@+id/search_search"
+                android:layout_width="@dimen/search_searchBarHeight"
+                android:layout_height="match_parent"
+                android:src="@drawable/search"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:visibility="gone"
+                />
+
+            <ImageView
                 android:id="@+id/search_searchDeleteText"
                 android:layout_width="@dimen/search_searchBarHeight"
                 android:layout_height="match_parent"
                 android:src="@mipmap/ic_launcher"
-                android:padding="10dp"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp"
+                android:layout_marginRight="5dp"
                 />
 
         </LinearLayout>

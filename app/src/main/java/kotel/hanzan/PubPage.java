@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +29,8 @@ import kotel.hanzan.Data.StaticData;
 import kotel.hanzan.view.DrinkSelector;
 
 public class PubPage extends AppCompatActivity {
-    public static int RESULT_FAVORITECHANGED=1;
+    public static int REQUEST_OPENPUBPAGE=10;
+    public static int RESULT_FAVORITECHANGED=11;
 
     private DrinkSelector drinkSelector;
 
@@ -40,8 +43,7 @@ public class PubPage extends AppCompatActivity {
     private ImageView back, share, favorite, pubImage, call, location;
 
     private Dialog drinkSelectorDialog;
-    private boolean isNowFirstStep=true;
-
+    private int dialogStep=0;
 
 
     //*****************Dialog*****************
@@ -82,7 +84,7 @@ public class PubPage extends AppCompatActivity {
         title.setText(pubInfo.name);
         address.setText(pubInfo.address);
         phoneNumber.setText(pubInfo.phone);
-        if(pubInfo.favorite){
+        if(pubInfo.getFavorite()){
             favorite.setImageResource(R.drawable.favorite_clicked);
         }else{
             favorite.setImageResource(R.drawable.favorite);
@@ -111,13 +113,33 @@ public class PubPage extends AppCompatActivity {
         });
 
         pubImage.setOnClickListener(view -> {
-            ImageViewer.Builder builder = new ImageViewer.Builder(this, new String[]{"https://cdn.pixabay.com/photo/2015/12/09/04/27/a-single-person-1084191_1280.jpg",
-                    "https://cdn.pixabay.com/photo/2013/04/06/11/50/image-editing-101040_1280.jpg",
-                    "https://cdn.pixabay.com/photo/2013/02/16/16/34/crystal-82296_1280.jpg"
+            ImageViewer.Builder builder = new ImageViewer.Builder(this, pubInfo.imageAddress);
+
+            TextView imageCounter = new TextView(this);
+            imageCounter.setPadding(0,50,0,0);
+            imageCounter.setGravity(Gravity.CENTER);
+            imageCounter.setTextColor(Color.WHITE);
+            imageCounter.setWidth(StaticData.displayWidth);
+
+            builder.setImageChangeListener(position -> {
+                imageCounter.setText(Integer.toString(position+1)+"/"+Integer.toString(pubInfo.imageAddress.length));
             });
+
+            builder.setOverlayView(imageCounter);
             builder.show();
         });
 
+        favorite.setOnClickListener(view -> {
+            pubInfo.setFavorite(!pubInfo.getFavorite());
+            if(pubInfo.getFavorite()){
+                favorite.setImageResource(R.drawable.favorite_clicked);
+            }else{
+                favorite.setImageResource(R.drawable.favorite);
+            }
+            Intent data = new Intent();
+            data.putExtra("favorite", pubInfo.getFavorite());
+            setResult(RESULT_FAVORITECHANGED,data);
+        });
 
 //        drinkType=new String[]{"aa","bb","cc","dd","ee","ff","gg","hh"};
         drinkType = new String[]{"aa", "bb", "cc"};
@@ -141,9 +163,8 @@ public class PubPage extends AppCompatActivity {
     private void openDrinkSelectDialog(String drinkName){
         drinkSelectorDialog = new Dialog(this);
         drinkSelectorDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        drinkSelectorDialog.setCancelable(false);
 
-        isNowFirstStep=true;
+        dialogStep=0;
 
         ViewGroup.LayoutParams dialogParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,StaticData.displayHeight*7/10);
         RelativeLayout dialogLayout = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.drinkselector_popup,null);
@@ -154,20 +175,39 @@ public class PubPage extends AppCompatActivity {
         button1 = (TextView)dialogLayout.findViewById(R.id.drinkSelectorDialog_button1);
         button2 = (TextView)dialogLayout.findViewById(R.id.drinkSelectorDialog_button2);
 
-        dialogText1.setText(title.getText().toString() + "에서 제공하는\n"+drinkName+"로 하시곘습니까?");
-        dialogText2.setText(drinkName+"\n"+"한잔 주세요!");
-        dialogText2.setVisibility(View.INVISIBLE);
+        if(StaticData.currentUser.expireYYYY==0){
+            dialogText1.setText("아직 한잔 멤버가 아니시네요!\n지금 가입하실래요?");
+            dialogText2.setVisibility(View.INVISIBLE);
+            button1.setText("네 가입할래요!");
+            button2.setText("아니요 나중에 할게요");
+            dialogStep = 0;
+        }else{
+            dialogText1.setText(title.getText().toString() + "에서 제공하는\n"+drinkName+"로 하시겠습니까?");
+            dialogText2.setVisibility(View.INVISIBLE);
+            button1.setText("네, 맞아요");
+            button2.setText("다시 생각해볼게요");
+            dialogStep = 1;
+        }
+
 
         button1.setOnClickListener(view -> {
-            if(isNowFirstStep){
-                drinkImage.setVisibility(View.VISIBLE);
-                dialogText1.setVisibility(View.INVISIBLE);
-                dialogText2.setVisibility(View.VISIBLE);
-                button1.setText("직원 확인");
-                button2.setText("취소하기");
-                isNowFirstStep=false;
-            }else{
-                requestService();
+            switch (dialogStep){
+                case 0:
+                    Intent intent = new Intent(getApplicationContext(),Membership.class);
+                    startActivity(intent);
+                    drinkSelectorDialog.cancel();
+                    break;
+                case 1:
+                    dialogText2.setText(drinkName+"\n"+"한잔 주세요!");
+                    drinkImage.setVisibility(View.VISIBLE);
+                    dialogText1.setVisibility(View.INVISIBLE);
+                    dialogText2.setVisibility(View.VISIBLE);
+                    button1.setText("직원 확인");
+                    button2.setText("취소하기");
+                    dialogStep = 2;
+                    break;
+                case 2:
+                    break;
             }
         });
 

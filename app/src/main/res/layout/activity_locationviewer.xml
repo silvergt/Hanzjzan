@@ -32,6 +32,7 @@
                 android:src="@drawable/back"
                 android:paddingTop="@dimen/backButtonPadding"
                 android:paddingBottom="@dimen/backButtonPadding"
+                android:layout_marginLeft="5dp"
                 />
             <TextView
                 android:id="@+id/locationViewer_upperBarMainText"
@@ -54,6 +55,7 @@
                 android:paddingTop="@dimen/backButtonPadding"
                 android:paddingBottom="@dimen/backButtonPadding"
                 android:layout_alignParentRight="true"
+                android:layout_marginRight="5dp"
                 />
 
         </RelativeLayout>

@@ -32,6 +32,7 @@
                 android:src="@drawable/back"
                 android:paddingTop="@dimen/backButtonPadding"
                 android:paddingBottom="@dimen/backButtonPadding"
+                android:layout_marginLeft="5dp"
                 />
             <TextView
                 android:id="@+id/NearbyPlaces_upperBarMainText"
@@ -40,7 +41,7 @@
                 android:gravity="center"
                 android:layout_centerVertical="true"
                 android:textColor="@color/black"
-                android:text="신촌"
+                android:text="내 주변"
                 android:textSize="@dimen/upperBar_MainFontSize"
                 android:layout_toRightOf="@id/NearbyPlaces_back"
                 android:layout_marginRight="5dp"
@@ -54,6 +55,7 @@
                 android:paddingTop="@dimen/backButtonPadding"
                 android:paddingBottom="@dimen/backButtonPadding"
                 android:layout_alignParentRight="true"
+                android:layout_marginRight="5dp"
                 />
 
         </RelativeLayout>

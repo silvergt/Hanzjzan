@@ -4,21 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="kotel.hanzan.Login"
+    tools:context="kotel.hanzan.Initial"
     >
 
-    <RelativeLayout
-        android:id="@+id/login_facebookLogin"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:background="@color/mainColor_medium"
-        android:layout_centerInParent="true"
-        />
 
-    <kotel.hanzan.view.Loading
-        android:id="@+id/login_loading"
+    <ImageView
+        android:id="@+id/initial_test"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:src="@drawable/loading_front"
         />
 
 </RelativeLayout>

@@ -8,11 +8,14 @@ import android.util.DisplayMetrics;
 import com.facebook.AccessToken;
 import com.facebook.drawee.backends.pipeline.Fresco;
 
+import java.util.HashMap;
+
 import kotel.hanzan.Data.StaticData;
 import kotel.hanzan.Data.UserInfo;
+import kotel.hanzan.function.ServerConnectionHelper;
 
 public class Initial extends AppCompatActivity {
-
+    HashMap<String,String> map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +29,6 @@ public class Initial extends AppCompatActivity {
 
         Fresco.initialize(this);
 
-        StaticData.currentUser = new UserInfo();
-
 //        AccessToken.setCurrentAccessToken(null);    //TEST
 
         if(AccessToken.getCurrentAccessToken()==null) {
@@ -35,18 +36,30 @@ public class Initial extends AppCompatActivity {
             startActivity(intent);
             finish();
         }else{
-            if(tryLogin()){
-                Intent intent = new Intent(Initial.this,Home.class);
-                startActivity(intent);
-                finish();
-            }
+            tryLogin();
         }
     }
 
 
-    private boolean tryLogin(){
+    private void tryLogin(){
+        new Thread(()->{
+            map = new HashMap<>();
+            map.put("fb_key",AccessToken.getCurrentAccessToken().getUserId());
+            map = ServerConnectionHelper.connect("checking account existence","login",map);
+            if(map.get("signup_history").equals("TRUE")){
+                makeUserInfoAndLogin(map);
+            }else if(map.get("signup_history").equals("FALSE")){
+                Intent intent = new Intent(getApplicationContext(),Login.class);
+                startActivity(intent);
+                finish();
+            }
+        }).start();
+    }
 
-
-        return true;
+    private void makeUserInfoAndLogin(HashMap<String,String> map){
+        StaticData.currentUser = new UserInfo(map);
+        Intent intent = new Intent(getApplicationContext(),Home.class);
+        startActivity(intent);
+        finish();
     }
 }

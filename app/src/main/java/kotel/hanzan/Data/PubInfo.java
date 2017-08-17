@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class PubInfo implements Serializable{
     public long id;
     public String name,address,businessType,phone;
-    public boolean favorite;
+    private boolean favorite;
     public double latitude,longitude;
     public String[] imageAddress;
 
@@ -21,5 +21,14 @@ public class PubInfo implements Serializable{
     }
 
     public PubInfo() {
+    }
+
+    public void setFavorite(boolean favoriteIsOn){
+        favorite = favoriteIsOn;
+        //send favorite info to server here
+    }
+
+    public boolean getFavorite(){
+        return favorite;
     }
 }

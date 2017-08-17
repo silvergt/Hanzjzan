@@ -26,6 +26,7 @@
                 android:paddingTop="@dimen/backButtonPadding"
                 android:paddingBottom="@dimen/backButtonPadding"
                 android:src="@drawable/back"
+                android:layout_marginLeft="5dp"
                 />
             <TextView
                 android:layout_width="match_parent"

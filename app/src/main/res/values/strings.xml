@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Hanzan</string>
+
+    <string name="naver_client_id">vTyKRfxeLRkzu3OELYyw</string>
+
+
+    <string name="facebook_app_id">265747197258109</string>
+    <string name="fb_login_protocol_scheme">fb265747197258109</string>
+
+
+    <string name="title_activity_main">Main</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+
+</resources>

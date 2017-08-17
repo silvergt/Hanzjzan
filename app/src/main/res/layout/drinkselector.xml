@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+    
+        <RelativeLayout
+            android:id="@+id/drinkSelector_itemListLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/drinkSelector_itemList"
+                        android:layout_width="80dp"
+                        android:layout_height="0dp"
+                        android:layout_alignParentBottom="true"
+                        android:scrollbars="none"
+                        android:overScrollMode="never"
+                        />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/drinkSelector_typeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:orientation="horizontal"
+            >
+
+            <View
+                android:id="@+id/drinkSelector_leftOfScroll"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                />
+
+            <HorizontalScrollView
+                android:id="@+id/drinkSelector_typeScroll"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:scrollbars="none"
+                android:overScrollMode="never"
+                android:layout_centerInParent="true"
+                >
+                <LinearLayout
+                    android:id="@+id/drinkSelector_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    />
+            </HorizontalScrollView>
+
+            <View
+                android:id="@+id/drinkSelector_rightOfScroll"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                />
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
+</RelativeLayout>
