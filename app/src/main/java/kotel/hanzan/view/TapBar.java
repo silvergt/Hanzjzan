@@ -122,7 +122,7 @@ public class TapBar extends RelativeLayout{
                 }
             });
 
-            setFocusedItem(0);
+            setItemToClicked(0);
 
             container.addView(itemLayout,itemParams);
 
@@ -143,13 +143,13 @@ public class TapBar extends RelativeLayout{
 
     public void setFocusedItem(int number){
         if(listener!=null){
-            listener.onClickStated(title[number],number);
+            listener.onClickStarted(title[number],number);
         }
 
         int itemCount = title.length;
         setItemToClicked(number);
 
-        ObjectAnimator animator = ObjectAnimator.ofFloat(top,"X",top.getX(),number*StaticData.displayWidth/itemCount).setDuration(100);
+        ObjectAnimator animator = ObjectAnimator.ofFloat(top,"X",top.getX(),number*StaticData.displayWidth/itemCount).setDuration(150);
         animator.addListener(new Animator.AnimatorListener() {
             @Override
             public void onAnimationStart(Animator animator) {

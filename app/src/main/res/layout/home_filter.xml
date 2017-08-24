@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+
+    <ImageButton
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/filter_Blur"
+        />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/white"
+            android:padding="@dimen/leftRightMargin"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <ImageView
+                    android:id="@+id/filter_checkbox1"
+                    android:layout_width="@dimen/filter_checkboxWidth"
+                    android:layout_height="@dimen/filter_checkboxWidth"
+                    android:src="@drawable/checkbox_unchecked"
+                    />
+                <TextView
+                    android:id="@+id/filter_textbox1"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/filter_textSize"
+                    android:text="테이블 당 한 병"
+                    android:layout_marginLeft="10dp"
+                    />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/leftRightMargin"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <ImageView
+                    android:id="@+id/filter_checkbox2"
+                    android:layout_width="@dimen/filter_checkboxWidth"
+                    android:layout_height="@dimen/filter_checkboxWidth"
+                    android:src="@drawable/checkbox_unchecked"
+                    />
+                <TextView
+                    android:id="@+id/filter_textbox2"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/filter_textSize"
+                    android:text="테이블 당 두 병"
+                    android:layout_marginLeft="10dp"
+                    />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/leftRightMargin"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                >
+
+                <ImageView
+                    android:id="@+id/filter_checkbox3"
+                    android:layout_width="@dimen/filter_checkboxWidth"
+                    android:layout_height="@dimen/filter_checkboxWidth"
+                    android:src="@drawable/checkbox_unchecked"
+                    />
+                <TextView
+                    android:id="@+id/filter_textbox3"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/filter_textSize"
+                    android:text="테이블 당 제한 없이"
+                    android:layout_marginLeft="10dp"
+
+                    />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/leftRightMargin"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                >
+
+                <TextView
+                    android:id="@+id/filter_apply"
+                    android:layout_width="@dimen/filter_buttonWidth"
+                    android:layout_height="@dimen/filter_buttonHeight"
+                    android:text="필터적용"
+                    android:textSize="@dimen/filter_buttonTextSize"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:background="@drawable/button_active"
+                    />
+
+                <View
+                    android:layout_width="20dp"
+                    android:layout_height="match_parent"
+                    />
+
+                <TextView
+                    android:id="@+id/filter_remove"
+                    android:layout_width="@dimen/filter_buttonWidth"
+                    android:layout_height="@dimen/filter_buttonHeight"
+                    android:text="필터제거"
+                    android:textSize="@dimen/filter_buttonTextSize"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:background="@drawable/button_inactive"
+                    />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/filter_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -19,7 +19,7 @@
             android:textColor="@color/mainColor_medium"
             android:textSize="@dimen/history_priceFontSize1"
             android:layout_gravity="center_horizontal"
-            android:text="42,000원"
+            android:text=""
             android:letterSpacing="0.1"
             android:layout_marginTop="10dp"
             />

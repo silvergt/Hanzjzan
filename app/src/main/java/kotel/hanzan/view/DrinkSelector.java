@@ -16,9 +16,12 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
+import kotel.hanzan.Data.DrinkInfo;
+import kotel.hanzan.Data.StaticData;
 import kotel.hanzan.R;
 import kotel.hanzan.function.JLog;
-import kotel.hanzan.Data.StaticData;
 import kotel.hanzan.listener.DrinkSelectorListener;
 
 /**
@@ -32,8 +35,8 @@ import kotel.hanzan.listener.DrinkSelectorListener;
 
 public class DrinkSelector extends RelativeLayout{
     private Context context;
-    String[] drinkType;
-    String[][] drinkList;
+    ArrayList<String> drinkType;
+    ArrayList[] drinkList;
     private DrinkSelectorListener listener;
     private int itemHeight = 50;
 
@@ -69,7 +72,7 @@ public class DrinkSelector extends RelativeLayout{
 
         @Override
         public void onBindViewHolder(drinkListAdapter.itemViewHolder holder, int position) {
-            holder.name.setText(drinkList[currentSelectedType][position]);
+            holder.name.setText((String)drinkList[currentSelectedType].get(position));
             holder.itemView.setOnClickListener(view -> {
                 listItemSelected(currentSelectedType,position);
             });
@@ -77,7 +80,11 @@ public class DrinkSelector extends RelativeLayout{
 
         @Override
         public int getItemCount() {
-            return drinkList[currentSelectedType].length;
+            int length =0;
+            try{
+                length = drinkList[currentSelectedType].size();
+            }catch (Exception e){}
+            return length;
         }
     }
 
@@ -115,6 +122,9 @@ public class DrinkSelector extends RelativeLayout{
 
         addView(layout);
 
+        drinkType = new ArrayList<>();
+        drinkList = new ArrayList[1];
+        drinkList[0] = new ArrayList();
 
         drinkListViewLayout.setOnClickListener(view -> {
             closeDrinkListView();
@@ -135,9 +145,37 @@ public class DrinkSelector extends RelativeLayout{
         return drinkListViewIsVisible;
     }
 
-    public void setDrinkList(String[] drinkType, String[][] drinkList){
-        this.drinkType=drinkType;
-        this.drinkList=drinkList;
+    public void setDrinkList(ArrayList<DrinkInfo> array){
+        JLog.v("Setting DL");
+
+        if(array.size()==0){
+            return;
+        }
+
+        drinkType = new ArrayList<>();
+        drinkType.add(array.get(0).drinkType);
+        for(int i=0;i<array.size();i++){
+            for(int j=0;j<drinkType.size();j++){
+                if(drinkType.get(j).equals(array.get(i).drinkType)){
+                    break;
+                }else if(j==drinkType.size()-1){
+                    drinkType.add(array.get(i).drinkType);
+                }
+            }
+        }
+
+        drinkList = new ArrayList[drinkType.size()];
+        for(int i=0;i<drinkList.length;i++){
+            drinkList[i] = new ArrayList<>();
+        }
+        for(int i=0;i<array.size();i++){
+            for(int j=0; j<drinkType.size();j++){
+                if(drinkType.get(j).equals(array.get(i).drinkType)){
+                    drinkList[j].add(array.get(i).drinkName);
+                }
+            }
+        }
+
 
         drinkListView.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.VERTICAL,true));
         drinkListView.setAdapter(new drinkListAdapter());
@@ -155,7 +193,12 @@ public class DrinkSelector extends RelativeLayout{
         drinkListViewLayout.setBackgroundColor(0);
         leftOfScroll.setBackgroundColor(0);
         rightOfScroll.setBackgroundColor(0);
-        for(int i=0;i<drinkType.length;i++){
+
+        if(drinkType.size()==0){
+            return;
+        }
+
+        for(int i=0;i<drinkType.size();i++){
             shadows[i].setBackgroundColor(0);
             drinkTypeLayout[i].setBackgroundColor(0);
         }
@@ -204,7 +247,7 @@ public class DrinkSelector extends RelativeLayout{
         drinkListViewLayout.setBackgroundColor(getResources().getColor(R.color.drinkSelector_Blur));
         leftOfScroll.setBackgroundColor(getResources().getColor(R.color.drinkSelector_Blur));
         rightOfScroll.setBackgroundColor(getResources().getColor(R.color.drinkSelector_Blur));
-        for(int i=0;i<drinkType.length;i++){
+        for(int i=0;i<drinkType.size();i++){
             if(i!=typeNum){
                 shadows[i].setBackgroundColor(getResources().getColor(R.color.drinkSelector_Blur));
             }else{
@@ -232,14 +275,16 @@ public class DrinkSelector extends RelativeLayout{
         drinkTypeViewLayout.setLayoutParams(typeParams);
         RelativeLayout.LayoutParams listParams=new RelativeLayout.LayoutParams(height,0);
         drinkListView.setLayoutParams(listParams);
+
+
         setDrinkTypeView();
     }
 
     private void setDrinkTypeView(){
-        shadows = new View[drinkType.length];
-        drinkTypeLayout = new RelativeLayout[drinkType.length];
+        shadows = new View[drinkType.size()];
+        drinkTypeLayout = new RelativeLayout[drinkType.size()];
 
-        for(int i=0;i<drinkType.length;i++){
+        for(int i=0;i<drinkType.size();i++){
             final int num=i;
             ScrollView.LayoutParams params=new ScrollView.LayoutParams(itemHeight,itemHeight);
             RelativeLayout item=(RelativeLayout)LayoutInflater.from(context).inflate(R.layout.drinkselector_drinktype,null);
@@ -247,7 +292,7 @@ public class DrinkSelector extends RelativeLayout{
 
 
             TextView textview=(TextView) item.findViewById(R.id.drinkSelector_drinkType_text);
-            textview.setText(drinkType[num]);
+            textview.setText(drinkType.get(num));
 
             drinkTypeLayout[i] = item.findViewById(R.id.drinkSelector_drinkType_layout);
             shadows[i] = item.findViewById(R.id.drinkSelector_drinkType_shadow);
@@ -271,9 +316,9 @@ public class DrinkSelector extends RelativeLayout{
 
     private void listItemSelected(int typeNum, int itemNum){
         if(listener!=null) {
-            listener.itemSelected(drinkList[typeNum][itemNum]);
+            listener.itemSelected((String)drinkList[typeNum].get(itemNum),drinkType.get(typeNum));
         }
-        JLog.v(drinkList[typeNum][itemNum]);
+        JLog.v((String)drinkList[typeNum].get(itemNum));
         closeDrinkListView();
     }
 }

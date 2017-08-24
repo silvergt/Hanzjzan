@@ -5,7 +5,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -24,17 +29,27 @@ import kotel.hanzan.Data.UserInfo;
 import kotel.hanzan.function.BitmapHelper;
 import kotel.hanzan.function.JLog;
 import kotel.hanzan.function.ServerConnectionHelper;
+import kotel.hanzan.listener.SlideListener;
+import kotel.hanzan.view.HorizontalSlideView;
+import kotel.hanzan.view.HorizontalSlideViewChild;
 import kotel.hanzan.view.Loading;
+import kotel.hanzan.view.SlideCountView;
+import pl.droidsonroids.gif.GifImageView;
 
 public class Login extends AppCompatActivity {
-    HashMap<String,String> map;
-    Bitmap bitmap=null;
+    private HashMap<String,String> map;
+    private Bitmap bitmap=null;
 
-    Loading loading;
+    private Loading loading;
 
-    RelativeLayout facebookLogin;
+    private RelativeLayout facebookLogin;
 
-    CallbackManager callbackManager;
+    private CallbackManager callbackManager;
+
+    private HorizontalSlideView slideView;
+    private SlideCountView slideCountView;
+    private TextView lowerButton;
+    private ImageView lowerIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,13 +58,110 @@ public class Login extends AppCompatActivity {
 
         initFacebook();
 
+        slideView = (HorizontalSlideView)findViewById(R.id.login_slideView);
+        slideCountView = (SlideCountView)findViewById(R.id.login_slideCountView);
+        lowerButton = (TextView)findViewById(R.id.login_lowerButton);
+        lowerIcon = (ImageView)findViewById(R.id.login_lowerIcon);
         loading = (Loading)findViewById(R.id.login_loading);
-        facebookLogin = (RelativeLayout)findViewById(R.id.login_facebookLogin);
 
-        facebookLogin.setOnClickListener(view -> {
-            LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
+        LinearLayout.LayoutParams slideViewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,StaticData.displayHeight*7/10);
+        slideView.setLayoutParams(slideViewParams);
+
+        slideCountView.initialize(3,40,5);
+
+        addSlideChildViews();
+
+
+
+        lowerIcon.setVisibility(View.GONE);
+
+
+        slideView.setOnSlideListener(new SlideListener() {
+            @Override
+            public void afterSlide() {
+                slideCountView.setCountTo(slideView.getCurrentIndex());
+                setLowerButton(slideView.getCurrentIndex());
+            }
+
+            @Override
+            public void beforeSlide() {
+
+            }
+
+            @Override
+            public void whileSlide() {
+
+            }
+        });
+
+        lowerButton.setOnClickListener(view -> {
+            switch (slideView.getCurrentIndex()){
+                case 0:
+                case 1:
+                    slideView.slideTo(slideView.getCurrentIndex()+1);
+                    break;
+                case 2:
+                    LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
+                    break;
+            }
         });
     }
+
+    private void addSlideChildViews(){
+        for(int i=0;i<3;i++){
+            LinearLayout childLayout = (LinearLayout)getLayoutInflater().inflate(R.layout.login_slideviewchild,null);
+            GifImageView gifView = (GifImageView)childLayout.findViewById(R.id.login_gif);
+            TextView text1 = (TextView)childLayout.findViewById(R.id.login_childText1);
+            TextView text2 = (TextView)childLayout.findViewById(R.id.login_childText2);
+
+            RelativeLayout.LayoutParams childParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            childLayout.setLayoutParams(childParams);
+
+            switch (i){
+                case 0:
+                    gifView.setImageResource(R.drawable.login_gif1);
+                    text1.setText("하루에 한번 한잔 하세요!");
+                    text2.setText("한잔 멤버쉽에 가입하면 하루에 한번,\n다양한 종류의 술 한병, 혹은 한잔이 무료입니다.");
+                    break;
+                case 1:
+                    gifView.setImageResource(R.drawable.login_gif2);
+                    text1.setText("앱을 보여주세요!");
+                    text2.setText("매장 점원에게 한잔 앱을 보여주세요.\n원하시는 음료를 가져다 드릴 것 입니다.\n무료로요!");
+                    break;
+                case 2:
+                    gifView.setImageResource(R.drawable.login_gif3);
+                    text1.setText("다양한 제휴 매장을 확인해 보세요");
+                    text2.setText("한잔과 여러 매장이 제휴되어 있습니다.\n주변의 매장을 확인해보고 원하는 매장을 방문해주세요.");
+                    break;
+            }
+
+            HorizontalSlideViewChild childContainer = new HorizontalSlideViewChild(this);
+            childContainer.addView(childLayout);
+
+            slideView.setChildWidth(StaticData.displayWidth);
+            slideView.addViewToList(childContainer);
+
+        }
+
+        setLowerButton(0);
+    }
+
+    private void setLowerButton(int num){
+        switch (num){
+            case 0:
+            case 1:
+                lowerIcon.setVisibility(View.GONE);
+                lowerButton.setText("다음으로");
+                break;
+            case 2:
+                lowerIcon.setVisibility(View.VISIBLE);
+                lowerButton.setText("페이스북으로 시작하기");
+                break;
+        }
+    }
+
+
+
 
     private void initFacebook(){
         callbackManager = CallbackManager.Factory.create();
@@ -69,6 +181,7 @@ public class Login extends AppCompatActivity {
 
             @Override
             public void onError(FacebookException error) {
+                error.printStackTrace();
                 JLog.e("facebook login ERROR!");
             }
         });
@@ -80,6 +193,12 @@ public class Login extends AppCompatActivity {
             map = new HashMap<>();
             map.put("fb_key",AccessToken.getCurrentAccessToken().getUserId());
             map = ServerConnectionHelper.connect("checking account existence","login",map);
+
+            if(map.get("signup_history")==null){
+                JLog.e("Connection failed!");
+                loading.setLoadingCompleted();
+                return;
+            }
 
             if(map.get("signup_history").equals("TRUE")){
                 makeUserInfoAndLogin(map);

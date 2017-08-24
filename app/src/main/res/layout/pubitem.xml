@@ -48,16 +48,36 @@
             android:text="서울시 서대문구 연희동사거리 794-9"
             android:textSize="@dimen/pubitem_text3"
             />
+        
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            />
 
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/pubitem_drinkProvidable"
+        android:layout_width="@dimen/pubitem_favorite"
+        android:layout_height="@dimen/pubitem_favorite"
+        android:paddingLeft="5dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="15dp"
+        android:paddingTop="5dp"
+        android:layout_margin="5dp"
+        />
 
     <ImageView
         android:id="@+id/pubitem_favorite"
         android:layout_width="@dimen/pubitem_favorite"
         android:layout_height="@dimen/pubitem_favorite"
+        android:paddingLeft="15dp"
+        android:paddingRight="5dp"
+        android:paddingBottom="15dp"
+        android:paddingTop="5dp"
         android:layout_alignParentRight="true"
         android:layout_margin="5dp"
-        android:src="@drawable/favorite"
+        android:src="@drawable/favorite_unselected"
         />
 
 </RelativeLayout>

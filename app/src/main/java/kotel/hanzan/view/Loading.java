@@ -3,6 +3,8 @@ package kotel.hanzan.view;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
@@ -73,14 +75,19 @@ public class Loading extends RelativeLayout {
 
 
     public void setLoadingStarted(){
-        this.setVisibility(VISIBLE);
+        new Handler(Looper.getMainLooper()).post(()->{
+            this.setVisibility(VISIBLE);
 
-        anim1.start();
+            anim1.start();
+        });
     }
 
     public void setLoadingCompleted(){
-        this.setVisibility(INVISIBLE);
+        new Handler(Looper.getMainLooper()).post(()->{
+            this.setVisibility(INVISIBLE);
 
-        anim1.cancel();
+            anim1.cancel();
+        });
+
     }
 }

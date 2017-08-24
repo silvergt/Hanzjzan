@@ -49,13 +49,13 @@
 
             <ImageView
                 android:id="@+id/locationViewer_myLocation"
-                android:layout_width="@dimen/upperBarIconWidth"
+                android:layout_width="@dimen/upperBar_myLocationWidth"
                 android:layout_height="match_parent"
-                android:src="@mipmap/ic_launcher"
+                android:src="@drawable/mylocation"
                 android:paddingTop="@dimen/backButtonPadding"
                 android:paddingBottom="@dimen/backButtonPadding"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="10dp"
                 />
 
         </RelativeLayout>

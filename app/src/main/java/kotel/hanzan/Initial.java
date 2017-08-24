@@ -12,6 +12,7 @@ import java.util.HashMap;
 
 import kotel.hanzan.Data.StaticData;
 import kotel.hanzan.Data.UserInfo;
+import kotel.hanzan.function.JLog;
 import kotel.hanzan.function.ServerConnectionHelper;
 
 public class Initial extends AppCompatActivity {
@@ -46,10 +47,19 @@ public class Initial extends AppCompatActivity {
             map = new HashMap<>();
             map.put("fb_key",AccessToken.getCurrentAccessToken().getUserId());
             map = ServerConnectionHelper.connect("checking account existence","login",map);
-            if(map.get("signup_history").equals("TRUE")){
+
+            if(map.get("signup_history")==null){
+                JLog.e("Connection failed!");
+                Intent intent = new Intent(getApplicationContext(), Login.class);
+                startActivity(intent);
+                finish();
+                return;
+            }
+
+            if (map.get("signup_history").equals("TRUE")) {
                 makeUserInfoAndLogin(map);
-            }else if(map.get("signup_history").equals("FALSE")){
-                Intent intent = new Intent(getApplicationContext(),Login.class);
+            } else if (map.get("signup_history").equals("FALSE")) {
+                Intent intent = new Intent(getApplicationContext(), Login.class);
                 startActivity(intent);
                 finish();
             }
@@ -62,4 +72,16 @@ public class Initial extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+    @Override
+    public void startActivity(Intent intent) {
+        try{
+            Thread.sleep(2000);
+        }catch (Exception e){e.printStackTrace();}
+        super.startActivity(intent);
+        overridePendingTransition(0,0);
+    }
+
+    @Override
+    public void onBackPressed() {}
 }

@@ -5,6 +5,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.lcodecore.tkrefreshlayout.IHeaderView;
 import com.lcodecore.tkrefreshlayout.OnAnimEndListener;
@@ -21,6 +23,8 @@ public class JRecyclerView extends TwinklingRefreshLayout {
     private JRecyclerViewListener listener;
 
     private boolean isLoadingMore=false,isRefreshing=false;
+
+    private ImageView toTopButton;
 
     public JRecyclerView(Context context) {
         super(context);
@@ -76,15 +80,29 @@ public class JRecyclerView extends TwinklingRefreshLayout {
 
         setEnableLoadmore(false);
 
-        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
 
                 try {
+
                     int visibleItemCount = recyclerView.getLayoutManager().getChildCount();
                     int totalItemCount = recyclerView.getLayoutManager().getItemCount();
                     int pastVisibleItems = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+
+
+                    if(pastVisibleItems >= 3){
+                        toTopButton.setVisibility(VISIBLE);
+                    }else{
+                        toTopButton.setVisibility(INVISIBLE);
+                    }
+
 
                     if ( (visibleItemCount + pastVisibleItems) >= totalItemCount)
                     {
@@ -100,8 +118,34 @@ public class JRecyclerView extends TwinklingRefreshLayout {
             }
         });
 
+
+        RelativeLayout.LayoutParams imageParams = new RelativeLayout.LayoutParams(
+                (int)getResources().getDimension(R.dimen.JRecyclerView_buttonWidth),
+                (int)getResources().getDimension(R.dimen.JRecyclerView_buttonWidth) );
+        imageParams.addRule(ALIGN_PARENT_BOTTOM);
+        imageParams.addRule(ALIGN_PARENT_RIGHT);
+        imageParams.setMargins(0,0,5,(int)getResources().getDimension(R.dimen.leftRightMargin));
+        toTopButton = new ImageView(context);
+        toTopButton.setLayoutParams(imageParams);
+        toTopButton.setImageResource(R.drawable.top);
+        toTopButton.setVisibility(INVISIBLE);
+
+        toTopButton.setOnClickListener(view -> {
+            recyclerView.smoothScrollToPosition(0);
+        });
+
+
         addView(recyclerView);
+        addView(toTopButton);
     }
+
+    public void removeToTopButton(){
+        removeView(toTopButton);
+    }
+
+
+
+
 
 
     @Override
@@ -141,5 +185,11 @@ public class JRecyclerView extends TwinklingRefreshLayout {
     @Override
     public void setOnRefreshListener(RefreshListenerAdapter refreshListener) {
         super.setOnRefreshListener(refreshListener);
+    }
+
+    @Deprecated
+    @Override
+    public void setEnableLoadmore(boolean enableLoadmore1) {
+        super.setEnableLoadmore(enableLoadmore1);
     }
 }

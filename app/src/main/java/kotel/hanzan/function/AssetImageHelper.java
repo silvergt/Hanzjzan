@@ -11,10 +11,6 @@ public class AssetImageHelper {
         return Picasso.with(context).load("file:///android_asset/drinks/"+drink+".png");
     }
 
-    public static RequestCreator loadTapBarImage(Context context, String name){
-        return Picasso.with(context).load("file:///android_asset/tapbar/"+name+".png");
-    }
-
     public static Drawable loadTapBarImageDrawable(Context context, String name){
         Drawable drawable = null;
         try{
@@ -23,5 +19,19 @@ public class AssetImageHelper {
             e.printStackTrace();
         }
         return drawable;
+    }
+
+    public static Drawable loadAssetImageDrawable(Context context, String folder, String name){
+        Drawable drawable = null;
+        try{
+            drawable = Drawable.createFromStream(context.getAssets().open(folder+"/"+name+".png"),null);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return drawable;
+    }
+
+    public static RequestCreator loadAssetImageCreator(Context context, String folder, String name){
+        return Picasso.with(context).load("file:///android_asset/"+folder+"/"+name+".png");
     }
 }

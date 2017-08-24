@@ -7,13 +7,76 @@
     tools:context="kotel.hanzan.Login"
     >
 
-    <RelativeLayout
-        android:id="@+id/login_facebookLogin"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:background="@color/mainColor_medium"
-        android:layout_centerInParent="true"
-        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <kotel.hanzan.view.HorizontalSlideView
+            android:id="@+id/login_slideView"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+
+        <kotel.hanzan.view.SlideCountView
+            android:id="@+id/login_slideCountView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:minWidth="@dimen/login_buttonWidth"
+            android:layout_height="@dimen/login_buttonHeight"
+            android:orientation="horizontal"
+            android:background="@drawable/roundbox_maingradient"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/login_marginBottom"
+            >
+
+            <ImageView
+                android:id="@+id/login_lowerIcon"
+                android:layout_width="@dimen/login_buttonIconWidth"
+                android:layout_height="@dimen/login_buttonIconWidth"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/facebookicon"
+                android:visibility="gone"
+                android:scaleType="fitXY"
+                android:layout_marginLeft="10dp"
+                />
+
+            <TextView
+                android:id="@+id/login_lowerButton"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/login_subFontSize"
+                android:text="다음으로"
+
+                />
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
 
     <kotel.hanzan.view.Loading
         android:id="@+id/login_loading"

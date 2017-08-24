@@ -3,26 +3,37 @@
 
     <dimen name="backButtonPadding">18dp</dimen>
 
-    <dimen name="leftRightMargin">25dp</dimen>
+    <dimen name="leftRightMargin">20dp</dimen>
+
+    <dimen name="markerWidth">35dp</dimen>
+    <dimen name="markerHeight">48dp</dimen>
 
     <dimen name="upperBar">60dp</dimen>
     <dimen name="upperBarIconWidth">40dp</dimen>
     <dimen name="upperBar_shadow">2dp</dimen>
-    <dimen name="upperBar_MainFontSize">20sp</dimen>
+    <dimen name="upperBar_MainFontSize">18sp</dimen>
     <dimen name="upperBar_SubFontSize">12sp</dimen>
+    <dimen name="upperBar_myLocationWidth">60dp</dimen>
 
     <dimen name="drinkSelector_height">80dp</dimen>
     <dimen name="drinkSelectorDialog_imageHeight">120dp</dimen>
     <dimen name="drinkSelectorDialog_imageHeight_half">60dp</dimen>
     <dimen name="drinkSelectorDialog_leftRightMargin">20dp</dimen>
     <dimen name="drinkSelectorDialog_buttonHeight">60dp</dimen>
-    <dimen name="drinkSelectorDialog_BigFontSize">20sp</dimen>
-    <dimen name="drinkSelectorDialog_subFontSize">14sp</dimen>
+    <dimen name="drinkSelectorDialog_BigFontSize">18sp</dimen>
+    <dimen name="drinkSelectorDialog_subFontSize">13sp</dimen>
 
     <dimen name="drinkCalendar_layoutPadding">10dp</dimen>
 
+    <dimen name="filter_checkboxWidth">25dp</dimen>
+    <dimen name="filter_buttonWidth">80dp</dimen>
+    <dimen name="filter_buttonHeight">35dp</dimen>
+    <dimen name="filter_textSize">14sp</dimen>
+    <dimen name="filter_buttonTextSize">12sp</dimen>
+
+
     <dimen name="home_bottomLayoutHeight">55dp</dimen>
-    <dimen name="pubitem_favorite">30dp</dimen>
+    <dimen name="pubitem_favorite">50dp</dimen>
     <dimen name="pubitem_text1">16sp</dimen>
     <dimen name="pubitem_text2">14sp</dimen>
     <dimen name="pubitem_text3">13sp</dimen>
@@ -31,14 +42,13 @@
     <dimen name="tapbar_itemMargin">5dp</dimen>
     <dimen name="tapbar_itemTitleFontSize">9sp</dimen>
 
-    <dimen name="locationViewer_markerSize">40dp</dimen>
+
     <dimen name="locationViewer_pubInfoHeight">100dp</dimen>
     <dimen name="locationViewer_pubitem_text1">15sp</dimen>
     <dimen name="locationViewer_pubitem_text2">13sp</dimen>
     <dimen name="locationViewer_pubitem_text3">11sp</dimen>
     <dimen name="locationViewer_pubitem_text4">11sp</dimen>
 
-    <dimen name="NearbyPlaces_markerSize">40dp</dimen>
     <dimen name="NearbyPlaces_pubInfoHeight">100dp</dimen>
     <dimen name="NearbyPlaces_pubitem_text1">15sp</dimen>
     <dimen name="NearbyPlaces_pubitem_text2">13sp</dimen>
@@ -56,9 +66,9 @@
 
 
     <dimen name="pubpage_itemSize">40dp</dimen>
-    <dimen name="pubpage_upperTitleFontSize">20sp</dimen>
-    <dimen name="pubpage_TitleFontSize">20sp</dimen>
-    <dimen name="pubpage_subTextFontSize">14sp</dimen>
+    <dimen name="pubpage_upperTitleFontSize">18sp</dimen>
+    <dimen name="pubpage_TitleFontSize">18sp</dimen>
+    <dimen name="pubpage_subTextFontSize">13sp</dimen>
 
 
     <dimen name="search_searchBarHeight">45dp</dimen>
@@ -66,7 +76,7 @@
 
 
     <dimen name="membership_itemHeight">80dp</dimen>
-    <dimen name="membership_fontSize">14sp</dimen>
+    <dimen name="membership_fontSize">13sp</dimen>
 
     <dimen name="membershipSuccess_buttonHeight">60dp</dimen>
     <dimen name="membershipSuccess_buttonWidth">150dp</dimen>
@@ -82,6 +92,14 @@
     <dimen name="historyItem_padding">12dp</dimen>
 
 
+    <dimen name="login_buttonHeight">40dp</dimen>
+    <dimen name="login_buttonWidth">200dp</dimen>
+    <dimen name="login_buttonIconWidth">25dp</dimen>
+    <dimen name="login_marginBottom">20dp</dimen>
+    <dimen name="login_mainFontSize">16sp</dimen>
+    <dimen name="login_subFontSize">12sp</dimen>
+
+    <dimen name="JRecyclerView_buttonWidth">50dp</dimen>
 
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>

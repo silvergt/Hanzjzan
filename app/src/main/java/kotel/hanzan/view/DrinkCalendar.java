@@ -9,8 +9,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
 import kotel.hanzan.R;
+import kotel.hanzan.function.JLog;
 import kotel.hanzan.listener.DrinkCalendarListener;
 
 public class DrinkCalendar extends RelativeLayout {
@@ -20,12 +23,16 @@ public class DrinkCalendar extends RelativeLayout {
     private TextView monthText, lowerText;
     private LinearLayout calendarLayout;
     private LinearLayout[] calendarRow;
-    private Calendar calendar;
+//    private Calendar calendar;
     private ImageView leftButton, rightButton;
 
     private RelativeLayout[] cells;
 
     private DrinkCalendarListener listener;
+
+    private GregorianCalendar calendar;
+
+    private int headerBufferSize;
     
 
     public DrinkCalendar(Context context) {
@@ -80,7 +87,7 @@ public class DrinkCalendar extends RelativeLayout {
         }).start();
 */
 
-        calendar = Calendar.getInstance();
+        calendar = new GregorianCalendar(Locale.getDefault());
         calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), 1);
 
         calendarRow = new LinearLayout[6];
@@ -114,7 +121,7 @@ public class DrinkCalendar extends RelativeLayout {
 
     public void setDateChecked(int[] date) {
         for (int i = 0; i < date.length; i++) {
-            ((ImageView)cells[date[i] - 1].getChildAt(0)).setImageResource(R.mipmap.ic_launcher);
+            ((ImageView)cells[date[i] - 1 + headerBufferSize].getChildAt(0)).setImageResource(R.mipmap.ic_launcher);
         }
     }
 
@@ -134,11 +141,14 @@ public class DrinkCalendar extends RelativeLayout {
     private void setTodayChecked() {
         Calendar todayCalendar = Calendar.getInstance();
         if (todayCalendar.get(Calendar.YEAR) == calendar.get(Calendar.YEAR) && todayCalendar.get(Calendar.MONTH) == calendar.get(Calendar.MONTH)) {
-            ((ImageView)cells[todayCalendar.get(Calendar.DATE) - 1].getChildAt(0)).setImageResource(R.mipmap.ic_launcher);
+            ((ImageView)cells[todayCalendar.get(Calendar.DATE) - 1 + headerBufferSize].getChildAt(0)).setImageResource(R.mipmap.ic_launcher);
+            JLog.v("calcal",todayCalendar.get(Calendar.DATE) - 1);
         }
     }
 
     private void updateCalendar() {
+        headerBufferSize = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+
         for(int i=0; i<cells.length;i++){
             ((ImageView)cells[i].getChildAt(0)).setImageResource(0);
         }

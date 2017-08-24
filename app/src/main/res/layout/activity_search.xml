@@ -30,6 +30,7 @@
                 />
 
             <TextView
+                android:id="@+id/search_upperTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -83,9 +84,9 @@
                 android:id="@+id/search_searchDeleteText"
                 android:layout_width="@dimen/search_searchBarHeight"
                 android:layout_height="match_parent"
-                android:src="@mipmap/ic_launcher"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
+                android:src="@drawable/xmark"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
                 android:layout_marginRight="5dp"
                 />
 
@@ -133,4 +134,9 @@
 
     </LinearLayout>
 
+    <kotel.hanzan.view.Loading
+        android:id="@+id/search_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 </RelativeLayout>

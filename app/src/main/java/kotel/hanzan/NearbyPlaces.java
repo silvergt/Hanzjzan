@@ -1,19 +1,21 @@
 package kotel.hanzan;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nhn.android.maps.NMapActivity;
-import com.nhn.android.maps.NMapLocationManager;
 import com.nhn.android.maps.NMapOverlayItem;
 import com.nhn.android.maps.NMapView;
 import com.nhn.android.maps.maplib.NGeoPoint;
@@ -21,31 +23,45 @@ import com.nhn.android.maps.overlay.NMapPOIdata;
 import com.nhn.android.maps.overlay.NMapPOIitem;
 import com.nhn.android.mapviewer.overlay.NMapOverlayManager;
 import com.nhn.android.mapviewer.overlay.NMapResourceProvider;
+import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import kotel.hanzan.Data.PubInfo;
+import kotel.hanzan.Data.StaticData;
+import kotel.hanzan.function.GeoHelper;
 import kotel.hanzan.function.JLog;
+import kotel.hanzan.function.LocationHelper;
+import kotel.hanzan.function.NumericHelper;
+import kotel.hanzan.function.ServerConnectionHelper;
+import kotel.hanzan.listener.LocationHelperListener;
 import kotel.hanzan.view.Loading;
 
 public class NearbyPlaces extends NMapActivity {
-    final private String LOCATION_MYLOCATION="LOCATION_MYLOCATION";
+    final private String LOCATION_MYLOCATION = "LOCATION_MYLOCATION";
 
     private NMapView mapView;// 지도 화면 View
 
     private NMapResourceProvider provider;
     private NMapOverlayManager overlayManager;
-    private NMapLocationManager locationManager;
     private NMapPOIdata poiData;
     private NGeoPoint myLocation;
 
     private NMapOverlayItem currentlyFocusedMarker;
 
-    private Drawable selected,unselected;
+    private LocationHelper locationHelper = new LocationHelper();
 
-    private int drawableSize;
+    private Drawable selected, unselected, myLocationMarker;
+
+    private int drawableWidth, drawableHeight;
 
     private Loading loading;
-    private ImageView myLocationButton,back,pubImage;
+    private ImageView myLocationButton, back, pubImage;
     private LinearLayout pubInfoLayout;
-    private TextView pubText1,pubText2,pubText3,pubText4;
+    private TextView pubText1, pubText2, pubText3, pubText4;
+
+    private ArrayList<PubInfo> pubInfoArray = new ArrayList<>();
 
 
     @Override
@@ -56,42 +72,23 @@ public class NearbyPlaces extends NMapActivity {
         init();
     }
 
-    private void init(){
-        drawableSize=(int)getResources().getDimension(R.dimen.locationViewer_markerSize);
+    private void init() {
 
-        locationManager = new NMapLocationManager(this);
-        locationManager.setOnLocationChangeListener(new NMapLocationManager.OnLocationChangeListener() {
-            @Override
-            public boolean onLocationChanged(NMapLocationManager nMapLocationManager, NGeoPoint nGeoPoint) {
-                onMyLocationUpdated(nGeoPoint);
-                getNearbyPubs(nGeoPoint);
-                locationManager.disableMyLocation();
-                loading.setLoadingCompleted();
-                return true;
-            }
+        drawableWidth = (int) getResources().getDimension(R.dimen.markerWidth);
+        drawableHeight = (int) getResources().getDimension(R.dimen.markerHeight);
 
-            @Override
-            public void onLocationUpdateTimeout(NMapLocationManager nMapLocationManager) {
-                loading.setLoadingCompleted();
-            }
 
-            @Override
-            public void onLocationUnavailableArea(NMapLocationManager nMapLocationManager, NGeoPoint nGeoPoint) {
-                loading.setLoadingCompleted();
-            }
-        });
+        loading = (Loading) findViewById(R.id.locationViewer_loading);
+        myLocationButton = (ImageView) findViewById(R.id.locationViewer_myLocation);
+        back = (ImageView) findViewById(R.id.locationViewer_back);
+        pubInfoLayout = (LinearLayout) findViewById(R.id.locationViewer_pubInfoLayout);
+        pubImage = (ImageView) findViewById(R.id.locationViewer_pubImage);
+        pubText1 = (TextView) findViewById(R.id.locationViewer_pubText1);
+        pubText2 = (TextView) findViewById(R.id.locationViewer_pubText2);
+        pubText3 = (TextView) findViewById(R.id.locationViewer_pubText3);
+        pubText4 = (TextView) findViewById(R.id.locationViewer_pubText4);
 
-        loading = (Loading)findViewById(R.id.locationViewer_loading);
-        myLocationButton = (ImageView)findViewById(R.id.locationViewer_myLocation);
-        back = (ImageView)findViewById(R.id.locationViewer_back);
-        pubInfoLayout = (LinearLayout)findViewById(R.id.locationViewer_pubInfoLayout);
-        pubImage=(ImageView)findViewById(R.id.locationViewer_pubImage);
-        pubText1=(TextView)findViewById(R.id.locationViewer_pubText1);
-        pubText2=(TextView)findViewById(R.id.locationViewer_pubText2);
-        pubText3=(TextView)findViewById(R.id.locationViewer_pubText3);
-        pubText4=(TextView)findViewById(R.id.locationViewer_pubText4);
-
-        mapView=(NMapView) findViewById(R.id.locationViewer_mapView);
+        mapView = (NMapView) findViewById(R.id.locationViewer_mapView);
         mapView.setClientId(getString(R.string.naver_client_id));
         mapView.setClickable(true);
         mapView.setEnabled(true);
@@ -100,7 +97,7 @@ public class NearbyPlaces extends NMapActivity {
         mapView.requestFocus();
         mapView.setScalingFactor(2.0f);
 
-        provider=new NMapResourceProvider(this) {
+        provider = new NMapResourceProvider(this) {
             @Override
             protected int findResourceIdForMarker(int i, boolean b) {
                 return 0;
@@ -196,7 +193,7 @@ public class NearbyPlaces extends NMapActivity {
 
             }
         };
-        overlayManager = new NMapOverlayManager(this,mapView,provider);
+        overlayManager = new NMapOverlayManager(this, mapView, provider);
         poiData = new NMapPOIdata(2, provider);
 
         overlayManager.setOnCalloutOverlayListener((nMapOverlay, nMapOverlayItem, rect) -> {
@@ -207,7 +204,8 @@ public class NearbyPlaces extends NMapActivity {
         pubInfoLayout.setVisibility(View.INVISIBLE);
 
 
-        myLocationButton.setOnClickListener(view ->{
+        myLocationButton.setOnClickListener(view -> {
+            pubInfoArray.clear();
             getMyLocation();
         });
 
@@ -215,13 +213,28 @@ public class NearbyPlaces extends NMapActivity {
             finish();
         });
 
-        selected = getResources().getDrawable(R.drawable.loading_front,null);
-        selected.setBounds(-drawableSize/2,-drawableSize,drawableSize/2,0);
+        selected = getResources().getDrawable(R.drawable.gps_selected, null);
+        selected.setBounds(-drawableWidth / 2, -drawableHeight, drawableWidth / 2, 0);
 
-        unselected = getResources().getDrawable(R.drawable.loading_back,null);
-        unselected.setBounds(-drawableSize/2,-drawableSize,drawableSize/2,0);
+        unselected = getResources().getDrawable(R.drawable.gps_unselected, null);
+        unselected.setBounds(-drawableWidth / 2, -drawableHeight, drawableWidth / 2, 0);
+
+        myLocationMarker = getResources().getDrawable(R.drawable.loading_back, null);
+        myLocationMarker.setBounds(-drawableWidth / 2, -drawableHeight, drawableWidth / 2, 0);
 
         requestGPSPermission();
+    }
+
+    private void requestGPSPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+            } else {
+                getMyLocation();
+            }
+        } else {
+            getMyLocation();
+        }
     }
 
     @Override
@@ -230,111 +243,198 @@ public class NearbyPlaces extends NMapActivity {
         getMyLocation();
     }
 
-    private void requestGPSPermission(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},1);
-            }else{
-                getMyLocation();
+    private void getMyLocation() {
+//        locationHelper = new LocationHelper();
+
+        locationHelper.getMyLocationOnlyOneTime(this, new LocationHelperListener() {
+            @Override
+            public void onSearchingStarted() {
+
             }
-        }else{
-            getMyLocation();
-        }
+
+            @Override
+            public void onSearchingEnded() {
+
+            }
+
+            @Override
+            public void onLocationFound(NGeoPoint nGeoPoint) {
+                myLocation = nGeoPoint;
+
+                mapView.getMapController().animateTo(myLocation);
+                addMarkerTo(myLocation, true, LOCATION_MYLOCATION);
+                getNearbyPubs(nGeoPoint);
+            }
+
+            @Override
+            public void onLocationTimeout() {
+                Toast.makeText(getApplicationContext(), "현재 위치를 불러오지 못했습니다", Toast.LENGTH_SHORT).show();
+                NGeoPoint geo = StaticData.defaultLocation;
+
+                mapView.getMapController().setMapCenter(geo, 13);
+                getNearbyPubs(geo);
+            }
+
+            @Override
+            public void onLocationUnavailableArea(NGeoPoint nGeoPoint) {
+                Toast.makeText(getApplicationContext(), "현재 위치를 불러오지 못했습니다", Toast.LENGTH_SHORT).show();
+                NGeoPoint geo = StaticData.defaultLocation;
+
+                mapView.getMapController().setMapCenter(geo, 13);
+                getNearbyPubs(geo);
+            }
+
+            @Override
+            public void onHasNoLocationPermission() {
+                JLog.v("Loading map without my location");
+                NGeoPoint geo = StaticData.defaultLocation;
+
+                mapView.getMapController().setMapCenter(geo, 13);
+                getNearbyPubs(geo);
+            }
+
+            @Override
+            public void onGpsIsOff() {
+                JLog.v("GPS is off");
+                NGeoPoint geo = StaticData.defaultLocation;
+
+                mapView.getMapController().setMapCenter(geo, 13);
+                getNearbyPubs(geo);
+            }
+        });
+
     }
 
-    private void getMyLocation(){
-        loading.setLoadingStarted();
-        try {
-            if(!locationManager.isMyLocationEnabled()) {
-                locationManager.enableMyLocation(false);
-            }
-        }catch (Exception e){
-            JLog.v("Loading map without my location");
-            NGeoPoint geo=new NGeoPoint();
-            geo.latitude=37.518775;
-            geo.longitude=127.050081;
 
-            mapView.getMapController().setMapCenter(geo,13);
-            loading.setLoadingCompleted();
-        }
-
-    }
-
-
-    private void addMarkerTo(double lat, double lng){
-        NGeoPoint geo=new NGeoPoint();
-        geo.latitude=lat;
-        geo.longitude=lng;
+    private void addMarkerTo(NGeoPoint geoPoint, boolean isMyLocation, String name) {
 
         poiData.beginPOIdata(1);
-        poiData.addPOIitem(geo, "Pizza 777-111", unselected,1);
+        if (isMyLocation) {
+            poiData.addPOIitem(geoPoint, LOCATION_MYLOCATION, myLocationMarker, 0);
+        } else {
+            poiData.addPOIitem(geoPoint, name, unselected, 1);
+        }
         poiData.endPOIdata();
 
         overlayManager.clearOverlays();
         overlayManager.createPOIdataOverlay(poiData, null);
-
     }
 
-    private void addMarkerTo(NGeoPoint geoPoint,boolean isMyLocation){
-
-        poiData.beginPOIdata(1);
-        if(isMyLocation) {
-            poiData.addPOIitem(geoPoint, LOCATION_MYLOCATION, unselected, 2);
-        }else{
-            poiData.addPOIitem(geoPoint, "tttt", unselected, 1);
-        }
-        poiData.endPOIdata();
-
-        overlayManager.clearOverlays();
-        overlayManager.createPOIdataOverlay(poiData, null);
-    }
-
-    private void onMarkerClicked(NMapOverlayItem nMapOverlayItem){
+    private void onMarkerClicked(NMapOverlayItem nMapOverlayItem) {
         JLog.v(nMapOverlayItem.getTitle());
         JLog.v(Double.toString(nMapOverlayItem.getPoint().getLatitude()));
         JLog.v(Double.toString(nMapOverlayItem.getPoint().getLongitude()));
 
 //        mapView.getMapController().animateTo(nMapOverlayItem.getPoint());
 
-        if(nMapOverlayItem.getTitle().equals(LOCATION_MYLOCATION)){
+        int position=0;
+        if (nMapOverlayItem.getTitle().equals(LOCATION_MYLOCATION)) {
             return;
+        }else{
+            try {
+                position = Integer.parseInt(nMapOverlayItem.getTitle());
+            }catch (Exception e){
+                JLog.e("parsing integer error");
+                return;
+            }
         }
 
-        if(currentlyFocusedMarker!=null){
+        if (currentlyFocusedMarker != null) {
             currentlyFocusedMarker.setMarker(unselected);
         }
 
-
         currentlyFocusedMarker = nMapOverlayItem;
-
         currentlyFocusedMarker.setMarker(selected);
 
         pubInfoLayout.setVisibility(View.VISIBLE);
 
-//        Intent intent=new Intent(LocationViewer.this,Home.class);
-//        startActivity(intent);
+        String distanceString = "";
+
+        if(myLocation!=null) {
+            Double distance = GeoHelper.getActualKilometer(myLocation.latitude, myLocation.longitude,
+                    nMapOverlayItem.getPoint().getLatitude(), nMapOverlayItem.getPoint().getLongitude());
+            distanceString = NumericHelper.trimUnderPoint(Double.toString(distance), 2) + "km";
+        }
+
+        Picasso.with(this).load(pubInfoArray.get(position).imageAddress.get(0)).into(pubImage);
+        pubText1.setText(pubInfoArray.get(position).name+"  "+distanceString);
+        pubText2.setText(pubInfoArray.get(position).businessType);
+        pubText4.setText(pubInfoArray.get(position).address);
+
+        int finalPosition = position;
+        pubInfoLayout.setOnClickListener(view -> {
+            Intent intent=new Intent(NearbyPlaces.this,PubPage.class);
+            intent.putExtra("info",pubInfoArray.get(finalPosition));
+            startActivity(intent);
+        });
     }
 
-    private void onMyLocationUpdated(NGeoPoint geoPoint){
-        JLog.v("myLoc",Double.toString(geoPoint.getLatitude()));
-        JLog.v("myLoc",Double.toString(geoPoint.getLongitude()));
-        myLocation = locationManager.getMyLocation();
+    private void getNearbyPubs(NGeoPoint geoPoint) {
+        JLog.v("getNearbyPubs");
 
+        new Thread(() -> {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("at", Integer.toString(pubInfoArray.size()));
+            map.put("user_lat", Double.toString(geoPoint.getLatitude()));
+            map.put("user_lng", Double.toString(geoPoint.getLongitude()));
+            map.put("id_member", Long.toString(StaticData.currentUser.id));
 
+            map = ServerConnectionHelper.connect("retrieving nearby pubs", "nearbyplace", map);
+
+            int i = 0;
+            while (true) {
+                try {
+                    String num = Integer.toString(i++);
+                    long id = Long.parseLong(map.get("id_place_" + num));
+                    String name = map.get("name_place_" + num);
+                    String address = map.get("address_place_" + num);
+                    String imageAddress = map.get("imgadd_place_" + num);
+                    boolean favorite = false;
+                    if (map.get("like_" + num).equals("TRUE")) {
+                        favorite = true;
+                    }
+                    double lat = Double.parseDouble(map.get("lat_" + num));
+                    double lng = Double.parseDouble(map.get("lng_" + num));
+                    int drinkProvideType = Integer.parseInt(map.get("alcoholpertable_" + num));
+
+                    pubInfoArray.add(new PubInfo(id, name, address, "주점", imageAddress, favorite, lat, lng, drinkProvideType));
+                } catch (Exception e) {
+                    break;
+                }
+            }
+            new Handler(getMainLooper()).post(()->{
+                updateMarkers();
+                loading.setLoadingCompleted();
+            });
+        }).start();
+    }
+
+    private void updateMarkers(){
         poiData.removeAllPOIdata();
 
-        mapView.getMapController().animateTo(myLocation);
-        addMarkerTo(myLocation,true);
+        if(myLocation!=null){
+            addMarkerTo(myLocation,true,LOCATION_MYLOCATION);
+        }
+
+        for(int i=0;i<pubInfoArray.size();i++){
+//            JLog.v("adding",i," - "+pubInfoArray.get(i).name);
+            NGeoPoint geoPoint = new NGeoPoint(pubInfoArray.get(i).longitude,pubInfoArray.get(i).latitude);
+
+            addMarkerTo(geoPoint,false,Integer.toString(i));
+
+//            poiData.beginPOIdata(1);
+//            poiData.addPOIitem(geoPoint, Integer.toString(i), unselected, 1);
+//            poiData.endPOIdata();
+        }
+
+        overlayManager.clearOverlays();
+        overlayManager.createPOIdataOverlay(poiData, null);
     }
 
-    private void getNearbyPubs(NGeoPoint geopoint){
-
-        addMarkerTo(37.518775,127.050081);
-        addMarkerTo(37.518875,127.050081);
-        addMarkerTo(37.518975,127.050081);
-        addMarkerTo(37.519075,127.050081);
-        addMarkerTo(37.519175,127.050081);
-        addMarkerTo(37.538775,127.050081);
+    @Override
+    protected void onStop() {
+        super.onStop();
+        locationHelper.onStop();
     }
 
 }
