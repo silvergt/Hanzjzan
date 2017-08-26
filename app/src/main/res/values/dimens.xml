@@ -1,103 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <dimen name="backButtonPadding">18dp</dimen>
+    <dimen name="backButtonPadding">12dp</dimen>
 
     <dimen name="leftRightMargin">20dp</dimen>
 
-    <dimen name="markerWidth">35dp</dimen>
-    <dimen name="markerHeight">48dp</dimen>
+    <dimen name="markerWidth">30dp</dimen>
+    <dimen name="markerHeight">42dp</dimen>
 
-    <dimen name="upperBar">60dp</dimen>
+    <dimen name="upperBar">50dp</dimen>
     <dimen name="upperBarIconWidth">40dp</dimen>
     <dimen name="upperBar_shadow">2dp</dimen>
-    <dimen name="upperBar_MainFontSize">18sp</dimen>
-    <dimen name="upperBar_SubFontSize">12sp</dimen>
+    <dimen name="upperBar_MainFontSize">17sp</dimen>
+    <dimen name="upperBar_SubFontSize">11sp</dimen>
     <dimen name="upperBar_myLocationWidth">60dp</dimen>
+
+    <dimen name="drinkSelector_typeFontSize">11sp</dimen>
+    <dimen name="drinkSelector_listFontSize">15sp</dimen>
 
     <dimen name="drinkSelector_height">80dp</dimen>
     <dimen name="drinkSelectorDialog_imageHeight">120dp</dimen>
     <dimen name="drinkSelectorDialog_imageHeight_half">60dp</dimen>
     <dimen name="drinkSelectorDialog_leftRightMargin">20dp</dimen>
     <dimen name="drinkSelectorDialog_buttonHeight">60dp</dimen>
-    <dimen name="drinkSelectorDialog_BigFontSize">18sp</dimen>
-    <dimen name="drinkSelectorDialog_subFontSize">13sp</dimen>
+    <dimen name="drinkSelectorDialog_BigFontSize">24sp</dimen>
+    <dimen name="drinkSelectorDialog_subFontSize">16sp</dimen>
 
     <dimen name="drinkCalendar_layoutPadding">10dp</dimen>
 
     <dimen name="filter_checkboxWidth">25dp</dimen>
     <dimen name="filter_buttonWidth">80dp</dimen>
     <dimen name="filter_buttonHeight">35dp</dimen>
-    <dimen name="filter_textSize">14sp</dimen>
-    <dimen name="filter_buttonTextSize">12sp</dimen>
+    <dimen name="filter_textSize">13sp</dimen>
+    <dimen name="filter_buttonTextSize">11sp</dimen>
 
 
     <dimen name="home_bottomLayoutHeight">55dp</dimen>
-    <dimen name="pubitem_favorite">50dp</dimen>
-    <dimen name="pubitem_text1">16sp</dimen>
-    <dimen name="pubitem_text2">14sp</dimen>
-    <dimen name="pubitem_text3">13sp</dimen>
+    <dimen name="pubitem_favorite">46dp</dimen>
+    <dimen name="pubitem_text1">15sp</dimen>
+    <dimen name="pubitem_text2">13sp</dimen>
+    <dimen name="pubitem_text3">12sp</dimen>
 
     <dimen name="tapbar_topHeight">3dp</dimen>
     <dimen name="tapbar_itemMargin">5dp</dimen>
-    <dimen name="tapbar_itemTitleFontSize">9sp</dimen>
+    <dimen name="tapbar_itemTitleFontSize">8sp</dimen>
 
 
     <dimen name="locationViewer_pubInfoHeight">100dp</dimen>
-    <dimen name="locationViewer_pubitem_text1">15sp</dimen>
-    <dimen name="locationViewer_pubitem_text2">13sp</dimen>
-    <dimen name="locationViewer_pubitem_text3">11sp</dimen>
-    <dimen name="locationViewer_pubitem_text4">11sp</dimen>
+    <dimen name="locationViewer_pubitem_text1">14sp</dimen>
+    <dimen name="locationViewer_pubitem_text2">12sp</dimen>
+    <dimen name="locationViewer_pubitem_text3">10sp</dimen>
+    <dimen name="locationViewer_pubitem_text4">10sp</dimen>
 
     <dimen name="NearbyPlaces_pubInfoHeight">100dp</dimen>
-    <dimen name="NearbyPlaces_pubitem_text1">15sp</dimen>
-    <dimen name="NearbyPlaces_pubitem_text2">13sp</dimen>
-    <dimen name="NearbyPlaces_pubitem_text3">11sp</dimen>
-    <dimen name="NearbyPlaces_pubitem_text4">11sp</dimen>
+    <dimen name="NearbyPlaces_pubitem_text1">14sp</dimen>
+    <dimen name="NearbyPlaces_pubitem_text2">12sp</dimen>
+    <dimen name="NearbyPlaces_pubitem_text3">10sp</dimen>
+    <dimen name="NearbyPlaces_pubitem_text4">10sp</dimen>
 
     <dimen name="mypage_profileHeight">100dp</dimen>
     <dimen name="mypage_calendarPadding">10dp</dimen>
     <dimen name="mypage_itemHeight">50dp</dimen>
     <dimen name="mypage_itemWidth">40dp</dimen>
-    <dimen name="mypage_profileMainTextFontSize">14sp</dimen>
-    <dimen name="mypage_profileSubTextFontSize">12sp</dimen>
-    <dimen name="mypage_itemFontSize">14sp</dimen>
+    <dimen name="mypage_profileMainTextFontSize">16sp</dimen>
+    <dimen name="mypage_profileSubTextFontSize">11sp</dimen>
+    <dimen name="mypage_itemFontSize">13sp</dimen>
     <dimen name="mypage_dividerMargin">25dp</dimen>
 
 
     <dimen name="pubpage_itemSize">40dp</dimen>
-    <dimen name="pubpage_upperTitleFontSize">18sp</dimen>
-    <dimen name="pubpage_TitleFontSize">18sp</dimen>
-    <dimen name="pubpage_subTextFontSize">13sp</dimen>
+    <dimen name="pubpage_upperTitleFontSize">17sp</dimen>
+    <dimen name="pubpage_TitleFontSize">17sp</dimen>
+    <dimen name="pubpage_subTextFontSize">12sp</dimen>
 
 
     <dimen name="search_searchBarHeight">45dp</dimen>
-    <dimen name="search_subTextFontSize">12sp</dimen>
+    <dimen name="search_subTextFontSize">11sp</dimen>
 
 
-    <dimen name="membership_itemHeight">80dp</dimen>
-    <dimen name="membership_fontSize">13sp</dimen>
+    <dimen name="membership_itemHeight">120dp</dimen>
+    <dimen name="membership_ticketImageWidth">80dp</dimen>
+    <dimen name="membership_saleImageWidth">30dp</dimen>
+    <dimen name="membership_numberFontSize">18dp</dimen>
+    <dimen name="membership_mainFontSize">14sp</dimen>
+    <dimen name="membership_BigfontSize">16sp</dimen>
+    <dimen name="membership_fontSize">12sp</dimen>
+    <dimen name="membership_saleFontSize">10sp</dimen>
 
     <dimen name="membershipSuccess_buttonHeight">60dp</dimen>
     <dimen name="membershipSuccess_buttonWidth">150dp</dimen>
-    <dimen name="membershipSuccess_mainFontSize">18sp</dimen>
-    <dimen name="membershipSuccess_subFontSize">13sp</dimen>
+    <dimen name="membershipSuccess_mainFontSize">17sp</dimen>
+    <dimen name="membershipSuccess_subFontSize">12sp</dimen>
 
 
 
-    <dimen name="history_itemHeight">100dp</dimen>
-    <dimen name="history_priceFontSize1">28sp</dimen>
-    <dimen name="history_priceFontSize2">18sp</dimen>
-    <dimen name="history_subFontSize">12sp</dimen>
-    <dimen name="historyItem_padding">12dp</dimen>
+    <dimen name="history_itemHeight">110dp</dimen>
+    <dimen name="history_itemWidth">100dp</dimen>
+    <dimen name="history_priceFontSize1">26sp</dimen>
+    <dimen name="history_priceFontSize2">17sp</dimen>
+    <dimen name="history_mainFontSize">16sp</dimen>
+    <dimen name="history_subFontSize">11sp</dimen>
+    <dimen name="historyItem_padding">11dp</dimen>
 
 
     <dimen name="login_buttonHeight">40dp</dimen>
     <dimen name="login_buttonWidth">200dp</dimen>
     <dimen name="login_buttonIconWidth">25dp</dimen>
     <dimen name="login_marginBottom">20dp</dimen>
-    <dimen name="login_mainFontSize">16sp</dimen>
-    <dimen name="login_subFontSize">12sp</dimen>
+    <dimen name="login_mainFontSize">15sp</dimen>
+    <dimen name="login_subFontSize">11sp</dimen>
 
     <dimen name="JRecyclerView_buttonWidth">50dp</dimen>
 

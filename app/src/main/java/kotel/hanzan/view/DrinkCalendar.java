@@ -1,6 +1,7 @@
 package kotel.hanzan.view;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.ImageView;
@@ -8,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
@@ -119,9 +121,9 @@ public class DrinkCalendar extends RelativeLayout {
         this.listener = listener;
     }
 
-    public void setDateChecked(int[] date) {
-        for (int i = 0; i < date.length; i++) {
-            ((ImageView)cells[date[i] - 1 + headerBufferSize].getChildAt(0)).setImageResource(R.mipmap.ic_launcher);
+    public void setDateChecked(ArrayList<Integer> date) {
+        for (int i = 0; i < date.size(); i++) {
+            ((ImageView)cells[date.get(i) - 1 + headerBufferSize].getChildAt(0)).setImageResource(R.drawable.calendar_check);
         }
     }
 
@@ -141,7 +143,8 @@ public class DrinkCalendar extends RelativeLayout {
     private void setTodayChecked() {
         Calendar todayCalendar = Calendar.getInstance();
         if (todayCalendar.get(Calendar.YEAR) == calendar.get(Calendar.YEAR) && todayCalendar.get(Calendar.MONTH) == calendar.get(Calendar.MONTH)) {
-            ((ImageView)cells[todayCalendar.get(Calendar.DATE) - 1 + headerBufferSize].getChildAt(0)).setImageResource(R.mipmap.ic_launcher);
+            ((ImageView)cells[todayCalendar.get(Calendar.DATE) - 1 + headerBufferSize].getChildAt(0)).setImageResource(R.drawable.calendar_check_today);
+            ((TextView)cells[todayCalendar.get(Calendar.DATE) - 1 + headerBufferSize].getChildAt(1)).setTextColor(Color.WHITE);
             JLog.v("calcal",todayCalendar.get(Calendar.DATE) - 1);
         }
     }
@@ -150,6 +153,7 @@ public class DrinkCalendar extends RelativeLayout {
         headerBufferSize = calendar.get(Calendar.DAY_OF_WEEK) - 1;
 
         for(int i=0; i<cells.length;i++){
+            ((TextView)cells[i].getChildAt(1)).setTextColor(Color.BLACK);
             ((ImageView)cells[i].getChildAt(0)).setImageResource(0);
         }
 

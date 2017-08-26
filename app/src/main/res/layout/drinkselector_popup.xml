@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         >
         <View
@@ -61,7 +61,7 @@
                     android:layout_height="wrap_content"
                     android:text="우주술집펍에서 제공하는\n카스 병맥주로 하시겠습니까?"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/drinkSelectorDialog_subFontSize"
+                    android:autoSizeMinTextSize="@dimen/drinkSelectorDialog_subFontSize"
                     android:textAlignment="center"
                     android:layout_centerInParent="true"
                     />
@@ -73,7 +73,7 @@
                     android:text="카스 병맥주\n한잔 주세요!"
                     android:lineSpacingExtra="10dp"
                     android:textStyle="bold"
-                    android:textSize="@dimen/drinkSelectorDialog_BigFontSize"
+                    android:autoSizeMinTextSize="@dimen/drinkSelectorDialog_BigFontSize"
                     android:textColor="@color/black"
                     android:textAlignment="center"
                     android:layout_centerInParent="true"

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <RelativeLayout
+        android:id="@+id/membership_ticket"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/membership_itemHeight"
+        android:paddingLeft="@dimen/leftRightMargin"
+        android:paddingRight="@dimen/leftRightMargin"
+        >
+        <ImageView
+            android:layout_width="@dimen/membership_ticketImageWidth"
+            android:layout_height="@dimen/membership_ticketImageWidth"
+            android:src="@drawable/ticket"
+            android:layout_centerVertical="true"
+            />
+
+        <TextView
+            android:id="@+id/membership_ticket_saleIcon"
+            android:layout_width="@dimen/membership_saleImageWidth"
+            android:layout_height="@dimen/membership_saleImageWidth"
+            android:background="@drawable/sale"
+            android:textColor="@color/white"
+            android:textSize="@dimen/membership_saleFontSize"
+            android:text="SALE"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            />
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:gravity="right"
+            >
+            <TextView
+                android:id="@+id/membership_ticket_name"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="한잔 멤버쉽 1달"
+                android:textColor="@color/black"
+                android:textSize="@dimen/membership_BigfontSize"
+                android:gravity="center_vertical"
+                android:textStyle="bold"
+                />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:id="@+id/membership_ticket_strikeThroughedPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="12,000원"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/membership_saleFontSize"
+                    android:gravity="center_vertical"
+                    android:layout_marginRight="10dp"
+                    android:background="@drawable/strikethrough"
+                    android:padding="5dp"
+                    />
+
+                <TextView
+                    android:id="@+id/membership_ticket_currentPrice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="9,900원"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/membership_BigfontSize"
+                    android:gravity="center_vertical"
+                    />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/membership_ticket_date"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:text="1.1 ~ 1.31"
+                android:textColor="@color/black"
+                android:textSize="@dimen/membership_fontSize"
+                />
+
+        </LinearLayout>
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/gray"
+        android:layout_marginLeft="@dimen/leftRightMargin"
+        android:layout_marginRight="@dimen/leftRightMargin"
+        />
+
+</LinearLayout>

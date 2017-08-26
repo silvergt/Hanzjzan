@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10"
+        >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            >
+
+
+            <RelativeLayout
+                android:minWidth="@dimen/login_buttonWidth"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/login_buttonHeight"
+                android:layout_gravity="center"
+                >
+
+                <com.kakao.usermgmt.LoginButton
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true"
+                    android:padding="@dimen/login_buttonWidth"
+                    />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:minWidth="@dimen/login_buttonWidth"
+                    android:layout_height="@dimen/login_buttonHeight"
+                    android:orientation="horizontal"
+                    android:background="@drawable/roundbox_yellow"
+                    android:layout_gravity="center"
+                    >
+
+                    <ImageView
+                        android:layout_width="@dimen/login_buttonIconWidth"
+                        android:layout_height="@dimen/login_buttonIconWidth"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/kakao_login_symbol"
+                        android:scaleType="fitXY"
+                        android:layout_marginLeft="10dp"
+                        />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:textColor="#181614"
+                        android:textSize="@dimen/login_subFontSize"
+                        android:text="카카오톡으로 시작하기"
+                        />
+
+
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="10dp"
+                android:layout_height="30dp"
+                />
+
+            <RelativeLayout
+                android:minWidth="@dimen/login_buttonWidth"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/login_buttonHeight"
+                android:layout_gravity="center"
+                android:background="@drawable/roundbox_blue">
+<!--
+
+                <com.facebook.login.widget.LoginButton
+                    android:layout_width="@dimen/login_buttonWidth"
+                    android:layout_height="@dimen/login_buttonHeight"
+                    android:padding="1000dp"
+                    />
+-->
+
+                <LinearLayout
+                    android:id="@+id/login_facebookLogin"
+                    android:minWidth="@dimen/login_buttonWidth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/login_buttonHeight"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal"
+                    android:background="@drawable/roundbox_blue"
+                    >
+
+                    <ImageView
+                        android:layout_width="@dimen/login_buttonIconWidth"
+                        android:layout_height="@dimen/login_buttonIconWidth"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/facebookicon"
+                        android:scaleType="fitXY"
+                        android:layout_marginLeft="10dp"
+                        />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/login_subFontSize"
+                        android:text="페이스북으로 시작하기"
+                        />
+
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/login_mainFontSize"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:textColor="@color/black"
+        android:text="지금 사용해보세요!"
+        android:layout_marginBottom="20dp"
+        />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/login_subFontSize"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:text="한잔은 카카오톡, 페이스북을 통해 간단히 회원가입할 수 있습니다.\n버튼 몇번만 누르면 끝나요!"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
+
+
+</LinearLayout>

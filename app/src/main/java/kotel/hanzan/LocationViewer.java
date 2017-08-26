@@ -24,6 +24,7 @@ import com.nhn.android.mapviewer.overlay.NMapResourceProvider;
 import com.squareup.picasso.Picasso;
 
 import kotel.hanzan.Data.PubInfo;
+import kotel.hanzan.Data.StaticData;
 import kotel.hanzan.function.GeoHelper;
 import kotel.hanzan.function.LocationHelper;
 import kotel.hanzan.listener.LocationHelperListener;
@@ -37,7 +38,7 @@ public class LocationViewer extends NMapActivity {
     private NMapResourceProvider provider;
     private NMapOverlayManager overlayManager;
     private NMapPOIdata poiData;
-    private NGeoPoint myLocation,pubLocation;
+    private NGeoPoint pubLocation;
     private PubInfo pubInfo;
 
     private LocationHelper locationHelper = new LocationHelper();
@@ -50,6 +51,7 @@ public class LocationViewer extends NMapActivity {
     private ImageView myLocationButton,back,pubImage;
     private LinearLayout pubInfoLayout;
     private TextView upperText,pubText1,pubText2,pubText3,pubText4;
+
 
 
     @Override
@@ -258,18 +260,16 @@ public class LocationViewer extends NMapActivity {
 
             @Override
             public void onLocationFound(NGeoPoint nGeoPoint) {
-                myLocation = nGeoPoint;
+                StaticData.myLatestLocation = nGeoPoint;
 
                 poiData.removeAllPOIdata();
 
-                addMarkerTo(myLocation,true);
+                addMarkerTo(StaticData.myLatestLocation,true);
                 addMarkerTo(pubLocation,false);
                 mapView.getMapController().setMapCenter(pubLocation,13);
 
-
-                double distance = GeoHelper.getActualKilometer(myLocation.getLatitude(),myLocation.getLongitude(),pubInfo.latitude,pubInfo.longitude);
-                String distanceString = Double.toString(distance);
-                distanceString = distanceString.substring(0,distanceString.indexOf(".")+2)+"km";
+                double distance = GeoHelper.getActualKilometer(StaticData.myLatestLocation.getLatitude(),StaticData.myLatestLocation.getLongitude(),pubInfo.latitude,pubInfo.longitude);
+                String distanceString = GeoHelper.getDistanceString(distance);
 
                 pubText1.setText(pubInfo.name+"  "+distanceString);
                 loading.setLoadingCompleted();
@@ -291,12 +291,14 @@ public class LocationViewer extends NMapActivity {
 
             @Override
             public void onHasNoLocationPermission() {
+                Toast.makeText(getApplicationContext(), "설정에서 위치정보 사용을 수락해 주세요", Toast.LENGTH_SHORT).show();
                 mapView.getMapController().setMapCenter(pubLocation,13);
                 loading.setLoadingCompleted();
             }
 
             @Override
             public void onGpsIsOff() {
+                Toast.makeText(getApplicationContext(), "위치를 켜 주세요", Toast.LENGTH_SHORT).show();
                 mapView.getMapController().setMapCenter(pubLocation,13);
                 loading.setLoadingCompleted();
             }

@@ -9,6 +9,10 @@ public class JLog {
         if (logIsEnabled) Log.v("Log",Integer.toString(message));
     }
 
+    public static void v(double message){
+        if (logIsEnabled) Log.v("Log",Double.toString(message));
+    }
+
     public static void v(String message){
         if (logIsEnabled) Log.v("Log",message);
     }
@@ -25,6 +29,17 @@ public class JLog {
     public static void v(String prefix,int content){
         if (logIsEnabled) Log.v("Log",prefix+Integer.toString(content));
     }
+
+    public static void v(String prefix,double content, String suffix){
+        if (logIsEnabled) Log.v("Log",prefix+Double.toString(content)+suffix);
+    }
+
+    public static void v(String prefix,double content){
+        if (logIsEnabled) Log.v("Log",prefix+Double.toString(content));
+    }
+
+
+
 
     public static void e(int message){
         if (logIsEnabled) Log.e("Log",Integer.toString(message));

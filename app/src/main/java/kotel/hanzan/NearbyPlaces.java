@@ -8,6 +8,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,7 +34,6 @@ import kotel.hanzan.Data.StaticData;
 import kotel.hanzan.function.GeoHelper;
 import kotel.hanzan.function.JLog;
 import kotel.hanzan.function.LocationHelper;
-import kotel.hanzan.function.NumericHelper;
 import kotel.hanzan.function.ServerConnectionHelper;
 import kotel.hanzan.listener.LocationHelperListener;
 import kotel.hanzan.view.Loading;
@@ -46,7 +46,7 @@ public class NearbyPlaces extends NMapActivity {
     private NMapResourceProvider provider;
     private NMapOverlayManager overlayManager;
     private NMapPOIdata poiData;
-    private NGeoPoint myLocation;
+//    private NGeoPoint myLocation;
 
     private NMapOverlayItem currentlyFocusedMarker;
 
@@ -62,6 +62,8 @@ public class NearbyPlaces extends NMapActivity {
     private TextView pubText1, pubText2, pubText3, pubText4;
 
     private ArrayList<PubInfo> pubInfoArray = new ArrayList<>();
+
+    private boolean myLocationMarkerIsVisible = false;
 
 
     @Override
@@ -203,8 +205,57 @@ public class NearbyPlaces extends NMapActivity {
 
         pubInfoLayout.setVisibility(View.INVISIBLE);
 
+        mapView.setOnMapViewTouchEventListener(new NMapView.OnMapViewTouchEventListener() {
+            @Override
+            public void onLongPress(NMapView nMapView, MotionEvent motionEvent) {
+
+            }
+
+            @Override
+            public void onLongPressCanceled(NMapView nMapView) {
+
+            }
+
+            @Override
+            public void onTouchDown(NMapView nMapView, MotionEvent motionEvent) {
+
+            }
+
+            @Override
+            public void onTouchUp(NMapView nMapView, MotionEvent motionEvent) {
+                JLog.v("LATLNG");
+                NGeoPoint[] geos = GeoHelper.getMapStartEndPoint(nMapView.getMapController().getMapCenter().getLatitudeE6(),nMapView.getMapController().getMapCenter().getLongitudeE6(),
+                        nMapView.getMapProjection().getLatitudeSpan(),nMapView.getMapProjection().getLongitudeSpan());
+
+                JLog.v(geos[0].getLatitude());
+                JLog.v(geos[0].getLongitude());
+                JLog.v(geos[1].getLatitude());
+                JLog.v(geos[1].getLongitude());
+//                JLog.v(Double.toString(nMapView.getMapController().getMapCenter().getLatitude()));
+//                JLog.v(Double.toString(nMapView.getMapController().getMapCenter().getLongitude()));
+//                JLog.v(Double.toString(nMapView.getMapController().getMapCenter().getLatitudeE6()));
+//                JLog.v(Double.toString(nMapView.getMapController().getMapCenter().getLongitudeE6()));
+//                JLog.v(nMapView.getMapProjection().getLatitudeSpan());
+//                JLog.v(nMapView.getMapProjection().getLongitudeSpan());
+
+            }
+
+            @Override
+            public void onScroll(NMapView nMapView, MotionEvent motionEvent, MotionEvent motionEvent1) {
+
+            }
+
+            @Override
+            public void onSingleTapUp(NMapView nMapView, MotionEvent motionEvent) {
+                if(currentlyFocusedMarker!=null) {
+                    removeFocusFromMarker();
+                }
+            }
+        });
 
         myLocationButton.setOnClickListener(view -> {
+            pubInfoLayout.setVisibility(View.INVISIBLE);
+            loading.setLoadingStarted();
             pubInfoArray.clear();
             getMyLocation();
         });
@@ -222,6 +273,7 @@ public class NearbyPlaces extends NMapActivity {
         myLocationMarker = getResources().getDrawable(R.drawable.loading_back, null);
         myLocationMarker.setBounds(-drawableWidth / 2, -drawableHeight, drawableWidth / 2, 0);
 
+        loading.setLoadingStarted();
         requestGPSPermission();
     }
 
@@ -259,10 +311,10 @@ public class NearbyPlaces extends NMapActivity {
 
             @Override
             public void onLocationFound(NGeoPoint nGeoPoint) {
-                myLocation = nGeoPoint;
+                StaticData.myLatestLocation = nGeoPoint;
+                myLocationMarkerIsVisible = true;
 
-                mapView.getMapController().animateTo(myLocation);
-                addMarkerTo(myLocation, true, LOCATION_MYLOCATION);
+                addMarkerTo(StaticData.myLatestLocation, true, LOCATION_MYLOCATION);
                 getNearbyPubs(nGeoPoint);
             }
 
@@ -270,8 +322,8 @@ public class NearbyPlaces extends NMapActivity {
             public void onLocationTimeout() {
                 Toast.makeText(getApplicationContext(), "현재 위치를 불러오지 못했습니다", Toast.LENGTH_SHORT).show();
                 NGeoPoint geo = StaticData.defaultLocation;
+                myLocationMarkerIsVisible = false;
 
-                mapView.getMapController().setMapCenter(geo, 13);
                 getNearbyPubs(geo);
             }
 
@@ -279,26 +331,26 @@ public class NearbyPlaces extends NMapActivity {
             public void onLocationUnavailableArea(NGeoPoint nGeoPoint) {
                 Toast.makeText(getApplicationContext(), "현재 위치를 불러오지 못했습니다", Toast.LENGTH_SHORT).show();
                 NGeoPoint geo = StaticData.defaultLocation;
+                myLocationMarkerIsVisible = false;
 
-                mapView.getMapController().setMapCenter(geo, 13);
                 getNearbyPubs(geo);
             }
 
             @Override
             public void onHasNoLocationPermission() {
-                JLog.v("Loading map without my location");
+                Toast.makeText(getApplicationContext(), "설정에서 위치정보 사용을 수락해 주세요", Toast.LENGTH_SHORT).show();
                 NGeoPoint geo = StaticData.defaultLocation;
+                myLocationMarkerIsVisible = false;
 
-                mapView.getMapController().setMapCenter(geo, 13);
                 getNearbyPubs(geo);
             }
 
             @Override
             public void onGpsIsOff() {
-                JLog.v("GPS is off");
+                Toast.makeText(getApplicationContext(), "위치를 켜 주세요", Toast.LENGTH_SHORT).show();
                 NGeoPoint geo = StaticData.defaultLocation;
+                myLocationMarkerIsVisible = false;
 
-                mapView.getMapController().setMapCenter(geo, 13);
                 getNearbyPubs(geo);
             }
         });
@@ -322,8 +374,6 @@ public class NearbyPlaces extends NMapActivity {
 
     private void onMarkerClicked(NMapOverlayItem nMapOverlayItem) {
         JLog.v(nMapOverlayItem.getTitle());
-        JLog.v(Double.toString(nMapOverlayItem.getPoint().getLatitude()));
-        JLog.v(Double.toString(nMapOverlayItem.getPoint().getLongitude()));
 
 //        mapView.getMapController().animateTo(nMapOverlayItem.getPoint());
 
@@ -350,10 +400,10 @@ public class NearbyPlaces extends NMapActivity {
 
         String distanceString = "";
 
-        if(myLocation!=null) {
-            Double distance = GeoHelper.getActualKilometer(myLocation.latitude, myLocation.longitude,
+        if(StaticData.myLatestLocation!=null && myLocationMarkerIsVisible) {
+            Double distance = GeoHelper.getActualKilometer(StaticData.myLatestLocation.latitude, StaticData.myLatestLocation.longitude,
                     nMapOverlayItem.getPoint().getLatitude(), nMapOverlayItem.getPoint().getLongitude());
-            distanceString = NumericHelper.trimUnderPoint(Double.toString(distance), 2) + "km";
+            distanceString = GeoHelper.getDistanceString(distance);
         }
 
         Picasso.with(this).load(pubInfoArray.get(position).imageAddress.get(0)).into(pubImage);
@@ -383,42 +433,43 @@ public class NearbyPlaces extends NMapActivity {
 
             int i = 0;
             while (true) {
-                try {
-                    String num = Integer.toString(i++);
-                    long id = Long.parseLong(map.get("id_place_" + num));
-                    String name = map.get("name_place_" + num);
-                    String address = map.get("address_place_" + num);
-                    String imageAddress = map.get("imgadd_place_" + num);
-                    boolean favorite = false;
-                    if (map.get("like_" + num).equals("TRUE")) {
-                        favorite = true;
-                    }
-                    double lat = Double.parseDouble(map.get("lat_" + num));
-                    double lng = Double.parseDouble(map.get("lng_" + num));
-                    int drinkProvideType = Integer.parseInt(map.get("alcoholpertable_" + num));
-
-                    pubInfoArray.add(new PubInfo(id, name, address, "주점", imageAddress, favorite, lat, lng, drinkProvideType));
-                } catch (Exception e) {
+                String num = Integer.toString(i++);
+                if(map.get("id_place_" + num)==null){
                     break;
                 }
+                long id = Long.parseLong(map.get("id_place_" + num));
+                String name = map.get("name_place_" + num);
+                String address = map.get("address_place_" + num);
+                String imageAddress = map.get("imgadd_place_" + num);
+                boolean favorite = false;
+                if (map.get("like_" + num).equals("TRUE")) {
+                    favorite = true;
+                }
+                double lat = Double.parseDouble(map.get("lat_" + num));
+                double lng = Double.parseDouble(map.get("lng_" + num));
+                int drinkProvideType = Integer.parseInt(map.get("alcoholpertable_" + num));
+
+                pubInfoArray.add(new PubInfo(id, name, address, "주점", imageAddress, favorite, lat, lng, drinkProvideType));
             }
-            new Handler(getMainLooper()).post(()->{
-                updateMarkers();
-                loading.setLoadingCompleted();
-            });
+            new Handler(getMainLooper()).post(this::updateMarkers);
+            loading.setLoadingCompleted();
         }).start();
     }
 
     private void updateMarkers(){
         poiData.removeAllPOIdata();
 
-        if(myLocation!=null){
-            addMarkerTo(myLocation,true,LOCATION_MYLOCATION);
+        if(StaticData.myLatestLocation!=null && myLocationMarkerIsVisible){
+            addMarkerTo(StaticData.myLatestLocation,true,LOCATION_MYLOCATION);
         }
 
         for(int i=0;i<pubInfoArray.size();i++){
 //            JLog.v("adding",i," - "+pubInfoArray.get(i).name);
             NGeoPoint geoPoint = new NGeoPoint(pubInfoArray.get(i).longitude,pubInfoArray.get(i).latitude);
+
+            if(i == 0){
+                mapView.getMapController().setMapCenter(geoPoint,13);
+            }
 
             addMarkerTo(geoPoint,false,Integer.toString(i));
 
@@ -429,6 +480,12 @@ public class NearbyPlaces extends NMapActivity {
 
         overlayManager.clearOverlays();
         overlayManager.createPOIdataOverlay(poiData, null);
+    }
+
+    private void removeFocusFromMarker(){
+        pubInfoLayout.setVisibility(View.INVISIBLE);
+        currentlyFocusedMarker.setMarker(unselected);
+        currentlyFocusedMarker=null;
     }
 
     @Override

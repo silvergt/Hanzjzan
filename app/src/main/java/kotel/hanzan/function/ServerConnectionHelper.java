@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class ServerConnectionHelper {
-    private final static String serverIP="ec2-54-191-200-134.us-west-2.compute.amazonaws.com";
+    private final static String serverIP="ec2-52-78-207-207.ap-northeast-2.compute.amazonaws.com";
     private int connectTimeout=10000;
 
     public static HashMap<String,String> connect(String recognizer, String phpAddress, HashMap<String,String> data, String imageName, byte[] image){

@@ -7,6 +7,7 @@
     >
 
     <LinearLayout
+        android:id="@+id/pubitem_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -51,7 +52,7 @@
         
         <View
             android:layout_width="match_parent"
-            android:layout_height="20dp"
+            android:layout_height="15dp"
             />
 
     </LinearLayout>
@@ -60,11 +61,15 @@
         android:id="@+id/pubitem_drinkProvidable"
         android:layout_width="@dimen/pubitem_favorite"
         android:layout_height="@dimen/pubitem_favorite"
-        android:paddingLeft="5dp"
-        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="5dp"
         android:paddingBottom="15dp"
         android:paddingTop="5dp"
-        android:layout_margin="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="25dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@id/pubitem_container"
+        android:tint="@color/black"
         />
 
     <ImageView

@@ -51,7 +51,7 @@ public class Search extends AppCompatActivity {
     private Loading loading;
 
     private LocationHelper locationHelper = new LocationHelper();
-    private NGeoPoint myLocation;
+//    private NGeoPoint StaticData.myLatestLocation;
 
     private InputMethodManager inputMethodManager;
 
@@ -63,13 +63,14 @@ public class Search extends AppCompatActivity {
         private int lastClickedNumber;
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            ImageView image, favorite;
+            ImageView image, favorite,drinkProvidable;
             TextView text1, text2, text3;
 
             public ViewHolder(View itemView) {
                 super(itemView);
                 image = (ImageView) itemView.findViewById(R.id.pubitem_image);
                 favorite = (ImageView) itemView.findViewById(R.id.pubitem_favorite);
+                drinkProvidable = (ImageView) itemView.findViewById(R.id.pubitem_drinkProvidable);
                 text1 = (TextView) itemView.findViewById(R.id.pubitem_text1);
                 text2 = (TextView) itemView.findViewById(R.id.pubitem_text2);
                 text3 = (TextView) itemView.findViewById(R.id.pubitem_text3);
@@ -109,9 +110,24 @@ public class Search extends AppCompatActivity {
                 holder.favorite.setImageResource(R.drawable.favorite_unselected);
             }
 
-            Double distance = GeoHelper.getActualKilometer(pubInfo.latitude,pubInfo.longitude,myLocation.getLatitude(),myLocation.getLongitude());
-            String distanceString = Double.toString(distance);
-            distanceString = distanceString.substring(0,distanceString.indexOf(".")+2)+"km";
+            String distanceString = "";
+
+            if(myLocationMarkerIsVisible) {
+                Double distance = GeoHelper.getActualKilometer(pubInfo.latitude, pubInfo.longitude, StaticData.myLatestLocation.getLatitude(), StaticData.myLatestLocation.getLongitude());
+                distanceString = GeoHelper.getDistanceString(distance);
+            }
+
+            switch (pubInfo.drinkProvideType){
+                case 1:
+                    Picasso.with(getApplicationContext()).load(R.drawable.drinkprovidable_1).into(holder.drinkProvidable);
+                    break;
+                case 2:
+                    Picasso.with(getApplicationContext()).load(R.drawable.drinkprovidable_2).into(holder.drinkProvidable);
+                    break;
+                case 3:
+                    Picasso.with(getApplicationContext()).load(R.drawable.drinkprovidable_infinite).into(holder.drinkProvidable);
+                    break;
+            }
 
             holder.text1.setText(pubInfo.name+"  "+distanceString);
             holder.text2.setText(pubInfo.businessType);
@@ -142,10 +158,11 @@ public class Search extends AppCompatActivity {
             return pubInfoArray.size();
         }
     }
-
     private SearchRecyclerViewAdapter adapter;
 
     private String searchedWord = "";
+
+    private boolean myLocationMarkerIsVisible = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,7 +203,17 @@ public class Search extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if (editable.toString().length() != 0) {
+
+                String word = editable.toString();
+
+                while(word.startsWith(" ")){
+                    word = word.substring(1,word.length());
+                }
+                while(word.endsWith(" ")){
+                    word = word.substring(0,word.length()-1);
+                }
+
+                if (word.length() != 0) {
                     searchText.setVisibility(View.VISIBLE);
                 } else {
                     searchText.setVisibility(View.GONE);
@@ -251,57 +278,63 @@ public class Search extends AppCompatActivity {
     private void getMyLocation(){
 //        locationHelper = new LocationHelper();
 
-        locationHelper.getMyLocationOnlyOneTime(this, new LocationHelperListener() {
-            @Override
-            public void onSearchingStarted() {
+        if(StaticData.myLatestLocation==null) {
+            locationHelper.getMyLocationOnlyOneTime(this, new LocationHelperListener() {
+                @Override
+                public void onSearchingStarted() {
 //                loading.setLoadingStarted();
-            }
+                }
 
-            @Override
-            public void onSearchingEnded() {
+                @Override
+                public void onSearchingEnded() {
 //                loading.setLoadingCompleted();
-            }
+                }
 
-            @Override
-            public void onLocationFound(NGeoPoint nGeoPoint) {
-                pubInfoArray.clear();
-                JLog.v("Normal GPS call");
-                myLocation = nGeoPoint;
-                retrievePubList(true);
-            }
+                @Override
+                public void onLocationFound(NGeoPoint nGeoPoint) {
+                    myLocationMarkerIsVisible = true;
 
-            @Override
-            public void onLocationTimeout() {
-                pubInfoArray.clear();
-                Toast.makeText(getApplicationContext(),"현재 위치를 불러오지 못했습니다",Toast.LENGTH_SHORT).show();
-                myLocation = StaticData.defaultLocation;
-                retrievePubList(true);
-            }
+                    JLog.v("Normal GPS call");
+                    StaticData.myLatestLocation = nGeoPoint;
+                    retrievePubList(true);
+                }
 
-            @Override
-            public void onLocationUnavailableArea(NGeoPoint nGeoPoint) {
-                pubInfoArray.clear();
-                Toast.makeText(getApplicationContext(),"현재 위치를 불러오지 못했습니다",Toast.LENGTH_SHORT).show();
-                myLocation = StaticData.defaultLocation;
-                retrievePubList(true);
-            }
+                @Override
+                public void onLocationTimeout() {
+                    myLocationMarkerIsVisible = false;
+//                    Toast.makeText(getApplicationContext(), "현재 위치를 불러오지 못했습니다", Toast.LENGTH_SHORT).show();
+                    StaticData.myLatestLocation = StaticData.defaultLocation;
+                    retrievePubList(true);
+                }
 
-            @Override
-            public void onHasNoLocationPermission() {
-                pubInfoArray.clear();
-                JLog.e("Permission has denied!");
-                myLocation = StaticData.defaultLocation;
-                retrievePubList(true);
-            }
+                @Override
+                public void onLocationUnavailableArea(NGeoPoint nGeoPoint) {
+                    myLocationMarkerIsVisible = false;
+//                    Toast.makeText(getApplicationContext(), "현재 위치를 불러오지 못했습니다", Toast.LENGTH_SHORT).show();
+                    StaticData.myLatestLocation = StaticData.defaultLocation;
+                    retrievePubList(true);
+                }
 
-            @Override
-            public void onGpsIsOff() {
-                pubInfoArray.clear();
-                JLog.e("GPS is off!");
-                myLocation = StaticData.defaultLocation;
-                retrievePubList(true);
-            }
-        });
+                @Override
+                public void onHasNoLocationPermission() {
+                    myLocationMarkerIsVisible = false;
+//                    Toast.makeText(getApplicationContext(), "설정에서 위치정보 사용을 수락해 주세요", Toast.LENGTH_SHORT).show();
+                    StaticData.myLatestLocation = StaticData.defaultLocation;
+                    retrievePubList(true);
+                }
+
+                @Override
+                public void onGpsIsOff() {
+                    myLocationMarkerIsVisible = false;
+//                    Toast.makeText(getApplicationContext(), "위치를 켜 주세요", Toast.LENGTH_SHORT).show();
+                    StaticData.myLatestLocation = StaticData.defaultLocation;
+                    retrievePubList(true);
+                }
+            });
+        }else{
+            JLog.v("Using buffered location");
+            retrievePubList(true);
+        }
     }
 
 
@@ -319,11 +352,11 @@ public class Search extends AppCompatActivity {
         }
         searchedWord = word;
 
-        searchEditText.setText("내 위치 검색중...");
+        searchEditText.setText("");
 
         loading.setLoadingStarted();
 
-        upperTitle.setText("검색 - " + word);
+        upperTitle.setText("검색 - '" + word+"'");
 
         inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         initialPanel.setVisibility(View.INVISIBLE);
@@ -338,10 +371,10 @@ public class Search extends AppCompatActivity {
             pubInfoArray.clear();
         }
 
-//        Toast.makeText(getApplicationContext(),Double.toString(myLocation.getLatitude())+","+Double.toString(myLocation.getLongitude()),Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(),Double.toString(StaticData.myLatestLocation.getLatitude())+","+Double.toString(StaticData.myLatestLocation.getLongitude()),Toast.LENGTH_SHORT).show();
         new Thread(()->{
-            String userlat = Double.toString(myLocation.getLatitude());
-            String userlng = Double.toString(myLocation.getLongitude());
+            String userLat = Double.toString(StaticData.myLatestLocation.getLatitude());
+            String userLng = Double.toString(StaticData.myLatestLocation.getLongitude());
             String word = searchedWord;
             if(word.equals("")){
                 return;
@@ -349,8 +382,8 @@ public class Search extends AppCompatActivity {
 
             HashMap<String,String> map = new HashMap<>();
             map.put("searchtext",word);
-            map.put("user_lat",userlat);
-            map.put("user_lng",userlng);
+            map.put("user_lat",userLat);
+            map.put("user_lng",userLng);
             map.put("id_member",Long.toString(StaticData.currentUser.id));
             map.put("at",Integer.toString(pubInfoArray.size()));
 
@@ -358,26 +391,23 @@ public class Search extends AppCompatActivity {
 
             int i=0;
             while(true){
-                try{
-                    String num = Integer.toString(i++);
-                    long id = Long.parseLong(map.get("id_place_"+num));
-                    String name = map.get("name_place_"+num);
-                    String address = map.get("address_place_"+num);
-                    String imageAddress = map.get("imgadd_place_"+num);
-                    boolean favorite=false;
-                    if(map.get("like_"+num).equals("TRUE")){
-                        favorite=true;
-                    }
-                    double lat = Double.parseDouble(map.get("lat_"+num));
-                    double lng = Double.parseDouble(map.get("lng_"+num));
-                    int drinkProvideType = Integer.parseInt(map.get("alcoholpertable_"+num));
-
-//                        JLog.v("retrieving number "+num);
-
-                    pubInfoArray.add(new PubInfo(id,name,address,"주점",imageAddress,favorite,lat,lng,drinkProvideType));
-                }catch (Exception e){
+                String num = Integer.toString(i++);
+                if(map.get("id_place_"+num)==null){
                     break;
                 }
+                long id = Long.parseLong(map.get("id_place_"+num));
+                String name = map.get("name_place_"+num);
+                String address = map.get("address_place_"+num);
+                String imageAddress = map.get("imgadd_place_"+num);
+                boolean favorite=false;
+                if(map.get("like_"+num).equals("TRUE")){
+                    favorite=true;
+                }
+                double lat = Double.parseDouble(map.get("lat_"+num));
+                double lng = Double.parseDouble(map.get("lng_"+num));
+                int drinkProvideType = Integer.parseInt(map.get("alcoholpertable_"+num));
+
+                pubInfoArray.add(new PubInfo(id,name,address,"주점",imageAddress,favorite,lat,lng,drinkProvideType));
             }
 
             String dataleft = map.get("datalefts");

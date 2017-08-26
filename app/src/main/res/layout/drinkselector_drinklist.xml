@@ -4,11 +4,18 @@
     android:layout_height="match_parent"
     >
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/drinkSelector_drinkList_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:src="@mipmap/ic_launcher"
+        android:src="@drawable/test"
+        />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@color/drinkSelector_Blur"
+        android:padding="1.5dp"
         />
 
     <TextView
@@ -17,7 +24,9 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="AAA"
-        android:textColor="#000000"
+        android:textStyle="bold"
+        android:textSize="@dimen/drinkSelector_listFontSize"
+        android:textColor="@color/white"
         />
 
 </RelativeLayout>

@@ -44,23 +44,19 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
-                        android:text="조주현"
+                        android:text=""
                         android:textSize="@dimen/mypage_profileMainTextFontSize"
+                        />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"
                         />
                     <TextView
                         android:id="@+id/mypage_profileText2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
-                        android:text="jjcop0501"
-                        android:textSize="@dimen/mypage_profileSubTextFontSize"
-                        />
-                    <TextView
-                        android:id="@+id/mypage_profileText3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/black"
-                        android:text="jjcop0501@gmail.com"
+                        android:text=""
                         android:textSize="@dimen/mypage_profileSubTextFontSize"
                         />
 
@@ -70,7 +66,7 @@
                     android:id="@+id/mypage_currentMembership"
                     android:layout_width="@dimen/mypage_itemWidth"
                     android:layout_height="match_parent"
-                    android:src="@drawable/test"
+                    android:src="@drawable/ticket"
                     android:layout_margin="15dp"
                     />
 
@@ -226,7 +222,7 @@
                     <ImageView
                         android:layout_width="@dimen/mypage_itemWidth"
                         android:layout_height="match_parent"
-                        android:src="@mipmap/ic_launcher"
+                        android:src="@drawable/logout"
                         android:padding="5dp"
                         />
                     <TextView

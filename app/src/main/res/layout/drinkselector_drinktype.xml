@@ -10,24 +10,35 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:background="@drawable/drink_container"
         >
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+
         <ImageView
             android:id="@+id/drinkSelector_drinkType_image"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:src="@mipmap/ic_launcher"
+            android:layout_weight="6"
             />
 
         <TextView
             android:id="@+id/drinkSelector_drinkType_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="AA"
+            android:text=""
             android:gravity="center"
+            android:textSize="@dimen/drinkSelector_typeFontSize"
             android:textColor="#000000"
             />
-
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            />
 
     </LinearLayout>
 

@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
+import com.kakao.usermgmt.UserManagement;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.nhn.android.maps.maplib.NGeoPoint;
 import com.squareup.picasso.Picasso;
@@ -37,6 +39,8 @@ import kotel.hanzan.Data.DrinkInfo;
 import kotel.hanzan.Data.PubHistoryInfo;
 import kotel.hanzan.Data.PubInfo;
 import kotel.hanzan.Data.StaticData;
+import kotel.hanzan.function.AssetImageHelper;
+import kotel.hanzan.function.CalendarHelper;
 import kotel.hanzan.function.GeoHelper;
 import kotel.hanzan.function.JLog;
 import kotel.hanzan.function.LocationHelper;
@@ -58,7 +62,7 @@ public class Home extends AppCompatActivity {
     private TextView upperBarMainText, upperBarSubText;
 
     private LocationHelper locationHelper = new LocationHelper();
-    private NGeoPoint myLocation;
+//    private NGeoPoint myLocation;
 
     //************************Home Tab************************
     private RelativeLayout homeLayout;
@@ -111,9 +115,13 @@ public class Home extends AppCompatActivity {
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             PubInfo pubInfo = pubInfoArray.get(position);
-            double distance = GeoHelper.getActualKilometer(myLocation.getLatitude(), myLocation.getLongitude(), pubInfo.latitude, pubInfo.longitude);
-            String distanceString = Double.toString(distance);
-            distanceString = distanceString.substring(0, distanceString.indexOf(".") + 2) + "km";
+
+            String distanceString = "";
+
+            if(myLocationIsAvailable){
+                double distance = GeoHelper.getActualKilometer(StaticData.myLatestLocation.getLatitude(), StaticData.myLatestLocation.getLongitude(), pubInfo.latitude, pubInfo.longitude);
+                distanceString = GeoHelper.getDistanceString(distance);
+            }
 
             Picasso.with(Home.this).load(pubInfo.imageAddress.get(0)).into(holder.image);
             switch (pubInfo.drinkProvideType){
@@ -165,6 +173,7 @@ public class Home extends AppCompatActivity {
     }
 
     private boolean isFirstGPSRequest = true;
+    private boolean myLocationIsAvailable = false;
     //******FILTER******
     private boolean filterLayoutIsVisible = false;
     private RelativeLayout filterLayout;
@@ -305,9 +314,11 @@ public class Home extends AppCompatActivity {
 
             Picasso.with(getApplicationContext()).load(pubInfo.imageAddress.get(0)).into(holder.image);
             String dateText = Integer.toString(pubInfo.YYYY) + "/" + Integer.toString(pubInfo.MM) + "/" + Integer.toString(pubInfo.DD);
-            holder.dateAndDrink.setText(dateText + "에 " + pubInfo.drinkInfo.drinkName + "한 잔");
+            holder.dateAndDrink.setText(dateText + "에 '" + pubInfo.drinkInfo.drinkName + "' 한 잔");
             holder.name.setText(pubInfo.name);
             holder.address.setText(pubInfo.address);
+            JLog.v(historyInfoArray.get(position).drinkInfo.drinkType);
+            AssetImageHelper.loadDrinkImage(getApplicationContext(),historyInfoArray.get(position).drinkInfo.drinkType).into(holder.drinkImage);
 
             holder.itemView.setOnClickListener(view -> {
                 lastClickedViewHolder = holder;
@@ -381,7 +392,8 @@ public class Home extends AppCompatActivity {
         container = (RelativeLayout) findViewById(R.id.home_contentContainer);
         tapBar = (TapBar) findViewById(R.id.home_tapbar);
 
-        upperBarFilter.setImageDrawable(filter_checkbox1Checked || filter_checkbox2Checked || filter_checkbox3Checked ? getDrawable(R.drawable.filtericon_active) : getDrawable(R.drawable.filtericon_inactive));
+        upperBarFilter.setImageDrawable(filter_checkbox1Checked || filter_checkbox2Checked || filter_checkbox3Checked ?
+                getDrawable(R.drawable.filtericon_active) : getDrawable(R.drawable.filtericon_inactive));
 
         upperBarFilter.setOnClickListener(view -> {
             if (filterLayoutIsVisible) {
@@ -458,9 +470,14 @@ public class Home extends AppCompatActivity {
     private void openMembershipPopup() {
         Dialog dialog = new Dialog(this);
 
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
         LinearLayout layout = (LinearLayout) getLayoutInflater().inflate(R.layout.home_membershippopup, null);
         TextView no = (TextView) layout.findViewById(R.id.homeMembershipPopup_no);
         TextView yes = (TextView) layout.findViewById(R.id.homeMembershipPopup_yes);
+
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layout.setLayoutParams(params);
 
         no.setOnClickListener(view -> dialog.cancel());
         yes.setOnClickListener(view -> {
@@ -634,7 +651,6 @@ public class Home extends AppCompatActivity {
         mypageProfileImage = (ProfileCircleImageView) layout.findViewById(R.id.mypage_profileImage);
         mypageProfileText1 = (TextView) layout.findViewById(R.id.mypage_profileText1);
         mypageProfileText2 = (TextView) layout.findViewById(R.id.mypage_profileText2);
-        mypageProfileText3 = (TextView) layout.findViewById(R.id.mypage_profileText3);
         mypageCurrentMembership = (ImageView) layout.findViewById(R.id.mypage_currentMembership);
 //        mypageCalendarContainer = (RelativeLayout)layout.findViewById(R.id.mypage_calendarContainer);
         mypageCalendar = (DrinkCalendar) layout.findViewById(R.id.mypage_calendar);
@@ -644,18 +660,54 @@ public class Home extends AppCompatActivity {
         mypageLogout = (LinearLayout) layout.findViewById(R.id.mypage_logout);
 
 
+        setCalendarChecked(mypageCalendar.getViewingYear(),mypageCalendar.getViewingMonthInNormal());
+
+        mypageCalendar.setListener(this::setCalendarChecked);
+
+
         Picasso.with(this).load(StaticData.currentUser.profileImageAddress).into(mypageProfileImage);
         mypageProfileText1.setText(StaticData.currentUser.name);
 
-        mypageProfileImage.setOnClickListener(view -> {
-            openProfilePhotoPopup();
-        });
 
+        String expireDate;
+        if(StaticData.currentUser.expireYYYY==0){
+            expireDate = "아직 멤버십 미가입 상태입니다";
+        }else{
+            expireDate = Integer.toString(StaticData.currentUser.expireYYYY)+"."+Integer.toString(StaticData.currentUser.expireMM)
+                    +"."+Integer.toString(StaticData.currentUser.expireDD)+" 까지";
+        }
+        mypageProfileText2.setText("내 멤버십 : " + expireDate);
+
+
+
+//        mypageProfileImage.setOnClickListener(view -> {
+//            openProfilePhotoPopup();
+//        });
+
+        mypageCurrentMembership.setOnClickListener(view->{
+            mypageMembership.callOnClick();
+        });
 
         mypageMembership.setOnClickListener(view -> {
             Intent intent = new Intent(Home.this, Membership.class);
             startActivity(intent);
         });
+
+        mypageInquire.setOnClickListener(view -> {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            String[] email=new String[]{"silvergt@naver.com"};
+            String subject="SUBJECT 맨~~~";
+            String body="BODYBODY~~";
+
+            intent.putExtra(Intent.EXTRA_EMAIL,email);
+            intent.putExtra(Intent.EXTRA_SUBJECT,subject);
+            intent.putExtra(Intent.EXTRA_TEXT,body);
+            intent.setType("message/rfc822");
+//            intent.setType("text/plain");
+
+            startActivity(Intent.createChooser(intent,"email을 보낼 앱을 선택하세요"));
+
+       });
 
         mypageLogout.setOnClickListener(view -> logoutToLoginPage());
 
@@ -677,8 +729,8 @@ public class Home extends AppCompatActivity {
 
             map.put("at", Integer.toString(pubInfoArray.size()));
             map.put("id_member", Long.toString(StaticData.currentUser.id));
-            map.put("user_lat", Double.toString(myLocation.getLatitude()));
-            map.put("user_lat", Double.toString(myLocation.getLongitude()));
+            map.put("user_lat", Double.toString(StaticData.myLatestLocation.getLatitude()));
+            map.put("user_lat", Double.toString(StaticData.myLatestLocation.getLongitude()));
             String filter1,filter2,filter3;
             filter1 = filter_checkbox1Checked ? "TRUE" : "FALSE";
             filter2 = filter_checkbox2Checked ? "TRUE" : "FALSE";
@@ -690,26 +742,23 @@ public class Home extends AppCompatActivity {
 
             int i = 0;
             while (true) {
-                try {
-                    String num = Integer.toString(i++);
-                    long id = Long.parseLong(map.get("id_place_" + num));
-                    String name = map.get("name_place_" + num);
-                    String address = map.get("address_place_" + num);
-                    String imageAddress = map.get("imgadd_place_" + num);
-                    boolean favorite = false;
-                    if (map.get("like_" + num).equals("TRUE")) {
-                        favorite = true;
-                    }
-                    double lat = Double.parseDouble(map.get("lat_" + num));
-                    double lng = Double.parseDouble(map.get("lng_" + num));
-                    int drinkProvideType = Integer.parseInt(map.get("alcoholpertable_" + num));
-
-//                        JLog.v("retrieving number "+num);
-
-                    pubInfoArray.add(new PubInfo(id, name, address, "주점", imageAddress, favorite, lat, lng, drinkProvideType));
-                } catch (Exception e) {
+                String num = Integer.toString(i++);
+                if(map.get("id_place_" + num)==null){
                     break;
                 }
+                long id = Long.parseLong(map.get("id_place_" + num));
+                String name = map.get("name_place_" + num);
+                String address = map.get("address_place_" + num);
+                String imageAddress = map.get("imgadd_place_" + num);
+                boolean favorite = false;
+                if (map.get("like_" + num).equals("TRUE")) {
+                    favorite = true;
+                }
+                double lat = Double.parseDouble(map.get("lat_" + num));
+                double lng = Double.parseDouble(map.get("lng_" + num));
+                int drinkProvideType = Integer.parseInt(map.get("alcoholpertable_" + num));
+
+                pubInfoArray.add(new PubInfo(id, name, address, "주점", imageAddress, favorite, lat, lng, drinkProvideType));
             }
 
             String dataleft = map.get("datalefts");
@@ -817,8 +866,8 @@ public class Home extends AppCompatActivity {
                 filterLayoutIsVisible = false;
                 container.removeView(filterLayout);
 
-                pubInfoArray.clear();
-                retrievePubList(true);
+
+                pubInfoRecyclerView.startRefresh();
             }
         });
 
@@ -833,8 +882,7 @@ public class Home extends AppCompatActivity {
                 filterLayoutIsVisible = false;
                 container.removeView(filterLayout);
 
-                pubInfoArray.clear();
-                retrievePubList(true);
+                pubInfoRecyclerView.startRefresh();
             }
         });
 
@@ -865,41 +913,46 @@ public class Home extends AppCompatActivity {
 
             @Override
             public void onLocationFound(NGeoPoint nGeoPoint) {
+                myLocationIsAvailable = true;
                 pubInfoArray.clear();
                 JLog.v("Normal GPS calling");
-                myLocation = nGeoPoint;
+                StaticData.myLatestLocation = nGeoPoint;
                 retrievePubList(true);
             }
 
             @Override
             public void onLocationTimeout() {
+                myLocationIsAvailable = false;
                 pubInfoArray.clear();
                 Toast.makeText(getApplicationContext(), "현재 위치를 불러오지 못했습니다", Toast.LENGTH_SHORT).show();
-                myLocation = StaticData.defaultLocation;
+                StaticData.myLatestLocation = StaticData.defaultLocation;
                 retrievePubList(true);
             }
 
             @Override
             public void onLocationUnavailableArea(NGeoPoint nGeoPoint) {
+                myLocationIsAvailable = false;
                 pubInfoArray.clear();
                 Toast.makeText(getApplicationContext(), "현재 위치를 불러오지 못했습니다", Toast.LENGTH_SHORT).show();
-                myLocation = StaticData.defaultLocation;
+                StaticData.myLatestLocation = StaticData.defaultLocation;
                 retrievePubList(true);
             }
 
             @Override
             public void onHasNoLocationPermission() {
+                myLocationIsAvailable = false;
                 pubInfoArray.clear();
-                JLog.e("GPS permission has denied");
-                myLocation = StaticData.defaultLocation;
+                Toast.makeText(getApplicationContext(), "설정에서 위치정보 사용을 수락해 주세요", Toast.LENGTH_SHORT).show();
+                StaticData.myLatestLocation = StaticData.defaultLocation;
                 retrievePubList(true);
             }
 
             @Override
             public void onGpsIsOff() {
+                myLocationIsAvailable = false;
                 pubInfoArray.clear();
-                JLog.e("GPS is off");
-                myLocation = StaticData.defaultLocation;
+                Toast.makeText(getApplicationContext(), "위치를 켜 주세요", Toast.LENGTH_SHORT).show();
+                StaticData.myLatestLocation = StaticData.defaultLocation;
                 retrievePubList(true);
             }
         });
@@ -921,23 +974,23 @@ public class Home extends AppCompatActivity {
 
             int i = 0;
             while (true) {
-                try {
-                    String num = Integer.toString(i++);
-                    long id = Long.parseLong(map.get("id_place_" + num));
-                    String name = map.get("name_place_" + num);
-                    String address = map.get("address_place_" + num);
-                    String imageAddress = map.get("imgadd_place_" + num);
-                    double lat = Double.parseDouble(map.get("lat_" + num));
-                    double lng = Double.parseDouble(map.get("lng_" + num));
-                    int drinkProvideType = Integer.parseInt(map.get("alcoholpertable_" + num));
-
-//                        JLog.v("retrieving number "+num);
-
-                    pubInfoFavoriteArray.add(new PubInfo(id, name, address, "주점", imageAddress, true, lat, lng, drinkProvideType));
-                } catch (Exception e) {
+                String num = Integer.toString(i++);
+                if(map.get("id_place_" + num)==null){
                     break;
                 }
+                long id = Long.parseLong(map.get("id_place_" + num));
+                String name = map.get("name_place_" + num);
+                String address = map.get("address_place_" + num);
+                String imageAddress = map.get("imgadd_place_" + num);
+                double lat = Double.parseDouble(map.get("lat_" + num));
+                double lng = Double.parseDouble(map.get("lng_" + num));
+                int drinkProvideType = Integer.parseInt(map.get("alcoholpertable_" + num));
+
+
+                pubInfoFavoriteArray.add(new PubInfo(id, name, address, "주점", imageAddress, true, lat, lng, drinkProvideType));
             }
+
+
 
             String dataleft = map.get("datalefts");
             new Handler(getMainLooper()).post(() -> {
@@ -966,36 +1019,35 @@ public class Home extends AppCompatActivity {
 
             int i = 0;
             while (true) {
-                try {
-                    String num = Integer.toString(i++);
-                    long id = Long.parseLong(map.get("id_place_" + num));
-                    String name = map.get("name_place_" + num);
-                    String address = map.get("address_place_" + num);
-                    String imageAddress = map.get("imgadd_place_" + num);
-                    boolean favorite = false;
-                    if (map.get("like_" + num).equals("TRUE")) {
-                        favorite = true;
-                    }
-                    double lat = Double.parseDouble(map.get("lat_" + num));
-                    double lng = Double.parseDouble(map.get("lng_" + num));
-                    int drinkProvideType = Integer.parseInt(map.get("alcoholpertable_" + num));
+                String num = Integer.toString(i++);
+                if(map.get("id_place_" + num)==null){
+                    break;
+                }
+                long id = Long.parseLong(map.get("id_place_" + num));
+                String name = map.get("name_place_" + num);
+                String address = map.get("address_place_" + num);
+                String imageAddress = map.get("imgadd_place_" + num);
+                boolean favorite = false;
+                if (map.get("like_" + num).equals("TRUE")) {
+                    favorite = true;
+                }
+                double lat = Double.parseDouble(map.get("lat_" + num));
+                double lng = Double.parseDouble(map.get("lng_" + num));
+                int drinkProvideType = Integer.parseInt(map.get("alcoholpertable_" + num));
 
-                    String dateString = map.get("date_visit_" + num);
-                    int year = Integer.parseInt(dateString.substring(0,4));
-                    int month = Integer.parseInt(dateString.substring(4,6));
-                    int day = Integer.parseInt(dateString.substring(6,8));
+                String dateString = map.get("date_visit_" + num);
+                int year = Integer.parseInt(dateString.substring(0,4));
+                int month = Integer.parseInt(dateString.substring(4,6));
+                int day = Integer.parseInt(dateString.substring(6,8));
 
-                    String drinkName = map.get("category_drink_" + num);
-                    String drinkCategory = map.get("name_drink_" + num);
+                String drinkCategory = map.get("category_drink_" + num);
+                String drinkName = map.get("name_drink_" + num);
 
 //                        JLog.v("retrieving number "+num);
 
-                    PubInfo pubInfo = new PubInfo(id, name, address, "주점", imageAddress, favorite, lat, lng, drinkProvideType);
-                    DrinkInfo drinkInfo = new DrinkInfo(drinkCategory,drinkName);
-                    historyInfoArray.add(new PubHistoryInfo(pubInfo,drinkInfo,year,month,day));
-                } catch (Exception e) {
-                    break;
-                }
+                PubInfo pubInfo = new PubInfo(id, name, address, "주점", imageAddress, favorite, lat, lng, drinkProvideType);
+                DrinkInfo drinkInfo = new DrinkInfo(drinkCategory,drinkName);
+                historyInfoArray.add(new PubHistoryInfo(pubInfo,drinkInfo,year,month,day));
             }
 
             String totalSavingCost = NumericHelper.toMoneyFormat(map.get("totalsavingcost"));
@@ -1019,6 +1071,8 @@ public class Home extends AppCompatActivity {
 
     private void openProfilePhotoPopup() {
         Dialog dialog = new Dialog(this);
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
         LinearLayout layout = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.mypage_profilephoto_popup, null);
         TextView see = (TextView) layout.findViewById(R.id.profilePhotoPopup_see);
@@ -1054,12 +1108,43 @@ public class Home extends AppCompatActivity {
         dialogBuilder.setNegativeButton("아니요", null);
         dialogBuilder.setPositiveButton("네", (dialogInterface, i) -> {
             AccessToken.setCurrentAccessToken(null);
+            UserManagement.requestLogout(null);
             Intent intent = new Intent(Home.this, Login.class);
             startActivity(intent);
             finishAffinity();
         });
         dialogBuilder.create().show();
 
+    }
+
+    private void setCalendarChecked(int year, int monthInNormal){
+        new Thread(()->{
+            HashMap<String,String> map = new HashMap<>();
+
+            String date = Integer.toString(year);
+            if(monthInNormal<10) date+="0";
+            date += Integer.toString(monthInNormal);
+
+            map.put("id_member",Long.toString(StaticData.currentUser.id));
+            map.put("date",date);
+
+            map = ServerConnectionHelper.connect("retrieving "+date+" drink history","drinkcalendar",map);
+
+            int i=0;
+            ArrayList<Integer> dateArray = new ArrayList<>();
+            while(true){
+                String num = Integer.toString(i++);
+                String retrievedDate = map.get("date_visit_" + num);
+                if(retrievedDate==null){
+                    break;
+                }else {
+                    dateArray.add(CalendarHelper.parseDate(retrievedDate)[2]);
+                }
+            }
+            new Handler(getMainLooper()).post(()->{
+                mypageCalendar.setDateChecked(dateArray);
+            });
+        }).start();
     }
 
 
@@ -1128,7 +1213,7 @@ public class Home extends AppCompatActivity {
                 finishIfBackButtonClickedOnceMore = true;
                 new Thread(()->{
                     try{
-                        Thread.sleep(3000);
+                        Thread.sleep(2500);
                         finishIfBackButtonClickedOnceMore = false;
                     }catch (Exception e){}
                 }).start();

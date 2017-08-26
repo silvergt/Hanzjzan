@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="kotel.hanzan.Login"
+    android:background="@color/white"
     >
 
     <LinearLayout
@@ -38,7 +39,9 @@
             android:layout_weight="1"
             />
 
+
         <LinearLayout
+            android:id="@+id/login_lowerButton"
             android:layout_width="wrap_content"
             android:minWidth="@dimen/login_buttonWidth"
             android:layout_height="@dimen/login_buttonHeight"
@@ -60,7 +63,6 @@
                 />
 
             <TextView
-                android:id="@+id/login_lowerButton"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -69,7 +71,6 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/login_subFontSize"
                 android:text="다음으로"
-
                 />
 
 
@@ -77,6 +78,7 @@
 
 
     </LinearLayout>
+
 
     <kotel.hanzan.view.Loading
         android:id="@+id/login_loading"

@@ -80,12 +80,13 @@ public class LocationHelper {
     public void onStop(){
         try{
             locationManager.disableMyLocation();
-        }catch (Exception e){e.printStackTrace();}
+        }catch (Exception e){}
     }
 
     public void onRestart(){
         try{
             locationManager.enableMyLocation(false);
-        }catch (Exception e){e.printStackTrace();}
+        }catch (Exception e){}
     }
+
 }

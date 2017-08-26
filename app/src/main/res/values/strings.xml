@@ -1,17 +1,24 @@
 <resources>
     <string name="app_name">Hanzan</string>
 
-    <string name="naver_client_id">vTyKRfxeLRkzu3OELYyw</string>
+    <string name="naver_client_id" translatable="false">vTyKRfxeLRkzu3OELYyw</string>
 
 
-    <string name="facebook_app_id">265747197258109</string>
-    <string name="fb_login_protocol_scheme">fb265747197258109</string>
+    <string name="facebook_app_id" translatable="false">265747197258109</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb265747197258109</string>
 
 
-    <string name="title_activity_main">Main</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_activity_main" translatable="false">Main</string>
+    <string name="title_home" translatable="false">Home</string>
+    <string name="title_dashboard" translatable="false">Dashboard</string>
+    <string name="title_notifications" translatable="false">Notifications</string>
+    <string name="mak">Makgeoli</string>
+    <string name="soju">Soju</string>
+    <string name="beer">Beer</string>
+    <string name="wine">Wine</string>
+    <string name="sake">Sake</string>
+    <string name="cocktail">Cocktail</string>
 
+    <string name="kakao_app_key">7ff7bd46a972baee55ee0f73e5beb506</string>
 
 </resources>

@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import kotel.hanzan.Data.DrinkInfo;
 import kotel.hanzan.Data.StaticData;
 import kotel.hanzan.R;
+import kotel.hanzan.function.AssetImageHelper;
 import kotel.hanzan.function.JLog;
 import kotel.hanzan.listener.DrinkSelectorListener;
 
@@ -280,31 +281,33 @@ public class DrinkSelector extends RelativeLayout{
         setDrinkTypeView();
     }
 
-    private void setDrinkTypeView(){
+    private void setDrinkTypeView() {
         shadows = new View[drinkType.size()];
         drinkTypeLayout = new RelativeLayout[drinkType.size()];
 
-        for(int i=0;i<drinkType.size();i++){
-            final int num=i;
-            ScrollView.LayoutParams params=new ScrollView.LayoutParams(itemHeight,itemHeight);
-            RelativeLayout item=(RelativeLayout)LayoutInflater.from(context).inflate(R.layout.drinkselector_drinktype,null);
+        for (int i = 0; i < drinkType.size(); i++) {
+            final int num = i;
+            ScrollView.LayoutParams params = new ScrollView.LayoutParams(itemHeight, itemHeight);
+            RelativeLayout item = (RelativeLayout) LayoutInflater.from(context).inflate(R.layout.drinkselector_drinktype, null);
             item.setLayoutParams(params);
 
+            ImageView drinktypeImage = (ImageView) item.findViewById(R.id.drinkSelector_drinkType_image);
+            TextView drinkTypeName = (TextView) item.findViewById(R.id.drinkSelector_drinkType_text);
 
-            TextView textview=(TextView) item.findViewById(R.id.drinkSelector_drinkType_text);
-            textview.setText(drinkType.get(num));
+            AssetImageHelper.loadDrinkImage(context,drinkType.get(num)).into(drinktypeImage);
+            drinkTypeName.setText(DrinkInfo.getDrinkName(context,drinkType.get(num)));
 
             drinkTypeLayout[i] = item.findViewById(R.id.drinkSelector_drinkType_layout);
             shadows[i] = item.findViewById(R.id.drinkSelector_drinkType_shadow);
 
             item.setOnClickListener(view -> {
-                if(drinkListViewIsVisible && num==currentSelectedType) {
+                if (drinkListViewIsVisible && num == currentSelectedType) {
                     closeDrinkListView();
-                }else{
-                    if(drinkListViewIsVisible) {
+                } else {
+                    if (drinkListViewIsVisible) {
                         closeDrinkListView();
                         typeSelected(num);
-                    }else{
+                    } else {
                         typeSelected(num);
                     }
                 }

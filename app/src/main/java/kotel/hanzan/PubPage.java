@@ -21,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.stfalcon.frescoimageviewer.ImageViewer;
@@ -81,7 +82,7 @@ public class PubPage extends AppCompatActivity {
         call = (ImageView) findViewById(R.id.pubpage_call);
         location = (ImageView) findViewById(R.id.pubpage_location);
 
-        LinearLayout.LayoutParams pubImageParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, StaticData.displayWidth*3/4);
+        LinearLayout.LayoutParams pubImageParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, StaticData.displayWidth*3/5);
         pubImage.setLayoutParams(pubImageParams);
 
         Picasso.with(this).load(pubInfo.imageAddress.get(0)).into(pubImage);
@@ -172,7 +173,7 @@ public class PubPage extends AppCompatActivity {
 
         dialogStep=0;
 
-        ViewGroup.LayoutParams dialogParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,StaticData.displayHeight*7/10);
+        ViewGroup.LayoutParams dialogParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, StaticData.displayHeight*7/10);
         RelativeLayout dialogLayout = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.drinkselector_popup,null);
 
         drinkImage = (ImageView)dialogLayout.findViewById(R.id.drinkSelectorDialog_drinkImage);
@@ -191,6 +192,7 @@ public class PubPage extends AppCompatActivity {
         }else if(StaticData.currentUser.isHanzanAvailableToday){
             //멤버이고, 오늘 한잔을 사용하지 않은 경우 - 1
             dialogText1.setText(title.getText().toString() + "에서 제공하는\n"+drinkName+"로 하시겠습니까?");
+            dialogText1.setVisibility(View.VISIBLE);
             dialogText2.setVisibility(View.INVISIBLE);
             button1.setText("네, 맞아요");
             button2.setText("다시 생각해볼게요");
@@ -198,6 +200,7 @@ public class PubPage extends AppCompatActivity {
         }else{
             //멤버이고, 오늘 한잔을 사용한 경우 - 2
             dialogText1.setText("오늘 이미 한잔을 사용하셨네요!\n내일 다시 사용해주세요");
+            dialogText1.setVisibility(View.VISIBLE);
             dialogText2.setVisibility(View.INVISIBLE);
             button1.setText("내일 다시쓸게요!");
             button2.setVisibility(View.GONE);
@@ -214,7 +217,6 @@ public class PubPage extends AppCompatActivity {
                     break;
                 case 1:
                     dialogText2.setText(drinkName+"\n"+"한잔 주세요!");
-                    drinkImage.setVisibility(View.VISIBLE);
                     dialogText1.setVisibility(View.INVISIBLE);
                     dialogText2.setVisibility(View.VISIBLE);
                     button1.setText("직원 확인");
@@ -253,15 +255,17 @@ public class PubPage extends AppCompatActivity {
             map = ServerConnectionHelper.connect("using today's hanzan", "usevoucher", map);
 
             String availability = map.get("availabletoday");
+            String voucherUsedSuccessfully = map.get("usevoucher_result");
 
             new Handler(getMainLooper()).post(()->{
                 if(availability==null||availability.equals("FALSE")){
                     dialogText1.setText("오늘 이미 한잔을 사용하셨네요!\n내일 다시 사용해주세요");
+                    dialogText1.setVisibility(View.VISIBLE);
                     dialogText2.setVisibility(View.INVISIBLE);
                     button1.setText("내일 다시쓸게요!");
                     button2.setVisibility(View.GONE);
                     dialogStep = 2;
-                }else if(availability.equals("TRUE")){
+                }else if(availability.equals("TRUE")&& voucherUsedSuccessfully.equals("TRUE")){
                     StaticData.currentUser.isHanzanAvailableToday = false;
 
                     dialogText2.setText("사용 성공!"+"\n"+"맛있게 "+drinkName+" 한잔 하세요!");
@@ -271,6 +275,9 @@ public class PubPage extends AppCompatActivity {
                     button1.setText("확인");
                     button2.setVisibility(View.GONE);
                     dialogStep = 4;
+                }else{
+                    drinkSelectorDialog.cancel();
+                    Toast.makeText(this,"서버와 연결에 실패하였습니다. 다시 시도해주세요!",Toast.LENGTH_SHORT).show();
                 }
             });
         }).start();

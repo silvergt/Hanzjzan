@@ -19,6 +19,15 @@ import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.kakao.auth.ErrorCode;
+import com.kakao.auth.ISessionCallback;
+import com.kakao.auth.Session;
+import com.kakao.network.ErrorResult;
+import com.kakao.usermgmt.UserManagement;
+import com.kakao.usermgmt.callback.MeResponseCallback;
+import com.kakao.usermgmt.response.model.UserProfile;
+import com.kakao.util.exception.KakaoException;
+import com.kakao.util.helper.log.Logger;
 
 import java.net.URL;
 import java.util.Arrays;
@@ -48,8 +57,12 @@ public class Login extends AppCompatActivity {
 
     private HorizontalSlideView slideView;
     private SlideCountView slideCountView;
-    private TextView lowerButton;
+    private TextView kakaoLogin;
     private ImageView lowerIcon;
+    private LinearLayout lowerButton;
+
+    private SessionCallback callback;
+    private Session session;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,23 +71,22 @@ public class Login extends AppCompatActivity {
 
         initFacebook();
 
+        initKakao();
+
         slideView = (HorizontalSlideView)findViewById(R.id.login_slideView);
         slideCountView = (SlideCountView)findViewById(R.id.login_slideCountView);
-        lowerButton = (TextView)findViewById(R.id.login_lowerButton);
+        lowerButton = (LinearLayout) findViewById(R.id.login_lowerButton);
         lowerIcon = (ImageView)findViewById(R.id.login_lowerIcon);
         loading = (Loading)findViewById(R.id.login_loading);
 
+
         LinearLayout.LayoutParams slideViewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,StaticData.displayHeight*7/10);
         slideView.setLayoutParams(slideViewParams);
-
-        slideCountView.initialize(3,40,5);
-
         addSlideChildViews();
 
-
+        slideCountView.initialize(4,40,5);
 
         lowerIcon.setVisibility(View.GONE);
-
 
         slideView.setOnSlideListener(new SlideListener() {
             @Override
@@ -95,17 +107,47 @@ public class Login extends AppCompatActivity {
         });
 
         lowerButton.setOnClickListener(view -> {
-            switch (slideView.getCurrentIndex()){
-                case 0:
-                case 1:
-                    slideView.slideTo(slideView.getCurrentIndex()+1);
-                    break;
-                case 2:
-                    LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile"));
-                    break;
+            if(slideView.getCurrentIndex()!=3){
+                slideView.slideTo(slideView.getCurrentIndex()+1);
+            }
+            setLowerButton(slideView.getCurrentIndex());
+        });
+
+    }
+
+
+    private void initFacebook(){
+        callbackManager = CallbackManager.Factory.create();
+
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                JLog.v("user ID ", AccessToken.getCurrentAccessToken().getUserId());
+
+                tryLoginWithFacebook();
+            }
+
+            @Override
+            public void onCancel() {
+                JLog.v("facebook login cancelled");
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                error.printStackTrace();
+                JLog.e("facebook login ERROR!");
             }
         });
     }
+
+    private void initKakao(){
+        callback = new SessionCallback();
+        session = Session.getCurrentSession();
+        session.addCallback(callback);
+    }
+
+
+
 
     private void addSlideChildViews(){
         for(int i=0;i<3;i++){
@@ -143,6 +185,19 @@ public class Login extends AppCompatActivity {
 
         }
 
+        LinearLayout childLayout = (LinearLayout)getLayoutInflater().inflate(R.layout.login_slideviewchild_login,null);
+        LinearLayout facebookLogin = (LinearLayout)childLayout.findViewById(R.id.login_facebookLogin);
+        facebookLogin.setOnClickListener(view -> LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile")));
+
+        RelativeLayout.LayoutParams childParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        childLayout.setLayoutParams(childParams);
+        HorizontalSlideViewChild childContainer = new HorizontalSlideViewChild(this);
+        childContainer.addView(childLayout);
+
+        slideView.setChildWidth(StaticData.displayWidth);
+        slideView.addViewToList(childContainer);
+
+
         setLowerButton(0);
     }
 
@@ -150,12 +205,13 @@ public class Login extends AppCompatActivity {
         switch (num){
             case 0:
             case 1:
-                lowerIcon.setVisibility(View.GONE);
-                lowerButton.setText("다음으로");
-                break;
             case 2:
-                lowerIcon.setVisibility(View.VISIBLE);
-                lowerButton.setText("페이스북으로 시작하기");
+                lowerButton.setBackgroundResource(R.drawable.roundbox_maingradient);
+//                lowerButton.setVisibility(View.VISIBLE);
+                break;
+            case 3:
+                lowerButton.setBackgroundResource(R.drawable.roundbox_gray);
+//                lowerButton.setVisibility(View.INVISIBLE);
                 break;
         }
     }
@@ -163,33 +219,69 @@ public class Login extends AppCompatActivity {
 
 
 
-    private void initFacebook(){
-        callbackManager = CallbackManager.Factory.create();
+    private void tryLoginWithKakaoTalk(UserProfile userProfile){
+        JLog.v("profile ID : ",Long.toString(userProfile.getId()));
+        JLog.v("profile Image : ",userProfile.getThumbnailImagePath());
+        JLog.v("profile Name : ",userProfile.getNickname());
 
-        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                JLog.v("user ID ", AccessToken.getCurrentAccessToken().getUserId());
+        loading.setLoadingStarted();
 
-                tryLogin();
+        new Thread(()->{
+            map = new HashMap<>();
+            map.put("fb_key",Long.toString(userProfile.getId()));
+            map = ServerConnectionHelper.connect("checking account existence","login",map);
+
+            if(map.get("signup_history")==null){
+                JLog.e("Connection failed!");
+                loading.setLoadingCompleted();
+                return;
             }
 
-            @Override
-            public void onCancel() {
-                JLog.v("facebook login cancelled");
-            }
+            if(map.get("signup_history").equals("TRUE")){
+                makeUserInfoAndLogin(map);
+            }else if(map.get("signup_history").equals("FALSE")){
+                map.clear();
+                map.put("fb_key",Long.toString(userProfile.getId()));
+                map.put("imageincluded","1");
+                try {
+                    URL imageURL = new URL(userProfile.getThumbnailImagePath());
+                    bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+                }catch (Exception e){
+                    e.printStackTrace();
+                    loading.setLoadingCompleted();
+                    return;
+                }
+                try {
+                    map.put("name_member",userProfile.getNickname());
 
-            @Override
-            public void onError(FacebookException error) {
-                error.printStackTrace();
-                JLog.e("facebook login ERROR!");
+                    map = ServerConnectionHelper.connect("signing up","signup",map,"profileimage", BitmapHelper.getCompressedImageByteArray(bitmap));
+                    if(map.get("signupresult").equals("TRUE")){
+                        map.clear();
+                        map.put("fb_key",Long.toString(userProfile.getId()));
+                        map = ServerConnectionHelper.connect("checking account existence","login",map);
+                        if(map.get("signup_history").equals("TRUE")){
+                            makeUserInfoAndLogin(map);
+                        }else{
+                            loading.setLoadingCompleted();
+                        }
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                    loading.setLoadingCompleted();
+                }
             }
-        });
+        }).start();
     }
 
-    private void tryLogin(){
+    private void tryLoginWithFacebook(){
         loading.setLoadingStarted();
+
         new Thread(()->{
+            if(AccessToken.getCurrentAccessToken()==null){
+                loading.setLoadingCompleted();
+                return;
+            }
+
             map = new HashMap<>();
             map.put("fb_key",AccessToken.getCurrentAccessToken().getUserId());
             map = ServerConnectionHelper.connect("checking account existence","login",map);
@@ -239,6 +331,8 @@ public class Login extends AppCompatActivity {
         }).start();
     }
 
+
+
     private void makeUserInfoAndLogin(HashMap<String,String> map){
         StaticData.currentUser = new UserInfo(map);
         Intent intent = new Intent(getApplicationContext(),Home.class);
@@ -246,18 +340,75 @@ public class Login extends AppCompatActivity {
         finish();
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+
+        //FACEBOOK
         callbackManager.onActivityResult(requestCode,resultCode,data);
+
+        //KAKAOTALK
+        Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data);
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
     protected void onDestroy() {
+        Session.getCurrentSession().removeCallback(callback);
         super.onDestroy();
         try {
             bitmap.recycle();
         }catch (Exception e){}
     }
+
+
+
+
+
+    //****KAKAO
+
+    private class SessionCallback implements ISessionCallback {
+
+        @Override
+        public void onSessionOpened() {
+            UserManagement.requestMe(new MeResponseCallback() {
+
+                @Override
+                public void onFailure(ErrorResult errorResult) {
+                    String message = "failed to get user info. msg=" + errorResult;
+                    Logger.d(message);
+
+                    ErrorCode result = ErrorCode.valueOf(errorResult.getErrorCode());
+                    if (result == ErrorCode.CLIENT_ERROR_CODE) {
+                        finish();
+                    } else {
+                        //redirectMainActivity();
+                    }
+                }
+
+                @Override
+                public void onSessionClosed(ErrorResult errorResult) {
+                }
+
+                @Override
+                public void onNotSignedUp() {
+                }
+
+                @Override
+                public void onSuccess(UserProfile userProfile) {
+                    tryLoginWithKakaoTalk(userProfile);
+                }
+            });
+        }
+
+        @Override
+        public void onSessionOpenFailed(KakaoException exception) {
+            if(exception != null) {
+                Logger.e(exception);
+            }
+            // 세션 연결이 실패했을때
+        }
+    }
+
+
 }
