@@ -125,6 +125,8 @@ public class DrinkCalendar extends RelativeLayout {
         for (int i = 0; i < date.size(); i++) {
             ((ImageView)cells[date.get(i) - 1 + headerBufferSize].getChildAt(0)).setImageResource(R.drawable.calendar_check);
         }
+
+        setTodayChecked();
     }
 
     public int getViewingYear() {

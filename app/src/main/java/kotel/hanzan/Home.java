@@ -54,6 +54,10 @@ import kotel.hanzan.view.JRecyclerView;
 import kotel.hanzan.view.ProfileCircleImageView;
 import kotel.hanzan.view.TapBar;
 
+import static kotel.hanzan.Data.PubInfo.PROVIDETYPE_1PERTABLE;
+import static kotel.hanzan.Data.PubInfo.PROVIDETYPE_2PERTABLE;
+import static kotel.hanzan.Data.PubInfo.PROVIDETYPE_INFINITEPERTABLE;
+
 public class Home extends AppCompatActivity {
     private TapBar tapBar;
     private RelativeLayout container;
@@ -125,13 +129,13 @@ public class Home extends AppCompatActivity {
 
             Picasso.with(Home.this).load(pubInfo.imageAddress.get(0)).into(holder.image);
             switch (pubInfo.drinkProvideType){
-                case 1:
+                case PROVIDETYPE_1PERTABLE:
                     Picasso.with(Home.this).load(R.drawable.drinkprovidable_1).into(holder.drinkProvidable);
                     break;
-                case 2:
+                case PROVIDETYPE_2PERTABLE:
                     Picasso.with(Home.this).load(R.drawable.drinkprovidable_2).into(holder.drinkProvidable);
                     break;
-                case 3:
+                case PROVIDETYPE_INFINITEPERTABLE:
                     Picasso.with(Home.this).load(R.drawable.drinkprovidable_infinite).into(holder.drinkProvidable);
                     break;
             }
@@ -241,13 +245,13 @@ public class Home extends AppCompatActivity {
             holder.text3.setText(pubInfo.address);
 
             switch (pubInfo.drinkProvideType){
-                case 1:
+                case PROVIDETYPE_1PERTABLE:
                     Picasso.with(Home.this).load(R.drawable.drinkprovidable_1).into(holder.drinkProvidable);
                     break;
-                case 2:
+                case PROVIDETYPE_2PERTABLE:
                     Picasso.with(Home.this).load(R.drawable.drinkprovidable_2).into(holder.drinkProvidable);
                     break;
-                case 3:
+                case PROVIDETYPE_INFINITEPERTABLE:
                     Picasso.with(Home.this).load(R.drawable.drinkprovidable_infinite).into(holder.drinkProvidable);
                     break;
             }
@@ -382,6 +386,12 @@ public class Home extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        if(StaticData.currentUser==null){
+            Intent intent = new Intent(getApplicationContext(),Login.class);
+            startActivity(intent);
+            finish();
+        }
 
         upperBarLeftIcon = (ImageView) findViewById(R.id.home_upperBarLeftIcon);
         upperBarMap = (ImageView) findViewById(R.id.home_upperBarMapIcon);
@@ -695,7 +705,7 @@ public class Home extends AppCompatActivity {
 
         mypageInquire.setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_SEND);
-            String[] email=new String[]{"silvergt@naver.com"};
+            String[] email=new String[]{StaticData.adminEmail};
             String subject="SUBJECT 맨~~~";
             String body="BODYBODY~~";
 
@@ -1107,6 +1117,7 @@ public class Home extends AppCompatActivity {
         dialogBuilder.setMessage("정말 로그아웃 할래요?");
         dialogBuilder.setNegativeButton("아니요", null);
         dialogBuilder.setPositiveButton("네", (dialogInterface, i) -> {
+            StaticData.currentUser = null;
             AccessToken.setCurrentAccessToken(null);
             UserManagement.requestLogout(null);
             Intent intent = new Intent(Home.this, Login.class);

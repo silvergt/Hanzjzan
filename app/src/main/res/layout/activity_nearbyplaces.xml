@@ -12,13 +12,13 @@
         android:layout_centerInParent="true"
         >
         <com.nhn.android.maps.NMapView
-            android:id="@+id/NearbyPlaces_mapView"
+            android:id="@+id/nearbyPlaces_mapView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             />
 
         <RelativeLayout
-            android:id="@+id/NearbyPlaces_upperBar"
+            android:id="@+id/nearbyPlaces_upperBar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/upperBar"
             android:background="@color/white"
@@ -26,7 +26,7 @@
             >
 
             <ImageView
-                android:id="@+id/NearbyPlaces_back"
+                android:id="@+id/nearbyPlaces_back"
                 android:layout_width="@dimen/upperBarIconWidth"
                 android:layout_height="match_parent"
                 android:src="@drawable/back"
@@ -35,7 +35,7 @@
                 android:layout_marginLeft="5dp"
                 />
             <TextView
-                android:id="@+id/NearbyPlaces_upperBarMainText"
+                android:id="@+id/nearbyPlaces_upperBarMainText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -43,44 +43,36 @@
                 android:textColor="@color/black"
                 android:text="내 주변"
                 android:textSize="@dimen/upperBar_MainFontSize"
-                android:layout_toRightOf="@id/NearbyPlaces_back"
+                android:layout_toRightOf="@id/nearbyPlaces_back"
                 android:layout_marginRight="5dp"
                 />
 
-            <ImageView
-                android:id="@+id/NearbyPlaces_myLocation"
-                android:layout_width="@dimen/upperBar_myLocationWidth"
-                android:layout_height="match_parent"
-                android:src="@drawable/mylocation"
-                android:paddingTop="@dimen/backButtonPadding"
-                android:paddingBottom="@dimen/backButtonPadding"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"
-                />
-
         </RelativeLayout>
-        <!--
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:background="@color/upperBarGrayColor"
-                    android:layout_below="@id/NearbyPlaces_upperBar"
-                    />
-        -->
+
+        <ImageView
+            android:id="@+id/nearbyPlaces_myLocation"
+            android:layout_width="@dimen/upperBar_myLocationWidth"
+            android:layout_height="@dimen/upperBar_myLocationWidth"
+            android:src="@drawable/mylocation"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:padding="3dp"
+            android:layout_below="@id/nearbyPlaces_upperBar"
+            />
 
 
         <LinearLayout
-            android:id="@+id/NearbyPlaces_pubInfoLayout"
+            android:id="@+id/nearbyPlaces_pubInfoLayout"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/NearbyPlaces_pubInfoHeight"
+            android:layout_height="@dimen/nearbyPlaces_pubInfoHeight"
             android:orientation="horizontal"
             android:layout_alignParentBottom="true"
             android:background="@color/white"
             >
             <ImageView
-                android:id="@+id/NearbyPlaces_pubImage"
-                android:layout_width="@dimen/NearbyPlaces_pubInfoHeight"
+                android:id="@+id/nearbyPlaces_pubImage"
+                android:layout_width="@dimen/nearbyPlaces_pubInfoHeight"
                 android:layout_height="match_parent"
                 android:src="@drawable/test"
                 android:scaleType="centerCrop"
@@ -96,11 +88,11 @@
                 >
 
                 <TextView
-                    android:id="@+id/NearbyPlaces_pubText1"
+                    android:id="@+id/nearbyPlaces_pubText1"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:textSize="@dimen/NearbyPlaces_pubitem_text1"
+                    android:textSize="@dimen/nearbyPlaces_pubitem_text1"
                     android:textColor="@color/black"
                     android:text=""
                     android:textStyle="bold"
@@ -108,33 +100,33 @@
                     />
 
                 <TextView
-                    android:id="@+id/NearbyPlaces_pubText2"
+                    android:id="@+id/nearbyPlaces_pubText2"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:textSize="@dimen/NearbyPlaces_pubitem_text2"
+                    android:textSize="@dimen/nearbyPlaces_pubitem_text2"
                     android:textColor="@color/gray"
                     android:text=""
                     android:gravity="center_vertical"
                     />
 
                 <TextView
-                    android:id="@+id/NearbyPlaces_pubText3"
+                    android:id="@+id/nearbyPlaces_pubText3"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:textSize="@dimen/NearbyPlaces_pubitem_text3"
+                    android:textSize="@dimen/nearbyPlaces_pubitem_text3"
                     android:textColor="@color/gray"
                     android:text=""
                     android:gravity="center_vertical"
                     />
 
                 <TextView
-                    android:id="@+id/NearbyPlaces_pubText4"
+                    android:id="@+id/nearbyPlaces_pubText4"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_weight="1"
-                    android:textSize="@dimen/NearbyPlaces_pubitem_text4"
+                    android:textSize="@dimen/nearbyPlaces_pubitem_text4"
                     android:textColor="@color/gray"
                     android:text=""
                     android:gravity="center_vertical"
@@ -142,6 +134,15 @@
 
 
             </LinearLayout>
+            
+            <ImageView
+                android:id="@+id/nearbyplaces_provideTypeIcon"
+                android:layout_width="@dimen/nearbyPlaces_provideTypeIcon"
+                android:layout_height="@dimen/nearbyPlaces_provideTypeIcon"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="10dp"
+                android:tint="@color/black"
+                />
 
         </LinearLayout>
 
@@ -149,7 +150,7 @@
     </RelativeLayout>
 
     <kotel.hanzan.view.Loading
-        android:id="@+id/NearbyPlaces_loading"
+        android:id="@+id/nearbyPlaces_loading"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 </RelativeLayout>

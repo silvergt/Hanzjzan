@@ -38,6 +38,10 @@ import kotel.hanzan.function.ServerConnectionHelper;
 import kotel.hanzan.listener.LocationHelperListener;
 import kotel.hanzan.view.Loading;
 
+import static kotel.hanzan.Data.PubInfo.PROVIDETYPE_1PERTABLE;
+import static kotel.hanzan.Data.PubInfo.PROVIDETYPE_2PERTABLE;
+import static kotel.hanzan.Data.PubInfo.PROVIDETYPE_INFINITEPERTABLE;
+
 public class NearbyPlaces extends NMapActivity {
     final private String LOCATION_MYLOCATION = "LOCATION_MYLOCATION";
 
@@ -57,7 +61,7 @@ public class NearbyPlaces extends NMapActivity {
     private int drawableWidth, drawableHeight;
 
     private Loading loading;
-    private ImageView myLocationButton, back, pubImage;
+    private ImageView myLocationButton, back, pubImage, provideTypeIcon;
     private LinearLayout pubInfoLayout;
     private TextView pubText1, pubText2, pubText3, pubText4;
 
@@ -69,28 +73,27 @@ public class NearbyPlaces extends NMapActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_locationviewer);
+        setContentView(R.layout.activity_nearbyplaces);
 
         init();
     }
 
     private void init() {
-
         drawableWidth = (int) getResources().getDimension(R.dimen.markerWidth);
         drawableHeight = (int) getResources().getDimension(R.dimen.markerHeight);
 
+        loading = (Loading) findViewById(R.id.nearbyPlaces_loading);
+        myLocationButton = (ImageView) findViewById(R.id.nearbyPlaces_myLocation);
+        back = (ImageView) findViewById(R.id.nearbyPlaces_back);
+        pubInfoLayout = (LinearLayout) findViewById(R.id.nearbyPlaces_pubInfoLayout);
+        pubImage = (ImageView) findViewById(R.id.nearbyPlaces_pubImage);
+        provideTypeIcon=(ImageView)findViewById(R.id.nearbyplaces_provideTypeIcon);
+        pubText1 = (TextView) findViewById(R.id.nearbyPlaces_pubText1);
+        pubText2 = (TextView) findViewById(R.id.nearbyPlaces_pubText2);
+        pubText3 = (TextView) findViewById(R.id.nearbyPlaces_pubText3);
+        pubText4 = (TextView) findViewById(R.id.nearbyPlaces_pubText4);
 
-        loading = (Loading) findViewById(R.id.locationViewer_loading);
-        myLocationButton = (ImageView) findViewById(R.id.locationViewer_myLocation);
-        back = (ImageView) findViewById(R.id.locationViewer_back);
-        pubInfoLayout = (LinearLayout) findViewById(R.id.locationViewer_pubInfoLayout);
-        pubImage = (ImageView) findViewById(R.id.locationViewer_pubImage);
-        pubText1 = (TextView) findViewById(R.id.locationViewer_pubText1);
-        pubText2 = (TextView) findViewById(R.id.locationViewer_pubText2);
-        pubText3 = (TextView) findViewById(R.id.locationViewer_pubText3);
-        pubText4 = (TextView) findViewById(R.id.locationViewer_pubText4);
-
-        mapView = (NMapView) findViewById(R.id.locationViewer_mapView);
+        mapView = (NMapView) findViewById(R.id.nearbyPlaces_mapView);
         mapView.setClientId(getString(R.string.naver_client_id));
         mapView.setClickable(true);
         mapView.setEnabled(true);
@@ -231,12 +234,6 @@ public class NearbyPlaces extends NMapActivity {
                 JLog.v(geos[0].getLongitude());
                 JLog.v(geos[1].getLatitude());
                 JLog.v(geos[1].getLongitude());
-//                JLog.v(Double.toString(nMapView.getMapController().getMapCenter().getLatitude()));
-//                JLog.v(Double.toString(nMapView.getMapController().getMapCenter().getLongitude()));
-//                JLog.v(Double.toString(nMapView.getMapController().getMapCenter().getLatitudeE6()));
-//                JLog.v(Double.toString(nMapView.getMapController().getMapCenter().getLongitudeE6()));
-//                JLog.v(nMapView.getMapProjection().getLatitudeSpan());
-//                JLog.v(nMapView.getMapProjection().getLongitudeSpan());
 
             }
 
@@ -270,8 +267,8 @@ public class NearbyPlaces extends NMapActivity {
         unselected = getResources().getDrawable(R.drawable.gps_unselected, null);
         unselected.setBounds(-drawableWidth / 2, -drawableHeight, drawableWidth / 2, 0);
 
-        myLocationMarker = getResources().getDrawable(R.drawable.loading_back, null);
-        myLocationMarker.setBounds(-drawableWidth / 2, -drawableHeight, drawableWidth / 2, 0);
+        myLocationMarker = getResources().getDrawable(R.drawable.gps_mylocation, null);
+        myLocationMarker.setBounds(-drawableWidth / 2, -drawableWidth/2, drawableWidth / 2, drawableWidth/2);
 
         loading.setLoadingStarted();
         requestGPSPermission();
@@ -296,7 +293,7 @@ public class NearbyPlaces extends NMapActivity {
     }
 
     private void getMyLocation() {
-//        locationHelper = new LocationHelper();
+        loading.setLoadingStarted();
 
         locationHelper.getMyLocationOnlyOneTime(this, new LocationHelperListener() {
             @Override
@@ -407,6 +404,17 @@ public class NearbyPlaces extends NMapActivity {
         }
 
         Picasso.with(this).load(pubInfoArray.get(position).imageAddress.get(0)).into(pubImage);
+        switch (pubInfoArray.get(position).drinkProvideType){
+            case PROVIDETYPE_1PERTABLE:
+                Picasso.with(getApplicationContext()).load(R.drawable.drinkprovidable_1).into(provideTypeIcon);
+                break;
+            case PROVIDETYPE_2PERTABLE:
+                Picasso.with(getApplicationContext()).load(R.drawable.drinkprovidable_2).into(provideTypeIcon);
+                break;
+            case PROVIDETYPE_INFINITEPERTABLE:
+                Picasso.with(getApplicationContext()).load(R.drawable.drinkprovidable_infinite).into(provideTypeIcon);
+                break;
+        }
         pubText1.setText(pubInfoArray.get(position).name+"  "+distanceString);
         pubText2.setText(pubInfoArray.get(position).businessType);
         pubText4.setText(pubInfoArray.get(position).address);
@@ -459,23 +467,19 @@ public class NearbyPlaces extends NMapActivity {
     private void updateMarkers(){
         poiData.removeAllPOIdata();
 
-        if(StaticData.myLatestLocation!=null && myLocationMarkerIsVisible){
-            addMarkerTo(StaticData.myLatestLocation,true,LOCATION_MYLOCATION);
-        }
 
         for(int i=0;i<pubInfoArray.size();i++){
-//            JLog.v("adding",i," - "+pubInfoArray.get(i).name);
             NGeoPoint geoPoint = new NGeoPoint(pubInfoArray.get(i).longitude,pubInfoArray.get(i).latitude);
 
-            if(i == 0){
-                mapView.getMapController().setMapCenter(geoPoint,13);
-            }
+            if(i == 0) mapView.getMapController().setMapCenter(geoPoint,13);
 
             addMarkerTo(geoPoint,false,Integer.toString(i));
 
-//            poiData.beginPOIdata(1);
-//            poiData.addPOIitem(geoPoint, Integer.toString(i), unselected, 1);
-//            poiData.endPOIdata();
+        }
+
+        if(StaticData.myLatestLocation!=null && myLocationMarkerIsVisible){
+            addMarkerTo(StaticData.myLatestLocation,true,LOCATION_MYLOCATION);
+            mapView.getMapController().setMapCenter(StaticData.myLatestLocation,13);
         }
 
         overlayManager.clearOverlays();

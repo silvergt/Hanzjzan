@@ -18,25 +18,27 @@ import kotel.hanzan.Data.StaticData;
 import kotel.hanzan.function.CalendarHelper;
 import kotel.hanzan.function.NumericHelper;
 import kotel.hanzan.function.ServerConnectionHelper;
-import kotel.hanzan.view.JRecyclerView;
 
 public class Membership extends AppCompatActivity {
     private ImageView back;
     private TextView expireDate;
-    private JRecyclerView recyclerView;
+    private RecyclerView recyclerView;
     private MembershipAdapter adapter = new MembershipAdapter();
     private ArrayList<MembershipTicketInfo> ticketArray = new ArrayList<>();
 
     private int startYYYY, startMM, startDD;
 
     private class MembershipTicketInfo{
+        String name;
+
         int originalPrice;
         int discountPrice;
         boolean isNowDiscounted;
 
         int durationMonths;
 
-        public MembershipTicketInfo(int durationMonths, int originalPrice, int discountPrice) {
+        public MembershipTicketInfo(String name, int durationMonths, int originalPrice, int discountPrice) {
+            this.name = name;
             this.originalPrice = originalPrice;
             this.discountPrice = discountPrice;
             this.durationMonths = durationMonths;
@@ -81,7 +83,7 @@ public class Membership extends AppCompatActivity {
                 holder.currentPrice.setText( NumericHelper.toMoneyFormat(Integer.toString(ticketInfo.originalPrice))+"원" );
             }
 
-            holder.title.setText("한잔 멤버쉽 "+Integer.toString(ticketInfo.durationMonths)+"달");
+            holder.title.setText(ticketInfo.name);
 
             int[] MembershipExpire = CalendarHelper.getDateAfterMonths(ticketInfo.durationMonths,new int[]{startYYYY,startMM,startDD});
 
@@ -103,7 +105,7 @@ public class Membership extends AppCompatActivity {
 
         back = (ImageView)findViewById(R.id.membership_back);
         expireDate = (TextView)findViewById(R.id.membership_expireDate);
-        recyclerView = (JRecyclerView)findViewById(R.id.membership_recycler);
+        recyclerView = (RecyclerView) findViewById(R.id.membership_recycler);
 
         if(StaticData.currentUser.expireYYYY==0){
             //if user is not a member of Hanzan
@@ -141,13 +143,15 @@ public class Membership extends AppCompatActivity {
                     break;
                 }
                 int durationMonth = Integer.parseInt(map.get("durationmonths_" + num));
+                String ticketName = map.get("name_ticket_" + num);
                 int originalPrice = Integer.parseInt(map.get("originalprice_" + num));
                 int discountPrice = Integer.parseInt(map.get("discountprice_" + num));
 
-                ticketArray.add(new MembershipTicketInfo(durationMonth,originalPrice,discountPrice));
+                ticketArray.add(new MembershipTicketInfo(ticketName, durationMonth,originalPrice,discountPrice));
             }
             new Handler(getMainLooper()).post(()->{
                 adapter.notifyDataSetChanged();
+
             });
         }).start();
     }

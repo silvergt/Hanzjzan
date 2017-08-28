@@ -34,6 +34,10 @@ import kotel.hanzan.Data.StaticData;
 import kotel.hanzan.function.ServerConnectionHelper;
 import kotel.hanzan.view.DrinkSelector;
 
+import static kotel.hanzan.Data.PubInfo.PROVIDETYPE_1PERTABLE;
+import static kotel.hanzan.Data.PubInfo.PROVIDETYPE_2PERTABLE;
+import static kotel.hanzan.Data.PubInfo.PROVIDETYPE_INFINITEPERTABLE;
+
 public class PubPage extends AppCompatActivity {
     public static int REQUEST_OPENPUBPAGE=10;
     public static int RESULT_FAVORITECHANGED=11;
@@ -45,7 +49,7 @@ public class PubPage extends AppCompatActivity {
     private PubInfo pubInfo;
 
     private TextView upperTitle, title, address, phoneNumber, workingHour_weekday,workingHour_weekend, dayOff, description;
-    private ImageView back, share, favorite, pubImage, call, location;
+    private ImageView back, share, favorite, provideType, pubImage, call, location;
 
     private Dialog drinkSelectorDialog;
     private int dialogStep=0;
@@ -69,6 +73,7 @@ public class PubPage extends AppCompatActivity {
         upperTitle = (TextView) findViewById(R.id.pubpage_upperTitle);
         title = (TextView) findViewById(R.id.pubpage_title);
         share = (ImageView)findViewById(R.id.pubpage_share);
+        provideType = (ImageView)findViewById(R.id.pubpage_provideType); 
         address = (TextView) findViewById(R.id.pubpage_address);
         phoneNumber = (TextView) findViewById(R.id.pubpage_phoneNumber);
         workingHour_weekday = (TextView) findViewById(R.id.pubpage_workingHour_weekday);
@@ -97,6 +102,19 @@ public class PubPage extends AppCompatActivity {
             favorite.setImageResource(R.drawable.pubpage_favorite_unselected);
         }
 
+        switch (pubInfo.drinkProvideType){
+            case PROVIDETYPE_1PERTABLE:
+                Picasso.with(getApplicationContext()).load(R.drawable.drinkprovidable_1).into(provideType);
+                break;
+            case PROVIDETYPE_2PERTABLE:
+                Picasso.with(getApplicationContext()).load(R.drawable.drinkprovidable_2).into(provideType);
+                break;
+            case PROVIDETYPE_INFINITEPERTABLE:
+                Picasso.with(getApplicationContext()).load(R.drawable.drinkprovidable_infinite).into(provideType);
+                break;
+        }
+        
+        
         back.setOnClickListener(view -> finish());
 
         share.setOnClickListener(view -> {

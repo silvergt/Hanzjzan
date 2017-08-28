@@ -15,13 +15,14 @@ import kotel.hanzan.R;
 import static android.animation.ObjectAnimator.ofFloat;
 
 public class Loading extends RelativeLayout {
-    Context context;
+    private Context context;
 
-    RelativeLayout layout;
-    ImageView loadingIcon;
+    private RelativeLayout layout;
+    private ImageView loadingIcon;
 
-    ObjectAnimator anim1;
-    boolean isShowingLoadingFrontIcon=true;
+    private ObjectAnimator anim1;
+    private boolean isShowingLoadingFrontIcon=true;
+    private Handler handler;
 
     public Loading(Context context) {
         super(context);
@@ -38,8 +39,9 @@ public class Loading extends RelativeLayout {
         layout = (RelativeLayout) LayoutInflater.from(context).inflate(R.layout.loading,null);
         loadingIcon = (ImageView)layout.findViewById(R.id.loading_image);
 
+        handler = new Handler(Looper.getMainLooper());
+
         anim1= ofFloat(loadingIcon,"rotationY",-90,90).setDuration(1000);
-//        anim1.setRepeatCount(ObjectAnimator.RESTART);
         anim1.setRepeatMode(ObjectAnimator.RESTART);
         anim1.setRepeatCount(Integer.MAX_VALUE);
         anim1.addListener(new Animator.AnimatorListener() {
@@ -56,17 +58,21 @@ public class Loading extends RelativeLayout {
 
             @Override
             public void onAnimationRepeat(Animator animator) {
-                if(isShowingLoadingFrontIcon) {
-                    loadingIcon.setImageResource(R.drawable.loading_back);
-                    isShowingLoadingFrontIcon=false;
-                }else{
-                    loadingIcon.setImageResource(R.drawable.loading_front);
-                    isShowingLoadingFrontIcon=true;
-                }
+                handler.post(()->{
+                    if(isShowingLoadingFrontIcon) {
+                        loadingIcon.setImageResource(R.drawable.loading_back);
+                        isShowingLoadingFrontIcon=false;
+                    }else{
+                        loadingIcon.setImageResource(R.drawable.loading_front);
+                        isShowingLoadingFrontIcon=true;
+                    }
+                });
+
             }
         });
 
-        setLoadingCompleted();
+
+        this.setVisibility(INVISIBLE);
 
         addView(layout);
     }
@@ -75,19 +81,17 @@ public class Loading extends RelativeLayout {
 
 
     public void setLoadingStarted(){
-        new Handler(Looper.getMainLooper()).post(()->{
+        handler.post(()->{
             this.setVisibility(VISIBLE);
-
             anim1.start();
         });
+
     }
 
     public void setLoadingCompleted(){
-        new Handler(Looper.getMainLooper()).post(()->{
+        handler.post(()->{
             this.setVisibility(INVISIBLE);
-
             anim1.cancel();
         });
-
     }
 }

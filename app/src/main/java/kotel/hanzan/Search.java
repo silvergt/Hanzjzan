@@ -118,13 +118,13 @@ public class Search extends AppCompatActivity {
             }
 
             switch (pubInfo.drinkProvideType){
-                case 1:
+                case PubInfo.PROVIDETYPE_1PERTABLE:
                     Picasso.with(getApplicationContext()).load(R.drawable.drinkprovidable_1).into(holder.drinkProvidable);
                     break;
-                case 2:
+                case PubInfo.PROVIDETYPE_2PERTABLE:
                     Picasso.with(getApplicationContext()).load(R.drawable.drinkprovidable_2).into(holder.drinkProvidable);
                     break;
-                case 3:
+                case PubInfo.PROVIDETYPE_INFINITEPERTABLE:
                     Picasso.with(getApplicationContext()).load(R.drawable.drinkprovidable_infinite).into(holder.drinkProvidable);
                     break;
             }

@@ -104,7 +104,7 @@ public class Initial extends AppCompatActivity {
 
         new Thread(()->{
             map = new HashMap<>();
-            map.put("fb_key",Long.toString(userProfile.getId()));
+            map.put("member_key",StaticData.IDENTIFIER_KAKAO+Long.toString(userProfile.getId()));
             map = ServerConnectionHelper.connect("checking account existence","login",map);
 
             if(map.get("signup_history")==null || map.get("signup_history").equals("FALSE")){
@@ -120,7 +120,7 @@ public class Initial extends AppCompatActivity {
     private void tryLoginWithFacebook(){
         new Thread(()->{
             map = new HashMap<>();
-            map.put("fb_key",AccessToken.getCurrentAccessToken().getUserId());
+            map.put("member_key",StaticData.IDENTIFIER_FACEBOOK+AccessToken.getCurrentAccessToken().getUserId());
             map = ServerConnectionHelper.connect("checking account existence","login",map);
 
             if(map.get("signup_history")==null || map.get("signup_history").equals("FALSE")){

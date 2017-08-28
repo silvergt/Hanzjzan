@@ -47,28 +47,18 @@
                 android:layout_marginRight="5dp"
                 />
 
-            <ImageView
-                android:id="@+id/locationViewer_myLocation"
-                android:layout_width="@dimen/upperBar_myLocationWidth"
-                android:layout_height="match_parent"
-                android:src="@drawable/mylocation"
-                android:paddingTop="@dimen/backButtonPadding"
-                android:paddingBottom="@dimen/backButtonPadding"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"
-                />
-
         </RelativeLayout>
-<!--
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/upperBarGrayColor"
+        <ImageView
+            android:id="@+id/locationViewer_myLocation"
+            android:layout_width="@dimen/upperBar_myLocationWidth"
+            android:layout_height="@dimen/upperBar_myLocationWidth"
+            android:src="@drawable/mylocation"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:padding="3dp"
             android:layout_below="@id/locationViewer_upperBar"
             />
--->
-
 
         <LinearLayout
             android:id="@+id/locationViewer_pubInfoLayout"
@@ -139,12 +129,20 @@
                     android:text="해피아워 : PM 5:00 ~ PM 7:00"
                     android:gravity="center_vertical"
                     />
-
-
             </LinearLayout>
 
-        </LinearLayout>
 
+            <ImageView
+                android:id="@+id/locationViewer_provideTypeIcon"
+                android:layout_width="@dimen/nearbyPlaces_provideTypeIcon"
+                android:layout_height="@dimen/nearbyPlaces_provideTypeIcon"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="10dp"
+                android:tint="@color/black"
+                />
+
+
+        </LinearLayout>
 
     </RelativeLayout>
 

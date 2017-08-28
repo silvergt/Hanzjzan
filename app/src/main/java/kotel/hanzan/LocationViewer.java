@@ -30,6 +30,10 @@ import kotel.hanzan.function.LocationHelper;
 import kotel.hanzan.listener.LocationHelperListener;
 import kotel.hanzan.view.Loading;
 
+import static kotel.hanzan.Data.PubInfo.PROVIDETYPE_1PERTABLE;
+import static kotel.hanzan.Data.PubInfo.PROVIDETYPE_2PERTABLE;
+import static kotel.hanzan.Data.PubInfo.PROVIDETYPE_INFINITEPERTABLE;
+
 public class LocationViewer extends NMapActivity {
     final private String LOCATION_MYLOCATION="LOCATION_MYLOCATION";
 
@@ -48,7 +52,7 @@ public class LocationViewer extends NMapActivity {
     private int drawableWidth,drawableHeight;
 
     private Loading loading;
-    private ImageView myLocationButton,back,pubImage;
+    private ImageView myLocationButton,back,pubImage,provideTypeIcon;
     private LinearLayout pubInfoLayout;
     private TextView upperText,pubText1,pubText2,pubText3,pubText4;
 
@@ -75,6 +79,7 @@ public class LocationViewer extends NMapActivity {
         pubInfoLayout = (LinearLayout)findViewById(R.id.locationViewer_pubInfoLayout);
         pubImage=(ImageView)findViewById(R.id.locationViewer_pubImage);
         upperText=(TextView)findViewById(R.id.locationViewer_upperBarMainText);
+        provideTypeIcon=(ImageView)findViewById(R.id.locationViewer_provideTypeIcon); 
         pubText1=(TextView)findViewById(R.id.locationViewer_pubText1);
         pubText2=(TextView)findViewById(R.id.locationViewer_pubText2);
         pubText3=(TextView)findViewById(R.id.locationViewer_pubText3);
@@ -197,6 +202,17 @@ public class LocationViewer extends NMapActivity {
 
         upperText.setText(pubInfo.name);
         Picasso.with(this).load(pubInfo.imageAddress.get(0)).into(pubImage);
+        switch (pubInfo.drinkProvideType){
+            case PROVIDETYPE_1PERTABLE:
+                Picasso.with(getApplicationContext()).load(R.drawable.drinkprovidable_1).into(provideTypeIcon);
+                break;
+            case PROVIDETYPE_2PERTABLE:
+                Picasso.with(getApplicationContext()).load(R.drawable.drinkprovidable_2).into(provideTypeIcon);
+                break;
+            case PROVIDETYPE_INFINITEPERTABLE:
+                Picasso.with(getApplicationContext()).load(R.drawable.drinkprovidable_infinite).into(provideTypeIcon);
+                break;
+        }
         pubText1.setText(pubInfo.name);
         pubText2.setText(pubInfo.businessType);
         pubText3.setText(pubInfo.address);
@@ -213,8 +229,8 @@ public class LocationViewer extends NMapActivity {
         pubMarker = getResources().getDrawable(R.drawable.gps_selected,null);
         pubMarker.setBounds(-drawableWidth/2,-drawableHeight,drawableWidth/2,0);
 
-        myLocationMarker = getResources().getDrawable(R.drawable.loading_back,null);
-        myLocationMarker.setBounds(-drawableWidth/2,-drawableHeight,drawableWidth/2,0);
+        myLocationMarker = getResources().getDrawable(R.drawable.gps_mylocation,null);
+        myLocationMarker.setBounds(-drawableWidth/2,-drawableWidth/2,drawableWidth/2,drawableWidth/2);
 
         pubInfoLayout.setVisibility(View.VISIBLE);
 
@@ -245,7 +261,7 @@ public class LocationViewer extends NMapActivity {
     }
 
     private void getMyLocation(){
-//        locationHelper = new LocationHelper();
+        loading.setLoadingStarted();
 
         locationHelper.getMyLocationOnlyOneTime(this, new LocationHelperListener() {
             @Override

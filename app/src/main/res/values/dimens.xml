@@ -23,8 +23,8 @@
     <dimen name="drinkSelectorDialog_imageHeight_half">60dp</dimen>
     <dimen name="drinkSelectorDialog_leftRightMargin">20dp</dimen>
     <dimen name="drinkSelectorDialog_buttonHeight">60dp</dimen>
-    <dimen name="drinkSelectorDialog_BigFontSize">24sp</dimen>
-    <dimen name="drinkSelectorDialog_subFontSize">16sp</dimen>
+    <dimen name="drinkSelectorDialog_BigFontSize">25sp</dimen>
+    <dimen name="drinkSelectorDialog_subFontSize">15sp</dimen>
 
     <dimen name="drinkCalendar_layoutPadding">10dp</dimen>
 
@@ -36,7 +36,7 @@
 
 
     <dimen name="home_bottomLayoutHeight">55dp</dimen>
-    <dimen name="pubitem_favorite">46dp</dimen>
+    <dimen name="pubitem_favorite">52dp</dimen>
     <dimen name="pubitem_text1">15sp</dimen>
     <dimen name="pubitem_text2">13sp</dimen>
     <dimen name="pubitem_text3">12sp</dimen>
@@ -47,16 +47,18 @@
 
 
     <dimen name="locationViewer_pubInfoHeight">100dp</dimen>
+    <dimen name="locationViewer_provideTypeIcon">30dp</dimen>
     <dimen name="locationViewer_pubitem_text1">14sp</dimen>
     <dimen name="locationViewer_pubitem_text2">12sp</dimen>
     <dimen name="locationViewer_pubitem_text3">10sp</dimen>
     <dimen name="locationViewer_pubitem_text4">10sp</dimen>
 
-    <dimen name="NearbyPlaces_pubInfoHeight">100dp</dimen>
-    <dimen name="NearbyPlaces_pubitem_text1">14sp</dimen>
-    <dimen name="NearbyPlaces_pubitem_text2">12sp</dimen>
-    <dimen name="NearbyPlaces_pubitem_text3">10sp</dimen>
-    <dimen name="NearbyPlaces_pubitem_text4">10sp</dimen>
+    <dimen name="nearbyPlaces_pubInfoHeight">100dp</dimen>
+    <dimen name="nearbyPlaces_provideTypeIcon">30dp</dimen>
+    <dimen name="nearbyPlaces_pubitem_text1">14sp</dimen>
+    <dimen name="nearbyPlaces_pubitem_text2">12sp</dimen>
+    <dimen name="nearbyPlaces_pubitem_text3">10sp</dimen>
+    <dimen name="nearbyPlaces_pubitem_text4">10sp</dimen>
 
     <dimen name="mypage_profileHeight">100dp</dimen>
     <dimen name="mypage_calendarPadding">10dp</dimen>
@@ -111,6 +113,13 @@
     <dimen name="login_subFontSize">11sp</dimen>
 
     <dimen name="JRecyclerView_buttonWidth">50dp</dimen>
+
+
+    <dimen name="locationSelectPopup_upperHeight">25dp</dimen>
+    <dimen name="locationSelectPopup_lowerButtonWidth">100dp</dimen>
+    <dimen name="locationSelectPopup_buttonHeight">35dp</dimen>
+    
+    
 
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>

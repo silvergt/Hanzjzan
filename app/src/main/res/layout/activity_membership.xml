@@ -65,10 +65,12 @@
             android:layout_height="30dp"
             />
 
-        <kotel.hanzan.view.JRecyclerView
+        <android.support.v7.widget.RecyclerView
             android:id="@+id/membership_recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/leftRightMargin"
+            android:layout_marginRight="@dimen/leftRightMargin"
             />
 
 

@@ -228,7 +228,7 @@ public class Login extends AppCompatActivity {
 
         new Thread(()->{
             map = new HashMap<>();
-            map.put("fb_key",Long.toString(userProfile.getId()));
+            map.put("member_key",StaticData.IDENTIFIER_KAKAO+Long.toString(userProfile.getId()));
             map = ServerConnectionHelper.connect("checking account existence","login",map);
 
             if(map.get("signup_history")==null){
@@ -241,7 +241,7 @@ public class Login extends AppCompatActivity {
                 makeUserInfoAndLogin(map);
             }else if(map.get("signup_history").equals("FALSE")){
                 map.clear();
-                map.put("fb_key",Long.toString(userProfile.getId()));
+                map.put("member_key",StaticData.IDENTIFIER_KAKAO+Long.toString(userProfile.getId()));
                 map.put("imageincluded","1");
                 try {
                     URL imageURL = new URL(userProfile.getThumbnailImagePath());
@@ -257,7 +257,7 @@ public class Login extends AppCompatActivity {
                     map = ServerConnectionHelper.connect("signing up","signup",map,"profileimage", BitmapHelper.getCompressedImageByteArray(bitmap));
                     if(map.get("signupresult").equals("TRUE")){
                         map.clear();
-                        map.put("fb_key",Long.toString(userProfile.getId()));
+                        map.put("member_key",StaticData.IDENTIFIER_KAKAO+Long.toString(userProfile.getId()));
                         map = ServerConnectionHelper.connect("checking account existence","login",map);
                         if(map.get("signup_history").equals("TRUE")){
                             makeUserInfoAndLogin(map);
@@ -283,7 +283,7 @@ public class Login extends AppCompatActivity {
             }
 
             map = new HashMap<>();
-            map.put("fb_key",AccessToken.getCurrentAccessToken().getUserId());
+            map.put("member_key",StaticData.IDENTIFIER_FACEBOOK+AccessToken.getCurrentAccessToken().getUserId());
             map = ServerConnectionHelper.connect("checking account existence","login",map);
 
             if(map.get("signup_history")==null){
@@ -296,7 +296,7 @@ public class Login extends AppCompatActivity {
                 makeUserInfoAndLogin(map);
             }else if(map.get("signup_history").equals("FALSE")){
                 map.clear();
-                map.put("fb_key",AccessToken.getCurrentAccessToken().getUserId());
+                map.put("member_key",StaticData.IDENTIFIER_FACEBOOK+AccessToken.getCurrentAccessToken().getUserId());
                 map.put("imageincluded","1");
                 try {
                     URL imageURL = new URL("https://graph.facebook.com/" + AccessToken.getCurrentAccessToken().getUserId() + "/picture?type=large");
@@ -313,7 +313,7 @@ public class Login extends AppCompatActivity {
                         map = ServerConnectionHelper.connect("signing up","signup",map,"profileimage", BitmapHelper.getCompressedImageByteArray(bitmap));
                         if(map.get("signupresult").equals("TRUE")){
                             map.clear();
-                            map.put("fb_key",AccessToken.getCurrentAccessToken().getUserId());
+                            map.put("member_key",StaticData.IDENTIFIER_FACEBOOK+AccessToken.getCurrentAccessToken().getUserId());
                             map = ServerConnectionHelper.connect("checking account existence","login",map);
                             if(map.get("signup_history").equals("TRUE")){
                                 makeUserInfoAndLogin(map);
