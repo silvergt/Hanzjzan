@@ -3,6 +3,11 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/gray"
+        />
 
     <RelativeLayout
         android:id="@+id/membership_ticket"
@@ -92,13 +97,5 @@
 
         </LinearLayout>
     </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="@color/gray"
-        android:layout_marginLeft="@dimen/leftRightMargin"
-        android:layout_marginRight="@dimen/leftRightMargin"
-        />
 
 </LinearLayout>

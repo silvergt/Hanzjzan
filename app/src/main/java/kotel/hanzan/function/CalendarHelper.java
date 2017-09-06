@@ -44,8 +44,7 @@ public class CalendarHelper {
     }
 
 
-
-
+    /** This method parse String date information(YYYYMMDD format) into int[]{YYYY,MM,DD} */
     public static int[] parseDate(String rawDateString){
         int[] returnValue = new int[3];
         try {
@@ -66,13 +65,15 @@ public class CalendarHelper {
 
 
 
-
+    /** This method returns the int[] date format which is after 'months' months from 'startDate' */
     public static int[] getDateAfterMonths(int months, int[] startDate){
         int[] returnValue = getDateAfterDays(getDaysOfMonths(months,startDate),startDate);
 
         return returnValue;
     }
 
+
+    /** This method returns the int[] date format which is after 'days' days from 'startDate' */
     public static int[] getDateAfterDays(int days, int[] startDate){
         int[] returnValue = new int[3];
 

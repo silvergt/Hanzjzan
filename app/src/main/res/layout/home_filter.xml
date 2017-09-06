@@ -30,94 +30,248 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 >
-
-                <ImageView
-                    android:id="@+id/filter_checkbox1"
-                    android:layout_width="@dimen/filter_checkboxWidth"
-                    android:layout_height="@dimen/filter_checkboxWidth"
-                    android:src="@drawable/checkbox_unchecked"
-                    />
-                <TextView
-                    android:id="@+id/filter_textbox1"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/filter_textSize"
-                    android:text="테이블 당 한 병"
-                    android:layout_marginLeft="10dp"
-                    />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
 
-            </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/leftRightMargin"
-                />
+                        <kotel.hanzan.view.JCheckBox
+                            android:id="@+id/filter_checkbox1"
+                            android:layout_width="@dimen/filter_checkboxWidth"
+                            android:layout_height="@dimen/filter_checkboxWidth"
+                            android:src="@drawable/checkbox_unchecked"
+                            />
+                        <TextView
+                            android:id="@+id/filter_textbox1"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/filter_textSize"
+                            android:text="@string/filter_1"
+                            android:layout_marginLeft="10dp"
+                            />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
+                    </LinearLayout>
 
-                <ImageView
-                    android:id="@+id/filter_checkbox2"
-                    android:layout_width="@dimen/filter_checkboxWidth"
-                    android:layout_height="@dimen/filter_checkboxWidth"
-                    android:src="@drawable/checkbox_unchecked"
-                    />
-                <TextView
-                    android:id="@+id/filter_textbox2"
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/leftRightMargin"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+
+                        <kotel.hanzan.view.JCheckBox
+                            android:id="@+id/filter_checkbox2"
+                            android:layout_width="@dimen/filter_checkboxWidth"
+                            android:layout_height="@dimen/filter_checkboxWidth"
+                            android:src="@drawable/checkbox_unchecked"
+                            />
+                        <TextView
+                            android:id="@+id/filter_textbox2"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/filter_textSize"
+                            android:text="@string/filter_2"
+                            android:layout_marginLeft="10dp"
+                            />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/leftRightMargin"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+
+                        <kotel.hanzan.view.JCheckBox
+                            android:id="@+id/filter_checkbox3"
+                            android:layout_width="@dimen/filter_checkboxWidth"
+                            android:layout_height="@dimen/filter_checkboxWidth"
+                            android:src="@drawable/checkbox_unchecked"
+                            />
+                        <TextView
+                            android:id="@+id/filter_textbox3"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/filter_textSize"
+                            android:text="@string/filter_3"
+                            android:layout_marginLeft="10dp"
+
+                            />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/leftRightMargin"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+
+                        <kotel.hanzan.view.JCheckBox
+                            android:id="@+id/filter_checkbox4"
+                            android:layout_width="@dimen/filter_checkboxWidth"
+                            android:layout_height="@dimen/filter_checkboxWidth"
+                            android:src="@drawable/checkbox_unchecked"
+                            />
+                        <TextView
+                            android:id="@+id/filter_textbox4"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/filter_textSize"
+                            android:text="@string/filter_4"
+                            android:layout_marginLeft="10dp"
+
+                            />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/leftRightMargin"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/filter_textSize"
-                    android:text="테이블 당 두 병"
-                    android:layout_marginLeft="10dp"
-                    />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+
+                        <kotel.hanzan.view.JCheckBox
+                            android:id="@+id/filter_checkbox5"
+                            android:layout_width="@dimen/filter_checkboxWidth"
+                            android:layout_height="@dimen/filter_checkboxWidth"
+                            android:src="@drawable/checkbox_unchecked"
+                            />
+                        <TextView
+                            android:id="@+id/filter_textbox5"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/filter_textSize"
+                            android:text="@string/filter_5"
+                            android:layout_marginLeft="10dp"
+
+                            />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/leftRightMargin"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+
+                        <kotel.hanzan.view.JCheckBox
+                            android:id="@+id/filter_checkbox6"
+                            android:layout_width="@dimen/filter_checkboxWidth"
+                            android:layout_height="@dimen/filter_checkboxWidth"
+                            android:src="@drawable/checkbox_unchecked"
+                            />
+                        <TextView
+                            android:id="@+id/filter_textbox6"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/filter_textSize"
+                            android:text="@string/filter_6"
+                            android:layout_marginLeft="10dp"
+
+                            />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/leftRightMargin"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
+
+                        <kotel.hanzan.view.JCheckBox
+                            android:id="@+id/filter_checkbox7"
+                            android:layout_width="@dimen/filter_checkboxWidth"
+                            android:layout_height="@dimen/filter_checkboxWidth"
+                            android:src="@drawable/checkbox_unchecked"
+                            />
+                        <TextView
+                            android:id="@+id/filter_textbox7"
+                            android:layout_width="0dp"
+                            android:layout_weight="1"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/filter_textSize"
+                            android:text="@string/filter_7"
+                            android:layout_marginLeft="10dp"
+
+                            />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/leftRightMargin"
+                        />
+
+
+                </LinearLayout>
 
             </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/leftRightMargin"
-                />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
-
-                <ImageView
-                    android:id="@+id/filter_checkbox3"
-                    android:layout_width="@dimen/filter_checkboxWidth"
-                    android:layout_height="@dimen/filter_checkboxWidth"
-                    android:src="@drawable/checkbox_unchecked"
-                    />
-                <TextView
-                    android:id="@+id/filter_textbox3"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/filter_textSize"
-                    android:text="테이블 당 제한 없이"
-                    android:layout_marginLeft="10dp"
-
-                    />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/leftRightMargin"
-                />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -155,7 +309,6 @@
 
 
             </LinearLayout>
-
 
         </LinearLayout>
 

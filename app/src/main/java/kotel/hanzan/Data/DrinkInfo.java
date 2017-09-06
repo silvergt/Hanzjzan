@@ -11,12 +11,13 @@ import kotel.hanzan.R;
 public class DrinkInfo implements Serializable{
     final public static HashMap<String,Integer> drinkIdMap = new HashMap<String,Integer>(){
         {
-            put("mak",100);
+            put("makgeolli",100);
             put("soju",200);
             put("beer",300);
-            put("wine",400);
-            put("sake",500);
-            put("cocktail",600);
+            put("sake",400);
+            put("liquor",500);
+            put("misc",600);
+            put("snack",700);
         }
     };
 
@@ -38,13 +39,22 @@ public class DrinkInfo implements Serializable{
 
         Resources res = context.getResources();
 
-        switch (drinkIdMap.get(code)){
-            case 100:returnValue = res.getString(R.string.mak); break;
+        int drinkCode;
+        try {
+            drinkCode = drinkIdMap.get(code);
+        }catch (Exception e){
+            return "UNKNOWN";
+        }
+
+        switch (drinkCode){
+            case 100:returnValue = res.getString(R.string.makgeolli); break;
             case 200:returnValue = res.getString(R.string.soju); break;
             case 300:returnValue = res.getString(R.string.beer); break;
-            case 400:returnValue = res.getString(R.string.wine); break;
-            case 500:returnValue = res.getString(R.string.sake); break;
-            case 600:returnValue = res.getString(R.string.cocktail); break;
+            case 400:returnValue = res.getString(R.string.sake); break;
+            case 500:returnValue = res.getString(R.string.liquor); break;
+            case 600:returnValue = res.getString(R.string.misc); break;
+            case 700:returnValue = res.getString(R.string.snack); break;
+            default:returnValue = "UNKNOWN";break;
 
         }
 

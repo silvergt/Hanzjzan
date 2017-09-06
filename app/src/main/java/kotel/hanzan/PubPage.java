@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -34,10 +35,6 @@ import kotel.hanzan.Data.StaticData;
 import kotel.hanzan.function.ServerConnectionHelper;
 import kotel.hanzan.view.DrinkSelector;
 
-import static kotel.hanzan.Data.PubInfo.PROVIDETYPE_1PERTABLE;
-import static kotel.hanzan.Data.PubInfo.PROVIDETYPE_2PERTABLE;
-import static kotel.hanzan.Data.PubInfo.PROVIDETYPE_INFINITEPERTABLE;
-
 public class PubPage extends AppCompatActivity {
     public static int REQUEST_OPENPUBPAGE=10;
     public static int RESULT_FAVORITECHANGED=11;
@@ -49,7 +46,7 @@ public class PubPage extends AppCompatActivity {
     private PubInfo pubInfo;
 
     private TextView upperTitle, title, address, phoneNumber, workingHour_weekday,workingHour_weekend, dayOff, description;
-    private ImageView back, share, favorite, provideType, pubImage, call, location;
+    private ImageView back, share, favorite, pubImage, call, location;
 
     private Dialog drinkSelectorDialog;
     private int dialogStep=0;
@@ -73,7 +70,6 @@ public class PubPage extends AppCompatActivity {
         upperTitle = (TextView) findViewById(R.id.pubpage_upperTitle);
         title = (TextView) findViewById(R.id.pubpage_title);
         share = (ImageView)findViewById(R.id.pubpage_share);
-        provideType = (ImageView)findViewById(R.id.pubpage_provideType); 
         address = (TextView) findViewById(R.id.pubpage_address);
         phoneNumber = (TextView) findViewById(R.id.pubpage_phoneNumber);
         workingHour_weekday = (TextView) findViewById(R.id.pubpage_workingHour_weekday);
@@ -81,7 +77,6 @@ public class PubPage extends AppCompatActivity {
         dayOff = (TextView) findViewById(R.id.pubpage_dayOff);
         description = (TextView) findViewById(R.id.pubpage_description);
         back = (ImageView) findViewById(R.id.pubpage_back);
-        share = (ImageView) findViewById(R.id.pubpage_share);
         favorite = (ImageView) findViewById(R.id.pubpage_favorite);
         pubImage = (ImageView) findViewById(R.id.pubpage_pubImage);
         call = (ImageView) findViewById(R.id.pubpage_call);
@@ -90,7 +85,7 @@ public class PubPage extends AppCompatActivity {
         LinearLayout.LayoutParams pubImageParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, StaticData.displayWidth*3/5);
         pubImage.setLayoutParams(pubImageParams);
 
-        Picasso.with(this).load(pubInfo.imageAddress.get(0)).into(pubImage);
+        Picasso.with(this).load(pubInfo.imageAddress.get(0)).placeholder(R.drawable.loading_store).into(pubImage);
 
         upperTitle.setText(pubInfo.name);
         title.setText(pubInfo.name);
@@ -102,18 +97,6 @@ public class PubPage extends AppCompatActivity {
             favorite.setImageResource(R.drawable.pubpage_favorite_unselected);
         }
 
-        switch (pubInfo.drinkProvideType){
-            case PROVIDETYPE_1PERTABLE:
-                Picasso.with(getApplicationContext()).load(R.drawable.drinkprovidable_1).into(provideType);
-                break;
-            case PROVIDETYPE_2PERTABLE:
-                Picasso.with(getApplicationContext()).load(R.drawable.drinkprovidable_2).into(provideType);
-                break;
-            case PROVIDETYPE_INFINITEPERTABLE:
-                Picasso.with(getApplicationContext()).load(R.drawable.drinkprovidable_infinite).into(provideType);
-                break;
-        }
-        
         
         back.setOnClickListener(view -> finish());
 
@@ -135,16 +118,23 @@ public class PubPage extends AppCompatActivity {
         });
 
         call.setOnClickListener(view -> {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-                    ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, 2);
-                return;
-            } else {
-                try {
-                    Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNumber.getText().toString()));
-                    startActivity(intent);
-                }catch (Exception e){e.printStackTrace();}
-            }
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("전화를 거시겠습니까?");
+            builder.setNegativeButton("아니요",null);
+            builder.setPositiveButton("네", (dialogInterface, i) -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
+                        ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
+                    requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, 2);
+                    return;
+                } else {
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNumber.getText().toString()));
+                        startActivity(intent);
+                    }catch (Exception e){e.printStackTrace();}
+                }
+            });
+            builder.show();
+
         });
 
         pubImage.setOnClickListener(view -> {
@@ -191,7 +181,8 @@ public class PubPage extends AppCompatActivity {
 
         dialogStep=0;
 
-        ViewGroup.LayoutParams dialogParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, StaticData.displayHeight*7/10);
+//        ViewGroup.LayoutParams dialogParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, StaticData.displayHeight*7/10);
+        ViewGroup.LayoutParams dialogParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         RelativeLayout dialogLayout = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.drinkselector_popup,null);
 
         drinkImage = (ImageView)dialogLayout.findViewById(R.id.drinkSelectorDialog_drinkImage);

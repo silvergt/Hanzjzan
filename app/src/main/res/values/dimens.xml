@@ -37,8 +37,8 @@
 
     <dimen name="home_bottomLayoutHeight">55dp</dimen>
     <dimen name="pubitem_favorite">52dp</dimen>
-    <dimen name="pubitem_text1">15sp</dimen>
-    <dimen name="pubitem_text2">13sp</dimen>
+    <dimen name="pubitem_text1">18sp</dimen>
+    <dimen name="pubitem_text2">14sp</dimen>
     <dimen name="pubitem_text3">12sp</dimen>
 
     <dimen name="tapbar_topHeight">3dp</dimen>
@@ -64,6 +64,7 @@
     <dimen name="mypage_calendarPadding">10dp</dimen>
     <dimen name="mypage_itemHeight">50dp</dimen>
     <dimen name="mypage_itemWidth">40dp</dimen>
+    <dimen name="mypage_profileNameChangeButton">25dp</dimen>
     <dimen name="mypage_profileMainTextFontSize">16sp</dimen>
     <dimen name="mypage_profileSubTextFontSize">11sp</dimen>
     <dimen name="mypage_itemFontSize">13sp</dimen>
@@ -95,7 +96,6 @@
     <dimen name="membershipSuccess_subFontSize">12sp</dimen>
 
 
-
     <dimen name="history_itemHeight">110dp</dimen>
     <dimen name="history_itemWidth">100dp</dimen>
     <dimen name="history_priceFontSize1">26sp</dimen>
@@ -109,8 +109,8 @@
     <dimen name="login_buttonWidth">200dp</dimen>
     <dimen name="login_buttonIconWidth">25dp</dimen>
     <dimen name="login_marginBottom">20dp</dimen>
-    <dimen name="login_mainFontSize">15sp</dimen>
-    <dimen name="login_subFontSize">11sp</dimen>
+    <dimen name="login_mainFontSize">16sp</dimen>
+    <dimen name="login_subFontSize">12sp</dimen>
 
     <dimen name="JRecyclerView_buttonWidth">50dp</dimen>
 
@@ -118,8 +118,11 @@
     <dimen name="locationSelectPopup_upperHeight">25dp</dimen>
     <dimen name="locationSelectPopup_lowerButtonWidth">100dp</dimen>
     <dimen name="locationSelectPopup_buttonHeight">35dp</dimen>
-    
-    
+
+
+    <dimen name="profileNameChange_profileWidth">60dp</dimen>
+    <dimen name="profileNameChange_height">150dp</dimen>
+
 
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>

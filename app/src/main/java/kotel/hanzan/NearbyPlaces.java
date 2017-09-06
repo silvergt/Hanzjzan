@@ -31,16 +31,13 @@ import java.util.HashMap;
 
 import kotel.hanzan.Data.PubInfo;
 import kotel.hanzan.Data.StaticData;
+import kotel.hanzan.function.DrawableHelper;
 import kotel.hanzan.function.GeoHelper;
 import kotel.hanzan.function.JLog;
 import kotel.hanzan.function.LocationHelper;
 import kotel.hanzan.function.ServerConnectionHelper;
 import kotel.hanzan.listener.LocationHelperListener;
 import kotel.hanzan.view.Loading;
-
-import static kotel.hanzan.Data.PubInfo.PROVIDETYPE_1PERTABLE;
-import static kotel.hanzan.Data.PubInfo.PROVIDETYPE_2PERTABLE;
-import static kotel.hanzan.Data.PubInfo.PROVIDETYPE_INFINITEPERTABLE;
 
 public class NearbyPlaces extends NMapActivity {
     final private String LOCATION_MYLOCATION = "LOCATION_MYLOCATION";
@@ -61,7 +58,7 @@ public class NearbyPlaces extends NMapActivity {
     private int drawableWidth, drawableHeight;
 
     private Loading loading;
-    private ImageView myLocationButton, back, pubImage, provideTypeIcon;
+    private ImageView myLocationButton, back, pubImage;
     private LinearLayout pubInfoLayout;
     private TextView pubText1, pubText2, pubText3, pubText4;
 
@@ -87,7 +84,6 @@ public class NearbyPlaces extends NMapActivity {
         back = (ImageView) findViewById(R.id.nearbyPlaces_back);
         pubInfoLayout = (LinearLayout) findViewById(R.id.nearbyPlaces_pubInfoLayout);
         pubImage = (ImageView) findViewById(R.id.nearbyPlaces_pubImage);
-        provideTypeIcon=(ImageView)findViewById(R.id.nearbyplaces_provideTypeIcon);
         pubText1 = (TextView) findViewById(R.id.nearbyPlaces_pubText1);
         pubText2 = (TextView) findViewById(R.id.nearbyPlaces_pubText2);
         pubText3 = (TextView) findViewById(R.id.nearbyPlaces_pubText3);
@@ -261,13 +257,13 @@ public class NearbyPlaces extends NMapActivity {
             finish();
         });
 
-        selected = getResources().getDrawable(R.drawable.gps_selected, null);
+        selected = DrawableHelper.getDrawable(getResources(),R.drawable.gps_selected);
         selected.setBounds(-drawableWidth / 2, -drawableHeight, drawableWidth / 2, 0);
 
-        unselected = getResources().getDrawable(R.drawable.gps_unselected, null);
+        unselected = DrawableHelper.getDrawable(getResources(),R.drawable.gps_unselected);
         unselected.setBounds(-drawableWidth / 2, -drawableHeight, drawableWidth / 2, 0);
 
-        myLocationMarker = getResources().getDrawable(R.drawable.gps_mylocation, null);
+        myLocationMarker = DrawableHelper.getDrawable(getResources(),R.drawable.gps_mylocation);
         myLocationMarker.setBounds(-drawableWidth / 2, -drawableWidth/2, drawableWidth / 2, drawableWidth/2);
 
         loading.setLoadingStarted();
@@ -403,20 +399,9 @@ public class NearbyPlaces extends NMapActivity {
             distanceString = GeoHelper.getDistanceString(distance);
         }
 
-        Picasso.with(this).load(pubInfoArray.get(position).imageAddress.get(0)).into(pubImage);
-        switch (pubInfoArray.get(position).drinkProvideType){
-            case PROVIDETYPE_1PERTABLE:
-                Picasso.with(getApplicationContext()).load(R.drawable.drinkprovidable_1).into(provideTypeIcon);
-                break;
-            case PROVIDETYPE_2PERTABLE:
-                Picasso.with(getApplicationContext()).load(R.drawable.drinkprovidable_2).into(provideTypeIcon);
-                break;
-            case PROVIDETYPE_INFINITEPERTABLE:
-                Picasso.with(getApplicationContext()).load(R.drawable.drinkprovidable_infinite).into(provideTypeIcon);
-                break;
-        }
+        Picasso.with(this).load(pubInfoArray.get(position).imageAddress.get(0)).placeholder(R.drawable.loading_store).into(pubImage);
         pubText1.setText(pubInfoArray.get(position).name+"  "+distanceString);
-        pubText2.setText(pubInfoArray.get(position).businessType);
+        pubText2.setText(pubInfoArray.get(position).district);
         pubText4.setText(pubInfoArray.get(position).address);
 
         int finalPosition = position;
@@ -449,15 +434,15 @@ public class NearbyPlaces extends NMapActivity {
                 String name = map.get("name_place_" + num);
                 String address = map.get("address_place_" + num);
                 String imageAddress = map.get("imgadd_place_" + num);
+                String district = map.get("district_"+num);
                 boolean favorite = false;
                 if (map.get("like_" + num).equals("TRUE")) {
                     favorite = true;
                 }
                 double lat = Double.parseDouble(map.get("lat_" + num));
                 double lng = Double.parseDouble(map.get("lng_" + num));
-                int drinkProvideType = Integer.parseInt(map.get("alcoholpertable_" + num));
 
-                pubInfoArray.add(new PubInfo(id, name, address, "주점", imageAddress, favorite, lat, lng, drinkProvideType));
+                pubInfoArray.add(new PubInfo(id, name, address, district, imageAddress, favorite, lat, lng));
             }
             new Handler(getMainLooper()).post(this::updateMarkers);
             loading.setLoadingCompleted();

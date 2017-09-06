@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="mak">막걸리</string>
     <string name="soju">소주</string>
     <string name="app_name">한잔</string>
     <string name="beer">맥주</string>
     <string name="sake">사케</string>
     <string name="wine">와인</string>
     <string name="cocktail">칵테일</string>
+    <string name="filter_1">맥주</string>
+    <string name="filter_2">소주</string>
+    <string name="filter_3">막걸리</string>
+    <string name="filter_4">사케</string>
+    <string name="filter_5">양주</string>
+    <string name="filter_6">기타 주류</string>
+    <string name="filter_7">안주</string>
+    <string name="makgeolli">막걸리</string>
+    <string name="liquor">양주</string>
+    <string name="snack">안주</string>
+    <string name="misc">기타 주류</string>
 
 </resources>

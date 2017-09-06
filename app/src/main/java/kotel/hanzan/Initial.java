@@ -50,7 +50,6 @@ public class Initial extends AppCompatActivity {
 //        UserManagement.requestLogout(null);         //TEST
 //        AccessToken.setCurrentAccessToken(null);    //TEST
 
-
         if(AccessToken.getCurrentAccessToken()==null && session==null) {
             JLog.v("No login information");
             Intent intent = new Intent(Initial.this, Login.class);

@@ -1,9 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="kotel.hanzan.Event">
+    android:orientation="vertical"
+    tools:context="kotel.hanzan.Event"
+    android:background="@color/white"
+    >
 
-</android.support.constraint.ConstraintLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/upperBar"
+        android:background="@color/white"
+        >
+
+        <ImageView
+            android:id="@+id/event_back"
+            android:layout_width="@dimen/upperBarIconWidth"
+            android:layout_height="match_parent"
+            android:src="@drawable/back"
+            android:paddingTop="@dimen/backButtonPadding"
+            android:paddingBottom="@dimen/backButtonPadding"
+            />
+        <TextView
+            android:id="@+id/event_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:textColor="@color/black"
+            android:text="이벤트"
+            android:textStyle="bold"
+            android:textSize="@dimen/upperBar_MainFontSize"
+            android:layout_toRightOf="@id/event_back"
+            android:layout_marginRight="5dp"
+            android:lines="1"
+            />
+
+        <ImageView
+            android:id="@+id/event_share"
+            android:layout_width="@dimen/upperBarIconWidth"
+            android:layout_height="match_parent"
+            android:src="@drawable/share"
+            android:layout_alignParentRight="true"
+            android:paddingTop="@dimen/backButtonPadding"
+            android:paddingBottom="@dimen/backButtonPadding"
+            />
+
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        android:layout_marginLeft="@dimen/leftRightMargin"
+        android:layout_marginRight="@dimen/leftRightMargin"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <ImageView
+                android:id="@+id/event_mainImage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                />
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+
+</LinearLayout>

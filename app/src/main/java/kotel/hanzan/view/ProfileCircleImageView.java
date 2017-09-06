@@ -54,17 +54,6 @@ public class ProfileCircleImageView extends CircleImageView {
                 return;
             }
 
-            /*
-            if(openMyPage) {
-                Intent intent = new Intent(context, MyPage.class);
-                intent.putExtra("id",id);
-                context.startActivity(intent);
-            }else{
-                Intent intent = new Intent(context, OthersPage.class);
-                intent.putExtra("id",id);
-                context.startActivity(intent);
-            }
-            */
         }catch (Exception e){
 //            Log.e("Log","opening profile page failed");
             e.printStackTrace();
@@ -73,19 +62,14 @@ public class ProfileCircleImageView extends CircleImageView {
     }
 
     public void setImage(final Context context, String imageAddress){
-        try {
-//            Log.v("Log","image address PCIV : "+imageAddress);
-        }catch (Exception e){
-//            Log.v("Log","image address PCIV is null !! ");
-        }
         if(imageAddress==null||imageAddress.equals("")||imageAddress.toUpperCase().equals("NULL")) {
-            Picasso.with(context).load(R.mipmap.ic_launcher).into(this);
+            Picasso.with(context).load(R.drawable.profile_null).into(this);
             image="NULL";
         }else{
             image=imageAddress;
-            Picasso.with(context).load(image).into(this);
+            Picasso.with(context).load(image).placeholder(R.drawable.profile_null).into(this);
         }
-        setOnClickListener(v -> openProfilePage(context));
+//        setOnClickListener(v -> openProfilePage(context));
     }
 
     public void setImage(final Context context, int res){

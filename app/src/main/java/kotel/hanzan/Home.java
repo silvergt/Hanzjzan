@@ -2,11 +2,11 @@ package kotel.hanzan;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,6 +19,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -26,21 +29,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
+import com.kakao.auth.Session;
 import com.kakao.usermgmt.UserManagement;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.nhn.android.maps.maplib.NGeoPoint;
 import com.squareup.picasso.Picasso;
-import com.stfalcon.frescoimageviewer.ImageViewer;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import kotel.hanzan.Data.DrinkInfo;
+import kotel.hanzan.Data.EventInfo;
 import kotel.hanzan.Data.PubHistoryInfo;
 import kotel.hanzan.Data.PubInfo;
 import kotel.hanzan.Data.StaticData;
 import kotel.hanzan.function.AssetImageHelper;
 import kotel.hanzan.function.CalendarHelper;
+import kotel.hanzan.function.DrawableHelper;
 import kotel.hanzan.function.GeoHelper;
 import kotel.hanzan.function.JLog;
 import kotel.hanzan.function.LocationHelper;
@@ -50,13 +55,11 @@ import kotel.hanzan.listener.JRecyclerViewListener;
 import kotel.hanzan.listener.LocationHelperListener;
 import kotel.hanzan.listener.TapBarItemClickListener;
 import kotel.hanzan.view.DrinkCalendar;
+import kotel.hanzan.view.JCheckBox;
 import kotel.hanzan.view.JRecyclerView;
+import kotel.hanzan.view.Loading;
 import kotel.hanzan.view.ProfileCircleImageView;
 import kotel.hanzan.view.TapBar;
-
-import static kotel.hanzan.Data.PubInfo.PROVIDETYPE_1PERTABLE;
-import static kotel.hanzan.Data.PubInfo.PROVIDETYPE_2PERTABLE;
-import static kotel.hanzan.Data.PubInfo.PROVIDETYPE_INFINITEPERTABLE;
 
 public class Home extends AppCompatActivity {
     private TapBar tapBar;
@@ -65,8 +68,11 @@ public class Home extends AppCompatActivity {
     private ImageView upperBarLeftIcon, upperBarMap, upperBarSearch, upperBarFilter;
     private TextView upperBarMainText, upperBarSubText;
 
+    private Loading loading;
+
     private LocationHelper locationHelper = new LocationHelper();
-//    private NGeoPoint myLocation;
+
+    private InputMethodManager inputMethodManager;
 
     //************************Home Tab************************
     private RelativeLayout homeLayout;
@@ -77,17 +83,15 @@ public class Home extends AppCompatActivity {
     private class HomeRecyclerViewAdapter extends RecyclerView.Adapter<HomeRecyclerViewAdapter.ViewHolder> {
         LinearLayout.LayoutParams imageParams;
         private ViewHolder lastClickedViewHolder = null;
-        private int lastClickedNumber;
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            ImageView image, favorite, drinkProvidable;
+            ImageView image, favorite;
             TextView text1, text2, text3;
 
             public ViewHolder(View itemView) {
                 super(itemView);
                 image = (ImageView) itemView.findViewById(R.id.pubitem_image);
                 image.setLayoutParams(imageParams);
-                drinkProvidable = (ImageView) itemView.findViewById(R.id.pubitem_drinkProvidable);
                 favorite = (ImageView) itemView.findViewById(R.id.pubitem_favorite);
                 text1 = (TextView) itemView.findViewById(R.id.pubitem_text1);
                 text2 = (TextView) itemView.findViewById(R.id.pubitem_text2);
@@ -112,7 +116,7 @@ public class Home extends AppCompatActivity {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.pubitem, parent, false);
+            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.pubitem, parent, false);
             return new ViewHolder(view);
         }
 
@@ -127,18 +131,7 @@ public class Home extends AppCompatActivity {
                 distanceString = GeoHelper.getDistanceString(distance);
             }
 
-            Picasso.with(Home.this).load(pubInfo.imageAddress.get(0)).into(holder.image);
-            switch (pubInfo.drinkProvideType){
-                case PROVIDETYPE_1PERTABLE:
-                    Picasso.with(Home.this).load(R.drawable.drinkprovidable_1).into(holder.drinkProvidable);
-                    break;
-                case PROVIDETYPE_2PERTABLE:
-                    Picasso.with(Home.this).load(R.drawable.drinkprovidable_2).into(holder.drinkProvidable);
-                    break;
-                case PROVIDETYPE_INFINITEPERTABLE:
-                    Picasso.with(Home.this).load(R.drawable.drinkprovidable_infinite).into(holder.drinkProvidable);
-                    break;
-            }
+            Picasso.with(Home.this).load(pubInfo.imageAddress.get(0)).placeholder(R.drawable.loading_store).into(holder.image);
 
             if (pubInfo.getFavorite()) {
                 holder.favorite.setImageResource(R.drawable.favorite_selected);
@@ -146,13 +139,12 @@ public class Home extends AppCompatActivity {
                 holder.favorite.setImageResource(R.drawable.favorite_unselected);
             }
             holder.text1.setText(pubInfo.name + "  " + distanceString);
-            holder.text2.setText(pubInfo.businessType);
+            holder.text2.setText(pubInfo.district);
             holder.text3.setText(pubInfo.address);
 
 
             holder.itemView.setOnClickListener(view -> {
                 lastClickedViewHolder = holder;
-                lastClickedNumber = position;
                 Intent intent = new Intent(Home.this, PubPage.class);
                 intent.putExtra("info", pubInfo);
                 startActivityForResult(intent, PubPage.REQUEST_OPENPUBPAGE);
@@ -181,7 +173,10 @@ public class Home extends AppCompatActivity {
     //******FILTER******
     private boolean filterLayoutIsVisible = false;
     private RelativeLayout filterLayout;
+    private JCheckBox checkbox1,checkbox2,checkbox3,checkbox4,checkbox5,checkbox6,checkbox7;
     private boolean filter_checkbox1Checked = false, filter_checkbox2Checked = false, filter_checkbox3Checked = false;
+    private boolean filter_checkbox4Checked = false, filter_checkbox5Checked = false, filter_checkbox6Checked = false;
+    private boolean filter_checkbox7Checked = false;
 
 
     //************************My Favorite Tab************************
@@ -191,17 +186,15 @@ public class Home extends AppCompatActivity {
     private class FavoriteRecyclerViewAdapter extends RecyclerView.Adapter<FavoriteRecyclerViewAdapter.ViewHolder> {
         LinearLayout.LayoutParams imageParams;
         private ViewHolder lastClickedViewHolder = null;
-        private int lastClickedNumber;
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            ImageView image, favorite, drinkProvidable;
+            ImageView image, favorite;
             TextView text1, text2, text3;
 
             public ViewHolder(View itemView) {
                 super(itemView);
                 image = (ImageView) itemView.findViewById(R.id.pubitem_image);
                 image.setLayoutParams(imageParams);
-                drinkProvidable = (ImageView)itemView.findViewById(R.id.pubitem_drinkProvidable);
                 favorite = (ImageView) itemView.findViewById(R.id.pubitem_favorite);
                 text1 = (TextView) itemView.findViewById(R.id.pubitem_text1);
                 text2 = (TextView) itemView.findViewById(R.id.pubitem_text2);
@@ -226,7 +219,7 @@ public class Home extends AppCompatActivity {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.pubitem, parent, false);
+            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.pubitem, parent, false);
             return new ViewHolder(view);
         }
 
@@ -234,31 +227,18 @@ public class Home extends AppCompatActivity {
         public void onBindViewHolder(ViewHolder holder, int position) {
             PubInfo pubInfo = pubInfoFavoriteArray.get(position);
 
-            Picasso.with(Home.this).load(pubInfo.imageAddress.get(0)).into(holder.image);
+            Picasso.with(Home.this).load(pubInfo.imageAddress.get(0)).placeholder(R.drawable.loading_store).into(holder.image);
             if (pubInfo.getFavorite()) {
                 holder.favorite.setImageResource(R.drawable.favorite_selected);
             } else {
                 holder.favorite.setImageResource(R.drawable.favorite_unselected);
             }
             holder.text1.setText(pubInfo.name);
-            holder.text2.setText(pubInfo.businessType);
+            holder.text2.setText(pubInfo.district);
             holder.text3.setText(pubInfo.address);
-
-            switch (pubInfo.drinkProvideType){
-                case PROVIDETYPE_1PERTABLE:
-                    Picasso.with(Home.this).load(R.drawable.drinkprovidable_1).into(holder.drinkProvidable);
-                    break;
-                case PROVIDETYPE_2PERTABLE:
-                    Picasso.with(Home.this).load(R.drawable.drinkprovidable_2).into(holder.drinkProvidable);
-                    break;
-                case PROVIDETYPE_INFINITEPERTABLE:
-                    Picasso.with(Home.this).load(R.drawable.drinkprovidable_infinite).into(holder.drinkProvidable);
-                    break;
-            }
 
             holder.itemView.setOnClickListener(view -> {
                 lastClickedViewHolder = holder;
-                lastClickedNumber = position;
                 Intent intent = new Intent(Home.this, PubPage.class);
                 intent.putExtra("info", pubInfo);
                 startActivityForResult(intent, PubPage.REQUEST_OPENPUBPAGE);
@@ -308,7 +288,7 @@ public class Home extends AppCompatActivity {
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.history_item, parent, false);
+            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.history_item, parent, false);
             return new ViewHolder(view);
         }
 
@@ -316,7 +296,7 @@ public class Home extends AppCompatActivity {
         public void onBindViewHolder(ViewHolder holder, int position) {
             PubHistoryInfo pubInfo = historyInfoArray.get(position);
 
-            Picasso.with(getApplicationContext()).load(pubInfo.imageAddress.get(0)).into(holder.image);
+            Picasso.with(getApplicationContext()).load(pubInfo.imageAddress.get(0)).placeholder(R.drawable.loading_store).into(holder.image);
             String dateText = Integer.toString(pubInfo.YYYY) + "/" + Integer.toString(pubInfo.MM) + "/" + Integer.toString(pubInfo.DD);
             holder.dateAndDrink.setText(dateText + "에 '" + pubInfo.drinkInfo.drinkName + "' 한 잔");
             holder.name.setText(pubInfo.name);
@@ -341,34 +321,45 @@ public class Home extends AppCompatActivity {
 
 
     //************************Event Tab************************
+    private ArrayList<EventInfo> eventInfoArray = new ArrayList<>();
+    private EventRecyclerViewAdapter eventAdapter = new EventRecyclerViewAdapter();
+    private JRecyclerView eventRecycler;
     private class EventRecyclerViewAdapter extends RecyclerView.Adapter<EventRecyclerViewAdapter.ViewHolder> {
+        RelativeLayout.LayoutParams eventImageParams;
+
+        public EventRecyclerViewAdapter(){
+            eventImageParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, StaticData.displayWidth/2);
+        }
+
         class ViewHolder extends RecyclerView.ViewHolder {
             ImageView image;
-            TextView dateAndDrink, name, address;
-
             public ViewHolder(View itemView) {
                 super(itemView);
-                image = (ImageView) itemView.findViewById(R.id.historyItem_image);
-                dateAndDrink = (TextView) itemView.findViewById(R.id.historyItem_dateAndDrink);
-                name = (TextView) itemView.findViewById(R.id.historyItem_name);
-                address = (TextView) itemView.findViewById(R.id.historyItem_address);
+                image = (ImageView)itemView.findViewById(R.id.event_titleImage);
+                image.setLayoutParams(eventImageParams);
             }
         }
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.history_item, parent, false);
+            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.eventitem, parent, false);
             return new ViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
+            Picasso.with(getApplicationContext()).load(eventInfoArray.get(position).titleImageAddress).placeholder(R.drawable.loading_store).into(holder.image);
 
+            holder.itemView.setOnClickListener(view -> {
+                Intent intent = new Intent(getApplicationContext(),Event.class);
+                intent.putExtra("info",eventInfoArray.get(position));
+                startActivity(intent);
+            });
         }
 
         @Override
         public int getItemCount() {
-            return historyInfoArray.size();
+            return eventInfoArray.size();
         }
     }
 
@@ -376,7 +367,7 @@ public class Home extends AppCompatActivity {
     //************************MyPage Tab************************
     private ProfileCircleImageView mypageProfileImage;
     private TextView mypageProfileText1, mypageProfileText2, mypageProfileText3;
-    private ImageView mypageCurrentMembership;
+    private ImageView mypageCurrentMembership,profileNameChange;
     private LinearLayout mypageMembership, mypageInquire, mypageSetting, mypageLogout;
     private RelativeLayout mypageCalendarContainer;
     private DrinkCalendar mypageCalendar;
@@ -393,6 +384,8 @@ public class Home extends AppCompatActivity {
             finish();
         }
 
+        inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
         upperBarLeftIcon = (ImageView) findViewById(R.id.home_upperBarLeftIcon);
         upperBarMap = (ImageView) findViewById(R.id.home_upperBarMapIcon);
         upperBarSearch = (ImageView) findViewById(R.id.home_upperBarSearchIcon);
@@ -401,9 +394,9 @@ public class Home extends AppCompatActivity {
         upperBarSubText = (TextView) findViewById(R.id.home_upperBarSubText);
         container = (RelativeLayout) findViewById(R.id.home_contentContainer);
         tapBar = (TapBar) findViewById(R.id.home_tapbar);
+        loading = (Loading) findViewById(R.id.home_loading);
 
-        upperBarFilter.setImageDrawable(filter_checkbox1Checked || filter_checkbox2Checked || filter_checkbox3Checked ?
-                getDrawable(R.drawable.filtericon_active) : getDrawable(R.drawable.filtericon_inactive));
+        upperBarFilter.setImageDrawable( isAnyFilterChecked() ? DrawableHelper.getDrawable(getResources(),R.drawable.filtericon_active) : DrawableHelper.getDrawable(getResources(),R.drawable.filtericon_inactive));
 
         upperBarFilter.setOnClickListener(view -> {
             if (filterLayoutIsVisible) {
@@ -425,7 +418,7 @@ public class Home extends AppCompatActivity {
             startActivity(intent);
         });
 
-        tapBar.setItems(new String[]{"홈", "즐겨찾기", "나의 한잔 기록", "공지/이벤트", "마이페이지"},
+        tapBar.setItems(new String[]{"홈", "즐겨찾기", "나의 한잔 기록", "이벤트", "마이페이지"},
                 new String[]{"home",
                         "favorite",
                         "history",
@@ -521,7 +514,6 @@ public class Home extends AppCompatActivity {
         pubInfoRecyclerView.setOnJRecyclerViewListener(new JRecyclerViewListener() {
             @Override
             public void onRefresh(TwinklingRefreshLayout refreshLayout) {
-                JLog.v("...", "Refreshing Item Wow !");
                 if (isFirstGPSRequest) {
                     isFirstGPSRequest = false;
 
@@ -536,7 +528,6 @@ public class Home extends AppCompatActivity {
 
             @Override
             public void onLoadMore() {
-                JLog.v("...", "Last Item !");
                 retrievePubList(false);
             }
         });
@@ -630,18 +621,26 @@ public class Home extends AppCompatActivity {
         upperBarSubText.setVisibility(View.INVISIBLE);
         upperBarFilter.setVisibility(View.INVISIBLE);
 
-        upperBarMainText.setText("공지 / 이벤트");
-
+        upperBarMainText.setText("이벤트");
 
         RelativeLayout layout = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.home_event, null);
-        JRecyclerView recyclerView = (JRecyclerView) layout.findViewById(R.id.home_eventRecycler);
+        eventRecycler = (JRecyclerView) layout.findViewById(R.id.home_eventRecycler);
 
-        historyInfoArray = new ArrayList<>();
+        eventRecycler.setLayoutManager(new LinearLayoutManager(this));
+        eventRecycler.setAdapter(eventAdapter);
+        eventRecycler.setOnJRecyclerViewListener(new JRecyclerViewListener() {
+            @Override
+            public void onRefresh(TwinklingRefreshLayout refreshLayout) {
+                retrieveEventList(true);
+            }
 
-        EventRecyclerViewAdapter adapter = new EventRecyclerViewAdapter();
+            @Override
+            public void onLoadMore() {
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
+            }
+        });
+
+        eventRecycler.startRefresh();
 
         container.addView(layout);
     }
@@ -649,25 +648,17 @@ public class Home extends AppCompatActivity {
     private void openMyPageTab() {
         container.removeAllViews();
 
-//        upperBarLeftIcon.setVisibility(View.INVISIBLE);
-//        upperBarMap.setVisibility(View.INVISIBLE);
-//        upperBarSearch.setVisibility(View.INVISIBLE);
-//        upperBarSubText.setVisibility(View.INVISIBLE);
-//        upperBarFilter.setVisibility(View.INVISIBLE);
-//
-//        upperBarMainText.setText("마이페이지");
-
         RelativeLayout layout = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.home_mypage, null);
         mypageProfileImage = (ProfileCircleImageView) layout.findViewById(R.id.mypage_profileImage);
         mypageProfileText1 = (TextView) layout.findViewById(R.id.mypage_profileText1);
         mypageProfileText2 = (TextView) layout.findViewById(R.id.mypage_profileText2);
         mypageCurrentMembership = (ImageView) layout.findViewById(R.id.mypage_currentMembership);
-//        mypageCalendarContainer = (RelativeLayout)layout.findViewById(R.id.mypage_calendarContainer);
         mypageCalendar = (DrinkCalendar) layout.findViewById(R.id.mypage_calendar);
         mypageMembership = (LinearLayout) layout.findViewById(R.id.mypage_joinMembership);
         mypageInquire = (LinearLayout) layout.findViewById(R.id.mypage_inquire);
         mypageSetting = (LinearLayout) layout.findViewById(R.id.mypage_setting);
         mypageLogout = (LinearLayout) layout.findViewById(R.id.mypage_logout);
+        profileNameChange = (ImageView) layout.findViewById(R.id.mypage_profileNameChange);
 
 
         setCalendarChecked(mypageCalendar.getViewingYear(),mypageCalendar.getViewingMonthInNormal());
@@ -675,7 +666,8 @@ public class Home extends AppCompatActivity {
         mypageCalendar.setListener(this::setCalendarChecked);
 
 
-        Picasso.with(this).load(StaticData.currentUser.profileImageAddress).into(mypageProfileImage);
+        mypageProfileImage.setImage(this,StaticData.currentUser.profileImageAddress);
+
         mypageProfileText1.setText(StaticData.currentUser.name);
 
 
@@ -689,10 +681,13 @@ public class Home extends AppCompatActivity {
         mypageProfileText2.setText("내 멤버십 : " + expireDate);
 
 
+        mypageProfileImage.setOnClickListener(view -> {
+            openProfilePhotoPopup();
+        });
 
-//        mypageProfileImage.setOnClickListener(view -> {
-//            openProfilePhotoPopup();
-//        });
+        profileNameChange.setOnClickListener(view -> {
+            openProfileNameChangePopup();
+        });
 
         mypageCurrentMembership.setOnClickListener(view->{
             mypageMembership.callOnClick();
@@ -706,8 +701,8 @@ public class Home extends AppCompatActivity {
         mypageInquire.setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_SEND);
             String[] email=new String[]{StaticData.adminEmail};
-            String subject="SUBJECT 맨~~~";
-            String body="BODYBODY~~";
+            String subject="문의 메일 보내요! - "+StaticData.currentUser.name;
+            String body="내용을 작성해 주세요";
 
             intent.putExtra(Intent.EXTRA_EMAIL,email);
             intent.putExtra(Intent.EXTRA_SUBJECT,subject);
@@ -717,12 +712,9 @@ public class Home extends AppCompatActivity {
 
             startActivity(Intent.createChooser(intent,"email을 보낼 앱을 선택하세요"));
 
-       });
+        });
 
         mypageLogout.setOnClickListener(view -> logoutToLoginPage());
-
-//        LinearLayout.LayoutParams calendarContainerParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,StaticData.displayWidth*4/5);
-//        mypageCalendar.setLayoutParams(calendarContainerParams);
 
         container.addView(layout);
 
@@ -741,13 +733,13 @@ public class Home extends AppCompatActivity {
             map.put("id_member", Long.toString(StaticData.currentUser.id));
             map.put("user_lat", Double.toString(StaticData.myLatestLocation.getLatitude()));
             map.put("user_lat", Double.toString(StaticData.myLatestLocation.getLongitude()));
-            String filter1,filter2,filter3;
-            filter1 = filter_checkbox1Checked ? "TRUE" : "FALSE";
-            filter2 = filter_checkbox2Checked ? "TRUE" : "FALSE";
-            filter3 = filter_checkbox3Checked ? "TRUE" : "FALSE";
-            map.put("filter_1",filter1);
-            map.put("filter_2",filter2);
-            map.put("filter_n",filter3);
+            map.put("filter_1",filter_checkbox1Checked ? "TRUE" : "FALSE");
+            map.put("filter_2",filter_checkbox2Checked ? "TRUE" : "FALSE");
+            map.put("filter_3",filter_checkbox3Checked ? "TRUE" : "FALSE");
+            map.put("filter_4",filter_checkbox4Checked ? "TRUE" : "FALSE");
+            map.put("filter_5",filter_checkbox5Checked ? "TRUE" : "FALSE");
+            map.put("filter_6",filter_checkbox6Checked ? "TRUE" : "FALSE");
+            map.put("filter_7",filter_checkbox7Checked ? "TRUE" : "FALSE");
             map = ServerConnectionHelper.connect("retrieve nearby places", "nearbyplace", map);
 
             int i = 0;
@@ -760,15 +752,15 @@ public class Home extends AppCompatActivity {
                 String name = map.get("name_place_" + num);
                 String address = map.get("address_place_" + num);
                 String imageAddress = map.get("imgadd_place_" + num);
+                String district = map.get("district_"+num);
                 boolean favorite = false;
                 if (map.get("like_" + num).equals("TRUE")) {
                     favorite = true;
                 }
                 double lat = Double.parseDouble(map.get("lat_" + num));
                 double lng = Double.parseDouble(map.get("lng_" + num));
-                int drinkProvideType = Integer.parseInt(map.get("alcoholpertable_" + num));
 
-                pubInfoArray.add(new PubInfo(id, name, address, "주점", imageAddress, favorite, lat, lng, drinkProvideType));
+                pubInfoArray.add(new PubInfo(id, name, address, district, imageAddress, favorite, lat, lng));
             }
 
             String dataleft = map.get("datalefts");
@@ -803,75 +795,106 @@ public class Home extends AppCompatActivity {
         getMyLocation();
     }
 
+    private boolean isAnyFilterChecked(){
+        return filter_checkbox1Checked || filter_checkbox2Checked || filter_checkbox3Checked
+                || filter_checkbox4Checked|| filter_checkbox5Checked|| filter_checkbox6Checked|| filter_checkbox7Checked;
+    }
+
+    private boolean isAnyFilterCheckedTemporarily(){
+        try {
+            boolean checked = checkbox1.isChecked() || checkbox2.isChecked() || checkbox3.isChecked() || checkbox4.isChecked()
+                    || checkbox5.isChecked() || checkbox6.isChecked() || checkbox7.isChecked();
+            return checked;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
     private void openFilter() {
         if (filterLayoutIsVisible) {
-            return;
+            return ;
         }
 
         filterLayoutIsVisible = true;
 
-        final boolean[] checkbox1Checked = {filter_checkbox1Checked};
-        final boolean[] checkbox2Checked = {filter_checkbox2Checked};
-        final boolean[] checkbox3Checked = {filter_checkbox3Checked};
-        final boolean[] applyIsActive = {checkbox1Checked[0] || checkbox2Checked[0] || checkbox3Checked[0]};
-        final boolean[] removeIsActive = {filter_checkbox1Checked || filter_checkbox2Checked || filter_checkbox3Checked};
-
         filterLayout = (RelativeLayout) getLayoutInflater().inflate(R.layout.home_filter, null);
-        ImageView checkbox1 = (ImageView) filterLayout.findViewById(R.id.filter_checkbox1);
-        ImageView checkbox2 = (ImageView) filterLayout.findViewById(R.id.filter_checkbox2);
-        ImageView checkbox3 = (ImageView) filterLayout.findViewById(R.id.filter_checkbox3);
+        checkbox1 = (JCheckBox) filterLayout.findViewById(R.id.filter_checkbox1);
+        checkbox2 = (JCheckBox) filterLayout.findViewById(R.id.filter_checkbox2);
+        checkbox3 = (JCheckBox) filterLayout.findViewById(R.id.filter_checkbox3);
+        checkbox4 = (JCheckBox) filterLayout.findViewById(R.id.filter_checkbox4);
+        checkbox5 = (JCheckBox) filterLayout.findViewById(R.id.filter_checkbox5);
+        checkbox6 = (JCheckBox) filterLayout.findViewById(R.id.filter_checkbox6);
+        checkbox7 = (JCheckBox) filterLayout.findViewById(R.id.filter_checkbox7);
         TextView textbox1 = (TextView) filterLayout.findViewById(R.id.filter_textbox1);
         TextView textbox2 = (TextView) filterLayout.findViewById(R.id.filter_textbox2);
         TextView textbox3 = (TextView) filterLayout.findViewById(R.id.filter_textbox3);
+        TextView textbox4 = (TextView) filterLayout.findViewById(R.id.filter_textbox4);
+        TextView textbox5 = (TextView) filterLayout.findViewById(R.id.filter_textbox5);
+        TextView textbox6 = (TextView) filterLayout.findViewById(R.id.filter_textbox6);
+        TextView textbox7 = (TextView) filterLayout.findViewById(R.id.filter_textbox7);
         TextView filterApply = (TextView) filterLayout.findViewById(R.id.filter_apply);
         TextView filterRemove = (TextView) filterLayout.findViewById(R.id.filter_remove);
         View filterCancel = filterLayout.findViewById(R.id.filter_cancel);
 
-        checkbox1.setImageDrawable(checkbox1Checked[0] ? getDrawable(R.drawable.checkbox_checked) : getDrawable(R.drawable.checkbox_unchecked));
-        checkbox2.setImageDrawable(checkbox2Checked[0] ? getDrawable(R.drawable.checkbox_checked) : getDrawable(R.drawable.checkbox_unchecked));
-        checkbox3.setImageDrawable(checkbox3Checked[0] ? getDrawable(R.drawable.checkbox_checked) : getDrawable(R.drawable.checkbox_unchecked));
+        checkbox1.setChecked(filter_checkbox1Checked);
+        checkbox2.setChecked(filter_checkbox2Checked);
+        checkbox3.setChecked(filter_checkbox3Checked);
+        checkbox4.setChecked(filter_checkbox4Checked);
+        checkbox5.setChecked(filter_checkbox5Checked);
+        checkbox6.setChecked(filter_checkbox6Checked);
+        checkbox7.setChecked(filter_checkbox7Checked);
 
-        filterApply.setBackground(applyIsActive[0] ? getDrawable(R.drawable.button_active) : getDrawable(R.drawable.button_inactive));
-        filterRemove.setBackground(removeIsActive[0] ? getDrawable(R.drawable.button_active) : getDrawable(R.drawable.button_inactive));
-//        filterApply.setTextColor(applyIsActive[0] ? getResources().getColor(R.color.mainColor_dark) : getResources().getColor(R.color.inactive));
-//        filterRemove.setTextColor(removeIsActive[0] ? getResources().getColor(R.color.mainColor_dark) : getResources().getColor(R.color.inactive));
-
+        filterApply.setBackground(isAnyFilterCheckedTemporarily() ? DrawableHelper.getDrawable(getResources(),R.drawable.button_active) : DrawableHelper.getDrawable(getResources(),R.drawable.button_inactive));
+        filterRemove.setBackground(isAnyFilterChecked() ? DrawableHelper.getDrawable(getResources(),R.drawable.button_active) : DrawableHelper.getDrawable(getResources(),R.drawable.button_inactive));
 
         textbox1.setOnClickListener(view -> checkbox1.callOnClick());
         textbox2.setOnClickListener(view -> checkbox2.callOnClick());
         textbox3.setOnClickListener(view -> checkbox3.callOnClick());
+        textbox4.setOnClickListener(view -> checkbox4.callOnClick());
+        textbox5.setOnClickListener(view -> checkbox5.callOnClick());
+        textbox6.setOnClickListener(view -> checkbox6.callOnClick());
+        textbox7.setOnClickListener(view -> checkbox7.callOnClick());
 
-        checkbox1.setOnClickListener(view -> {
-            checkbox1Checked[0] = !checkbox1Checked[0];
-            checkbox1.setImageDrawable(checkbox1Checked[0] ? getDrawable(R.drawable.checkbox_checked) : getDrawable(R.drawable.checkbox_unchecked));
-            applyIsActive[0] = checkbox1Checked[0] || checkbox2Checked[0] || checkbox3Checked[0];
-            filterApply.setBackground(applyIsActive[0] ? getDrawable(R.drawable.button_active) : getDrawable(R.drawable.button_inactive));
-//            filterApply.setTextColor(applyIsActive[0] ? getResources().getColor(R.color.mainColor_dark) : getResources().getColor(R.color.inactive));
+
+        checkbox1.setOnCheckListener(() -> {
+            filterApply.setBackground(isAnyFilterCheckedTemporarily() ? DrawableHelper.getDrawable(getResources(),R.drawable.button_active) : DrawableHelper.getDrawable(getResources(),R.drawable.button_inactive));
         });
 
-        checkbox2.setOnClickListener(view -> {
-            checkbox2Checked[0] = !checkbox2Checked[0];
-            checkbox2.setImageDrawable(checkbox2Checked[0] ? getDrawable(R.drawable.checkbox_checked) : getDrawable(R.drawable.checkbox_unchecked));
-            applyIsActive[0] = checkbox1Checked[0] || checkbox2Checked[0] || checkbox3Checked[0];
-            filterApply.setBackground(applyIsActive[0] ? getDrawable(R.drawable.button_active) : getDrawable(R.drawable.button_inactive));
-//            filterApply.setTextColor(applyIsActive[0] ? getResources().getColor(R.color.mainColor_dark) : getResources().getColor(R.color.inactive));
+        checkbox2.setOnCheckListener(() -> {
+            filterApply.setBackground(isAnyFilterCheckedTemporarily() ? DrawableHelper.getDrawable(getResources(),R.drawable.button_active) : DrawableHelper.getDrawable(getResources(),R.drawable.button_inactive));
         });
 
-        checkbox3.setOnClickListener(view -> {
-            checkbox3Checked[0] = !checkbox3Checked[0];
-            checkbox3.setImageDrawable(checkbox3Checked[0] ? getDrawable(R.drawable.checkbox_checked) : getDrawable(R.drawable.checkbox_unchecked));
-            applyIsActive[0] = checkbox1Checked[0] || checkbox2Checked[0] || checkbox3Checked[0];
-            filterApply.setBackground(applyIsActive[0] ? getDrawable(R.drawable.button_active) : getDrawable(R.drawable.button_inactive));
-//            filterApply.setTextColor(applyIsActive[0] ? getResources().getColor(R.color.mainColor_dark) : getResources().getColor(R.color.inactive));
+        checkbox3.setOnCheckListener(() -> {
+            filterApply.setBackground(isAnyFilterCheckedTemporarily() ? DrawableHelper.getDrawable(getResources(),R.drawable.button_active) : DrawableHelper.getDrawable(getResources(),R.drawable.button_inactive));
+        });
+
+        checkbox4.setOnCheckListener(() -> {
+            filterApply.setBackground(isAnyFilterCheckedTemporarily() ? DrawableHelper.getDrawable(getResources(),R.drawable.button_active) : DrawableHelper.getDrawable(getResources(),R.drawable.button_inactive));
+        });
+
+        checkbox5.setOnCheckListener(() -> {
+            filterApply.setBackground(isAnyFilterCheckedTemporarily() ? DrawableHelper.getDrawable(getResources(),R.drawable.button_active) : DrawableHelper.getDrawable(getResources(),R.drawable.button_inactive));
+        });
+
+        checkbox6.setOnCheckListener(() -> {
+            filterApply.setBackground(isAnyFilterCheckedTemporarily()? DrawableHelper.getDrawable(getResources(),R.drawable.button_active) : DrawableHelper.getDrawable(getResources(),R.drawable.button_inactive));
+        });
+
+        checkbox7.setOnCheckListener(() -> {
+            filterApply.setBackground(isAnyFilterCheckedTemporarily()? DrawableHelper.getDrawable(getResources(),R.drawable.button_active) : DrawableHelper.getDrawable(getResources(),R.drawable.button_inactive));
         });
 
         filterApply.setOnClickListener(view -> {
-            if (applyIsActive[0]) {
-                filter_checkbox1Checked = checkbox1Checked[0];
-                filter_checkbox2Checked = checkbox2Checked[0];
-                filter_checkbox3Checked = checkbox3Checked[0];
+            if (isAnyFilterCheckedTemporarily()) {
+                filter_checkbox1Checked = checkbox1.isChecked();
+                filter_checkbox2Checked = checkbox2.isChecked();
+                filter_checkbox3Checked = checkbox3.isChecked();
+                filter_checkbox4Checked = checkbox4.isChecked();
+                filter_checkbox5Checked = checkbox5.isChecked();
+                filter_checkbox6Checked = checkbox6.isChecked();
+                filter_checkbox7Checked = checkbox7.isChecked();
 
-                upperBarFilter.setImageDrawable(filter_checkbox1Checked || filter_checkbox2Checked || filter_checkbox3Checked ? getDrawable(R.drawable.filtericon_active) : getDrawable(R.drawable.filtericon_inactive));
+                upperBarFilter.setImageDrawable(isAnyFilterChecked() ? DrawableHelper.getDrawable(getResources(),R.drawable.filtericon_active) : DrawableHelper.getDrawable(getResources(),R.drawable.filtericon_inactive));
 
                 filterLayoutIsVisible = false;
                 container.removeView(filterLayout);
@@ -882,12 +905,16 @@ public class Home extends AppCompatActivity {
         });
 
         filterRemove.setOnClickListener(view -> {
-            if (removeIsActive[0]) {
+            if (isAnyFilterChecked()) {
                 filter_checkbox1Checked = false;
                 filter_checkbox2Checked = false;
                 filter_checkbox3Checked = false;
+                filter_checkbox4Checked = false;
+                filter_checkbox5Checked = false;
+                filter_checkbox6Checked = false;
+                filter_checkbox7Checked = false;
 
-                upperBarFilter.setImageDrawable(getDrawable(R.drawable.filtericon_inactive));
+                upperBarFilter.setImageDrawable(DrawableHelper.getDrawable(getResources(),R.drawable.filtericon_inactive));
 
                 filterLayoutIsVisible = false;
                 container.removeView(filterLayout);
@@ -992,14 +1019,12 @@ public class Home extends AppCompatActivity {
                 String name = map.get("name_place_" + num);
                 String address = map.get("address_place_" + num);
                 String imageAddress = map.get("imgadd_place_" + num);
+                String district = map.get("district_"+num);
                 double lat = Double.parseDouble(map.get("lat_" + num));
                 double lng = Double.parseDouble(map.get("lng_" + num));
-                int drinkProvideType = Integer.parseInt(map.get("alcoholpertable_" + num));
 
-
-                pubInfoFavoriteArray.add(new PubInfo(id, name, address, "주점", imageAddress, true, lat, lng, drinkProvideType));
+                pubInfoFavoriteArray.add(new PubInfo(id, name, address, district, imageAddress, true, lat, lng));
             }
-
 
 
             String dataleft = map.get("datalefts");
@@ -1037,13 +1062,13 @@ public class Home extends AppCompatActivity {
                 String name = map.get("name_place_" + num);
                 String address = map.get("address_place_" + num);
                 String imageAddress = map.get("imgadd_place_" + num);
+                String district = map.get("district_"+num);
                 boolean favorite = false;
                 if (map.get("like_" + num).equals("TRUE")) {
                     favorite = true;
                 }
                 double lat = Double.parseDouble(map.get("lat_" + num));
                 double lng = Double.parseDouble(map.get("lng_" + num));
-                int drinkProvideType = Integer.parseInt(map.get("alcoholpertable_" + num));
 
                 String dateString = map.get("date_visit_" + num);
                 int year = Integer.parseInt(dateString.substring(0,4));
@@ -1055,7 +1080,7 @@ public class Home extends AppCompatActivity {
 
 //                        JLog.v("retrieving number "+num);
 
-                PubInfo pubInfo = new PubInfo(id, name, address, "주점", imageAddress, favorite, lat, lng, drinkProvideType);
+                PubInfo pubInfo = new PubInfo(id, name, address, district, imageAddress, favorite, lat, lng);
                 DrinkInfo drinkInfo = new DrinkInfo(drinkCategory,drinkName);
                 historyInfoArray.add(new PubHistoryInfo(pubInfo,drinkInfo,year,month,day));
             }
@@ -1077,6 +1102,42 @@ public class Home extends AppCompatActivity {
     }
 
 
+
+    //****Event Tab****
+
+    private synchronized void retrieveEventList(boolean clearArray){
+        if(clearArray){
+            eventInfoArray.clear();
+        }
+        new Thread(() -> {
+            HashMap<String, String> map = new HashMap<>();
+
+            map.put("id_member", Long.toString(StaticData.currentUser.id));
+            map = ServerConnectionHelper.connect("retrieving event lists", "eventlist", map);
+
+            int i = 0;
+            while (true) {
+                String num = Integer.toString(i++);
+                if(map.get("id_event_" + num)==null){
+                    break;
+                }
+                long id = Long.parseLong(map.get("id_event_" + num));
+                String titleImage = map.get("titleimgadd_event_"+num);
+                String mainImage = map.get("mainimgadd_event_"+num);
+                String title = map.get("title_event_"+num);
+
+                eventInfoArray.add(new EventInfo(id,titleImage,mainImage,title));
+            }
+
+            new Handler(getMainLooper()).post(() -> {
+                eventAdapter.notifyDataSetChanged();
+                eventRecycler.finishRefreshing();
+            });
+        }).start();
+    }
+
+
+
     //****My Page Tab****
 
     private void openProfilePhotoPopup() {
@@ -1090,12 +1151,12 @@ public class Home extends AppCompatActivity {
         TextView delete = (TextView) layout.findViewById(R.id.profilePhotoPopup_delete);
 
         see.setOnClickListener(view -> {
-            ImageViewer.Builder viewer = new ImageViewer.Builder(Home.this, new String[]{StaticData.currentUser.profileImageAddress});
-            viewer.show();
+            mypageProfileImage.openProfilePage(this);
             dialog.cancel();
         });
 
         change.setOnClickListener(view -> {
+            loading.setLoadingStarted();
             Intent intent = new Intent();
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_PICK);
@@ -1104,11 +1165,85 @@ public class Home extends AppCompatActivity {
         });
 
         delete.setOnClickListener(view -> {
-
+            loading.setLoadingStarted();
+            updateNewProfileImage(new byte[0],true);
+            dialog.cancel();
         });
 
         dialog.setContentView(layout);
 
+        dialog.show();
+    }
+
+    private void openProfileNameChangePopup(){
+        Dialog dialog = new Dialog(this);
+
+        RelativeLayout layout = (RelativeLayout) getLayoutInflater().inflate(R.layout.mypage_profilenamechange_popup,null);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+        ProfileCircleImageView profileImage = (ProfileCircleImageView)layout.findViewById(R.id.profileNameChange_image);
+        EditText profileEditText = (EditText)layout.findViewById(R.id.profileNameChange_editText);
+        ImageView delete = (ImageView)layout.findViewById(R.id.profileNameChange_xmark);
+        TextView cancel = (TextView)layout.findViewById(R.id.profileNameChange_cancel);
+        TextView confirm = (TextView)layout.findViewById(R.id.profileNameChange_confirm);
+
+        profileImage.setImage(this,StaticData.currentUser.profileImageAddress);
+        profileEditText.setText(StaticData.currentUser.name);
+
+
+
+        profileEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
+            if (i == EditorInfo.IME_ACTION_DONE) {
+                confirm.callOnClick();
+            }
+            return false;
+        });
+
+        cancel.setOnClickListener(view -> dialog.cancel());
+
+        delete.setOnClickListener(view -> profileEditText.setText(""));
+
+        confirm.setOnClickListener(view -> {
+            try {
+                inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }catch (Exception e){}
+            loading.setLoadingStarted();
+            String word = profileEditText.getText().toString();
+
+            while(word.startsWith(" ")){
+                word = word.substring(1,word.length());
+            }
+            while(word.endsWith(" ")){
+                word = word.substring(0,word.length()-1);
+            }
+            if (word.length() == 0) {
+                new Handler(getMainLooper()).post(()->loading.setLoadingCompleted());
+                return;
+            }
+
+            String finalWord = word;
+            new Thread(()->{
+                HashMap<String, String> map = new HashMap<>();
+                map.put("id_member",Long.toString(StaticData.currentUser.id));
+                map.put("name_member", finalWord);
+                map = ServerConnectionHelper.connect("Updating new profile name","nameupdate",map);
+
+                String result = map.get("nameupdate_result");
+                String newName = map.get("name_member");
+
+                if(result!=null && result.equals("TRUE")){
+                    StaticData.currentUser.name = newName;
+                    new Handler(getMainLooper()).post(()-> {
+                        mypageProfileText1.setText(newName);
+                        dialog.cancel();
+                    });
+                }
+                new Handler(getMainLooper()).post(()->loading.setLoadingCompleted());
+
+            }).start();
+        });
+
+        dialog.setContentView(layout,params);
         dialog.show();
     }
 
@@ -1120,6 +1255,7 @@ public class Home extends AppCompatActivity {
             StaticData.currentUser = null;
             AccessToken.setCurrentAccessToken(null);
             UserManagement.requestLogout(null);
+            Session.getCurrentSession().close();
             Intent intent = new Intent(Home.this, Login.class);
             startActivity(intent);
             finishAffinity();
@@ -1158,9 +1294,28 @@ public class Home extends AppCompatActivity {
         }).start();
     }
 
+    private void updateNewProfileImage(byte[] bitmapArray, boolean deleteProfile){
+        new Thread(()->{
+            HashMap<String,String> map = new HashMap<>();
+            map.put("id_member",Long.toString(StaticData.currentUser.id));
+            String delete = "FALSE";
+            if(deleteProfile)delete = "TRUE";
+            map.put("deleteornot",delete);
 
-    //****Other Tab****
+            map = ServerConnectionHelper.connect("updating profile image","imageupdate",map,"profileimage",bitmapArray);
 
+            String result = map.get("imageupdate_result");
+            String newImageAddress = map.get("imgadd_member");
+
+            new Handler(getMainLooper()).post(()->{
+                loading.setLoadingCompleted();
+                if(result != null && result.equals("TRUE")){
+                    StaticData.currentUser.profileImageAddress = newImageAddress;
+                    mypageProfileImage.setImage(this,newImageAddress);
+                }
+            });
+        }).start();
+    }
 
 
 
@@ -1173,10 +1328,15 @@ public class Home extends AppCompatActivity {
                 Intent intent = new Intent(Home.this, ImageCropper.class);
                 intent.setData(uri);
                 startActivityForResult(intent, ImageCropper.IMAGE_CROP_REQUEST);
+            }else{
+                loading.setLoadingCompleted();
             }
         } else if (requestCode == ImageCropper.IMAGE_CROP_REQUEST) {
             if (resultCode == RESULT_OK) {
-                Drawable drawable = ImageCropper.croppedImage;
+                byte[] bitmapArray = ImageCropper.croppedImageByteArray;
+                updateNewProfileImage(bitmapArray,false);
+            }else{
+                loading.setLoadingCompleted();
             }
         } else if (requestCode == PubPage.REQUEST_OPENPUBPAGE) {
             if (resultCode == PubPage.RESULT_FAVORITECHANGED) {
@@ -1199,7 +1359,6 @@ public class Home extends AppCompatActivity {
             pubInfoRecyclerView.finishRefreshing();
         }catch (Exception e){}
 
-//        locationHelper.onRestart();
     }
 
     @Override
@@ -1230,14 +1389,6 @@ public class Home extends AppCompatActivity {
                 }).start();
             }
 
-
-//            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//            builder.setMessage("정말 한잔을 종료하실건가요?");
-//            builder.setNegativeButton("아니요",null);
-//            builder.setPositiveButton("네", (dialogInterface, i) -> {
-//                super.onBackPressed();
-//            });
-//            builder.create().show();
         }
     }
 

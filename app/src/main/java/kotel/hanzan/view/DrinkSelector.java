@@ -105,11 +105,6 @@ public class DrinkSelector extends RelativeLayout{
         init(context);
     }
 
-    public DrinkSelector(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        init(context);
-    }
-
     private void init(Context context){
         this.context = context;
         layout = (RelativeLayout) LayoutInflater.from(context).inflate(R.layout.drinkselector,null);
@@ -256,7 +251,7 @@ public class DrinkSelector extends RelativeLayout{
             }
         }
 
-        ValueAnimator anim=ValueAnimator.ofInt(0, StaticData.displayHeight-drinkTypeViewScroll.getHeight());
+        ValueAnimator anim=ValueAnimator.ofInt(0, StaticData.displayHeight-drinkTypeViewScroll.getHeight()).setDuration(500);
         anim.addUpdateListener(valueAnimator -> {
             int i=(int)valueAnimator.getAnimatedValue();
             RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(itemHeight,i);

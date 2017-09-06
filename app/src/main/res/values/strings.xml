@@ -12,13 +12,23 @@
     <string name="title_home" translatable="false">Home</string>
     <string name="title_dashboard" translatable="false">Dashboard</string>
     <string name="title_notifications" translatable="false">Notifications</string>
-    <string name="mak">Makgeoli</string>
     <string name="soju">Soju</string>
     <string name="beer">Beer</string>
     <string name="wine">Wine</string>
     <string name="sake">Sake</string>
     <string name="cocktail">Cocktail</string>
 
-    <string name="kakao_app_key">7ff7bd46a972baee55ee0f73e5beb506</string>
+    <string name="kakao_app_key" translatable="false">7ff7bd46a972baee55ee0f73e5beb506</string>
+    <string name="filter_1">beer</string>
+    <string name="filter_2">soju</string>
+    <string name="filter_3">makgeolli</string>
+    <string name="filter_4">sake</string>
+    <string name="filter_5">liquor</string>
+    <string name="filter_6">misc</string>
+    <string name="filter_7">snack</string>
+    <string name="makgeolli">Makgeolli</string>
+    <string name="liquor">Liquor</string>
+    <string name="snack">Snack</string>
+    <string name="misc">Misc</string>
 
 </resources>

@@ -63,14 +63,13 @@ public class Search extends AppCompatActivity {
         private int lastClickedNumber;
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            ImageView image, favorite,drinkProvidable;
+            ImageView image, favorite;
             TextView text1, text2, text3;
 
             public ViewHolder(View itemView) {
                 super(itemView);
                 image = (ImageView) itemView.findViewById(R.id.pubitem_image);
                 favorite = (ImageView) itemView.findViewById(R.id.pubitem_favorite);
-                drinkProvidable = (ImageView) itemView.findViewById(R.id.pubitem_drinkProvidable);
                 text1 = (TextView) itemView.findViewById(R.id.pubitem_text1);
                 text2 = (TextView) itemView.findViewById(R.id.pubitem_text2);
                 text3 = (TextView) itemView.findViewById(R.id.pubitem_text3);
@@ -103,7 +102,7 @@ public class Search extends AppCompatActivity {
         public void onBindViewHolder(ViewHolder holder, int position) {
             PubInfo pubInfo = pubInfoArray.get(position);
 
-            Picasso.with(getApplicationContext()).load(pubInfo.imageAddress.get(0)).into(holder.image);
+            Picasso.with(getApplicationContext()).load(pubInfo.imageAddress.get(0)).placeholder(R.drawable.loading_store).into(holder.image);
             if (pubInfo.getFavorite()) {
                 holder.favorite.setImageResource(R.drawable.favorite_selected);
             } else {
@@ -117,20 +116,8 @@ public class Search extends AppCompatActivity {
                 distanceString = GeoHelper.getDistanceString(distance);
             }
 
-            switch (pubInfo.drinkProvideType){
-                case PubInfo.PROVIDETYPE_1PERTABLE:
-                    Picasso.with(getApplicationContext()).load(R.drawable.drinkprovidable_1).into(holder.drinkProvidable);
-                    break;
-                case PubInfo.PROVIDETYPE_2PERTABLE:
-                    Picasso.with(getApplicationContext()).load(R.drawable.drinkprovidable_2).into(holder.drinkProvidable);
-                    break;
-                case PubInfo.PROVIDETYPE_INFINITEPERTABLE:
-                    Picasso.with(getApplicationContext()).load(R.drawable.drinkprovidable_infinite).into(holder.drinkProvidable);
-                    break;
-            }
-
-            holder.text1.setText(pubInfo.name+"  "+distanceString);
-            holder.text2.setText(pubInfo.businessType);
+            holder.text1.setText(pubInfo.name + "  " + distanceString);
+            holder.text2.setText(pubInfo.district);
             holder.text3.setText(pubInfo.address);
 
 
@@ -399,15 +386,15 @@ public class Search extends AppCompatActivity {
                 String name = map.get("name_place_"+num);
                 String address = map.get("address_place_"+num);
                 String imageAddress = map.get("imgadd_place_"+num);
+                String district = map.get("district_"+num);
                 boolean favorite=false;
                 if(map.get("like_"+num).equals("TRUE")){
                     favorite=true;
                 }
                 double lat = Double.parseDouble(map.get("lat_"+num));
                 double lng = Double.parseDouble(map.get("lng_"+num));
-                int drinkProvideType = Integer.parseInt(map.get("alcoholpertable_"+num));
 
-                pubInfoArray.add(new PubInfo(id,name,address,"주점",imageAddress,favorite,lat,lng,drinkProvideType));
+                pubInfoArray.add(new PubInfo(id,name,address, district,imageAddress,favorite,lat,lng));
             }
 
             String dataleft = map.get("datalefts");

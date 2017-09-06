@@ -147,8 +147,6 @@ public class Login extends AppCompatActivity {
     }
 
 
-
-
     private void addSlideChildViews(){
         for(int i=0;i<3;i++){
             LinearLayout childLayout = (LinearLayout)getLayoutInflater().inflate(R.layout.login_slideviewchild,null);
@@ -220,9 +218,9 @@ public class Login extends AppCompatActivity {
 
 
     private void tryLoginWithKakaoTalk(UserProfile userProfile){
-        JLog.v("profile ID : ",Long.toString(userProfile.getId()));
-        JLog.v("profile Image : ",userProfile.getThumbnailImagePath());
-        JLog.v("profile Name : ",userProfile.getNickname());
+        JLog.v("profile ID",Long.toString(userProfile.getId()));
+        JLog.v("profile Image",userProfile.getThumbnailImagePath());
+        JLog.v("profile Name",userProfile.getNickname());
 
         loading.setLoadingStarted();
 
@@ -283,6 +281,7 @@ public class Login extends AppCompatActivity {
             }
 
             map = new HashMap<>();
+            JLog.v("FBLOGIN!",AccessToken.getCurrentAccessToken().getToken());
             map.put("member_key",StaticData.IDENTIFIER_FACEBOOK+AccessToken.getCurrentAccessToken().getUserId());
             map = ServerConnectionHelper.connect("checking account existence","login",map);
 

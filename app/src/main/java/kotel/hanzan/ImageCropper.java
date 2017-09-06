@@ -1,7 +1,6 @@
 package kotel.hanzan;
 
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,13 +10,16 @@ import android.widget.TextView;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
+import kotel.hanzan.function.BitmapHelper;
+
 public class ImageCropper extends AppCompatActivity {
     public final static int IMAGE_CROP_IMAGESELECT=209;
     public final static int IMAGE_CROP_REQUEST=210;
     public final static int IMAGE_CROP_RESELECT_IMAGE=211;
     public final static int IMAGE_CROP_ABORT=212;
     public final static int IMAGE_CROP_CROPSUCCESS=213;
-    public static Drawable croppedImage;
+    public Bitmap croppedImage;
+    public static byte[] croppedImageByteArray;
 
     private CropImageView cropper;
     private ImageView back,rotate;
@@ -59,7 +61,10 @@ public class ImageCropper extends AppCompatActivity {
         });
 
         confirm.setOnClickListener(v -> {
-            croppedImage = new BitmapDrawable(getResources(),cropper.getCroppedImage());
+//            croppedImage = new BitmapDrawable(getResources(),cropper.getCroppedImage());
+//            croppedImage = cropper.getCroppedImage();
+            croppedImageByteArray = BitmapHelper.getResizedCompressedByteArray(cropper.getCroppedImage());
+
 
             setResult(RESULT_OK);
             finish();
@@ -69,6 +74,14 @@ public class ImageCropper extends AppCompatActivity {
 
         //cropper.setImageResource(R.drawable.pic2);
         cropper.setImageUriAsync(imageUri);
+    }
+
+    @Override
+    protected void onStop() {
+        try{
+            croppedImage.recycle();
+        }catch (Exception e){}
+        super.onStop();
     }
 
     @Override

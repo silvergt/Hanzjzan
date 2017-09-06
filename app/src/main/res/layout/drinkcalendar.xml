@@ -23,8 +23,8 @@
                 android:layout_weight="1"
                 android:layout_height="60dp"
                 android:src="@drawable/arrow_left"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
+                android:paddingLeft="@dimen/backButtonPadding"
+                android:paddingRight="@dimen/backButtonPadding"
                 />
 
             <TextView
@@ -43,8 +43,8 @@
                 android:layout_weight="1"
                 android:layout_height="60dp"
                 android:src="@drawable/arrow_right"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
+                android:paddingLeft="@dimen/backButtonPadding"
+                android:paddingRight="@dimen/backButtonPadding"
                 />
 
         </LinearLayout>
