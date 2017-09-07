@@ -5,11 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="kotel.hanzan.Initial"
-    android:background="@color/white"
     >
 
     <ImageView
-        android:id="@+id/initial_test"
+        android:id="@+id/initial_image"
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:src="@drawable/logo"

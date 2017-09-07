@@ -40,7 +40,6 @@ public class Initial extends AppCompatActivity {
         StaticData.displayWidth=metrics.widthPixels;
         StaticData.displayHeight=metrics.heightPixels;
 
-
         if(!Fresco.hasBeenInitialized()) {
             Fresco.initialize(this);
         }
@@ -58,11 +57,12 @@ public class Initial extends AppCompatActivity {
         }else if(AccessToken.getCurrentAccessToken()!=null){
             JLog.v("Trying facebook login");
             tryLoginWithFacebook();
-        }else if(session != null){
+        }else if(session != null && session.isOpened()){
             JLog.v("Trying kakaotalk login");
             UserManagement.requestMe(new MeResponseCallback() {
                 @Override
                 public void onSessionClosed(ErrorResult errorResult) {
+                    JLog.v(errorResult.getErrorMessage());
                     JLog.v("session closed");
                     Intent intent = new Intent(Initial.this, Login.class);
                     startActivity(intent);
@@ -83,6 +83,11 @@ public class Initial extends AppCompatActivity {
                     tryLoginWithKakaoTalk(result);
                 }
             });
+        }else{
+            JLog.v("No login information");
+            Intent intent = new Intent(Initial.this, Login.class);
+            startActivity(intent);
+            finish();
         }
 
 

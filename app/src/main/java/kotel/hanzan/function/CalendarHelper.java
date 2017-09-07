@@ -131,6 +131,22 @@ public class CalendarHelper {
 
 
 
+    public static int getDaysBetweenDates(int[] startDate, int[] endDate){
+        int returnValue;
+
+        Calendar startCal = Calendar.getInstance();
+        startCal.set(startDate[0],startDate[1] - 1,startDate[2]);
+
+        Calendar endCal = Calendar.getInstance();
+        endCal.set(endDate[0],endDate[1] - 1,endDate[2]);
+
+        long diff=endCal.getTimeInMillis()-startCal.getTimeInMillis();
+        returnValue=(int)(diff / (24 * 60 * 60 * 1000));
+
+        returnValue = Math.abs(returnValue);
+
+        return returnValue;
+    }
 
 
 }

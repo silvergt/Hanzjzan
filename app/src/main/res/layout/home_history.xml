@@ -29,7 +29,7 @@
             android:textColor="@color/black"
             android:textSize="@dimen/history_priceFontSize2"
             android:layout_gravity="center_horizontal"
-            android:text="절약하셨어요!"
+            android:text="@string/isSaved"
             android:layout_marginBottom="10dp"
             />
 

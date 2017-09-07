@@ -36,7 +36,7 @@
                 android:layout_gravity="center_vertical"
                 android:textSize="@dimen/upperBar_MainFontSize"
                 android:textColor="@color/black"
-                android:text="검색"
+                android:text="@string/search"
                 android:paddingLeft="5dp"
                 />
 
@@ -62,7 +62,7 @@
                 android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:background="@color/grayBackground"
-                android:hint="검색어를 입력해주세요"
+                android:hint="@string/inputSearchKeyword"
                 android:textColorHint="@color/gray"
                 android:textColor="@color/black"
                 android:textSize="@dimen/search_subTextFontSize"
@@ -121,7 +121,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="원하는 술집 이름 혹은 지역 이름을\n입력해 주세요"
+                    android:text="@string/inputPubNameKeyword"
                     android:textAlignment="center"
                     android:paddingTop="10dp"
                     />

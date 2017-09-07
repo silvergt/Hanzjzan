@@ -41,7 +41,7 @@
                 android:gravity="center"
                 android:layout_centerVertical="true"
                 android:textColor="@color/black"
-                android:text="내 주변"
+                android:text="@string/nearbyPlaces"
                 android:textSize="@dimen/upperBar_MainFontSize"
                 android:layout_toRightOf="@id/nearbyPlaces_back"
                 android:layout_marginRight="5dp"

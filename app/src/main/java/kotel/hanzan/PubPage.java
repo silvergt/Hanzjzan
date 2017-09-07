@@ -119,9 +119,9 @@ public class PubPage extends AppCompatActivity {
 
         call.setOnClickListener(view -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("전화를 거시겠습니까?");
-            builder.setNegativeButton("아니요",null);
-            builder.setPositiveButton("네", (dialogInterface, i) -> {
+            builder.setMessage(getString(R.string.makeCall));
+            builder.setNegativeButton(getString(R.string.no),null);
+            builder.setPositiveButton(getString(R.string.yes), (dialogInterface, i) -> {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
                         ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
                     requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, 2);
@@ -193,25 +193,25 @@ public class PubPage extends AppCompatActivity {
 
         if(StaticData.currentUser.expireYYYY==0){
             //아직 멤버가 아닌 경우 - 0
-            dialogText1.setText("아직 한잔 멤버가 아니시네요!\n지금 가입하실래요?");
+            dialogText1.setText(getString(R.string.pubPagePopup_joinMembership));
             dialogText2.setVisibility(View.INVISIBLE);
-            button1.setText("네 가입할래요!");
-            button2.setText("아니요 나중에 할게요");
+            button1.setText(getString(R.string.yesJoin));
+            button2.setText(getString(R.string.noLater));
             dialogStep = 0;
         }else if(StaticData.currentUser.isHanzanAvailableToday){
             //멤버이고, 오늘 한잔을 사용하지 않은 경우 - 1
-            dialogText1.setText(title.getText().toString() + "에서 제공하는\n"+drinkName+"로 하시겠습니까?");
+            dialogText1.setText(title.getText().toString() +getString(R.string.providing)+"\n"+drinkName+getString(R.string.isYourChoice));
             dialogText1.setVisibility(View.VISIBLE);
             dialogText2.setVisibility(View.INVISIBLE);
-            button1.setText("네, 맞아요");
-            button2.setText("다시 생각해볼게요");
+            button1.setText(getString(R.string.yes));
+            button2.setText(getString(R.string.no));
             dialogStep = 1;
         }else{
             //멤버이고, 오늘 한잔을 사용한 경우 - 2
-            dialogText1.setText("오늘 이미 한잔을 사용하셨네요!\n내일 다시 사용해주세요");
+            dialogText1.setText(getString(R.string.alreadyUsedTicket));
             dialogText1.setVisibility(View.VISIBLE);
             dialogText2.setVisibility(View.INVISIBLE);
-            button1.setText("내일 다시쓸게요!");
+            button1.setText(getString(R.string.willComebackLater));
             button2.setVisibility(View.GONE);
             dialogStep = 2;
         }
@@ -225,11 +225,11 @@ public class PubPage extends AppCompatActivity {
                     drinkSelectorDialog.cancel();
                     break;
                 case 1:
-                    dialogText2.setText(drinkName+"\n"+"한잔 주세요!");
+                    dialogText2.setText(drinkName+"\n"+getString(R.string.oneGlassPlease));
                     dialogText1.setVisibility(View.INVISIBLE);
                     dialogText2.setVisibility(View.VISIBLE);
-                    button1.setText("직원 확인");
-                    button2.setText("취소하기");
+                    button1.setText(getString(R.string.clerkCheck));
+                    button2.setText(getString(R.string.cancel));
                     dialogStep = 3;
                     break;
                 case 2:
@@ -268,16 +268,16 @@ public class PubPage extends AppCompatActivity {
 
             new Handler(getMainLooper()).post(()->{
                 if(availability==null||availability.equals("FALSE")){
-                    dialogText1.setText("오늘 이미 한잔을 사용하셨네요!\n내일 다시 사용해주세요");
+                    dialogText1.setText(getString(R.string.alreadyUsedTicket));
                     dialogText1.setVisibility(View.VISIBLE);
                     dialogText2.setVisibility(View.INVISIBLE);
-                    button1.setText("내일 다시쓸게요!");
+                    button1.setText(getString(R.string.willComebackLater));
                     button2.setVisibility(View.GONE);
                     dialogStep = 2;
                 }else if(availability.equals("TRUE")&& voucherUsedSuccessfully.equals("TRUE")){
                     StaticData.currentUser.isHanzanAvailableToday = false;
 
-                    dialogText2.setText("사용 성공!"+"\n"+"맛있게 "+drinkName+" 한잔 하세요!");
+                    dialogText2.setText(getString(R.string.SuccessfullyUsed)+"\n"+drinkName+getString(R.string.isComing));
                     drinkImage.setVisibility(View.VISIBLE);
                     dialogText1.setVisibility(View.INVISIBLE);
                     dialogText2.setVisibility(View.VISIBLE);

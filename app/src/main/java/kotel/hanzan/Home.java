@@ -170,13 +170,13 @@ public class Home extends AppCompatActivity {
 
     private boolean isFirstGPSRequest = true;
     private boolean myLocationIsAvailable = false;
-    //******FILTER******
-    private boolean filterLayoutIsVisible = false;
-    private RelativeLayout filterLayout;
-    private JCheckBox checkbox1,checkbox2,checkbox3,checkbox4,checkbox5,checkbox6,checkbox7;
-    private boolean filter_checkbox1Checked = false, filter_checkbox2Checked = false, filter_checkbox3Checked = false;
-    private boolean filter_checkbox4Checked = false, filter_checkbox5Checked = false, filter_checkbox6Checked = false;
-    private boolean filter_checkbox7Checked = false;
+        //******FILTER******
+        private boolean filterLayoutIsVisible = false;
+        private RelativeLayout filterLayout;
+        private JCheckBox checkbox1,checkbox2,checkbox3,checkbox4,checkbox5,checkbox6,checkbox7;
+        private boolean filter_checkbox1Checked = false, filter_checkbox2Checked = false, filter_checkbox3Checked = false,
+                filter_checkbox4Checked = false, filter_checkbox5Checked = false, filter_checkbox6Checked = false,
+                filter_checkbox7Checked = false;
 
 
     //************************My Favorite Tab************************
@@ -298,7 +298,7 @@ public class Home extends AppCompatActivity {
 
             Picasso.with(getApplicationContext()).load(pubInfo.imageAddress.get(0)).placeholder(R.drawable.loading_store).into(holder.image);
             String dateText = Integer.toString(pubInfo.YYYY) + "/" + Integer.toString(pubInfo.MM) + "/" + Integer.toString(pubInfo.DD);
-            holder.dateAndDrink.setText(dateText + "에 '" + pubInfo.drinkInfo.drinkName + "' 한 잔");
+            holder.dateAndDrink.setText(dateText + " - '" + pubInfo.drinkInfo.drinkName + "'");
             holder.name.setText(pubInfo.name);
             holder.address.setText(pubInfo.address);
             JLog.v(historyInfoArray.get(position).drinkInfo.drinkType);
@@ -366,10 +366,9 @@ public class Home extends AppCompatActivity {
 
     //************************MyPage Tab************************
     private ProfileCircleImageView mypageProfileImage;
-    private TextView mypageProfileText1, mypageProfileText2, mypageProfileText3;
+    private TextView mypageProfileText1, mypageProfileText2;
     private ImageView mypageCurrentMembership,profileNameChange;
     private LinearLayout mypageMembership, mypageInquire, mypageSetting, mypageLogout;
-    private RelativeLayout mypageCalendarContainer;
     private DrinkCalendar mypageCalendar;
 
 
@@ -418,13 +417,9 @@ public class Home extends AppCompatActivity {
             startActivity(intent);
         });
 
-        tapBar.setItems(new String[]{"홈", "즐겨찾기", "나의 한잔 기록", "이벤트", "마이페이지"},
-                new String[]{"home",
-                        "favorite",
-                        "history",
-                        "event",
-                        "profile"
-                });
+        tapBar.setItems(new String[]{getString(R.string.home), getString(R.string.favorite), getString(R.string.history)
+                        , getString(R.string.event), getString(R.string.mypage)},
+                new String[]{ "home", "favorite", "history", "event", "profile" });
 
         tapBar.setListener(new TapBarItemClickListener() {
             @Override
@@ -457,7 +452,7 @@ public class Home extends AppCompatActivity {
                     upperBarSearch.setVisibility(View.INVISIBLE);
                     upperBarSubText.setVisibility(View.INVISIBLE);
                     upperBarFilter.setVisibility(View.INVISIBLE);
-                    upperBarMainText.setText("마이페이지");
+                    upperBarMainText.setText(getString(R.string.mypage));
                     container.removeAllViews();
                 }
             }
@@ -476,11 +471,21 @@ public class Home extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
         LinearLayout layout = (LinearLayout) getLayoutInflater().inflate(R.layout.home_membershippopup, null);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layout.setLayoutParams(params);
+
+        TextView text = (TextView)layout.findViewById(R.id.homeMembershipPopup_text);
         TextView no = (TextView) layout.findViewById(R.id.homeMembershipPopup_no);
         TextView yes = (TextView) layout.findViewById(R.id.homeMembershipPopup_yes);
 
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        layout.setLayoutParams(params);
+        if (StaticData.currentUser.expireYYYY==0){
+            text.setText(getString(R.string.membershipPopupText));
+
+        }else if(CalendarHelper.getDaysBetweenDates(CalendarHelper.getCurrentDate(),
+                new int[]{StaticData.currentUser.expireYYYY,StaticData.currentUser.expireMM,StaticData.currentUser.expireDD})
+                <= 7 ){
+            text.setText(getString(R.string.membershipPopupTextAlmostEnd));
+        }
 
         no.setOnClickListener(view -> dialog.cancel());
         yes.setOnClickListener(view -> {
@@ -503,7 +508,8 @@ public class Home extends AppCompatActivity {
         upperBarSubText.setVisibility(View.VISIBLE);
         upperBarFilter.setVisibility(View.VISIBLE);
 
-        upperBarMainText.setText("내 주변");
+        upperBarMainText.setText(getString(R.string.aroundMe));
+        upperBarSubText.setText(getString(R.string.homeUpperText));
 
         homeLayout = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.home_home, null);
         pubInfoRecyclerView = (JRecyclerView) homeLayout.findViewById(R.id.home_homeRecycler);
@@ -546,7 +552,7 @@ public class Home extends AppCompatActivity {
         upperBarSubText.setVisibility(View.INVISIBLE);
         upperBarFilter.setVisibility(View.INVISIBLE);
 
-        upperBarMainText.setText("즐겨찾기");
+        upperBarMainText.setText(getString(R.string.favorite));
 
         RelativeLayout layout = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.home_favorite, null);
         pubInfoFavoriteRecyclerView = (JRecyclerView) layout.findViewById(R.id.home_favoriteRecycler);
@@ -580,7 +586,7 @@ public class Home extends AppCompatActivity {
         upperBarSubText.setVisibility(View.INVISIBLE);
         upperBarFilter.setVisibility(View.INVISIBLE);
 
-        upperBarMainText.setText("내가 마신 한잔");
+        upperBarMainText.setText(getString(R.string.history));
 
 
         RelativeLayout layout = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.home_history, null);
@@ -621,7 +627,7 @@ public class Home extends AppCompatActivity {
         upperBarSubText.setVisibility(View.INVISIBLE);
         upperBarFilter.setVisibility(View.INVISIBLE);
 
-        upperBarMainText.setText("이벤트");
+        upperBarMainText.setText(getString(R.string.event));
 
         RelativeLayout layout = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.home_event, null);
         eventRecycler = (JRecyclerView) layout.findViewById(R.id.home_eventRecycler);
@@ -673,13 +679,14 @@ public class Home extends AppCompatActivity {
 
         String expireDate;
         if(StaticData.currentUser.expireYYYY==0){
-            expireDate = "아직 멤버십 미가입 상태입니다";
+            expireDate = getString(R.string.notMemberYet);
         }else{
-            expireDate = Integer.toString(StaticData.currentUser.expireYYYY)+"."+Integer.toString(StaticData.currentUser.expireMM)
-                    +"."+Integer.toString(StaticData.currentUser.expireDD)+" 까지";
+            expireDate = "~ "+Integer.toString(StaticData.currentUser.expireYYYY)+"."+Integer.toString(StaticData.currentUser.expireMM)
+                    +"."+Integer.toString(StaticData.currentUser.expireDD);
         }
-        mypageProfileText2.setText("내 멤버십 : " + expireDate);
+        mypageProfileText2.setText(getString(R.string.myMembership) + expireDate);
 
+        mypageProfileText1.setOnClickListener(view -> profileNameChange.callOnClick());
 
         mypageProfileImage.setOnClickListener(view -> {
             openProfilePhotoPopup();
@@ -701,8 +708,8 @@ public class Home extends AppCompatActivity {
         mypageInquire.setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_SEND);
             String[] email=new String[]{StaticData.adminEmail};
-            String subject="문의 메일 보내요! - "+StaticData.currentUser.name;
-            String body="내용을 작성해 주세요";
+            String subject=getString(R.string.emailTitle)+" - "+StaticData.currentUser.name;
+            String body=getString(R.string.emailBody);
 
             intent.putExtra(Intent.EXTRA_EMAIL,email);
             intent.putExtra(Intent.EXTRA_SUBJECT,subject);
@@ -710,7 +717,7 @@ public class Home extends AppCompatActivity {
             intent.setType("message/rfc822");
 //            intent.setType("text/plain");
 
-            startActivity(Intent.createChooser(intent,"email을 보낼 앱을 선택하세요"));
+            startActivity(Intent.createChooser(intent,getString(R.string.chooseEmailApp)));
 
         });
 
@@ -961,7 +968,7 @@ public class Home extends AppCompatActivity {
             public void onLocationTimeout() {
                 myLocationIsAvailable = false;
                 pubInfoArray.clear();
-                Toast.makeText(getApplicationContext(), "현재 위치를 불러오지 못했습니다", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.failedGPS), Toast.LENGTH_SHORT).show();
                 StaticData.myLatestLocation = StaticData.defaultLocation;
                 retrievePubList(true);
             }
@@ -970,7 +977,7 @@ public class Home extends AppCompatActivity {
             public void onLocationUnavailableArea(NGeoPoint nGeoPoint) {
                 myLocationIsAvailable = false;
                 pubInfoArray.clear();
-                Toast.makeText(getApplicationContext(), "현재 위치를 불러오지 못했습니다", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.failedGPS), Toast.LENGTH_SHORT).show();
                 StaticData.myLatestLocation = StaticData.defaultLocation;
                 retrievePubList(true);
             }
@@ -979,7 +986,7 @@ public class Home extends AppCompatActivity {
             public void onHasNoLocationPermission() {
                 myLocationIsAvailable = false;
                 pubInfoArray.clear();
-                Toast.makeText(getApplicationContext(), "설정에서 위치정보 사용을 수락해 주세요", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.allowGPS), Toast.LENGTH_SHORT).show();
                 StaticData.myLatestLocation = StaticData.defaultLocation;
                 retrievePubList(true);
             }
@@ -988,7 +995,7 @@ public class Home extends AppCompatActivity {
             public void onGpsIsOff() {
                 myLocationIsAvailable = false;
                 pubInfoArray.clear();
-                Toast.makeText(getApplicationContext(), "위치를 켜 주세요", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.turnOnGPS), Toast.LENGTH_SHORT).show();
                 StaticData.myLatestLocation = StaticData.defaultLocation;
                 retrievePubList(true);
             }
@@ -1090,7 +1097,7 @@ public class Home extends AppCompatActivity {
 
             new Handler(getMainLooper()).post(() -> {
                 try {
-                    historyPrice.setText(totalSavingCost+"원");
+                    historyPrice.setText(totalSavingCost+getString(R.string.won));
                 }catch (Exception e){}
                 historyAdapter.notifyDataSetChanged();
                 historyRecyclerView.finishRefreshing();
@@ -1100,7 +1107,6 @@ public class Home extends AppCompatActivity {
             });
         }).start();
     }
-
 
 
     //****Event Tab****
@@ -1135,7 +1141,6 @@ public class Home extends AppCompatActivity {
             });
         }).start();
     }
-
 
 
     //****My Page Tab****
@@ -1249,9 +1254,9 @@ public class Home extends AppCompatActivity {
 
     private void logoutToLoginPage() {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
-        dialogBuilder.setMessage("정말 로그아웃 할래요?");
-        dialogBuilder.setNegativeButton("아니요", null);
-        dialogBuilder.setPositiveButton("네", (dialogInterface, i) -> {
+        dialogBuilder.setMessage(getString(R.string.logoutMessage));
+        dialogBuilder.setNegativeButton(getString(R.string.no), null);
+        dialogBuilder.setPositiveButton(getString(R.string.yes), (dialogInterface, i) -> {
             StaticData.currentUser = null;
             AccessToken.setCurrentAccessToken(null);
             UserManagement.requestLogout(null);
@@ -1379,7 +1384,7 @@ public class Home extends AppCompatActivity {
             if(finishIfBackButtonClickedOnceMore){
                 super.onBackPressed();
             }else{
-                Toast.makeText(this,"뒤로가기 버튼을 한번 더 누르면 종료합니다",Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,getString(R.string.oneMoreBackButton),Toast.LENGTH_SHORT).show();
                 finishIfBackButtonClickedOnceMore = true;
                 new Thread(()->{
                     try{

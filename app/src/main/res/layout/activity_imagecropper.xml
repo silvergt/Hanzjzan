@@ -91,7 +91,7 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="free size"
+                android:text="@string/freeSize"
                 android:gravity="center"
                 android:textColor="@color/black"
                 />
@@ -101,7 +101,7 @@
             android:id="@+id/cropper_confirm"
             android:layout_width="match_parent"
             android:layout_height="@dimen/upperBar"
-            android:text="확인"
+            android:text="@string/confirm"
             android:textSize="15sp"
             android:textColor="@color/white"
             android:background="@color/mainColor_medium"

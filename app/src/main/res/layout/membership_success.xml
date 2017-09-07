@@ -18,7 +18,7 @@
             />
 
         <TextView
-            android:text="구매가 완료되었습니다!"
+            android:text="@string/successfullyPurchased"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
@@ -37,7 +37,7 @@
             android:layout_width="@dimen/membershipSuccess_buttonWidth"
             android:layout_height="@dimen/membershipSuccess_buttonWidth"
             android:layout_gravity="center"
-            android:src="@drawable/test"
+            android:src="@drawable/ticket"
             />
 
         <View
@@ -52,11 +52,10 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/membershipSuccess_subFontSize"
             android:textColor="@color/black"
-            android:text="한잔 멤버십 1달\n8.13 ~ 9.13\n12,000원"
+            android:text="한잔 멤버십 1달\n~ 9.13\n12,000원"
             android:layout_gravity="center"
             android:textAlignment="center"
             />
-
 
         <View
             android:layout_width="match_parent"
@@ -73,7 +72,7 @@
             android:gravity="center"
             android:textColor="@color/white"
             android:textSize="@dimen/membershipSuccess_subFontSize"
-            android:text="확인"
+            android:text="@string/confirm"
             />
 
         <View

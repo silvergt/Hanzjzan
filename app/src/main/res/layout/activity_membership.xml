@@ -34,7 +34,7 @@
                 android:gravity="center_vertical"
                 android:textSize="@dimen/upperBar_MainFontSize"
                 android:textColor="@color/black"
-                android:text="멤버쉽 가입"
+                android:text="@string/joinMembership"
                 android:paddingLeft="5dp"
                 />
 
@@ -47,7 +47,7 @@
             android:gravity="center"
             android:textColor="@color/black"
             android:textSize="@dimen/membership_mainFontSize"
-            android:text="현재 멤버쉽 만료일"
+            android:text="@string/currentExpireDate"
             />
 
         <TextView

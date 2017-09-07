@@ -17,7 +17,7 @@ public class GeoHelper {
 
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-        JLog.v(Double.toString(AVERAGE_RADIUS_OF_EARTH_KM * c));
+        JLog.v(Double.toString(AVERAGE_RADIUS_OF_EARTH_KM * c)+"km");
 
         return AVERAGE_RADIUS_OF_EARTH_KM * c;
     }

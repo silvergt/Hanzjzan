@@ -46,8 +46,8 @@ import kotel.hanzan.view.SlideCountView;
 import pl.droidsonroids.gif.GifImageView;
 
 public class Login extends AppCompatActivity {
-    private HashMap<String,String> map;
-    private Bitmap bitmap=null;
+    private HashMap<String, String> map;
+    private Bitmap bitmap = null;
 
     private Loading loading;
 
@@ -73,18 +73,18 @@ public class Login extends AppCompatActivity {
 
         initKakao();
 
-        slideView = (HorizontalSlideView)findViewById(R.id.login_slideView);
-        slideCountView = (SlideCountView)findViewById(R.id.login_slideCountView);
+        slideView = (HorizontalSlideView) findViewById(R.id.login_slideView);
+        slideCountView = (SlideCountView) findViewById(R.id.login_slideCountView);
         lowerButton = (LinearLayout) findViewById(R.id.login_lowerButton);
-        lowerIcon = (ImageView)findViewById(R.id.login_lowerIcon);
-        loading = (Loading)findViewById(R.id.login_loading);
+        lowerIcon = (ImageView) findViewById(R.id.login_lowerIcon);
+        loading = (Loading) findViewById(R.id.login_loading);
 
 
-        LinearLayout.LayoutParams slideViewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,StaticData.displayHeight*7/10);
+        LinearLayout.LayoutParams slideViewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, StaticData.displayHeight * 7 / 10);
         slideView.setLayoutParams(slideViewParams);
         addSlideChildViews();
 
-        slideCountView.initialize(4,40,5);
+        slideCountView.initialize(4, 40, 5);
 
         lowerIcon.setVisibility(View.GONE);
 
@@ -107,8 +107,8 @@ public class Login extends AppCompatActivity {
         });
 
         lowerButton.setOnClickListener(view -> {
-            if(slideView.getCurrentIndex()!=3){
-                slideView.slideTo(slideView.getCurrentIndex()+1);
+            if (slideView.getCurrentIndex() != 3) {
+                slideView.slideTo(slideView.getCurrentIndex() + 1);
             }
             setLowerButton(slideView.getCurrentIndex());
         });
@@ -116,7 +116,7 @@ public class Login extends AppCompatActivity {
     }
 
 
-    private void initFacebook(){
+    private void initFacebook() {
         callbackManager = CallbackManager.Factory.create();
 
         LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
@@ -140,38 +140,38 @@ public class Login extends AppCompatActivity {
         });
     }
 
-    private void initKakao(){
+    private void initKakao() {
         callback = new SessionCallback();
         session = Session.getCurrentSession();
         session.addCallback(callback);
     }
 
 
-    private void addSlideChildViews(){
-        for(int i=0;i<3;i++){
-            LinearLayout childLayout = (LinearLayout)getLayoutInflater().inflate(R.layout.login_slideviewchild,null);
-            GifImageView gifView = (GifImageView)childLayout.findViewById(R.id.login_gif);
-            TextView text1 = (TextView)childLayout.findViewById(R.id.login_childText1);
-            TextView text2 = (TextView)childLayout.findViewById(R.id.login_childText2);
+    private void addSlideChildViews() {
+        for (int i = 0; i < 3; i++) {
+            LinearLayout childLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.login_slideviewchild, null);
+            GifImageView gifView = (GifImageView) childLayout.findViewById(R.id.login_gif);
+            TextView text1 = (TextView) childLayout.findViewById(R.id.login_childText1);
+            TextView text2 = (TextView) childLayout.findViewById(R.id.login_childText2);
 
             RelativeLayout.LayoutParams childParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             childLayout.setLayoutParams(childParams);
 
-            switch (i){
+            switch (i) {
                 case 0:
                     gifView.setImageResource(R.drawable.login_gif1);
-                    text1.setText("하루에 한번 한잔 하세요!");
-                    text2.setText("한잔 멤버쉽에 가입하면 하루에 한번,\n다양한 종류의 술 한병, 혹은 한잔이 무료입니다.");
+                    text1.setText(getString(R.string.loginText1Main));
+                    text2.setText(getString(R.string.loginText1Sub));
                     break;
                 case 1:
                     gifView.setImageResource(R.drawable.login_gif2);
-                    text1.setText("앱을 보여주세요!");
-                    text2.setText("매장 점원에게 한잔 앱을 보여주세요.\n원하시는 음료를 가져다 드릴 것 입니다.\n무료로요!");
+                    text1.setText(getString(R.string.loginText2Main));
+                    text2.setText(getString(R.string.loginText2Sub));
                     break;
                 case 2:
                     gifView.setImageResource(R.drawable.login_gif3);
-                    text1.setText("다양한 제휴 매장을 확인해 보세요");
-                    text2.setText("한잔과 여러 매장이 제휴되어 있습니다.\n주변의 매장을 확인해보고 원하는 매장을 방문해주세요.");
+                    text1.setText(getString(R.string.loginText3Main));
+                    text2.setText(getString(R.string.loginText3Sub));
                     break;
             }
 
@@ -183,8 +183,8 @@ public class Login extends AppCompatActivity {
 
         }
 
-        LinearLayout childLayout = (LinearLayout)getLayoutInflater().inflate(R.layout.login_slideviewchild_login,null);
-        LinearLayout facebookLogin = (LinearLayout)childLayout.findViewById(R.id.login_facebookLogin);
+        LinearLayout childLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.login_slideviewchild_login, null);
+        LinearLayout facebookLogin = (LinearLayout) childLayout.findViewById(R.id.login_facebookLogin);
         facebookLogin.setOnClickListener(view -> LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile")));
 
         RelativeLayout.LayoutParams childParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -199,71 +199,65 @@ public class Login extends AppCompatActivity {
         setLowerButton(0);
     }
 
-    private void setLowerButton(int num){
-        switch (num){
+    private void setLowerButton(int num) {
+        switch (num) {
             case 0:
             case 1:
             case 2:
                 lowerButton.setBackgroundResource(R.drawable.roundbox_maingradient);
-//                lowerButton.setVisibility(View.VISIBLE);
                 break;
             case 3:
                 lowerButton.setBackgroundResource(R.drawable.roundbox_gray);
-//                lowerButton.setVisibility(View.INVISIBLE);
                 break;
         }
     }
 
 
+    private void tryLoginWithKakaoTalk(UserProfile userProfile) {
+        JLog.v("profile ID", Long.toString(userProfile.getId()));
+        JLog.v("profile Image", userProfile.getThumbnailImagePath());
+        JLog.v("profile Name", userProfile.getNickname());
 
-
-    private void tryLoginWithKakaoTalk(UserProfile userProfile){
-        JLog.v("profile ID",Long.toString(userProfile.getId()));
-        JLog.v("profile Image",userProfile.getThumbnailImagePath());
-        JLog.v("profile Name",userProfile.getNickname());
-
-        loading.setLoadingStarted();
-
-        new Thread(()->{
+        new Thread(() -> {
             map = new HashMap<>();
-            map.put("member_key",StaticData.IDENTIFIER_KAKAO+Long.toString(userProfile.getId()));
-            map = ServerConnectionHelper.connect("checking account existence","login",map);
+            map.put("member_key", StaticData.IDENTIFIER_KAKAO + Long.toString(userProfile.getId()));
+            map = ServerConnectionHelper.connect("checking account existence", "login", map);
 
-            if(map.get("signup_history")==null){
+            if (map.get("signup_history") == null) {
                 JLog.e("Connection failed!");
                 loading.setLoadingCompleted();
                 return;
             }
 
-            if(map.get("signup_history").equals("TRUE")){
+            if (map.get("signup_history").equals("TRUE")) {
                 makeUserInfoAndLogin(map);
-            }else if(map.get("signup_history").equals("FALSE")){
+            } else if (map.get("signup_history").equals("FALSE")) {
                 map.clear();
-                map.put("member_key",StaticData.IDENTIFIER_KAKAO+Long.toString(userProfile.getId()));
-                map.put("imageincluded","1");
+                map.put("member_key", StaticData.IDENTIFIER_KAKAO + Long.toString(userProfile.getId()));
+                map.put("imageincluded", "1");
                 try {
                     URL imageURL = new URL(userProfile.getThumbnailImagePath());
                     bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                     loading.setLoadingCompleted();
                     return;
                 }
                 try {
-                    map.put("name_member",userProfile.getNickname());
+                    map.put("name_member", userProfile.getNickname());
 
-                    map = ServerConnectionHelper.connect("signing up","signup",map,"profileimage", BitmapHelper.getCompressedImageByteArray(bitmap));
-                    if(map.get("signupresult").equals("TRUE")){
+                    map = ServerConnectionHelper.connect("signing up", "signup", map, "profileimage", BitmapHelper.getCompressedImageByteArray(bitmap));
+                    if (map.get("signupresult").equals("TRUE")) {
                         map.clear();
-                        map.put("member_key",StaticData.IDENTIFIER_KAKAO+Long.toString(userProfile.getId()));
-                        map = ServerConnectionHelper.connect("checking account existence","login",map);
-                        if(map.get("signup_history").equals("TRUE")){
+                        map.put("member_key", StaticData.IDENTIFIER_KAKAO + Long.toString(userProfile.getId()));
+                        map = ServerConnectionHelper.connect("checking account existence", "login", map);
+                        if (map.get("signup_history").equals("TRUE")) {
                             makeUserInfoAndLogin(map);
-                        }else{
+                        } else {
                             loading.setLoadingCompleted();
                         }
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                     loading.setLoadingCompleted();
                 }
@@ -271,56 +265,56 @@ public class Login extends AppCompatActivity {
         }).start();
     }
 
-    private void tryLoginWithFacebook(){
+    private void tryLoginWithFacebook() {
         loading.setLoadingStarted();
 
-        new Thread(()->{
-            if(AccessToken.getCurrentAccessToken()==null){
+        new Thread(() -> {
+            if (AccessToken.getCurrentAccessToken() == null) {
                 loading.setLoadingCompleted();
                 return;
             }
 
             map = new HashMap<>();
-            JLog.v("FBLOGIN!",AccessToken.getCurrentAccessToken().getToken());
-            map.put("member_key",StaticData.IDENTIFIER_FACEBOOK+AccessToken.getCurrentAccessToken().getUserId());
-            map = ServerConnectionHelper.connect("checking account existence","login",map);
+            JLog.v("FBLOGIN!", AccessToken.getCurrentAccessToken().getToken());
+            map.put("member_key", StaticData.IDENTIFIER_FACEBOOK + AccessToken.getCurrentAccessToken().getUserId());
+            map = ServerConnectionHelper.connect("checking account existence", "login", map);
 
-            if(map.get("signup_history")==null){
+            if (map.get("signup_history") == null) {
                 JLog.e("Connection failed!");
                 loading.setLoadingCompleted();
                 return;
             }
 
-            if(map.get("signup_history").equals("TRUE")){
+            if (map.get("signup_history").equals("TRUE")) {
                 makeUserInfoAndLogin(map);
-            }else if(map.get("signup_history").equals("FALSE")){
+            } else if (map.get("signup_history").equals("FALSE")) {
                 map.clear();
-                map.put("member_key",StaticData.IDENTIFIER_FACEBOOK+AccessToken.getCurrentAccessToken().getUserId());
-                map.put("imageincluded","1");
+                map.put("member_key", StaticData.IDENTIFIER_FACEBOOK + AccessToken.getCurrentAccessToken().getUserId());
+                map.put("imageincluded", "1");
                 try {
                     URL imageURL = new URL("https://graph.facebook.com/" + AccessToken.getCurrentAccessToken().getUserId() + "/picture?type=large");
                     bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                     loading.setLoadingCompleted();
                     return;
                 }
-                GraphRequest request=GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), (object, response) -> {
+                GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), (object, response) -> {
                     try {
-                        map.put("name_member",object.get("name").toString());
+                        map.put("name_member", object.get("name").toString());
 
-                        map = ServerConnectionHelper.connect("signing up","signup",map,"profileimage", BitmapHelper.getCompressedImageByteArray(bitmap));
-                        if(map.get("signupresult").equals("TRUE")){
+                        map = ServerConnectionHelper.connect("signing up", "signup", map, "profileimage", BitmapHelper.getCompressedImageByteArray(bitmap));
+                        if (map.get("signupresult").equals("TRUE")) {
                             map.clear();
-                            map.put("member_key",StaticData.IDENTIFIER_FACEBOOK+AccessToken.getCurrentAccessToken().getUserId());
-                            map = ServerConnectionHelper.connect("checking account existence","login",map);
-                            if(map.get("signup_history").equals("TRUE")){
+                            map.put("member_key", StaticData.IDENTIFIER_FACEBOOK + AccessToken.getCurrentAccessToken().getUserId());
+                            map = ServerConnectionHelper.connect("checking account existence", "login", map);
+                            if (map.get("signup_history").equals("TRUE")) {
                                 makeUserInfoAndLogin(map);
-                            }else{
+                            } else {
                                 loading.setLoadingCompleted();
                             }
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                         loading.setLoadingCompleted();
                     }
@@ -331,10 +325,9 @@ public class Login extends AppCompatActivity {
     }
 
 
-
-    private void makeUserInfoAndLogin(HashMap<String,String> map){
+    private void makeUserInfoAndLogin(HashMap<String, String> map) {
         StaticData.currentUser = new UserInfo(map);
-        Intent intent = new Intent(getApplicationContext(),Home.class);
+        Intent intent = new Intent(getApplicationContext(), Home.class);
         startActivity(intent);
         finish();
     }
@@ -343,7 +336,7 @@ public class Login extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         //FACEBOOK
-        callbackManager.onActivityResult(requestCode,resultCode,data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
 
         //KAKAOTALK
         Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data);
@@ -357,10 +350,9 @@ public class Login extends AppCompatActivity {
         super.onDestroy();
         try {
             bitmap.recycle();
-        }catch (Exception e){}
+        } catch (Exception e) {
+        }
     }
-
-
 
 
 
@@ -370,8 +362,9 @@ public class Login extends AppCompatActivity {
 
         @Override
         public void onSessionOpened() {
-            UserManagement.requestMe(new MeResponseCallback() {
+            loading.setLoadingStarted();
 
+            UserManagement.requestMe(new MeResponseCallback() {
                 @Override
                 public void onFailure(ErrorResult errorResult) {
                     String message = "failed to get user info. msg=" + errorResult;
@@ -380,8 +373,6 @@ public class Login extends AppCompatActivity {
                     ErrorCode result = ErrorCode.valueOf(errorResult.getErrorCode());
                     if (result == ErrorCode.CLIENT_ERROR_CODE) {
                         finish();
-                    } else {
-                        //redirectMainActivity();
                     }
                 }
 
@@ -402,12 +393,11 @@ public class Login extends AppCompatActivity {
 
         @Override
         public void onSessionOpenFailed(KakaoException exception) {
-            if(exception != null) {
+            // 세션 연결이 실패했을때
+            if (exception != null) {
                 Logger.e(exception);
             }
-            // 세션 연결이 실패했을때
         }
     }
-
 
 }

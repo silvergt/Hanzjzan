@@ -75,12 +75,13 @@ public class Membership extends AppCompatActivity {
             MembershipTicketInfo ticketInfo = ticketArray.get(position);
             if(ticketInfo.isNowDiscounted){
                 holder.saleIcon.setVisibility(View.VISIBLE);
-                holder.strikeThroughedPrice.setText( NumericHelper.toMoneyFormat(Integer.toString(ticketInfo.originalPrice))+"원" );
-                holder.currentPrice.setText( NumericHelper.toMoneyFormat(Integer.toString(ticketInfo.discountPrice))+"원" );
+                holder.saleIcon.setText(Integer.toString(100 - (int)(100*(float)ticketInfo.discountPrice/ticketInfo.originalPrice))+"%\nSALE");
+                holder.strikeThroughedPrice.setText( NumericHelper.toMoneyFormat(Integer.toString(ticketInfo.originalPrice))+getString(R.string.won) );
+                holder.currentPrice.setText( NumericHelper.toMoneyFormat(Integer.toString(ticketInfo.discountPrice))+getString(R.string.won) );
             }else{
                 holder.saleIcon.setVisibility(View.INVISIBLE);
                 holder.strikeThroughedPrice.setText("");
-                holder.currentPrice.setText( NumericHelper.toMoneyFormat(Integer.toString(ticketInfo.originalPrice))+"원" );
+                holder.currentPrice.setText( NumericHelper.toMoneyFormat(Integer.toString(ticketInfo.originalPrice))+getString(R.string.won) );
             }
 
             holder.title.setText(ticketInfo.name);
@@ -113,7 +114,7 @@ public class Membership extends AppCompatActivity {
             startYYYY = startDate[0];
             startMM = startDate[1];
             startDD = startDate[2];
-            expireDate.setText("아직 회원이 아닙니다");
+            expireDate.setText(getString(R.string.notMemberYet));
         }else{
             //if user is a member of Hanzan
             startYYYY = StaticData.currentUser.expireYYYY;

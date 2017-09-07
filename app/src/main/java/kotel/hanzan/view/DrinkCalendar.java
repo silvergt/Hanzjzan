@@ -67,28 +67,6 @@ public class DrinkCalendar extends RelativeLayout {
             updateCalendar();
         });
 
-/*
-
-        new Thread(() -> {
-            calendar = Calendar.getInstance();
-            calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), 1);
-
-            calendarRow = new LinearLayout[6];
-            cells = new RelativeLayout[42];
-
-            JLog.v("3");
-            for (int i = 0; i < calendarLayout.getChildCount(); i++) {
-                calendarRow[i] = (LinearLayout) calendarLayout.getChildAt(i);
-                for (int j = 0; j < 7; j++) {
-                    cells[i * 7 + j] = (RelativeLayout) calendarRow[i].getChildAt(j);
-                }
-            }
-            JLog.v("4");
-            new Handler(Looper.getMainLooper()).post(this::setCalendar);
-
-        }).start();
-*/
-
         calendar = new GregorianCalendar(Locale.getDefault());
         calendar.set(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), 1);
 
@@ -159,7 +137,11 @@ public class DrinkCalendar extends RelativeLayout {
             ((ImageView)cells[i].getChildAt(0)).setImageResource(0);
         }
 
-        monthText.setText(Integer.toString(calendar.get(Calendar.YEAR)) + "년 " + Integer.toString(calendar.get(Calendar.MONTH) + 1) + "월");
+        if(calendar.get(Calendar.MONTH) + 1 <= 9) {
+            monthText.setText(Integer.toString(calendar.get(Calendar.YEAR)) + ". 0" + Integer.toString(calendar.get(Calendar.MONTH) + 1));
+        }else{
+            monthText.setText(Integer.toString(calendar.get(Calendar.YEAR)) + ". " + Integer.toString(calendar.get(Calendar.MONTH) + 1));
+        }
 
         switch (calendar.getActualMaximum(Calendar.WEEK_OF_MONTH)) {
             case 4:

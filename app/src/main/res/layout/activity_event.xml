@@ -30,7 +30,7 @@
             android:gravity="center"
             android:layout_centerVertical="true"
             android:textColor="@color/black"
-            android:text="이벤트"
+            android:text="@string/event"
             android:textStyle="bold"
             android:textSize="@dimen/upperBar_MainFontSize"
             android:layout_toRightOf="@id/event_back"

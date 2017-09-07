@@ -28,7 +28,7 @@ public class ServerConnectionHelper {
     }
 
     private HashMap<String,String> interactWithServer(String recognizer,String phpAddress,HashMap<String,String> data, @Nullable String imageName, @Nullable byte[] image){
-        final HashMap<String, String> returnedValue = new HashMap<>();
+        final HashMap<String, String> returnValue = new HashMap<>();
         Thread th = new Thread(() -> {
             JLog.v("<"+recognizer+">");
             String boundary = "-----KOTEL-----" + System.currentTimeMillis();
@@ -46,11 +46,6 @@ public class ServerConnectionHelper {
                     MultipartEntityBuilder MEB = MultipartEntityBuilder.create();
                     MEB.setBoundary(boundary);
                     MEB.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-//                        if (image!=null) {
-//                            MEB.addTextBody("imageincluded", "1");
-//                        } else {
-//                            MEB.addTextBody("imageincluded", "0");
-//                        }
                     if(image!=null) {
                         JLog.v("image size : ", image.length);
                         MEB.addBinaryBody(imageName, image, ContentType.create("image/png"), "imagefile.png");
@@ -70,7 +65,7 @@ public class ServerConnectionHelper {
                         String[] map = temp.split(" ",2);
                         if(map.length!=2){continue;}
                         JLog.v("<"+recognizer+"> returned ", map[0] + " -> " + map[1]);
-                        returnedValue.put(map[0],map[1]);
+                        returnValue.put(map[0],map[1]);
                     }
 
                     BR.close();
@@ -86,7 +81,7 @@ public class ServerConnectionHelper {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return returnedValue;
+        return returnValue;
     }
 }
 

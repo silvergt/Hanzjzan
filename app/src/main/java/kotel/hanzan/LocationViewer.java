@@ -279,28 +279,28 @@ public class LocationViewer extends NMapActivity {
 
             @Override
             public void onLocationTimeout() {
-                Toast.makeText(getApplicationContext(),"현재 위치를 불러오지 못했습니다",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),getString(R.string.failedGPS),Toast.LENGTH_SHORT).show();
                 mapView.getMapController().setMapCenter(pubLocation,13);
                 loading.setLoadingCompleted();
             }
 
             @Override
             public void onLocationUnavailableArea(NGeoPoint nGeoPoint) {
-                Toast.makeText(getApplicationContext(),"현재 위치를 불러오지 못했습니다",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),getString(R.string.failedGPS),Toast.LENGTH_SHORT).show();
                 mapView.getMapController().setMapCenter(pubLocation,13);
                 loading.setLoadingCompleted();
             }
 
             @Override
             public void onHasNoLocationPermission() {
-                Toast.makeText(getApplicationContext(), "설정에서 위치정보 사용을 수락해 주세요", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.allowGPS), Toast.LENGTH_SHORT).show();
                 mapView.getMapController().setMapCenter(pubLocation,13);
                 loading.setLoadingCompleted();
             }
 
             @Override
             public void onGpsIsOff() {
-                Toast.makeText(getApplicationContext(), "위치를 켜 주세요", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.turnOnGPS), Toast.LENGTH_SHORT).show();
                 mapView.getMapController().setMapCenter(pubLocation,13);
                 loading.setLoadingCompleted();
             }

@@ -135,7 +135,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
                         android:textSize="@dimen/mypage_itemFontSize"
-                        android:text="멤버십 가입"
+                        android:text="@string/joinMembership"
                         android:textColor="@color/black"
                         android:paddingLeft="5dp"
                         />
@@ -173,7 +173,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
                         android:textSize="@dimen/mypage_itemFontSize"
-                        android:text="문의하기"
+                        android:text="@string/inquire"
                         android:textColor="@color/black"
                         android:paddingLeft="5dp"
                         />
@@ -211,7 +211,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
                         android:textSize="@dimen/mypage_itemFontSize"
-                        android:text="설정"
+                        android:text="@string/settings"
                         android:textColor="@color/black"
                         android:paddingLeft="5dp"
                         />
@@ -248,7 +248,7 @@
                         android:layout_height="match_parent"
                         android:gravity="center_vertical"
                         android:textSize="@dimen/mypage_itemFontSize"
-                        android:text="로그아웃"
+                        android:text="@string/logout"
                         android:textColor="@color/black"
                         android:paddingLeft="5dp"
                         />

@@ -22,12 +22,12 @@
             android:layout_height="20dp" />
 
         <TextView
+            android:id="@+id/homeMembershipPopup_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
             android:minWidth="250dp"
-            android:text="아직 한잔 멤버쉽에 가입하지 않으셨네요!\n지금 가입하실래요?"
             android:textColor="@color/black" />
 
         <LinearLayout
@@ -44,7 +44,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/roundbox_gray"
                 android:gravity="center"
-                android:text="아니요"
+                android:text="@string/no"
                 android:textColor="@color/white" />
 
             <TextView
@@ -55,7 +55,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/roundbox_maincolor"
                 android:gravity="center"
-                android:text="네"
+                android:text="@string/yes"
                 android:textColor="@color/white" />
 
         </LinearLayout>

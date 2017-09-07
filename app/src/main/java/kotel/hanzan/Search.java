@@ -51,7 +51,7 @@ public class Search extends AppCompatActivity {
     private Loading loading;
 
     private LocationHelper locationHelper = new LocationHelper();
-//    private NGeoPoint StaticData.myLatestLocation;
+
 
     private InputMethodManager inputMethodManager;
 
@@ -289,7 +289,7 @@ public class Search extends AppCompatActivity {
                 @Override
                 public void onLocationTimeout() {
                     myLocationMarkerIsVisible = false;
-//                    Toast.makeText(getApplicationContext(), "현재 위치를 불러오지 못했습니다", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), getString(R.string.failedGPS), Toast.LENGTH_SHORT).show();
                     StaticData.myLatestLocation = StaticData.defaultLocation;
                     retrievePubList(true);
                 }
@@ -297,7 +297,7 @@ public class Search extends AppCompatActivity {
                 @Override
                 public void onLocationUnavailableArea(NGeoPoint nGeoPoint) {
                     myLocationMarkerIsVisible = false;
-//                    Toast.makeText(getApplicationContext(), "현재 위치를 불러오지 못했습니다", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), getString(R.string.failedGPS), Toast.LENGTH_SHORT).show();
                     StaticData.myLatestLocation = StaticData.defaultLocation;
                     retrievePubList(true);
                 }
@@ -305,7 +305,7 @@ public class Search extends AppCompatActivity {
                 @Override
                 public void onHasNoLocationPermission() {
                     myLocationMarkerIsVisible = false;
-//                    Toast.makeText(getApplicationContext(), "설정에서 위치정보 사용을 수락해 주세요", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), getString(R.string.allowGPS), Toast.LENGTH_SHORT).show();
                     StaticData.myLatestLocation = StaticData.defaultLocation;
                     retrievePubList(true);
                 }
@@ -313,7 +313,7 @@ public class Search extends AppCompatActivity {
                 @Override
                 public void onGpsIsOff() {
                     myLocationMarkerIsVisible = false;
-//                    Toast.makeText(getApplicationContext(), "위치를 켜 주세요", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), getString(R.string.turnOnGPS), Toast.LENGTH_SHORT).show();
                     StaticData.myLatestLocation = StaticData.defaultLocation;
                     retrievePubList(true);
                 }
