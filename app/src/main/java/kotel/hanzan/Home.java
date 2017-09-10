@@ -65,7 +65,7 @@ public class Home extends AppCompatActivity {
     private TapBar tapBar;
     private RelativeLayout container;
 
-    private ImageView upperBarLeftIcon, upperBarMap, upperBarSearch, upperBarFilter;
+    private ImageView upperBarLeftIcon, upperBarMap, upperBarSearch, upperBarFilter, upperBarDropdown;
     private TextView upperBarMainText, upperBarSubText;
 
     private Loading loading;
@@ -390,12 +390,15 @@ public class Home extends AppCompatActivity {
         upperBarSearch = (ImageView) findViewById(R.id.home_upperBarSearchIcon);
         upperBarFilter = (ImageView) findViewById(R.id.home_upperBarFilterIcon);
         upperBarMainText = (TextView) findViewById(R.id.home_upperBarMainText);
-        upperBarSubText = (TextView) findViewById(R.id.home_upperBarSubText);
+        upperBarDropdown = (ImageView) findViewById(R.id.home_upperBarDropdown);
+//        upperBarSubText = (TextView) findViewById(R.id.home_upperBarSubText);
         container = (RelativeLayout) findViewById(R.id.home_contentContainer);
         tapBar = (TapBar) findViewById(R.id.home_tapbar);
         loading = (Loading) findViewById(R.id.home_loading);
 
         upperBarFilter.setImageDrawable( isAnyFilterChecked() ? DrawableHelper.getDrawable(getResources(),R.drawable.filtericon_active) : DrawableHelper.getDrawable(getResources(),R.drawable.filtericon_inactive));
+
+        upperBarFilter.setVisibility(View.INVISIBLE);
 
         upperBarFilter.setOnClickListener(view -> {
             if (filterLayoutIsVisible) {
@@ -404,7 +407,14 @@ public class Home extends AppCompatActivity {
             } else {
                 openFilter();
             }
+        });
 
+        upperBarMainText.setOnClickListener(view -> {
+            upperBarDropdown.callOnClick();
+        });
+
+        upperBarDropdown.setOnClickListener(view -> {
+            openLocationDropdown();
         });
 
         upperBarSearch.setOnClickListener(view -> {
@@ -447,11 +457,7 @@ public class Home extends AppCompatActivity {
             @Override
             public void onClickStarted(String title, int number) {
                 if (number == 4) {
-                    upperBarLeftIcon.setVisibility(View.INVISIBLE);
-                    upperBarMap.setVisibility(View.INVISIBLE);
-                    upperBarSearch.setVisibility(View.INVISIBLE);
-                    upperBarSubText.setVisibility(View.INVISIBLE);
-                    upperBarFilter.setVisibility(View.INVISIBLE);
+                    setUpperBarVisibility(false);
                     upperBarMainText.setText(getString(R.string.mypage));
                     container.removeAllViews();
                 }
@@ -498,18 +504,38 @@ public class Home extends AppCompatActivity {
         dialog.show();
     }
 
+    private void setUpperBarVisibility(boolean setToVisible){
+        int visibility = setToVisible ? View.VISIBLE : View.INVISIBLE;
+
+        upperBarLeftIcon.setVisibility(visibility);
+        upperBarMap.setVisibility(visibility);
+        upperBarSearch.setVisibility(visibility);
+        upperBarDropdown.setVisibility(visibility);
+//        upperBarSubText.setVisibility(visibility);
+        upperBarFilter.setVisibility(View.INVISIBLE);
+
+
+        int resID = setToVisible ? R.drawable.bottomline : 0;
+
+        upperBarMainText.setBackgroundResource(resID);
+
+    }
+
 
     private void openHomeTab() {
         container.removeAllViews();
 
-        upperBarLeftIcon.setVisibility(View.VISIBLE);
-        upperBarMap.setVisibility(View.VISIBLE);
-        upperBarSearch.setVisibility(View.VISIBLE);
-        upperBarSubText.setVisibility(View.VISIBLE);
-        upperBarFilter.setVisibility(View.VISIBLE);
+        setUpperBarVisibility(true);
 
         upperBarMainText.setText(getString(R.string.aroundMe));
-        upperBarSubText.setText(getString(R.string.homeUpperText));
+
+        if(StaticData.currentUser.expireYYYY != 0 && StaticData.currentUser.isHanzanAvailableToday) {
+            upperBarLeftIcon.setImageResource(R.drawable.icon);
+        }else if(StaticData.currentUser.expireYYYY != 0 && !StaticData.currentUser.isHanzanAvailableToday){
+            upperBarLeftIcon.setImageResource(R.drawable.icon_used);
+        }else {
+            upperBarLeftIcon.setImageResource(R.drawable.icon_deactivated);
+        }
 
         homeLayout = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.home_home, null);
         pubInfoRecyclerView = (JRecyclerView) homeLayout.findViewById(R.id.home_homeRecycler);
@@ -546,11 +572,7 @@ public class Home extends AppCompatActivity {
     private void openMyFavoriteTab() {
         container.removeAllViews();
 
-        upperBarLeftIcon.setVisibility(View.INVISIBLE);
-        upperBarMap.setVisibility(View.INVISIBLE);
-        upperBarSearch.setVisibility(View.INVISIBLE);
-        upperBarSubText.setVisibility(View.INVISIBLE);
-        upperBarFilter.setVisibility(View.INVISIBLE);
+        setUpperBarVisibility(false);
 
         upperBarMainText.setText(getString(R.string.favorite));
 
@@ -580,11 +602,7 @@ public class Home extends AppCompatActivity {
     private void openHistoryTab() {
         container.removeAllViews();
 
-        upperBarLeftIcon.setVisibility(View.INVISIBLE);
-        upperBarMap.setVisibility(View.INVISIBLE);
-        upperBarSearch.setVisibility(View.INVISIBLE);
-        upperBarSubText.setVisibility(View.INVISIBLE);
-        upperBarFilter.setVisibility(View.INVISIBLE);
+        setUpperBarVisibility(false);
 
         upperBarMainText.setText(getString(R.string.history));
 
@@ -621,11 +639,7 @@ public class Home extends AppCompatActivity {
     private void openEventTab() {
         container.removeAllViews();
 
-        upperBarLeftIcon.setVisibility(View.INVISIBLE);
-        upperBarMap.setVisibility(View.INVISIBLE);
-        upperBarSearch.setVisibility(View.INVISIBLE);
-        upperBarSubText.setVisibility(View.INVISIBLE);
-        upperBarFilter.setVisibility(View.INVISIBLE);
+        setUpperBarVisibility(false);
 
         upperBarMainText.setText(getString(R.string.event));
 
@@ -941,6 +955,12 @@ public class Home extends AppCompatActivity {
         container.addView(filterLayout, params);
     }
 
+    private void openLocationDropdown(){
+        if(upperBarDropdown.getVisibility() == View.VISIBLE){
+            JLog.v("Dropdown");
+        }
+    }
+
     private void getMyLocation() {
 //        locationHelper = new LocationHelper();
 
@@ -1182,6 +1202,7 @@ public class Home extends AppCompatActivity {
 
     private void openProfileNameChangePopup(){
         Dialog dialog = new Dialog(this);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
         RelativeLayout layout = (RelativeLayout) getLayoutInflater().inflate(R.layout.mypage_profilenamechange_popup,null);
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -1360,6 +1381,13 @@ public class Home extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
+        if(StaticData.currentUser.expireYYYY != 0 && StaticData.currentUser.isHanzanAvailableToday) {
+            upperBarLeftIcon.setImageResource(R.drawable.icon);
+        }else if(StaticData.currentUser.expireYYYY != 0 && !StaticData.currentUser.isHanzanAvailableToday) {
+            upperBarLeftIcon.setImageResource(R.drawable.icon_used);
+        }else {
+            upperBarLeftIcon.setImageResource(R.drawable.icon_deactivated);
+        }
         try{
             pubInfoRecyclerView.finishRefreshing();
         }catch (Exception e){}

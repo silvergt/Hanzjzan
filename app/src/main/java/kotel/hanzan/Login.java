@@ -19,7 +19,6 @@ import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.kakao.auth.ErrorCode;
 import com.kakao.auth.ISessionCallback;
 import com.kakao.auth.Session;
 import com.kakao.network.ErrorResult;
@@ -51,7 +50,7 @@ public class Login extends AppCompatActivity {
 
     private Loading loading;
 
-    private RelativeLayout facebookLogin;
+    private RelativeLayout layout;
 
     private CallbackManager callbackManager;
 
@@ -69,22 +68,22 @@ public class Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        initFacebook();
-
-        initKakao();
-
+        layout = (RelativeLayout) findViewById(R.id.login_login);
         slideView = (HorizontalSlideView) findViewById(R.id.login_slideView);
         slideCountView = (SlideCountView) findViewById(R.id.login_slideCountView);
         lowerButton = (LinearLayout) findViewById(R.id.login_lowerButton);
         lowerIcon = (ImageView) findViewById(R.id.login_lowerIcon);
         loading = (Loading) findViewById(R.id.login_loading);
 
+        initFacebook();
+        initKakao();
+        tryLogin();
 
         LinearLayout.LayoutParams slideViewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, StaticData.displayHeight * 7 / 10);
         slideView.setLayoutParams(slideViewParams);
         addSlideChildViews();
 
-        slideCountView.initialize(4, 40, 5);
+        slideCountView.initialize(slideView.getListChildCount(), 40, 5);
 
         lowerIcon.setVisibility(View.GONE);
 
@@ -204,14 +203,53 @@ public class Login extends AppCompatActivity {
             case 0:
             case 1:
             case 2:
-                lowerButton.setBackgroundResource(R.drawable.roundbox_maingradient);
+//                lowerButton.setBackgroundResource(R.drawable.roundbox_maingradient);
+                lowerButton.setVisibility(View.VISIBLE);
                 break;
             case 3:
-                lowerButton.setBackgroundResource(R.drawable.roundbox_gray);
+//                lowerButton.setBackgroundResource(R.drawable.roundbox_gray);
+                lowerButton.setVisibility(View.INVISIBLE);
                 break;
         }
     }
 
+
+
+    private void tryLogin(){
+        layout.setVisibility(View.INVISIBLE);
+        if(AccessToken.getCurrentAccessToken()==null && session==null) {
+            JLog.v("No login information");
+            onLoginFailed();
+        }else if(AccessToken.getCurrentAccessToken()!=null){
+            JLog.v("Trying facebook login");
+            tryLoginWithFacebook();
+        }else if(session != null && session.isOpened()){
+            JLog.v("Trying kakaotalk login");
+            UserManagement.requestMe(new MeResponseCallback() {
+                @Override
+                public void onSessionClosed(ErrorResult errorResult) {
+                    JLog.v(errorResult.getErrorMessage());
+                    JLog.v("session closed");
+                    onLoginFailed();
+                }
+
+                @Override
+                public void onNotSignedUp() {
+                    JLog.v("session not signed up");
+                    onLoginFailed();
+                }
+
+                @Override
+                public void onSuccess(UserProfile result) {
+                    JLog.v("kakaotalk login onSuccess");
+                    tryLoginWithKakaoTalk(result);
+                }
+            });
+        }else{
+            JLog.v("No login information");
+            onLoginFailed();
+        }
+    }
 
     private void tryLoginWithKakaoTalk(UserProfile userProfile) {
         JLog.v("profile ID", Long.toString(userProfile.getId()));
@@ -225,7 +263,7 @@ public class Login extends AppCompatActivity {
 
             if (map.get("signup_history") == null) {
                 JLog.e("Connection failed!");
-                loading.setLoadingCompleted();
+                onLoginFailed();
                 return;
             }
 
@@ -240,7 +278,7 @@ public class Login extends AppCompatActivity {
                     bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
                 } catch (Exception e) {
                     e.printStackTrace();
-                    loading.setLoadingCompleted();
+                    onLoginFailed();
                     return;
                 }
                 try {
@@ -254,12 +292,12 @@ public class Login extends AppCompatActivity {
                         if (map.get("signup_history").equals("TRUE")) {
                             makeUserInfoAndLogin(map);
                         } else {
-                            loading.setLoadingCompleted();
+                            onLoginFailed();
                         }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    loading.setLoadingCompleted();
+                    onLoginFailed();
                 }
             }
         }).start();
@@ -270,7 +308,7 @@ public class Login extends AppCompatActivity {
 
         new Thread(() -> {
             if (AccessToken.getCurrentAccessToken() == null) {
-                loading.setLoadingCompleted();
+                onLoginFailed();
                 return;
             }
 
@@ -281,7 +319,7 @@ public class Login extends AppCompatActivity {
 
             if (map.get("signup_history") == null) {
                 JLog.e("Connection failed!");
-                loading.setLoadingCompleted();
+                onLoginFailed();
                 return;
             }
 
@@ -296,7 +334,7 @@ public class Login extends AppCompatActivity {
                     bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
                 } catch (Exception e) {
                     e.printStackTrace();
-                    loading.setLoadingCompleted();
+                    onLoginFailed();
                     return;
                 }
                 GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), (object, response) -> {
@@ -311,17 +349,22 @@ public class Login extends AppCompatActivity {
                             if (map.get("signup_history").equals("TRUE")) {
                                 makeUserInfoAndLogin(map);
                             } else {
-                                loading.setLoadingCompleted();
+                                onLoginFailed();
                             }
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
-                        loading.setLoadingCompleted();
+                        onLoginFailed();
                     }
                 });
                 request.executeAsync();
             }
         }).start();
+    }
+
+    private void onLoginFailed(){
+        layout.setVisibility(View.VISIBLE);
+        loading.setLoadingCompleted();
     }
 
 
@@ -350,8 +393,7 @@ public class Login extends AppCompatActivity {
         super.onDestroy();
         try {
             bitmap.recycle();
-        } catch (Exception e) {
-        }
+        } catch (Exception e) {}
     }
 
 
@@ -368,16 +410,18 @@ public class Login extends AppCompatActivity {
                 @Override
                 public void onFailure(ErrorResult errorResult) {
                     String message = "failed to get user info. msg=" + errorResult;
-                    Logger.d(message);
+                    JLog.v(message);
 
-                    ErrorCode result = ErrorCode.valueOf(errorResult.getErrorCode());
-                    if (result == ErrorCode.CLIENT_ERROR_CODE) {
-                        finish();
-                    }
+//                    ErrorCode result = ErrorCode.valueOf(errorResult.getErrorCode());
+//                    if (result == ErrorCode.CLIENT_ERROR_CODE) {
+//                        finish();
+//                    }
                 }
 
                 @Override
                 public void onSessionClosed(ErrorResult errorResult) {
+                    String message = "Session closed. msg=" + errorResult;
+                    JLog.v(message);
                 }
 
                 @Override

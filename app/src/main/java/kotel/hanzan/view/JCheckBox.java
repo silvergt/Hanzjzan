@@ -1,5 +1,6 @@
 package kotel.hanzan.view;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -29,6 +30,13 @@ public class JCheckBox extends android.support.v7.widget.AppCompatImageView {
         this.context = context;
         setOnClickListener(view -> {
             setChecked(!checked);
+
+            ValueAnimator anim = ValueAnimator.ofInt(0,10,0).setDuration(300);
+            anim.addUpdateListener(valueAnimator -> {
+                int i = (int)valueAnimator.getAnimatedValue();
+                setPadding(i,i,i,i);
+            });
+            anim.start();
         });
         
         callOnClick();

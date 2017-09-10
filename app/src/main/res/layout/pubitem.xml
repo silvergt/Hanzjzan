@@ -31,14 +31,31 @@
             android:layout_marginTop="10dp"
             />
 
-        <TextView
-            android:id="@+id/pubitem_text2"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="@dimen/pubitem_text2"
+            android:orientation="horizontal"
             android:layout_marginBottom="5dp"
-            />
+            >
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/location"
+                />
+
+            <TextView
+                android:id="@+id/pubitem_text2"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="@dimen/pubitem_text2"
+                android:gravity="center_vertical"
+                android:layout_gravity="center_vertical"
+                />
+        </LinearLayout>
+
 
         <TextView
             android:id="@+id/pubitem_text3"

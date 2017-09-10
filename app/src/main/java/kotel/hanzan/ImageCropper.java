@@ -72,7 +72,6 @@ public class ImageCropper extends AppCompatActivity {
 
         rotate.setOnClickListener(v -> cropper.rotateImage(90));
 
-        //cropper.setImageResource(R.drawable.pic2);
         cropper.setImageUriAsync(imageUri);
     }
 

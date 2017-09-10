@@ -3,11 +3,15 @@ package kotel.hanzan.function;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.LocationManager;
 import android.os.Build;
 
 import com.nhn.android.maps.NMapLocationManager;
 import com.nhn.android.maps.maplib.NGeoPoint;
+
+import java.util.List;
 
 import kotel.hanzan.listener.LocationHelperListener;
 
@@ -23,8 +27,6 @@ public class LocationHelper {
     public void getMyLocationOnlyOneTime(Context context, LocationHelperListener listener) {
         listener.onSearchingStarted();
 
-        JLog.v("ONE TIME");
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 listener.onHasNoLocationPermission();
@@ -32,7 +34,6 @@ public class LocationHelper {
                 return;
             }
         }
-
 
         locationManager = new NMapLocationManager(context);
         locationManager.setOnLocationChangeListener(new NMapLocationManager.OnLocationChangeListener() {
@@ -60,7 +61,6 @@ public class LocationHelper {
         });
 
 
-
         LocationManager locMan = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
         if (!locMan.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             listener.onGpsIsOff();
@@ -76,6 +76,30 @@ public class LocationHelper {
             e.printStackTrace();
         }
     }
+
+    public void getLocationNameBy(Context context, double lat, double lng) {
+        Thread thread = new Thread(()->{
+            Geocoder geo = new Geocoder(context);
+            try {
+                List<Address> list =geo.getFromLocation(lat, lng, 1);
+                Address address = list.get(0);
+                JLog.v("1",address.getCountryName());
+                JLog.v("2",address.getAdminArea());
+                JLog.v("3",address.getFeatureName());
+                JLog.v("4",address.getLocality());
+                JLog.v("5",address.getPostalCode());
+                JLog.v("6",address.getSubAdminArea());
+                JLog.v("7",address.getSubLocality());
+                JLog.v("8",address.getPremises());
+            }catch (Exception e){e.printStackTrace();}
+        });
+        thread.start();
+        try {
+            thread.join();
+        }catch (Exception e){e.printStackTrace();}
+    }
+
+
 
     public void onStop(){
         try{

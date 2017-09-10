@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Hanzan</string>
+    <string name="app_name">Hanjan</string>
 
     <string name="naver_client_id" translatable="false">vTyKRfxeLRkzu3OELYyw</string>
 
@@ -31,8 +31,8 @@
     <string name="snack">Snack</string>
     <string name="misc">Misc</string>
     <string name="isSaved">is saved!</string>
-    <string name="event">event</string>
-    <string name="homeUpperText"></string>
+    <string name="event">Event</string>
+    <string name="homeUpperText">have a drink</string>
     <string name="freeSize">free size</string>
     <string name="confirm">confirm</string>
     <string name="next">next</string>
@@ -51,7 +51,7 @@
     <string name="yes">Yes</string>
     <string name="makeCall">Do you want to make a call?</string>
     <string name="pubPagePopup_joinMembership">You are not member yet!\nDo you want to join now?</string>
-    <string name="yesJoin">Join me now!</string>
+    <string name="yesJoin">Yes count me in!</string>
     <string name="noLater">No, later!</string>
     <string name="isYourChoice">is your choice?</string>
     <string name="providing">\'s</string>
@@ -65,10 +65,10 @@
     <string name="membershipPopupText">You are not member yet!\nDo you want to join now?</string>
     <string name="membershipPopupTextAlmostEnd">"Your membership due is coming!\nDo you want to extend your membership? "</string>
     <string name="aroundMe">Around me</string>
-    <string name="home">home</string>
-    <string name="favorite">favorite</string>
-    <string name="mypage">my page</string>
-    <string name="history">history</string>
+    <string name="home">Home</string>
+    <string name="favorite">Favorite</string>
+    <string name="mypage">My page</string>
+    <string name="history">History</string>
     <string name="oneMoreBackButton">Closes app if you click back button one more time</string>
     <string name="notMemberYet">Not member yet</string>
     <string name="myMembership">"My membership : "</string>
@@ -88,11 +88,18 @@
     <string name="loginText1Main">Have one drink every day!</string>
     <string name="loginText1Sub">1 free drink is provided every day\nif you join our membership</string>
     <string name="loginText2Main">Show application!</string>
-    <string name="loginText2Sub">Show application to clerk.\nHe/she will bring the drink you wanted.\nFor free!</string>
+    <string name="loginText2Sub">Show application to clerks.\nThey will bring you the drink ordered.\nFor free!</string>
     <string name="loginText3Main">Check out our various pubs</string>
     <string name="loginText3Sub">We have many pubs contracted.\nLook around nearby pubs and visit the pub you like.</string>
     <string name="loginText4Main">Try now!</string>
-    <string name="loginText4Sub">You can sign-up simply with your KakaoTalk or Facebook.\nIt only takes few clicks!</string>
+    <string name="loginText4Sub">You can sign-up simply\nwith your KakaoTalk or Facebook.\nIt only takes few clicks!</string>
     <string name="successfullyPurchased">Successfully purchased!</string>
+    <string name="seeProfile">See profile</string>
+    <string name="changeProfile">Change profile</string>
+    <string name="deleteProfile">Delete profile</string>
+    <string name="eventShare">Share event with friends</string>
+    <string name="enterSearchText">Enter text you want to search</string>
+    <string name="share">Share</string>
+    <string name="shallWeHaveDrink">Shall we have some drinks here?</string>
 
 </resources>

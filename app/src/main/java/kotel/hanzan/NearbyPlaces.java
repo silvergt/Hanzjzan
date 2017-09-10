@@ -352,7 +352,6 @@ public class NearbyPlaces extends NMapActivity {
                 getNearbyPubs(geo, true);
             }
         });
-
     }
 
 
@@ -373,7 +372,7 @@ public class NearbyPlaces extends NMapActivity {
     }
 
     private void onMarkerClicked(NMapOverlayItem nMapOverlayItem) {
-        JLog.v(nMapOverlayItem.getTitle());
+        JLog.v("marker title",nMapOverlayItem.getTitle());
 
         int position;
         if (nMapOverlayItem.getTitle().equals(LOCATION_MYLOCATION)) {
@@ -385,10 +384,6 @@ public class NearbyPlaces extends NMapActivity {
                 JLog.e("parsing integer error");
                 return;
             }
-        }
-
-        for (int i = 0; i < pubInfoArray.size(); i++) {
-
         }
 
         if (currentlyFocusedMarker != null) {

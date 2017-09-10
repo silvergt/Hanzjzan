@@ -22,7 +22,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.stfalcon.frescoimageviewer.ImageViewer;
@@ -103,11 +102,11 @@ public class PubPage extends AppCompatActivity {
         share.setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.addCategory(Intent.CATEGORY_DEFAULT);
-            intent.putExtra(Intent.EXTRA_TEXT,pubInfo.name+" 에서 함께 한잔 할래요?"+"\n"+pubInfo.imageAddress.get(0));
+            intent.putExtra(Intent.EXTRA_TEXT,pubInfo.name+" "+getString(R.string.shallWeHaveDrink)+"\n"+pubInfo.imageAddress.get(0));
 
             intent.setType("text/plain");
 
-            startActivity(Intent.createChooser(intent,"공유하기"));
+            startActivity(Intent.createChooser(intent,getString(R.string.share)));
 
         });
 
@@ -285,8 +284,8 @@ public class PubPage extends AppCompatActivity {
                     button2.setVisibility(View.GONE);
                     dialogStep = 4;
                 }else{
+                    //Connection with server failed
                     drinkSelectorDialog.cancel();
-                    Toast.makeText(this,"서버와 연결에 실패하였습니다. 다시 시도해주세요!",Toast.LENGTH_SHORT).show();
                 }
             });
         }).start();
@@ -340,7 +339,7 @@ public class PubPage extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 2) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "01091187680"));
+                Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNumber.getText().toString()));
                 startActivity(intent);
                 return;
             }

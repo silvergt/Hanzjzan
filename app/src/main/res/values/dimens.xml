@@ -31,13 +31,13 @@
     <dimen name="filter_checkboxWidth">25dp</dimen>
     <dimen name="filter_buttonWidth">80dp</dimen>
     <dimen name="filter_buttonHeight">35dp</dimen>
-    <dimen name="filter_textSize">13sp</dimen>
-    <dimen name="filter_buttonTextSize">12sp</dimen>
+    <dimen name="filter_textSize">12sp</dimen>
+    <dimen name="filter_buttonTextSize">11sp</dimen>
 
 
     <dimen name="home_bottomLayoutHeight">55dp</dimen>
     <dimen name="pubitem_favorite">52dp</dimen>
-    <dimen name="pubitem_text1">18sp</dimen>
+    <dimen name="pubitem_text1">16sp</dimen>
     <dimen name="pubitem_text2">14sp</dimen>
     <dimen name="pubitem_text3">12sp</dimen>
 

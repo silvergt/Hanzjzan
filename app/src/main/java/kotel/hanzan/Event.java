@@ -44,7 +44,7 @@ public class Event extends AppCompatActivity {
 
             intent.setType("text/plain");
 
-            startActivity(Intent.createChooser(intent,"공유하기"));
+            startActivity(Intent.createChooser(intent,getString(R.string.eventShare)));
 
         });
     }

@@ -218,7 +218,7 @@ public class Search extends AppCompatActivity {
             pubInfoArray = new ArrayList<>();
             adapter.notifyDataSetChanged();
             searchEditText.setText("");
-            upperTitle.setText("검색");
+            upperTitle.setText(getString(R.string.search));
             initialPanel.setVisibility(View.VISIBLE);
         });
 
@@ -334,7 +334,7 @@ public class Search extends AppCompatActivity {
         }
 
         if (word.length() == 0) {
-            Toast.makeText(this, "검색어를 입력해주세요", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.enterSearchText), Toast.LENGTH_SHORT).show();
             return;
         }
         searchedWord = word;
@@ -343,7 +343,7 @@ public class Search extends AppCompatActivity {
 
         loading.setLoadingStarted();
 
-        upperTitle.setText("검색 - '" + word+"'");
+        upperTitle.setText(getString(R.string.search)+" - '" + word+"'");
 
         inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         initialPanel.setVisibility(View.INVISIBLE);
