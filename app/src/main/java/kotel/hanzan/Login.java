@@ -255,6 +255,7 @@ public class Login extends AppCompatActivity {
         JLog.v("profile ID", Long.toString(userProfile.getId()));
         JLog.v("profile Image", userProfile.getThumbnailImagePath());
         JLog.v("profile Name", userProfile.getNickname());
+        JLog.v("email", userProfile.getEmail());
 
         new Thread(() -> {
             map = new HashMap<>();
@@ -340,6 +341,7 @@ public class Login extends AppCompatActivity {
                 GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), (object, response) -> {
                     try {
                         map.put("name_member", object.get("name").toString());
+                        JLog.v("email",object.get("email").toString());
 
                         map = ServerConnectionHelper.connect("signing up", "signup", map, "profileimage", BitmapHelper.getCompressedImageByteArray(bitmap));
                         if (map.get("signupresult").equals("TRUE")) {

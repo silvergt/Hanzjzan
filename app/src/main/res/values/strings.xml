@@ -101,5 +101,6 @@
     <string name="enterSearchText">Enter text you want to search</string>
     <string name="share">Share</string>
     <string name="shallWeHaveDrink">Shall we have some drinks here?</string>
+    <string name="unknownLocation">Unknown location</string>
 
 </resources>

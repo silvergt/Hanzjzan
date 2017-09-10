@@ -272,7 +272,10 @@ public class NearbyPlaces extends NMapActivity {
         myLocationMarker.setBounds(-drawableWidth / 2, -drawableWidth / 2, drawableWidth / 2, drawableWidth / 2);
 
         loading.setLoadingStarted();
-        requestGPSPermission();
+        new Handler(getMainLooper()).post(()->{
+            requestGPSPermission();
+        });
+
     }
 
     private void requestGPSPermission() {
@@ -422,6 +425,10 @@ public class NearbyPlaces extends NMapActivity {
 
         new Thread(() -> {
             HashMap<String, String> map = new HashMap<>();
+            JLog.v(Double.toString(edgeGeo[0].getLatitude()));
+            JLog.v(Double.toString(edgeGeo[0].getLongitude()));
+            JLog.v(Double.toString(edgeGeo[1].getLatitude()));
+            JLog.v(Double.toString(edgeGeo[1].getLongitude()));
             map.put("lat1", Double.toString(edgeGeo[0].getLatitude()));
             map.put("lng1", Double.toString(edgeGeo[0].getLongitude()));
             map.put("lat2", Double.toString(edgeGeo[1].getLatitude()));

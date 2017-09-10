@@ -88,5 +88,6 @@
     <string name="enterSearchText">검색어를 입력해주세요</string>
     <string name="share">공유하기</string>
     <string name="shallWeHaveDrink">에서 오늘 한잔 하실래요?</string>
+    <string name="unknownLocation">알 수 없는 지역</string>
 
 </resources>

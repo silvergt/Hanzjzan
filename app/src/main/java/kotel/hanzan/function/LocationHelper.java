@@ -13,6 +13,8 @@ import com.nhn.android.maps.maplib.NGeoPoint;
 
 import java.util.List;
 
+import kotel.hanzan.Data.StaticData;
+import kotel.hanzan.R;
 import kotel.hanzan.listener.LocationHelperListener;
 
 /**
@@ -24,6 +26,7 @@ public class LocationHelper {
     NMapLocationManager locationManager;
 
 
+    /** Get user's current location one time. Retrieved location can be modified/used by implementing listener. */
     public void getMyLocationOnlyOneTime(Context context, LocationHelperListener listener) {
         listener.onSearchingStarted();
 
@@ -77,26 +80,75 @@ public class LocationHelper {
         }
     }
 
-    public void getLocationNameBy(Context context, double lat, double lng) {
+
+
+    /** Returns location's dong( ex : 청담동, 창천동) according to lat lng */
+    public static String getLocationDongBy(Context context, double lat, double lng) {
+        final String[] returnValue = {""};
         Thread thread = new Thread(()->{
             Geocoder geo = new Geocoder(context);
             try {
                 List<Address> list =geo.getFromLocation(lat, lng, 1);
                 Address address = list.get(0);
-                JLog.v("1",address.getCountryName());
-                JLog.v("2",address.getAdminArea());
-                JLog.v("3",address.getFeatureName());
-                JLog.v("4",address.getLocality());
-                JLog.v("5",address.getPostalCode());
-                JLog.v("6",address.getSubAdminArea());
-                JLog.v("7",address.getSubLocality());
-                JLog.v("8",address.getPremises());
+                JLog.v("Dong", address.getThoroughfare());
+                JLog.v("Full loc", address.getAddressLine(0));
+                String concatenationString = address.getThoroughfare() == null || address.getThoroughfare().equals("null") ?
+                        getLocationDongBy(context, StaticData.defaultLocation.getLatitude(),StaticData.defaultLocation.getLongitude()) :
+                        address.getThoroughfare();
+                returnValue[0] = returnValue[0].concat(concatenationString);
             }catch (Exception e){e.printStackTrace();}
         });
         thread.start();
         try {
             thread.join();
         }catch (Exception e){e.printStackTrace();}
+
+        return returnValue[0];
+    }
+
+    /** Returns location's full name( ex : 대한민국 서울특별시 청담동 ~~~~) according to lat lng */
+    public static String getFullLocationBy(Context context, double lat, double lng) {
+        final String[] returnValue = {""};
+        Thread thread = new Thread(()->{
+            Geocoder geo = new Geocoder(context);
+            try {
+                List<Address> list =geo.getFromLocation(lat, lng, 1);
+                Address address = list.get(0);
+                JLog.v("Full loc", address.getAddressLine(0));
+                String concatenationString = address.getLocality() + " " + address.getSubLocality() + " " +
+                        address.getThoroughfare() + " " + address.getSubThoroughfare();
+                returnValue[0] = returnValue[0].concat(concatenationString);
+            }catch (Exception e){
+                e.printStackTrace();
+                returnValue[0] = returnValue[0].concat(context.getString(R.string.unknownLocation));
+            }
+        });
+        thread.start();
+        try {
+            thread.join();
+        }catch (Exception e){e.printStackTrace();}
+
+        return returnValue[0];
+    }
+
+    /** Returns location's lat lng in NGeoPoint class form according to address */
+    public static NGeoPoint getLocationLatLngBy(Context context, String address){
+        final NGeoPoint[] returnValue = new NGeoPoint[1];
+        JLog.v("address~",address);
+        Thread thread = new Thread(()->{
+            Geocoder geo = new Geocoder(context);
+            try {
+                List<Address> list =geo.getFromLocationName(address,1);
+                Address addressTemp = list.get(0);
+                returnValue[0] = new NGeoPoint(addressTemp.getLongitude(),addressTemp.getLatitude());
+            }catch (Exception e){e.printStackTrace();}
+        });
+        thread.start();
+        try {
+            thread.join();
+        }catch (Exception e){e.printStackTrace();}
+
+        return returnValue[0];
     }
 
 

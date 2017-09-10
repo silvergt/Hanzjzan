@@ -507,7 +507,7 @@ public class Home extends AppCompatActivity {
     private void setUpperBarVisibility(boolean setToVisible){
         int visibility = setToVisible ? View.VISIBLE : View.INVISIBLE;
 
-        upperBarLeftIcon.setVisibility(visibility);
+//        upperBarLeftIcon.setVisibility(visibility);
         upperBarMap.setVisibility(visibility);
         upperBarSearch.setVisibility(visibility);
         upperBarDropdown.setVisibility(visibility);
@@ -744,6 +744,9 @@ public class Home extends AppCompatActivity {
 
     //****Home Tab****
     private synchronized void retrievePubList(boolean clearArray) {
+        LocationHelper.getLocationDongBy(getApplicationContext(),StaticData.myLatestLocation.getLatitude(),
+                StaticData.myLatestLocation.getLongitude());
+
         if(clearArray) {
             pubInfoArray.clear();
         }
@@ -962,8 +965,6 @@ public class Home extends AppCompatActivity {
     }
 
     private void getMyLocation() {
-//        locationHelper = new LocationHelper();
-
         locationHelper.getMyLocationOnlyOneTime(this, new LocationHelperListener() {
             @Override
             public void onSearchingStarted() {
