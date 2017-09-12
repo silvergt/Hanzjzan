@@ -56,7 +56,6 @@ public class Login extends AppCompatActivity {
 
     private HorizontalSlideView slideView;
     private SlideCountView slideCountView;
-    private TextView kakaoLogin;
     private ImageView lowerIcon;
     private LinearLayout lowerButton;
 
@@ -255,7 +254,6 @@ public class Login extends AppCompatActivity {
         JLog.v("profile ID", Long.toString(userProfile.getId()));
         JLog.v("profile Image", userProfile.getThumbnailImagePath());
         JLog.v("profile Name", userProfile.getNickname());
-        JLog.v("email", userProfile.getEmail());
 
         new Thread(() -> {
             map = new HashMap<>();
@@ -272,8 +270,6 @@ public class Login extends AppCompatActivity {
                 makeUserInfoAndLogin(map);
             } else if (map.get("signup_history").equals("FALSE")) {
                 map.clear();
-                map.put("member_key", StaticData.IDENTIFIER_KAKAO + Long.toString(userProfile.getId()));
-                map.put("imageincluded", "1");
                 try {
                     URL imageURL = new URL(userProfile.getThumbnailImagePath());
                     bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
@@ -283,7 +279,12 @@ public class Login extends AppCompatActivity {
                     return;
                 }
                 try {
+                    map.put("member_key", StaticData.IDENTIFIER_KAKAO + Long.toString(userProfile.getId()));
+                    map.put("imageincluded", "1");
                     map.put("name_member", userProfile.getNickname());
+                    if(userProfile.getEmail()!=null){
+                        map.put("member_email",userProfile.getEmail());
+                    }
 
                     map = ServerConnectionHelper.connect("signing up", "signup", map, "profileimage", BitmapHelper.getCompressedImageByteArray(bitmap));
                     if (map.get("signupresult").equals("TRUE")) {
@@ -328,8 +329,6 @@ public class Login extends AppCompatActivity {
                 makeUserInfoAndLogin(map);
             } else if (map.get("signup_history").equals("FALSE")) {
                 map.clear();
-                map.put("member_key", StaticData.IDENTIFIER_FACEBOOK + AccessToken.getCurrentAccessToken().getUserId());
-                map.put("imageincluded", "1");
                 try {
                     URL imageURL = new URL("https://graph.facebook.com/" + AccessToken.getCurrentAccessToken().getUserId() + "/picture?type=large");
                     bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
@@ -339,9 +338,15 @@ public class Login extends AppCompatActivity {
                     return;
                 }
                 GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), (object, response) -> {
+                    try{
+                        map.put("member_email", object.get("email").toString());
+                    }catch (Exception e){}
+
                     try {
+                        map.put("member_key", StaticData.IDENTIFIER_FACEBOOK + AccessToken.getCurrentAccessToken().getUserId());
+                        map.put("imageincluded", "1");
                         map.put("name_member", object.get("name").toString());
-                        JLog.v("email",object.get("email").toString());
+
 
                         map = ServerConnectionHelper.connect("signing up", "signup", map, "profileimage", BitmapHelper.getCompressedImageByteArray(bitmap));
                         if (map.get("signupresult").equals("TRUE")) {

@@ -19,23 +19,23 @@
     <string name="cocktail">Cocktail</string>
 
     <string name="kakao_app_key" translatable="false">7ff7bd46a972baee55ee0f73e5beb506</string>
-    <string name="filter_1">beer</string>
-    <string name="filter_2">soju</string>
-    <string name="filter_3">makgeolli</string>
-    <string name="filter_4">sake</string>
-    <string name="filter_5">liquor</string>
-    <string name="filter_6">misc</string>
-    <string name="filter_7">snack</string>
+    <string name="filter_1">Beer</string>
+    <string name="filter_2">Soju</string>
+    <string name="filter_3">Makgeolli</string>
+    <string name="filter_4">Sake</string>
+    <string name="filter_5">Liquor</string>
+    <string name="filter_6">Misc</string>
+    <string name="filter_7">Snack</string>
     <string name="makgeolli">Makgeolli</string>
     <string name="liquor">Liquor</string>
     <string name="snack">Snack</string>
     <string name="misc">Misc</string>
-    <string name="isSaved">is saved!</string>
+    <string name="isSaved">has been saved!</string>
     <string name="event">Event</string>
     <string name="homeUpperText">have a drink</string>
-    <string name="freeSize">free size</string>
-    <string name="confirm">confirm</string>
-    <string name="next">next</string>
+    <string name="freeSize">Free size</string>
+    <string name="confirm">Confirm</string>
+    <string name="next">Next</string>
     <string name="joinMembership">Join membership</string>
     <string name="currentExpireDate">Membership expire date</string>
     <string name="nearbyPlaces">Nearby places</string>
@@ -94,13 +94,19 @@
     <string name="loginText4Main">Try now!</string>
     <string name="loginText4Sub">You can sign-up simply\nwith your KakaoTalk or Facebook.\nIt only takes few clicks!</string>
     <string name="successfullyPurchased">Successfully purchased!</string>
-    <string name="seeProfile">See profile</string>
-    <string name="changeProfile">Change profile</string>
-    <string name="deleteProfile">Delete profile</string>
+    <string name="seeProfile">See profile photo</string>
+    <string name="changeProfile">Change profile photo</string>
+    <string name="deleteProfile">Delete profile photo</string>
     <string name="eventShare">Share event with friends</string>
     <string name="enterSearchText">Enter text you want to search</string>
     <string name="share">Share</string>
     <string name="shallWeHaveDrink">Shall we have some drinks here?</string>
     <string name="unknownLocation">Unknown location</string>
+    <string name="termCondition">Terms &amp; Conditions</string>
+    <string name="announcement">Announcements</string>
+    <string name="comingSoon">COMING SOON</string>
+    <string name="selectLocation">Select location</string>
+    <string name="searchAroundMe">Search around me</string>
+    <string name="moreLocationsAreComingSoon">More locations are coming soon!</string>
 
 </resources>

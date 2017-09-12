@@ -3,7 +3,7 @@
 
 
     <solid
-        android:color="@color/mainColor_dark"
+        android:color="@color/mainColor_light"
         />
 
     <corners

@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.DisplayMetrics;
+import android.util.Log;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 
@@ -25,9 +27,6 @@ public class Initial extends AppCompatActivity {
         if(!Fresco.hasBeenInitialized()) {
             Fresco.initialize(this);
         }
-
-//        UserManagement.requestLogout(null);         //TEST
-//        AccessToken.setCurrentAccessToken(null);    //TEST
 
 
         new Thread(()->{

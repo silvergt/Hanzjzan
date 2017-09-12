@@ -218,32 +218,38 @@ public class PubPage extends AppCompatActivity {
 
         button1.setOnClickListener(view -> {
             switch (dialogStep){
-                case 0:
-                    Intent intent = new Intent(getApplicationContext(),Membership.class);
-                    startActivity(intent);
-                    drinkSelectorDialog.cancel();
-                    break;
+
                 case 1:
                     dialogText2.setText(drinkName+"\n"+getString(R.string.oneGlassPlease));
                     dialogText1.setVisibility(View.INVISIBLE);
                     dialogText2.setVisibility(View.VISIBLE);
-                    button1.setText(getString(R.string.clerkCheck));
-                    button2.setText(getString(R.string.cancel));
+                    button1.setBackgroundResource(R.drawable.roundbox_gray);
+                    button2.setBackgroundResource(R.drawable.roundbox_maincolor);
+                    button1.setText(getString(R.string.cancel));
+                    button2.setText(getString(R.string.clerkCheck));
                     dialogStep = 3;
                     break;
+                case 0:
+                    Intent intent = new Intent(getApplicationContext(),Membership.class);
+                    startActivity(intent);
                 case 2:
-                    drinkSelectorDialog.cancel();
-                    break;
                 case 3:
-                    useVoucher(drinkName,drinkType);
-                    break;
                 case 4:
                     drinkSelectorDialog.cancel();
                     break;
             }
         });
 
-        button2.setOnClickListener(view -> drinkSelectorDialog.cancel());
+        button2.setOnClickListener(view -> {
+            switch (dialogStep) {
+                case 3:
+                    useVoucher(drinkName,drinkType);
+                    break;
+                default:
+                    drinkSelectorDialog.cancel();
+                    break;
+            }
+        });
 
 
         drinkSelectorDialog.setContentView(dialogLayout,dialogParams);
@@ -266,6 +272,8 @@ public class PubPage extends AppCompatActivity {
             String voucherUsedSuccessfully = map.get("usevoucher_result");
 
             new Handler(getMainLooper()).post(()->{
+                button1.setBackgroundResource(R.drawable.roundbox_maincolor);
+                button2.setBackgroundResource(R.drawable.roundbox_gray);
                 if(availability==null||availability.equals("FALSE")){
                     dialogText1.setText(getString(R.string.alreadyUsedTicket));
                     dialogText1.setVisibility(View.VISIBLE);

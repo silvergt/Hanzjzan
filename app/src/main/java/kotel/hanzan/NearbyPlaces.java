@@ -272,10 +272,8 @@ public class NearbyPlaces extends NMapActivity {
         myLocationMarker.setBounds(-drawableWidth / 2, -drawableWidth / 2, drawableWidth / 2, drawableWidth / 2);
 
         loading.setLoadingStarted();
-        new Handler(getMainLooper()).post(()->{
-            requestGPSPermission();
-        });
 
+        new Handler(getMainLooper()).post(this::requestGPSPermission);
     }
 
     private void requestGPSPermission() {

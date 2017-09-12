@@ -52,12 +52,14 @@ import kotel.hanzan.function.LocationHelper;
 import kotel.hanzan.function.NumericHelper;
 import kotel.hanzan.function.ServerConnectionHelper;
 import kotel.hanzan.listener.JRecyclerViewListener;
+import kotel.hanzan.listener.LocationFilterListener;
 import kotel.hanzan.listener.LocationHelperListener;
 import kotel.hanzan.listener.TapBarItemClickListener;
 import kotel.hanzan.view.DrinkCalendar;
 import kotel.hanzan.view.JCheckBox;
 import kotel.hanzan.view.JRecyclerView;
 import kotel.hanzan.view.Loading;
+import kotel.hanzan.view.LocationFilterView;
 import kotel.hanzan.view.ProfileCircleImageView;
 import kotel.hanzan.view.TapBar;
 
@@ -65,7 +67,7 @@ public class Home extends AppCompatActivity {
     private TapBar tapBar;
     private RelativeLayout container;
 
-    private ImageView upperBarLeftIcon, upperBarMap, upperBarSearch, upperBarFilter, upperBarDropdown;
+    private ImageView upperBarLeftIcon, upperBarMap, upperBarSearch, upperBarFilter, upperBarLocationFilter;
     private TextView upperBarMainText, upperBarSubText;
 
     private Loading loading;
@@ -173,11 +175,12 @@ public class Home extends AppCompatActivity {
         //******FILTER******
         private boolean filterLayoutIsVisible = false;
         private RelativeLayout filterLayout;
-        private JCheckBox checkbox1,checkbox2,checkbox3,checkbox4,checkbox5,checkbox6,checkbox7;
-        private boolean filter_checkbox1Checked = false, filter_checkbox2Checked = false, filter_checkbox3Checked = false,
-                filter_checkbox4Checked = false, filter_checkbox5Checked = false, filter_checkbox6Checked = false,
-                filter_checkbox7Checked = false;
+        private JCheckBox[] filterCheckbox;
+        private boolean[] filter_checkboxChecked = new boolean[]{false,false,false,false,false,false,false};
 
+        //******LOCATION FILTER******
+        private boolean locationFilterLayoutIsVisible = false;
+        private LocationFilterView locationFilterLayout;
 
     //************************My Favorite Tab************************
     private JRecyclerView pubInfoFavoriteRecyclerView;
@@ -390,7 +393,7 @@ public class Home extends AppCompatActivity {
         upperBarSearch = (ImageView) findViewById(R.id.home_upperBarSearchIcon);
         upperBarFilter = (ImageView) findViewById(R.id.home_upperBarFilterIcon);
         upperBarMainText = (TextView) findViewById(R.id.home_upperBarMainText);
-        upperBarDropdown = (ImageView) findViewById(R.id.home_upperBarDropdown);
+        upperBarLocationFilter = (ImageView) findViewById(R.id.home_upperBarDropdown);
 //        upperBarSubText = (TextView) findViewById(R.id.home_upperBarSubText);
         container = (RelativeLayout) findViewById(R.id.home_contentContainer);
         tapBar = (TapBar) findViewById(R.id.home_tapbar);
@@ -410,11 +413,11 @@ public class Home extends AppCompatActivity {
         });
 
         upperBarMainText.setOnClickListener(view -> {
-            upperBarDropdown.callOnClick();
+            upperBarLocationFilter.callOnClick();
         });
 
-        upperBarDropdown.setOnClickListener(view -> {
-            openLocationDropdown();
+        upperBarLocationFilter.setOnClickListener(view -> {
+            openLocationFilter();
         });
 
         upperBarSearch.setOnClickListener(view -> {
@@ -435,6 +438,7 @@ public class Home extends AppCompatActivity {
             @Override
             public void onClick(String title, int number) {
                 filterLayoutIsVisible = false;
+                locationFilterLayoutIsVisible = false;
                 switch (number) {
                     case 0:
                         openHomeTab();
@@ -510,7 +514,7 @@ public class Home extends AppCompatActivity {
 //        upperBarLeftIcon.setVisibility(visibility);
         upperBarMap.setVisibility(visibility);
         upperBarSearch.setVisibility(visibility);
-        upperBarDropdown.setVisibility(visibility);
+        upperBarLocationFilter.setVisibility(visibility);
 //        upperBarSubText.setVisibility(visibility);
         upperBarFilter.setVisibility(View.INVISIBLE);
 
@@ -735,6 +739,11 @@ public class Home extends AppCompatActivity {
 
         });
 
+        mypageSetting.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(),Settings.class);
+            startActivity(intent);
+        });
+
         mypageLogout.setOnClickListener(view -> logoutToLoginPage());
 
         container.addView(layout);
@@ -744,26 +753,20 @@ public class Home extends AppCompatActivity {
 
     //****Home Tab****
     private synchronized void retrievePubList(boolean clearArray) {
-        LocationHelper.getLocationDongBy(getApplicationContext(),StaticData.myLatestLocation.getLatitude(),
-                StaticData.myLatestLocation.getLongitude());
-
         if(clearArray) {
             pubInfoArray.clear();
         }
+        if(StaticData.myLatestLocation == null )StaticData.myLatestLocation = StaticData.defaultLocation;
         new Thread(() -> {
             HashMap<String, String> map = new HashMap<>();
 
             map.put("at", Integer.toString(pubInfoArray.size()));
             map.put("id_member", Long.toString(StaticData.currentUser.id));
             map.put("user_lat", Double.toString(StaticData.myLatestLocation.getLatitude()));
-            map.put("user_lat", Double.toString(StaticData.myLatestLocation.getLongitude()));
-            map.put("filter_1",filter_checkbox1Checked ? "TRUE" : "FALSE");
-            map.put("filter_2",filter_checkbox2Checked ? "TRUE" : "FALSE");
-            map.put("filter_3",filter_checkbox3Checked ? "TRUE" : "FALSE");
-            map.put("filter_4",filter_checkbox4Checked ? "TRUE" : "FALSE");
-            map.put("filter_5",filter_checkbox5Checked ? "TRUE" : "FALSE");
-            map.put("filter_6",filter_checkbox6Checked ? "TRUE" : "FALSE");
-            map.put("filter_7",filter_checkbox7Checked ? "TRUE" : "FALSE");
+            map.put("user_lng", Double.toString(StaticData.myLatestLocation.getLongitude()));
+            for(int i=0;i<filter_checkboxChecked.length;i++){
+                map.put("filter_"+Integer.toString(i+1),filter_checkboxChecked[i] ? "TRUE" : "FALSE");
+            }
             map = ServerConnectionHelper.connect("retrieve nearby places", "nearbyplace", map);
 
             int i = 0;
@@ -817,151 +820,6 @@ public class Home extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         JLog.v("PERMISSION GRANTED");
         getMyLocation();
-    }
-
-    private boolean isAnyFilterChecked(){
-        return filter_checkbox1Checked || filter_checkbox2Checked || filter_checkbox3Checked
-                || filter_checkbox4Checked|| filter_checkbox5Checked|| filter_checkbox6Checked|| filter_checkbox7Checked;
-    }
-
-    private boolean isAnyFilterCheckedTemporarily(){
-        try {
-            boolean checked = checkbox1.isChecked() || checkbox2.isChecked() || checkbox3.isChecked() || checkbox4.isChecked()
-                    || checkbox5.isChecked() || checkbox6.isChecked() || checkbox7.isChecked();
-            return checked;
-        }catch (Exception e){
-            return false;
-        }
-    }
-
-    private void openFilter() {
-        if (filterLayoutIsVisible) {
-            return ;
-        }
-
-        filterLayoutIsVisible = true;
-
-        filterLayout = (RelativeLayout) getLayoutInflater().inflate(R.layout.home_filter, null);
-        checkbox1 = (JCheckBox) filterLayout.findViewById(R.id.filter_checkbox1);
-        checkbox2 = (JCheckBox) filterLayout.findViewById(R.id.filter_checkbox2);
-        checkbox3 = (JCheckBox) filterLayout.findViewById(R.id.filter_checkbox3);
-        checkbox4 = (JCheckBox) filterLayout.findViewById(R.id.filter_checkbox4);
-        checkbox5 = (JCheckBox) filterLayout.findViewById(R.id.filter_checkbox5);
-        checkbox6 = (JCheckBox) filterLayout.findViewById(R.id.filter_checkbox6);
-        checkbox7 = (JCheckBox) filterLayout.findViewById(R.id.filter_checkbox7);
-        TextView textbox1 = (TextView) filterLayout.findViewById(R.id.filter_textbox1);
-        TextView textbox2 = (TextView) filterLayout.findViewById(R.id.filter_textbox2);
-        TextView textbox3 = (TextView) filterLayout.findViewById(R.id.filter_textbox3);
-        TextView textbox4 = (TextView) filterLayout.findViewById(R.id.filter_textbox4);
-        TextView textbox5 = (TextView) filterLayout.findViewById(R.id.filter_textbox5);
-        TextView textbox6 = (TextView) filterLayout.findViewById(R.id.filter_textbox6);
-        TextView textbox7 = (TextView) filterLayout.findViewById(R.id.filter_textbox7);
-        TextView filterApply = (TextView) filterLayout.findViewById(R.id.filter_apply);
-        TextView filterRemove = (TextView) filterLayout.findViewById(R.id.filter_remove);
-        View filterCancel = filterLayout.findViewById(R.id.filter_cancel);
-
-        checkbox1.setChecked(filter_checkbox1Checked);
-        checkbox2.setChecked(filter_checkbox2Checked);
-        checkbox3.setChecked(filter_checkbox3Checked);
-        checkbox4.setChecked(filter_checkbox4Checked);
-        checkbox5.setChecked(filter_checkbox5Checked);
-        checkbox6.setChecked(filter_checkbox6Checked);
-        checkbox7.setChecked(filter_checkbox7Checked);
-
-        filterApply.setBackground(isAnyFilterCheckedTemporarily() ? DrawableHelper.getDrawable(getResources(),R.drawable.button_active) : DrawableHelper.getDrawable(getResources(),R.drawable.button_inactive));
-        filterRemove.setBackground(isAnyFilterChecked() ? DrawableHelper.getDrawable(getResources(),R.drawable.button_active) : DrawableHelper.getDrawable(getResources(),R.drawable.button_inactive));
-
-        textbox1.setOnClickListener(view -> checkbox1.callOnClick());
-        textbox2.setOnClickListener(view -> checkbox2.callOnClick());
-        textbox3.setOnClickListener(view -> checkbox3.callOnClick());
-        textbox4.setOnClickListener(view -> checkbox4.callOnClick());
-        textbox5.setOnClickListener(view -> checkbox5.callOnClick());
-        textbox6.setOnClickListener(view -> checkbox6.callOnClick());
-        textbox7.setOnClickListener(view -> checkbox7.callOnClick());
-
-
-        checkbox1.setOnCheckListener(() -> {
-            filterApply.setBackground(isAnyFilterCheckedTemporarily() ? DrawableHelper.getDrawable(getResources(),R.drawable.button_active) : DrawableHelper.getDrawable(getResources(),R.drawable.button_inactive));
-        });
-
-        checkbox2.setOnCheckListener(() -> {
-            filterApply.setBackground(isAnyFilterCheckedTemporarily() ? DrawableHelper.getDrawable(getResources(),R.drawable.button_active) : DrawableHelper.getDrawable(getResources(),R.drawable.button_inactive));
-        });
-
-        checkbox3.setOnCheckListener(() -> {
-            filterApply.setBackground(isAnyFilterCheckedTemporarily() ? DrawableHelper.getDrawable(getResources(),R.drawable.button_active) : DrawableHelper.getDrawable(getResources(),R.drawable.button_inactive));
-        });
-
-        checkbox4.setOnCheckListener(() -> {
-            filterApply.setBackground(isAnyFilterCheckedTemporarily() ? DrawableHelper.getDrawable(getResources(),R.drawable.button_active) : DrawableHelper.getDrawable(getResources(),R.drawable.button_inactive));
-        });
-
-        checkbox5.setOnCheckListener(() -> {
-            filterApply.setBackground(isAnyFilterCheckedTemporarily() ? DrawableHelper.getDrawable(getResources(),R.drawable.button_active) : DrawableHelper.getDrawable(getResources(),R.drawable.button_inactive));
-        });
-
-        checkbox6.setOnCheckListener(() -> {
-            filterApply.setBackground(isAnyFilterCheckedTemporarily()? DrawableHelper.getDrawable(getResources(),R.drawable.button_active) : DrawableHelper.getDrawable(getResources(),R.drawable.button_inactive));
-        });
-
-        checkbox7.setOnCheckListener(() -> {
-            filterApply.setBackground(isAnyFilterCheckedTemporarily()? DrawableHelper.getDrawable(getResources(),R.drawable.button_active) : DrawableHelper.getDrawable(getResources(),R.drawable.button_inactive));
-        });
-
-        filterApply.setOnClickListener(view -> {
-            if (isAnyFilterCheckedTemporarily()) {
-                filter_checkbox1Checked = checkbox1.isChecked();
-                filter_checkbox2Checked = checkbox2.isChecked();
-                filter_checkbox3Checked = checkbox3.isChecked();
-                filter_checkbox4Checked = checkbox4.isChecked();
-                filter_checkbox5Checked = checkbox5.isChecked();
-                filter_checkbox6Checked = checkbox6.isChecked();
-                filter_checkbox7Checked = checkbox7.isChecked();
-
-                upperBarFilter.setImageDrawable(isAnyFilterChecked() ? DrawableHelper.getDrawable(getResources(),R.drawable.filtericon_active) : DrawableHelper.getDrawable(getResources(),R.drawable.filtericon_inactive));
-
-                filterLayoutIsVisible = false;
-                container.removeView(filterLayout);
-
-
-                pubInfoRecyclerView.startRefresh();
-            }
-        });
-
-        filterRemove.setOnClickListener(view -> {
-            if (isAnyFilterChecked()) {
-                filter_checkbox1Checked = false;
-                filter_checkbox2Checked = false;
-                filter_checkbox3Checked = false;
-                filter_checkbox4Checked = false;
-                filter_checkbox5Checked = false;
-                filter_checkbox6Checked = false;
-                filter_checkbox7Checked = false;
-
-                upperBarFilter.setImageDrawable(DrawableHelper.getDrawable(getResources(),R.drawable.filtericon_inactive));
-
-                filterLayoutIsVisible = false;
-                container.removeView(filterLayout);
-
-                pubInfoRecyclerView.startRefresh();
-            }
-        });
-
-        filterCancel.setOnClickListener(view -> {
-            filterLayoutIsVisible = false;
-            container.removeView(filterLayout);
-        });
-
-
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-
-        container.addView(filterLayout, params);
-    }
-
-    private void openLocationDropdown(){
-        if(upperBarDropdown.getVisibility() == View.VISIBLE){
-            JLog.v("Dropdown");
-        }
     }
 
     private void getMyLocation() {
@@ -1022,6 +880,144 @@ public class Home extends AppCompatActivity {
             }
         });
     }
+
+    private void openLocationFilter(){
+        if(upperBarLocationFilter.getVisibility() == View.INVISIBLE) {
+            return;
+        }else if(locationFilterLayoutIsVisible){
+            container.removeView(locationFilterLayout);
+            locationFilterLayoutIsVisible = false;
+            return;
+        }
+
+        locationFilterLayoutIsVisible = true;
+
+        locationFilterLayout = new LocationFilterView(getApplicationContext());
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        locationFilterLayout.setListener(new LocationFilterListener() {
+            @Override
+            public void onItemClick(String locationName, boolean isActive) {
+
+            }
+
+            @Override
+            public void onUpperBarItemClick(String locationName) {
+
+            }
+
+            @Override
+            public void onSelectLocationClick(String locationName) {
+                container.removeView(locationFilterLayout);
+                locationFilterLayoutIsVisible = false;
+            }
+
+            @Override
+            public void onSearchAroundMeClick() {
+                pubInfoRecyclerView.startRefresh();
+                container.removeView(locationFilterLayout);
+                locationFilterLayoutIsVisible = false;
+            }
+        });
+
+
+        container.addView(locationFilterLayout,params);
+
+    }
+
+
+
+    private boolean isAnyFilterChecked(){
+        for(int i=0;i<filter_checkboxChecked.length;i++){
+            if(filter_checkboxChecked[i])return true;
+        }
+        return false;
+    }
+
+    private boolean isAnyFilterCheckedTemporarily(){
+        for(int i=0;i<filterCheckbox.length;i++){
+            if(filterCheckbox[i].isChecked())return true;
+        }
+        return false;
+    }
+
+    private void openFilter() {
+        if (filterLayoutIsVisible) {
+            return ;
+        }
+
+        filterLayoutIsVisible = true;
+
+        filterLayout = (RelativeLayout) getLayoutInflater().inflate(R.layout.home_filter, null);
+        filterCheckbox = new JCheckBox[7];
+        TextView[] filterTextbox = new TextView[7];
+        filterCheckbox[1] = (JCheckBox) filterLayout.findViewById(R.id.filter_checkbox1);
+        filterCheckbox[2] = (JCheckBox) filterLayout.findViewById(R.id.filter_checkbox2);
+        filterCheckbox[3] = (JCheckBox) filterLayout.findViewById(R.id.filter_checkbox3);
+        filterCheckbox[4] = (JCheckBox) filterLayout.findViewById(R.id.filter_checkbox4);
+        filterCheckbox[5] = (JCheckBox) filterLayout.findViewById(R.id.filter_checkbox5);
+        filterCheckbox[6] = (JCheckBox) filterLayout.findViewById(R.id.filter_checkbox6);
+        filterCheckbox[7] = (JCheckBox) filterLayout.findViewById(R.id.filter_checkbox7);
+        filterTextbox[1] = (TextView) filterLayout.findViewById(R.id.filter_textbox1);
+        filterTextbox[2] = (TextView) filterLayout.findViewById(R.id.filter_textbox2);
+        filterTextbox[3] = (TextView) filterLayout.findViewById(R.id.filter_textbox3);
+        filterTextbox[4] = (TextView) filterLayout.findViewById(R.id.filter_textbox4);
+        filterTextbox[5] = (TextView) filterLayout.findViewById(R.id.filter_textbox5);
+        filterTextbox[6] = (TextView) filterLayout.findViewById(R.id.filter_textbox6);
+        filterTextbox[7] = (TextView) filterLayout.findViewById(R.id.filter_textbox7);
+        TextView filterApply = (TextView) filterLayout.findViewById(R.id.filter_apply);
+        TextView filterRemove = (TextView) filterLayout.findViewById(R.id.filter_remove);
+        View filterCancel = filterLayout.findViewById(R.id.filter_cancel);
+
+        for(int i=0;i<filterCheckbox.length;i++){
+            final int num = i;
+            filterCheckbox[num].setChecked(filter_checkboxChecked[num]);
+            filterTextbox[num].setOnClickListener(view -> filterCheckbox[num].callOnClick());
+            filterCheckbox[num].setOnCheckListener(() -> {
+                filterApply.setBackground(isAnyFilterCheckedTemporarily() ? DrawableHelper.getDrawable(getResources(),R.drawable.button_active) : DrawableHelper.getDrawable(getResources(),R.drawable.button_inactive));
+            });
+        }
+        
+        filterApply.setBackground(isAnyFilterCheckedTemporarily() ? DrawableHelper.getDrawable(getResources(),R.drawable.button_active) : DrawableHelper.getDrawable(getResources(),R.drawable.button_inactive));
+        filterRemove.setBackground(isAnyFilterChecked() ? DrawableHelper.getDrawable(getResources(),R.drawable.button_active) : DrawableHelper.getDrawable(getResources(),R.drawable.button_inactive));
+
+
+        filterApply.setOnClickListener(view -> {
+            if (isAnyFilterCheckedTemporarily()) {
+                for(int i=0;i<filter_checkboxChecked.length;i++){
+                    filter_checkboxChecked[0] = filterCheckbox[i].isChecked();
+                }
+
+                upperBarFilter.setImageDrawable(isAnyFilterChecked() ? DrawableHelper.getDrawable(getResources(),R.drawable.filtericon_active) : DrawableHelper.getDrawable(getResources(),R.drawable.filtericon_inactive));
+                filterLayoutIsVisible = false;
+                container.removeView(filterLayout);
+                pubInfoRecyclerView.startRefresh();
+            }
+        });
+
+        filterRemove.setOnClickListener(view -> {
+            if (isAnyFilterChecked()) {
+                for(int i=0;i<filter_checkboxChecked.length;i++){
+                    filter_checkboxChecked[0] = false;
+                }
+                upperBarFilter.setImageDrawable(DrawableHelper.getDrawable(getResources(),R.drawable.filtericon_inactive));
+                filterLayoutIsVisible = false;
+                container.removeView(filterLayout);
+                pubInfoRecyclerView.startRefresh();
+            }
+        });
+
+        filterCancel.setOnClickListener(view -> {
+            filterLayoutIsVisible = false;
+            container.removeView(filterLayout);
+        });
+
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+
+        container.addView(filterLayout, params);
+    }
+
 
 
     //****Favorite Tab****
@@ -1409,7 +1405,11 @@ public class Home extends AppCompatActivity {
         if (filterLayoutIsVisible) {
             container.removeView(filterLayout);
             filterLayoutIsVisible = false;
-        } else {
+        }else if(locationFilterLayoutIsVisible) {
+            container.removeView(locationFilterLayout);
+            locationFilterLayoutIsVisible = false;
+
+        }else {
             if(finishIfBackButtonClickedOnceMore){
                 super.onBackPressed();
             }else{
@@ -1425,6 +1425,5 @@ public class Home extends AppCompatActivity {
 
         }
     }
-
 
 }

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <ImageButton
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/white"
+        >
+        
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/locationFilter_upperBarHeight"
+            >
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="@color/darkGray"
+                android:layout_alignParentBottom="true"
+                />
+
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none"
+                android:overScrollMode="never"
+                >
+
+                <LinearLayout
+                    android:id="@+id/locationFilter_upperBarContainer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    />
+
+            </HorizontalScrollView>
+
+        </RelativeLayout>
+        
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/locationFilter_locationContainer"
+            android:layout_weight="1"
+            android:layout_height="0dp"
+            android:layout_width="match_parent"
+            android:overScrollMode="never"
+            android:scrollbars="none"
+            android:paddingLeft="@dimen/locationFilter_itemMargin"
+            android:paddingRight="@dimen/locationFilter_itemMargin"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/moreLocationsAreComingSoon"
+            android:gravity="center"
+            android:textSize="@dimen/locationFilter_bigFontSize"
+            android:textColor="@color/darkGray"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="40dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/locationFilter_buttonHeight"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/leftRightMargin"
+            android:paddingRight="@dimen/leftRightMargin"
+            >
+
+            <TextView
+                android:id="@+id/locationFilter_selectLocation"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/roundbox_gray"
+                android:gravity="center"
+                android:text="@string/selectLocation"
+                android:textColor="@color/white" />
+
+            <View
+                android:layout_width="20dp"
+                android:layout_height="match_parent"
+                />
+
+            <TextView
+                android:id="@+id/locationFilter_aroundMe"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@drawable/roundbox_maincolor"
+                android:gravity="center"
+                android:text="@string/searchAroundMe"
+                android:textColor="@color/white"
+                />
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"/>
+
+
+
+
+    </LinearLayout>
+
+</RelativeLayout>

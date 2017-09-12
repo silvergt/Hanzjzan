@@ -31,5 +31,6 @@ public class NumericHelper {
     public static String trimUnderPoint(String string,int underPoint){
         string = string.substring(0,string.indexOf(".")+underPoint);
         return string;
+
     }
 }

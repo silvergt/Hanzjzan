@@ -84,7 +84,7 @@
     <dimen name="membership_itemHeight">120dp</dimen>
     <dimen name="membership_ticketImageWidth">80dp</dimen>
     <dimen name="membership_saleImageWidth">42dp</dimen>
-    <dimen name="membership_numberFontSize">18dp</dimen>
+    <dimen name="membership_numberFontSize">18sp</dimen>
     <dimen name="membership_mainFontSize">14sp</dimen>
     <dimen name="membership_BigfontSize">17sp</dimen>
     <dimen name="membership_fontSize">14sp</dimen>
@@ -123,6 +123,21 @@
 
     <dimen name="profileNameChange_profileWidth">60dp</dimen>
     <dimen name="profileNameChange_height">150dp</dimen>
+
+    <dimen name="setting_optionHeight">50dp</dimen>
+    <dimen name="setting_roundIconSize">40dp</dimen>
+    <dimen name="setting_textFontSize">15sp</dimen>
+    <dimen name="setting_sideMargin">40dp</dimen>
+
+
+    <dimen name="locationFilter_upperBarHeight">40dp</dimen>
+    <dimen name="locationFilter_itemHeight">45dp</dimen>
+    <dimen name="locationFilter_buttonHeight">40dp</dimen>
+    <dimen name="locationFilter_upperBarItemWidth">80dp</dimen>
+    <dimen name="locationFilter_itemMargin">8dp</dimen>
+    <dimen name="locationFilter_itemFontSize">14sp</dimen>
+    <dimen name="locationFilter_bigFontSize">17sp</dimen>
+    <dimen name="locationFilter_comingSoonFontSize">12sp</dimen>
 
 
     <!-- Default screen margins, per the Android Design guidelines. -->
