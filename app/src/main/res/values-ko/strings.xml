@@ -95,5 +95,9 @@
     <string name="searchAroundMe">내 주변 검색</string>
     <string name="selectLocation">지역 선택하기</string>
     <string name="moreLocationsAreComingSoon">곧 더 많은 지역에서 서비스됩니다</string>
+    <string name="language">언어</string>
+    <string name="english">영어</string>
+    <string name="korean">한국어</string>
+    <string name="networkFailure">인터넷 연결 실패</string>
 
 </resources>

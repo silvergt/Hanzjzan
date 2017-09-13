@@ -32,18 +32,29 @@ public class PubInfo implements Serializable{
         drinkList = new ArrayList<>();
     }
 
-    public void setFavorite(boolean favoriteIsOn){
-        favorite = favoriteIsOn;
+    public boolean setFavorite(boolean favoriteIsOn){
+        final boolean[] sendingSucceed = {false};
         //send favorite info to server here
-        new Thread(()->{
+        Thread th = new Thread(()->{
             HashMap<String,String> map = new HashMap<>();
             map.put("id_member",Long.toString(StaticData.currentUser.id));
             map.put("id_place",Long.toString(id));
             map = ServerConnectionHelper.connect("clicked like button","likeplace",map);
-            if(map.get("likeresult").equals("TRUE")){
+            if(map.get("likeresult")==null||map.get("likeresult").equals("FALSE")){
+                sendingSucceed[0] = false;
+            }else if(map.get("likeresult").equals("TRUE")){
                 JLog.v("favorite click info sended");
+                favorite = favoriteIsOn;
+                sendingSucceed[0] = true;
             }
-        }).start();
+        });
+        th.start();
+        try{
+            th.join();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return sendingSucceed[0];
     }
 
     public boolean getFavorite(){

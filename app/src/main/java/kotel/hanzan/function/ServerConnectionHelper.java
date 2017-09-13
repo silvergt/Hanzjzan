@@ -1,7 +1,10 @@
 package kotel.hanzan.function;
 
 
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.Nullable;
+import android.widget.Toast;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.entity.ContentType;
@@ -14,6 +17,9 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Iterator;
+
+import kotel.hanzan.R;
+import kotel.hanzan.kakao.GlobalApplication;
 
 public class ServerConnectionHelper {
     private final static String serverIP="ec2-52-78-207-207.ap-northeast-2.compute.amazonaws.com";
@@ -41,7 +47,15 @@ public class ServerConnectionHelper {
                     uc.setDoOutput(true);
                     uc.setDoInput(true);
                     uc.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
-                    uc.connect();
+                    try {
+                        uc.connect();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        new Handler(Looper.getMainLooper()).post(()->{
+                            Toast.makeText(GlobalApplication.getGlobalApplicationContext().getApplicationContext(),
+                                    GlobalApplication.getGlobalApplicationContext().getString(R.string.networkFailure),Toast.LENGTH_SHORT).show();
+                        });
+                    }
 
                     MultipartEntityBuilder MEB = MultipartEntityBuilder.create();
                     MEB.setBoundary(boundary);

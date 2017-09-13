@@ -8,6 +8,10 @@ public class NumericHelper {
 
 
     public static String toMoneyFormat(String original) {
+        if (original==null){
+            return "0";
+        }
+
         String returnString = "";
         ArrayList<Character> temp = new ArrayList<>();
 

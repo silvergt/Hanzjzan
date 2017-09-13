@@ -3,16 +3,14 @@ package kotel.hanzan;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.util.DisplayMetrics;
-import android.util.Log;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 
 import kotel.hanzan.Data.StaticData;
+import kotel.hanzan.view.JActivity;
 
-public class Initial extends AppCompatActivity {
+public class Initial extends JActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

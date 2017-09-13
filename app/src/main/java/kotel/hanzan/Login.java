@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -40,11 +39,12 @@ import kotel.hanzan.function.ServerConnectionHelper;
 import kotel.hanzan.listener.SlideListener;
 import kotel.hanzan.view.HorizontalSlideView;
 import kotel.hanzan.view.HorizontalSlideViewChild;
+import kotel.hanzan.view.JActivity;
 import kotel.hanzan.view.Loading;
 import kotel.hanzan.view.SlideCountView;
 import pl.droidsonroids.gif.GifImageView;
 
-public class Login extends AppCompatActivity {
+public class Login extends JActivity {
     private HashMap<String, String> map;
     private Bitmap bitmap = null;
 

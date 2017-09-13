@@ -2,15 +2,15 @@ package kotel.hanzan;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
 import kotel.hanzan.Data.EventInfo;
+import kotel.hanzan.view.JActivity;
 
-public class Event extends AppCompatActivity {
+public class Event extends JActivity {
     ImageView back,image,share;
     TextView title;
 

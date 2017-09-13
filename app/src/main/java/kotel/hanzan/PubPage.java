@@ -13,7 +13,6 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,8 +32,9 @@ import kotel.hanzan.Data.PubInfo;
 import kotel.hanzan.Data.StaticData;
 import kotel.hanzan.function.ServerConnectionHelper;
 import kotel.hanzan.view.DrinkSelector;
+import kotel.hanzan.view.JActivity;
 
-public class PubPage extends AppCompatActivity {
+public class PubPage extends JActivity {
     public static int REQUEST_OPENPUBPAGE=10;
     public static int RESULT_FAVORITECHANGED=11;
 

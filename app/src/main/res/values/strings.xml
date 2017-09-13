@@ -108,5 +108,9 @@
     <string name="selectLocation">Select location</string>
     <string name="searchAroundMe">Search around me</string>
     <string name="moreLocationsAreComingSoon">More locations are coming soon!</string>
+    <string name="language">Language</string>
+    <string name="korean">Korean</string>
+    <string name="english">English</string>
+    <string name="networkFailure">Network connection lost</string>
 
 </resources>

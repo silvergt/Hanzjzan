@@ -2,7 +2,6 @@ package kotel.hanzan;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,8 +17,9 @@ import kotel.hanzan.Data.StaticData;
 import kotel.hanzan.function.CalendarHelper;
 import kotel.hanzan.function.NumericHelper;
 import kotel.hanzan.function.ServerConnectionHelper;
+import kotel.hanzan.view.JActivity;
 
-public class Membership extends AppCompatActivity {
+public class Membership extends JActivity {
     private ImageView back;
     private TextView expireDate;
     private RecyclerView recyclerView;

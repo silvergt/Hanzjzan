@@ -3,7 +3,6 @@ package kotel.hanzan;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,8 +10,9 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
 import kotel.hanzan.function.BitmapHelper;
+import kotel.hanzan.view.JActivity;
 
-public class ImageCropper extends AppCompatActivity {
+public class ImageCropper extends JActivity {
     public final static int IMAGE_CROP_IMAGESELECT=209;
     public final static int IMAGE_CROP_REQUEST=210;
     public final static int IMAGE_CROP_RESELECT_IMAGE=211;

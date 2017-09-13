@@ -12,7 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        >
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -41,78 +42,155 @@
 
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/setting_optionHeight"
-            android:layout_marginLeft="@dimen/setting_sideMargin"
-            android:layout_marginRight="@dimen/setting_sideMargin"
-            android:background="@drawable/roundbox_maincolor"
-            android:textColor="@color/white"
-            android:textSize="@dimen/setting_textFontSize"
-            android:gravity="center"
-            android:text="@string/termCondition"
-            />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="25dp"
-            />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/setting_optionHeight"
-            android:layout_marginLeft="@dimen/setting_sideMargin"
-            android:layout_marginRight="@dimen/setting_sideMargin"
-            android:background="@drawable/roundbox_maincolor"
-            android:textColor="@color/white"
-            android:textSize="@dimen/setting_textFontSize"
-            android:gravity="center"
-            android:text="@string/announcement"
-            />
-
-        <View
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:orientation="horizontal"
-            android:layout_marginLeft="@dimen/setting_sideMargin"
-            android:layout_marginRight="@dimen/setting_sideMargin"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_marginLeft="@dimen/leftRightMargin"
+            android:layout_marginRight="@dimen/leftRightMargin"
             >
-
-            <ImageView
-                android:id="@+id/settings_facebook"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="@dimen/setting_roundIconSize"
-                android:src="@drawable/facebookicon"
-                android:tint="@color/Blue"
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
                 />
 
-            <ImageView
-                android:id="@+id/settings_instagram"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="@dimen/setting_roundIconSize"
-                android:src="@drawable/test"
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/language"
+                android:textColor="@color/black"
+                android:textSize="@dimen/setting_textFontSize"
+                android:paddingBottom="20dp"
+                android:paddingLeft="@dimen/leftRightMargin"
                 />
 
-            <ImageView
-                android:id="@+id/settings_website"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="@dimen/setting_roundIconSize"
-                android:src="@drawable/test"
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_optionHeight"
+                android:orientation="horizontal"
+                android:layout_marginLeft="@dimen/leftRightMargin"
+                android:layout_marginRight="@dimen/leftRightMargin"
+                >
+
+                <TextView
+                    android:id="@+id/settings_korean"
+                    android:background="@drawable/roundbox_gray_hollow"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/korean"
+                    android:textColor="@color/darkGray"
+                    />
+
+                <View
+                    android:layout_width="20dp"
+                    android:layout_height="match_parent"
+                    />
+
+                <TextView
+                    android:id="@+id/settings_english"
+                    android:background="@drawable/roundbox_gray_hollow"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/english"
+                    android:textColor="@color/darkGray"
+                    />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
                 />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/gray"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                />
+
+            <TextView
+                android:id="@+id/settings_termsConditions"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_optionHeight"
+                android:layout_marginLeft="@dimen/setting_sideMargin"
+                android:layout_marginRight="@dimen/setting_sideMargin"
+                android:background="@drawable/roundbox_maincolor"
+                android:textColor="@color/white"
+                android:textSize="@dimen/setting_textFontSize"
+                android:gravity="center"
+                android:text="@string/termCondition"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                />
+
+            <TextView
+                android:id="@+id/settings_announcements"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_optionHeight"
+                android:layout_marginLeft="@dimen/setting_sideMargin"
+                android:layout_marginRight="@dimen/setting_sideMargin"
+                android:background="@drawable/roundbox_maincolor"
+                android:textColor="@color/white"
+                android:textSize="@dimen/setting_textFontSize"
+                android:gravity="center"
+                android:text="@string/announcement"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal"
+                android:layout_marginLeft="@dimen/setting_sideMargin"
+                android:layout_marginRight="@dimen/setting_sideMargin"
+                >
+
+                <ImageView
+                    android:id="@+id/settings_facebook"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="@dimen/setting_roundIconSize"
+                    android:src="@drawable/facebook"
+                    />
+
+                <ImageView
+                    android:id="@+id/settings_instagram"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="@dimen/setting_roundIconSize"
+                    android:src="@drawable/instagram"
+                    />
+
+                <ImageView
+                    android:id="@+id/settings_website"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="@dimen/setting_roundIconSize"
+                    android:src="@drawable/globe"
+                    android:tint="@color/mainColor_light"
+                    />
+
+            </LinearLayout>
+
 
         </LinearLayout>
 

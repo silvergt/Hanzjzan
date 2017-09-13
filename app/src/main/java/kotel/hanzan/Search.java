@@ -8,7 +8,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -39,10 +38,11 @@ import kotel.hanzan.function.LocationHelper;
 import kotel.hanzan.function.ServerConnectionHelper;
 import kotel.hanzan.listener.JRecyclerViewListener;
 import kotel.hanzan.listener.LocationHelperListener;
+import kotel.hanzan.view.JActivity;
 import kotel.hanzan.view.JRecyclerView;
 import kotel.hanzan.view.Loading;
 
-public class Search extends AppCompatActivity {
+public class Search extends JActivity {
     private ImageView back, searchIcon, deleteText, searchText;
     private EditText searchEditText;
     private TextView upperTitle;
@@ -403,7 +403,7 @@ public class Search extends AppCompatActivity {
                 recyclerView.finishRefreshing();
                 adapter.notifyDataSetChanged();
                 loading.setLoadingCompleted();
-                if (dataleft.equals("TRUE")){
+                if (dataleft!=null&&dataleft.equals("TRUE")){
                     recyclerView.finishLoadmore();
                 }
             });

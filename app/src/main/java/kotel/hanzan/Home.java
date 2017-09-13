@@ -13,7 +13,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -56,6 +55,7 @@ import kotel.hanzan.listener.LocationFilterListener;
 import kotel.hanzan.listener.LocationHelperListener;
 import kotel.hanzan.listener.TapBarItemClickListener;
 import kotel.hanzan.view.DrinkCalendar;
+import kotel.hanzan.view.JActivity;
 import kotel.hanzan.view.JCheckBox;
 import kotel.hanzan.view.JRecyclerView;
 import kotel.hanzan.view.Loading;
@@ -63,10 +63,11 @@ import kotel.hanzan.view.LocationFilterView;
 import kotel.hanzan.view.ProfileCircleImageView;
 import kotel.hanzan.view.TapBar;
 
-public class Home extends AppCompatActivity {
+public class Home extends JActivity {
     private TapBar tapBar;
     private RelativeLayout container;
 
+    private RelativeLayout upperBarLocationFilterContainer;
     private ImageView upperBarLeftIcon, upperBarMap, upperBarSearch, upperBarFilter, upperBarLocationFilter;
     private TextView upperBarMainText, upperBarSubText;
 
@@ -388,13 +389,13 @@ public class Home extends AppCompatActivity {
 
         inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
+        upperBarLocationFilterContainer = (RelativeLayout)findViewById(R.id.home_upperBarLocationFilterContainer);
         upperBarLeftIcon = (ImageView) findViewById(R.id.home_upperBarLeftIcon);
         upperBarMap = (ImageView) findViewById(R.id.home_upperBarMapIcon);
         upperBarSearch = (ImageView) findViewById(R.id.home_upperBarSearchIcon);
         upperBarFilter = (ImageView) findViewById(R.id.home_upperBarFilterIcon);
         upperBarMainText = (TextView) findViewById(R.id.home_upperBarMainText);
         upperBarLocationFilter = (ImageView) findViewById(R.id.home_upperBarDropdown);
-//        upperBarSubText = (TextView) findViewById(R.id.home_upperBarSubText);
         container = (RelativeLayout) findViewById(R.id.home_contentContainer);
         tapBar = (TapBar) findViewById(R.id.home_tapbar);
         loading = (Loading) findViewById(R.id.home_loading);
@@ -412,11 +413,7 @@ public class Home extends AppCompatActivity {
             }
         });
 
-        upperBarMainText.setOnClickListener(view -> {
-            upperBarLocationFilter.callOnClick();
-        });
-
-        upperBarLocationFilter.setOnClickListener(view -> {
+        upperBarLocationFilterContainer.setOnClickListener(view -> {
             openLocationFilter();
         });
 
@@ -795,7 +792,7 @@ public class Home extends AppCompatActivity {
             new Handler(getMainLooper()).post(() -> {
                 pubInfoRecyclerView.finishRefreshing();
                 homeAdapter.notifyDataSetChanged();
-                if(dataleft.equals("TRUE")){
+                if(dataleft!=null&&dataleft.equals("TRUE")){
                     pubInfoRecyclerView.finishLoadmore();
                 }
             });
@@ -1055,7 +1052,7 @@ public class Home extends AppCompatActivity {
             new Handler(getMainLooper()).post(() -> {
                 pubInfoFavoriteRecyclerView.finishRefreshing();
                 pubInfoFavoriteAdapter.notifyDataSetChanged();
-                if(dataleft.equals("TRUE")){
+                if(dataleft!=null&&dataleft.equals("TRUE")){
                     pubInfoFavoriteRecyclerView.finishLoadmore();
                 }
             });
@@ -1110,7 +1107,7 @@ public class Home extends AppCompatActivity {
             }
 
             String totalSavingCost = NumericHelper.toMoneyFormat(map.get("totalsavingcost"));
-            String dataLefts = map.get("datalefts");
+            String dataleft = map.get("datalefts");
 
             new Handler(getMainLooper()).post(() -> {
                 try {
@@ -1118,7 +1115,7 @@ public class Home extends AppCompatActivity {
                 }catch (Exception e){}
                 historyAdapter.notifyDataSetChanged();
                 historyRecyclerView.finishRefreshing();
-                if (dataLefts.equals("TRUE")) {
+                if (dataleft!=null&&dataleft.equals("TRUE")) {
                     historyRecyclerView.finishLoadmore();
                 }
             });
