@@ -6,7 +6,7 @@ public class UserInfo{
     public long id;
     public String name,profileImageAddress,personalCode;
     public int expireYYYY,expireMM,expireDD;
-    public boolean isHanzanAvailableToday;
+    public boolean isHanjanAvailableToday;
 
     public UserInfo(){
         id=123;
@@ -15,7 +15,7 @@ public class UserInfo{
         expireYYYY = 2017;
         expireMM = 8;
         expireDD = 14;
-        isHanzanAvailableToday = true;
+        isHanjanAvailableToday = true;
     }
 
     public UserInfo(long id, String name, String profileImageAddress, String personalCode, int expireYYYY, int expireMM, int expireDD, boolean isHanzanAvailableToday) {
@@ -26,7 +26,7 @@ public class UserInfo{
         this.expireYYYY = expireYYYY;
         this.expireMM = expireMM;
         this.expireDD = expireDD;
-        this.isHanzanAvailableToday = isHanzanAvailableToday;
+        this.isHanjanAvailableToday = isHanzanAvailableToday;
     }
 
     public UserInfo(HashMap<String,String> map){
@@ -49,6 +49,6 @@ public class UserInfo{
         this.expireYYYY = year;
         this.expireMM = month;
         this.expireDD = day;
-        this.isHanzanAvailableToday = isAvailableToday;
+        this.isHanjanAvailableToday = isAvailableToday;
     }
 }

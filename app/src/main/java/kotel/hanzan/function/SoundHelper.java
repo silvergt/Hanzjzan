@@ -11,6 +11,7 @@ public class SoundHelper{
 
     private int soundID;
 
+    @SuppressWarnings("deprecation")
     public SoundHelper(Context context,int maxStreams,int soundRes){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             soundPool = new SoundPool.Builder()

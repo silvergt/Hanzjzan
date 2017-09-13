@@ -15,7 +15,10 @@ import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import kotel.hanzan.R;
+import kotel.hanzan.function.ColorHelper;
 import kotel.hanzan.listener.JRecyclerViewListener;
+
+import static kotel.hanzan.R.color.mainColor_medium;
 
 public class JRecyclerView extends TwinklingRefreshLayout {
     private RecyclerView recyclerView;
@@ -46,7 +49,7 @@ public class JRecyclerView extends TwinklingRefreshLayout {
             public View getView() {
                 AVLoadingIndicatorView image = new AVLoadingIndicatorView(context);
                 image.setIndicator("BallClipRotateIndicator");
-                image.setIndicatorColor(context.getResources().getColor(R.color.mainColor_medium));
+                image.setIndicatorColor(ColorHelper.getColor(getResources(),R.color.mainColor_medium));
                 return image;
             }
 

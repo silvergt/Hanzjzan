@@ -27,14 +27,11 @@ public class ImageCropper extends JActivity {
     private TextView[] ratios;
     private TextView confirm;
 
-    private String attribute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_imagecropper);
-
-        attribute=getIntent().getStringExtra("attr");
 
         init();
     }

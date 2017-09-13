@@ -1,5 +1,8 @@
 package kotel.hanzan;
 
+import android.app.Dialog;
+import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
@@ -7,8 +10,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,11 +26,22 @@ import kotel.hanzan.function.CalendarHelper;
 import kotel.hanzan.function.NumericHelper;
 import kotel.hanzan.function.ServerConnectionHelper;
 import kotel.hanzan.view.JActivity;
+import kotel.hanzan.view.Loading;
+
+import static kotel.hanzan.Data.StaticData.currentUser;
 
 public class Membership extends JActivity {
+    final public static int MEMBERSHIP_OPENED = 880;
+    final public static int RESULT_MEMBERSHIP_APPLIED = 881;
+    private InputMethodManager inputMethodManager;
+
+    private Loading loading;
+    private Dialog dialog;
+
     private ImageView back;
     private TextView expireDate;
     private RecyclerView recyclerView;
+    private RelativeLayout promotionLowerBar;
     private MembershipAdapter adapter = new MembershipAdapter();
     private ArrayList<MembershipTicketInfo> ticketArray = new ArrayList<>();
 
@@ -35,13 +54,13 @@ public class Membership extends JActivity {
         int discountPrice;
         boolean isNowDiscounted;
 
-        int durationMonths;
+        int durationDays;
 
-        public MembershipTicketInfo(String name, int durationMonths, int originalPrice, int discountPrice) {
+        public MembershipTicketInfo(String name, int durationDays, int originalPrice, int discountPrice) {
             this.name = name;
             this.originalPrice = originalPrice;
             this.discountPrice = discountPrice;
-            this.durationMonths = durationMonths;
+            this.durationDays = durationDays;
             if(discountPrice != 0){
                 isNowDiscounted = true;
             }else{
@@ -86,7 +105,7 @@ public class Membership extends JActivity {
 
             holder.title.setText(ticketInfo.name);
 
-            int[] MembershipExpire = CalendarHelper.getDateAfterMonths(ticketInfo.durationMonths,new int[]{startYYYY,startMM,startDD});
+            int[] MembershipExpire = CalendarHelper.getDateAfterDays(ticketInfo.durationDays,new int[]{startYYYY,startMM,startDD});
 
             holder.duration.setText("~"+Integer.toString(MembershipExpire[0])+"."+Integer.toString(MembershipExpire[1])+"."+
                 Integer.toString(MembershipExpire[2]));
@@ -104,11 +123,15 @@ public class Membership extends JActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_membership);
 
+        inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+
         back = (ImageView)findViewById(R.id.membership_back);
         expireDate = (TextView)findViewById(R.id.membership_expireDate);
         recyclerView = (RecyclerView) findViewById(R.id.membership_recycler);
+        promotionLowerBar = (RelativeLayout) findViewById(R.id.membership_promotion);
+        loading = (Loading)findViewById(R.id.membership_loading);
 
-        if(StaticData.currentUser.expireYYYY==0){
+        if(currentUser.expireYYYY==0){
             //if user is not a member of Hanzan
             int[] startDate = CalendarHelper.getCurrentDate();
             startYYYY = startDate[0];
@@ -117,38 +140,157 @@ public class Membership extends JActivity {
             expireDate.setText(getString(R.string.notMemberYet));
         }else{
             //if user is a member of Hanzan
-            startYYYY = StaticData.currentUser.expireYYYY;
-            startMM = StaticData.currentUser.expireMM;
-            startDD = StaticData.currentUser.expireDD;
+            startYYYY = currentUser.expireYYYY;
+            startMM = currentUser.expireMM;
+            startDD = currentUser.expireDD;
             expireDate.setText(Integer.toString(startYYYY)+"."+Integer.toString(startMM)+"."+Integer.toString(startDD));
         }
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
-        retrieveMembershipTicketInfo();
-
         back.setOnClickListener(view -> finish());
+
+        promotionLowerBar.setOnClickListener(view -> {
+            openPromotionPopup();
+        });
+
+
+        retrieveMembershipTicketInfo();
+    }
+
+    private void openPromotionPopup(){
+        dialog = new Dialog(this);
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        RelativeLayout layout = (RelativeLayout)getLayoutInflater().inflate(R.layout.promotion_inputpopup,null);
+        EditText editText = (EditText)layout.findViewById(R.id.promotion_editText);
+        ImageView delete = (ImageView)layout.findViewById(R.id.promotion_delete);
+        TextView apply = (TextView) layout.findViewById(R.id.promotion_apply);
+        TextView cancel = (TextView) layout.findViewById(R.id.promotion_cancel);
+
+
+        editText.setOnEditorActionListener((textView, i, keyEvent) -> {
+            if (i == EditorInfo.IME_ACTION_DONE) {
+                apply.callOnClick();
+            }
+            return false;
+        });
+
+        delete.setOnClickListener(view -> editText.setText(""));
+
+        apply.setOnClickListener(view -> {
+            try {
+                inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            }catch (Exception e){}
+
+            String word = editText.getText().toString();
+
+            while(word.startsWith(" ")){
+                word = word.substring(1,word.length());
+            }
+            while(word.endsWith(" ")){
+                word = word.substring(0,word.length()-1);
+            }
+            if (word.length() == 0) {
+                Toast.makeText(getApplicationContext(),getString(R.string.notValidPromotionCode),Toast.LENGTH_SHORT).show();
+            }else{
+                loading.setLoadingStarted();
+                usePromotionCode(word);
+            }
+        });
+
+        cancel.setOnClickListener(view -> dialog.cancel());
+
+        dialog.setContentView(layout);
+        dialog.show();
+    }
+
+    private void openPromotionSuccessPopup(){
+        RelativeLayout layout = (RelativeLayout)getLayoutInflater().inflate(R.layout.promotion_successpopup,null);
+        TextView confirm = (TextView)layout.findViewById(R.id.promotion_successConfirm);
+
+        confirm.setOnClickListener(view -> dialog.cancel());
+
+        dialog.setContentView(layout);
+    }
+
+    private void usePromotionCode(String code){
+        new Thread(()->{
+            HashMap<String,String> map = new HashMap<>();
+            map.put("id_member",Long.toString(currentUser.id));
+            map.put("name_promotion",code);
+
+            map = ServerConnectionHelper.connect("sending promotion code","usepromotion",map);
+
+            if(map.get("promotion_result")!=null){
+                switch (Integer.parseInt(map.get("promotion_result"))){
+                    case 0 :
+                        new Handler(getMainLooper()).post(() -> {
+                            Toast.makeText(getApplicationContext(), getString(R.string.alreadyAppliedPromotion), Toast.LENGTH_SHORT).show();
+                        });
+                        break;
+                    case 1 :
+                        new Handler(getMainLooper()).post(() -> {
+                            Toast.makeText(getApplicationContext(), getString(R.string.notValidPromotionCode), Toast.LENGTH_SHORT).show();
+                        });
+                        break;
+                    case 2 :
+                        new Handler(getMainLooper()).post(() -> {
+                            Toast.makeText(getApplicationContext(), getString(R.string.alreadyUsedPromotionCode), Toast.LENGTH_SHORT).show();
+                        });
+                        break;
+                    case 3 :
+                        int duration = Integer.parseInt(map.get("durationdays_promotion"));
+                        String newDue = map.get("membershipdue");
+
+                        int[] newExpireDate = CalendarHelper.parseDate(newDue);
+                        if(StaticData.currentUser.expireYYYY == 0){
+                            StaticData.currentUser.isHanjanAvailableToday = true;
+                        }
+                        StaticData.currentUser.expireYYYY = newExpireDate[0];
+                        StaticData.currentUser.expireMM = newExpireDate[1];
+                        StaticData.currentUser.expireDD = newExpireDate[2];
+
+                        setResult(RESULT_MEMBERSHIP_APPLIED);
+
+                        new Handler(getMainLooper()).post(() -> {
+                            try{
+                                inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                            }catch (Exception e){}
+                            expireDate.setText(Integer.toString(StaticData.currentUser.expireYYYY) + "." + Integer.toString(StaticData.currentUser.expireMM) + "." + Integer.toString(StaticData.currentUser.expireDD));
+                            openPromotionSuccessPopup();
+                        });
+                        break;
+                }
+            }
+
+            new Handler(getMainLooper()).post(() -> {
+                loading.setLoadingCompleted();
+            });
+
+        }).start();
     }
 
     private void retrieveMembershipTicketInfo(){
         new Thread(()->{
             HashMap<String,String> map = new HashMap<>();
-            map.put("id_member",Long.toString(StaticData.currentUser.id));
+            map.put("id_member",Long.toString(currentUser.id));
             map = ServerConnectionHelper.connect("retrieving membership ticket info","ticketinfo",map);
 
             int i=0;
             while (true) {
                 String num = Integer.toString(i++);
-                if (map.get("durationmonths_" + num)==null){
+                if (map.get("durationdays_" + num)==null){
                     break;
                 }
-                int durationMonth = Integer.parseInt(map.get("durationmonths_" + num));
+                int durationDays = Integer.parseInt(map.get("durationdays_" + num));
                 String ticketName = map.get("name_ticket_" + num);
                 int originalPrice = Integer.parseInt(map.get("originalprice_" + num));
                 int discountPrice = Integer.parseInt(map.get("discountprice_" + num));
 
-                ticketArray.add(new MembershipTicketInfo(ticketName, durationMonth,originalPrice,discountPrice));
+                ticketArray.add(new MembershipTicketInfo(ticketName, durationDays,originalPrice,discountPrice));
             }
             new Handler(getMainLooper()).post(()->{
                 adapter.notifyDataSetChanged();

@@ -108,9 +108,17 @@
     <string name="selectLocation">Select location</string>
     <string name="searchAroundMe">Search around me</string>
     <string name="moreLocationsAreComingSoon">More locations are coming soon!</string>
-    <string name="language">Language</string>
-    <string name="korean">Korean</string>
-    <string name="english">English</string>
+    <string name="language">Language / 언어</string>
+    <string name="korean" translatable="false">한국어</string>
+    <string name="english" translatable="false">English</string>
     <string name="networkFailure">Network connection lost</string>
+    <string name="inputPromotionCode">Input promotion code</string>
+    <string name="apply">Apply</string>
+    <string name="pleaseEnterPromotionCode">Please enter coupon code</string>
+    <string name="notValidPromotionCode">Not valid promotion code</string>
+    <string name="promotionCodeApplied">Promotion code\napplied!</string>
+    <string name="enterName">Enter name you want to use</string>
+    <string name="alreadyUsedPromotionCode">This code is already used!</string>
+    <string name="alreadyAppliedPromotion">You already applied this promotion!</string>
 
 </resources>

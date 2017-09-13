@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
+import com.stfalcon.frescoimageviewer.ImageViewer;
 
 import kotel.hanzan.Data.EventInfo;
 import kotel.hanzan.view.JActivity;
@@ -33,9 +34,13 @@ public class Event extends JActivity {
         Picasso.with(this).load(eventInfo.mainImageAddress).into(image);
 
 
-
-
         back.setOnClickListener(view -> finish());
+
+        image.setOnClickListener(view -> {
+            String[] images = new String[]{eventInfo.mainImageAddress};
+            ImageViewer.Builder builder = new ImageViewer.Builder(this, images);
+            builder.show();
+        });
 
         share.setOnClickListener(view -> {
             Intent intent = new Intent(Intent.ACTION_SEND);

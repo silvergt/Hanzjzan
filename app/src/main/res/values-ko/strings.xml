@@ -95,9 +95,15 @@
     <string name="searchAroundMe">내 주변 검색</string>
     <string name="selectLocation">지역 선택하기</string>
     <string name="moreLocationsAreComingSoon">곧 더 많은 지역에서 서비스됩니다</string>
-    <string name="language">언어</string>
-    <string name="english">영어</string>
-    <string name="korean">한국어</string>
+    <string name="language">언어 / Language</string>
     <string name="networkFailure">인터넷 연결 실패</string>
+    <string name="apply">적용</string>
+    <string name="inputPromotionCode">프로모션 코드 입력하기</string>
+    <string name="pleaseEnterPromotionCode">쿠폰 번호를 입력해 주세요</string>
+    <string name="notValidPromotionCode">올바른 코드가 아닙니다</string>
+    <string name="promotionCodeApplied">프로모션 코드가\n적용되었습니다!</string>
+    <string name="enterName">사용할 이름을 입력해 주세요</string>
+    <string name="alreadyUsedPromotionCode">이미 사용된 코드입니다!</string>
+    <string name="alreadyAppliedPromotion">이미 참여한 프로모션입니다!</string>
 
 </resources>

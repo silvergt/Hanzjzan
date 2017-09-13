@@ -14,6 +14,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import kotel.hanzan.R;
+import kotel.hanzan.function.ColorHelper;
 import kotel.hanzan.listener.LocationFilterListener;
 
 public class LocationFilterView extends RelativeLayout{
@@ -84,10 +85,10 @@ public class LocationFilterView extends RelativeLayout{
             holder.locationName.setText(locationName);
             holder.comingSoon.setVisibility(isActive ? INVISIBLE : VISIBLE);
             if(isActive){
-                holder.locationName.setTextColor(context.getResources().getColor(R.color.black));
+                holder.locationName.setTextColor(ColorHelper.getColor(context.getResources(),R.color.black));
                 holder.locationName.setBackgroundResource(R.drawable.roundbox_black_hollow);
             }else{
-                holder.locationName.setTextColor(context.getResources().getColor(R.color.darkGray));
+                holder.locationName.setTextColor(ColorHelper.getColor(context.getResources(),R.color.darkGray));
                 holder.locationName.setBackgroundResource(R.drawable.roundbox_gray_hollow);
             }
 
@@ -97,10 +98,10 @@ public class LocationFilterView extends RelativeLayout{
                     selectLocation.setBackgroundResource(R.drawable.roundbox_maincolor);
 
                     if(lastClickedTextView!=null){
-                        lastClickedTextView.setTextColor(context.getResources().getColor(R.color.black));
+                        lastClickedTextView.setTextColor(ColorHelper.getColor(context.getResources(),R.color.black));
                         lastClickedTextView.setBackgroundResource(R.drawable.roundbox_black_hollow);
                     }
-                    holder.locationName.setTextColor(context.getResources().getColor(R.color.white));
+                    holder.locationName.setTextColor(ColorHelper.getColor(context.getResources(),R.color.white));
                     holder.locationName.setBackgroundResource(R.drawable.roundbox_maincolor_nothollow);
                     lastClickedTextView = holder.locationName;
                     selectedNumber = position;
@@ -220,24 +221,24 @@ public class LocationFilterView extends RelativeLayout{
             locationItemText.setText(locationList.get(number).locationName);
             if(number == 0){
                 lastClickedUpperBarItemText = locationItemText;
-                lastClickedUpperBarItemText.setTextColor(getResources().getColor(R.color.mainColor_light));
+                lastClickedUpperBarItemText.setTextColor(ColorHelper.getColor(getResources(),R.color.mainColor_light));
                 lastClickedUpperBarItemLowerBar = locationItemLowerBar;
-                lastClickedUpperBarItemLowerBar.setBackgroundColor(getResources().getColor(R.color.mainColor_light));
+                lastClickedUpperBarItemLowerBar.setBackgroundColor(ColorHelper.getColor(getResources(),R.color.mainColor_light));
             }
 
             locationItemText.setOnClickListener(view -> {
                 clickedNewLocationList(number);
 
                 if(lastClickedUpperBarItemText!=null) {
-                    lastClickedUpperBarItemText.setTextColor(getResources().getColor(R.color.black));
+                    lastClickedUpperBarItemText.setTextColor(ColorHelper.getColor(getResources(),R.color.black));
                 }
                 lastClickedUpperBarItemText = locationItemText;
-                lastClickedUpperBarItemText.setTextColor(getResources().getColor(R.color.mainColor_light));
+                lastClickedUpperBarItemText.setTextColor(ColorHelper.getColor(getResources(),R.color.mainColor_light));
                 if(lastClickedUpperBarItemLowerBar!=null){
                     lastClickedUpperBarItemLowerBar.setBackgroundColor(0);
                 }
                 lastClickedUpperBarItemLowerBar = locationItemLowerBar;
-                lastClickedUpperBarItemLowerBar.setBackgroundColor(getResources().getColor(R.color.mainColor_light));
+                lastClickedUpperBarItemLowerBar.setBackgroundColor(ColorHelper.getColor(getResources(),R.color.mainColor_light));
             });
 
             upperScrollContainer.addView(locationUpperItem,locationUpperItemParams);

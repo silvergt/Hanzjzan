@@ -67,7 +67,8 @@
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:overScrollMode="never"
             android:scrollbars="none"
             >
@@ -104,5 +105,45 @@
 
         </ScrollView>
 
+
+        <RelativeLayout
+            android:id="@+id/membership_promotion"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/upperBar"
+            android:orientation="horizontal"
+            android:background="@color/mainColor_light"
+            >
+
+            <TextView
+                android:id="@+id/membership_promotionText"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="@string/inputPromotionCode"
+                android:textColor="@color/white"
+                android:textSize="@dimen/membership_mainFontSize"
+                android:layout_centerInParent="true"
+                android:layout_marginLeft="@dimen/leftRightMargin"
+                />
+
+
+            <ImageView
+                android:layout_width="@dimen/upperBarIconWidth"
+                android:layout_height="match_parent"
+                android:src="@drawable/promotion_white"
+                android:padding="8dp"
+                android:layout_toStartOf="@id/membership_promotionText"
+                />
+
+
+        </RelativeLayout>
+
     </LinearLayout>
+
+    <kotel.hanzan.view.Loading
+        android:id="@+id/membership_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
 </RelativeLayout>

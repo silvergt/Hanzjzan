@@ -17,6 +17,7 @@ import android.widget.TextView;
 import kotel.hanzan.Data.StaticData;
 import kotel.hanzan.R;
 import kotel.hanzan.function.AssetImageHelper;
+import kotel.hanzan.function.ColorHelper;
 import kotel.hanzan.function.JLog;
 import kotel.hanzan.listener.TapBarItemClickListener;
 
@@ -64,7 +65,7 @@ public class TapBar extends RelativeLayout{
         top = layout.findViewById(R.id.tapbar_top);
         container = layout.findViewById(R.id.tapbar_container);
 
-        setMainColor(getResources().getColor(R.color.mainColor_medium));
+        setMainColor(ColorHelper.getColor(getResources(),R.color.mainColor_medium));
 
         addView(layout);
     }

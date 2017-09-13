@@ -10,6 +10,8 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import kotel.hanzan.Data.StaticData;
 import kotel.hanzan.view.JActivity;
 
+import static kotel.hanzan.Data.StaticData.displayWidthWithoutMargin;
+
 public class Initial extends JActivity {
 
     @Override
@@ -21,6 +23,7 @@ public class Initial extends JActivity {
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         StaticData.displayWidth=metrics.widthPixels;
         StaticData.displayHeight=metrics.heightPixels;
+        displayWidthWithoutMargin = (int)(StaticData.displayWidth - 2*getResources().getDimension(R.dimen.leftRightMargin));
 
         if(!Fresco.hasBeenInitialized()) {
             Fresco.initialize(this);

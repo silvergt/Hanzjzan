@@ -22,6 +22,7 @@ import kotel.hanzan.Data.DrinkInfo;
 import kotel.hanzan.Data.StaticData;
 import kotel.hanzan.R;
 import kotel.hanzan.function.AssetImageHelper;
+import kotel.hanzan.function.ColorHelper;
 import kotel.hanzan.function.JLog;
 import kotel.hanzan.listener.DrinkSelectorListener;
 
@@ -240,14 +241,14 @@ public class DrinkSelector extends RelativeLayout{
         currentSelectedType=typeNum;
         drinkListView.getAdapter().notifyDataSetChanged();
 
-        drinkListViewLayout.setBackgroundColor(getResources().getColor(R.color.drinkSelector_Blur));
-        leftOfScroll.setBackgroundColor(getResources().getColor(R.color.drinkSelector_Blur));
-        rightOfScroll.setBackgroundColor(getResources().getColor(R.color.drinkSelector_Blur));
+        drinkListViewLayout.setBackgroundColor(ColorHelper.getColor(getResources(),R.color.drinkSelector_Blur));
+        leftOfScroll.setBackgroundColor(ColorHelper.getColor(getResources(),R.color.drinkSelector_Blur));
+        rightOfScroll.setBackgroundColor(ColorHelper.getColor(getResources(),R.color.drinkSelector_Blur));
         for(int i=0;i<drinkType.size();i++){
             if(i!=typeNum){
-                shadows[i].setBackgroundColor(getResources().getColor(R.color.drinkSelector_Blur));
+                shadows[i].setBackgroundColor(ColorHelper.getColor(getResources(),R.color.drinkSelector_Blur));
             }else{
-                drinkTypeLayout[i].setBackgroundColor(getResources().getColor(R.color.drinkSelector_Blur));
+                drinkTypeLayout[i].setBackgroundColor(ColorHelper.getColor(getResources(),R.color.drinkSelector_Blur));
             }
         }
 

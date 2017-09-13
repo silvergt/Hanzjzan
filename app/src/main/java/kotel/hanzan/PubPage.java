@@ -35,8 +35,8 @@ import kotel.hanzan.view.DrinkSelector;
 import kotel.hanzan.view.JActivity;
 
 public class PubPage extends JActivity {
-    public static int REQUEST_OPENPUBPAGE=10;
-    public static int RESULT_FAVORITECHANGED=11;
+    final public static int REQUEST_OPENPUBPAGE=10;
+    final public static int RESULT_FAVORITECHANGED=11;
 
     private HashMap<String,String> map;
 
@@ -197,7 +197,7 @@ public class PubPage extends JActivity {
             button1.setText(getString(R.string.yesJoin));
             button2.setText(getString(R.string.noLater));
             dialogStep = 0;
-        }else if(StaticData.currentUser.isHanzanAvailableToday){
+        }else if(StaticData.currentUser.isHanjanAvailableToday){
             //멤버이고, 오늘 한잔을 사용하지 않은 경우 - 1
             dialogText1.setText(title.getText().toString() +getString(R.string.providing)+"\n"+drinkName+getString(R.string.isYourChoice));
             dialogText1.setVisibility(View.VISIBLE);
@@ -282,7 +282,7 @@ public class PubPage extends JActivity {
                     button2.setVisibility(View.GONE);
                     dialogStep = 2;
                 }else if(availability.equals("TRUE")&& voucherUsedSuccessfully.equals("TRUE")){
-                    StaticData.currentUser.isHanzanAvailableToday = false;
+                    StaticData.currentUser.isHanjanAvailableToday = false;
 
                     dialogText2.setText(getString(R.string.SuccessfullyUsed)+"\n"+drinkName+getString(R.string.isComing));
                     drinkImage.setVisibility(View.VISIBLE);

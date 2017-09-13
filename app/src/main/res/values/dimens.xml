@@ -142,6 +142,11 @@
     <dimen name="announcement_itemHeight">50dp</dimen>
     <dimen name="announcement_titleFontSize">16sp</dimen>
 
+    <dimen name="promotion_iconHeight">60dp</dimen>
+    <dimen name="promotion_mainFontSize">16sp</dimen>
+    <dimen name="promotion_editTextHeight">30dp</dimen>
+    <dimen name="promotion_buttonHeight">40dp</dimen>
+
 
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>

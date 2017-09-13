@@ -58,7 +58,6 @@ public class Search extends JActivity {
     private ArrayList<PubInfo> pubInfoArray = new ArrayList<>();
 
     private class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecyclerViewAdapter.ViewHolder> {
-        RecyclerView.LayoutParams imageParams;
         private ViewHolder lastClickedViewHolder = null;
         private int lastClickedNumber;
 
@@ -86,10 +85,6 @@ public class Search extends JActivity {
                 }
             } catch (Exception e) {
             }
-        }
-
-        public SearchRecyclerViewAdapter() {
-            imageParams = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, StaticData.displayWidth / 2);
         }
 
         @Override

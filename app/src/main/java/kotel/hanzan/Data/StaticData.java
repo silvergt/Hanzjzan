@@ -3,6 +3,7 @@ package kotel.hanzan.Data;
 import com.nhn.android.maps.maplib.NGeoPoint;
 
 public class StaticData {
+
     /** These strings are used as prefix of new member's key, which is sended to server to perform sign in request.
      *  This makes sure that there won't be any repeated key among KAKAO id, FACEBOOK id, and other login account id. */
     final public static String IDENTIFIER_KAKAO="KAKAO";
@@ -15,6 +16,8 @@ public class StaticData {
      *  you have to divide these numbers by DPI. */
     public static int displayHeight,displayWidth;
 
+    /** Actual size of items without leftRightMargin on both sides. */
+    public static int displayWidthWithoutMargin;
 
     /** currentUser is logged in UserInfo, transmitted from server.
      *  currentUser becomes null when system calls logout methods. */

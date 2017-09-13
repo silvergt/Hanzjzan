@@ -69,7 +69,7 @@ public class Home extends JActivity {
 
     private RelativeLayout upperBarLocationFilterContainer;
     private ImageView upperBarLeftIcon, upperBarMap, upperBarSearch, upperBarFilter, upperBarLocationFilter;
-    private TextView upperBarMainText, upperBarSubText;
+    private TextView upperBarMainText;
 
     private Loading loading;
 
@@ -273,8 +273,6 @@ public class Home extends JActivity {
     private HistoryRecyclerViewAdapter historyAdapter = new HistoryRecyclerViewAdapter();
 
     private class HistoryRecyclerViewAdapter extends RecyclerView.Adapter<HistoryRecyclerViewAdapter.ViewHolder> {
-        private ViewHolder lastClickedViewHolder = null;
-        private int lastClickedNumber;
 
         class ViewHolder extends RecyclerView.ViewHolder {
             ImageView image, drinkImage;
@@ -309,8 +307,6 @@ public class Home extends JActivity {
             AssetImageHelper.loadDrinkImage(getApplicationContext(),historyInfoArray.get(position).drinkInfo.drinkType).into(holder.drinkImage);
 
             holder.itemView.setOnClickListener(view -> {
-                lastClickedViewHolder = holder;
-                lastClickedNumber = position;
                 Intent intent = new Intent(Home.this, PubPage.class);
                 intent.putExtra("info", pubInfo);
                 startActivityForResult(intent, PubPage.REQUEST_OPENPUBPAGE);
@@ -332,7 +328,8 @@ public class Home extends JActivity {
         RelativeLayout.LayoutParams eventImageParams;
 
         public EventRecyclerViewAdapter(){
-            eventImageParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, StaticData.displayWidth/2);
+            int width = StaticData.displayWidthWithoutMargin*3/5;
+            eventImageParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, width);
         }
 
         class ViewHolder extends RecyclerView.ViewHolder {
@@ -497,7 +494,7 @@ public class Home extends JActivity {
         no.setOnClickListener(view -> dialog.cancel());
         yes.setOnClickListener(view -> {
             Intent intent = new Intent(Home.this, Membership.class);
-            startActivity(intent);
+            startActivityForResult(intent,Membership.MEMBERSHIP_OPENED);
             dialog.cancel();
         });
 
@@ -530,9 +527,9 @@ public class Home extends JActivity {
 
         upperBarMainText.setText(getString(R.string.aroundMe));
 
-        if(StaticData.currentUser.expireYYYY != 0 && StaticData.currentUser.isHanzanAvailableToday) {
+        if(StaticData.currentUser.expireYYYY != 0 && StaticData.currentUser.isHanjanAvailableToday) {
             upperBarLeftIcon.setImageResource(R.drawable.icon);
-        }else if(StaticData.currentUser.expireYYYY != 0 && !StaticData.currentUser.isHanzanAvailableToday){
+        }else if(StaticData.currentUser.expireYYYY != 0 && !StaticData.currentUser.isHanjanAvailableToday){
             upperBarLeftIcon.setImageResource(R.drawable.icon_used);
         }else {
             upperBarLeftIcon.setImageResource(R.drawable.icon_deactivated);
@@ -717,7 +714,7 @@ public class Home extends JActivity {
 
         mypageMembership.setOnClickListener(view -> {
             Intent intent = new Intent(Home.this, Membership.class);
-            startActivity(intent);
+            startActivityForResult(intent,Membership.MEMBERSHIP_OPENED);
         });
 
         mypageInquire.setOnClickListener(view -> {
@@ -1257,6 +1254,10 @@ public class Home extends JActivity {
                         mypageProfileText1.setText(newName);
                         dialog.cancel();
                     });
+                }else{
+                    new Handler(getMainLooper()).post(()-> {
+                        Toast.makeText(getApplicationContext(),getString(R.string.networkFailure),Toast.LENGTH_SHORT).show();
+                    });
                 }
                 new Handler(getMainLooper()).post(()->loading.setLoadingCompleted());
 
@@ -1342,42 +1343,70 @@ public class Home extends JActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == ImageCropper.IMAGE_CROP_IMAGESELECT) {
-            if (resultCode == RESULT_OK) {
-                Uri uri = data.getData();
-                Intent intent = new Intent(Home.this, ImageCropper.class);
-                intent.setData(uri);
-                startActivityForResult(intent, ImageCropper.IMAGE_CROP_REQUEST);
-            }else{
-                loading.setLoadingCompleted();
-            }
-        } else if (requestCode == ImageCropper.IMAGE_CROP_REQUEST) {
-            if (resultCode == RESULT_OK) {
-                byte[] bitmapArray = ImageCropper.croppedImageByteArray;
-                updateNewProfileImage(bitmapArray,false);
-            }else{
-                loading.setLoadingCompleted();
-            }
-        } else if (requestCode == PubPage.REQUEST_OPENPUBPAGE) {
-            if (resultCode == PubPage.RESULT_FAVORITECHANGED) {
-                switch (tapBar.getCurrentlyFocusedTapNumber()) {
-                    case 0:
-                        homeAdapter.setFavoriteButton(data.getBooleanExtra("favorite", false));
-                        break;
-                    case 1:
-                        pubInfoFavoriteAdapter.setFavoriteButton(data.getBooleanExtra("favorite", false));
-                        break;
+        switch (requestCode){
+            case ImageCropper.IMAGE_CROP_IMAGESELECT :
+                if (resultCode == RESULT_OK) {
+                    Uri uri = data.getData();
+                    Intent intent = new Intent(Home.this, ImageCropper.class);
+                    intent.setData(uri);
+                    startActivityForResult(intent, ImageCropper.IMAGE_CROP_REQUEST);
+                }else{
+                    loading.setLoadingCompleted();
                 }
-            }
+                break;
+
+            case ImageCropper.IMAGE_CROP_REQUEST :
+                if (resultCode == RESULT_OK) {
+                    byte[] bitmapArray = ImageCropper.croppedImageByteArray;
+                    updateNewProfileImage(bitmapArray,false);
+                }else{
+                    loading.setLoadingCompleted();
+                }
+                break;
+
+            case PubPage.REQUEST_OPENPUBPAGE :
+                if (resultCode == PubPage.RESULT_FAVORITECHANGED) {
+                    switch (tapBar.getCurrentlyFocusedTapNumber()) {
+                        case 0:
+                            homeAdapter.setFavoriteButton(data.getBooleanExtra("favorite", false));
+                            break;
+                        case 1:
+                            pubInfoFavoriteAdapter.setFavoriteButton(data.getBooleanExtra("favorite", false));
+                            break;
+                    }
+                }
+                break;
+
+            case Membership.MEMBERSHIP_OPENED:
+                if (resultCode == Membership.RESULT_MEMBERSHIP_APPLIED) {
+                    String expireDate;
+                    if(StaticData.currentUser.expireYYYY==0){
+                        expireDate = getString(R.string.notMemberYet);
+                    }else{
+                        expireDate = "~ "+Integer.toString(StaticData.currentUser.expireYYYY)+"."+Integer.toString(StaticData.currentUser.expireMM)
+                                +"."+Integer.toString(StaticData.currentUser.expireDD);
+                    }
+                    try {
+                        if(StaticData.currentUser.expireYYYY != 0 && StaticData.currentUser.isHanjanAvailableToday) {
+                            upperBarLeftIcon.setImageResource(R.drawable.icon);
+                        }else if(StaticData.currentUser.expireYYYY != 0 && !StaticData.currentUser.isHanjanAvailableToday){
+                            upperBarLeftIcon.setImageResource(R.drawable.icon_used);
+                        }else {
+                            upperBarLeftIcon.setImageResource(R.drawable.icon_deactivated);
+                        }
+                        mypageProfileText2.setText(getString(R.string.myMembership) + expireDate);
+                    }catch (Exception e){e.printStackTrace();}
+                }
+                break;
         }
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        if(StaticData.currentUser.expireYYYY != 0 && StaticData.currentUser.isHanzanAvailableToday) {
+        if(StaticData.currentUser.expireYYYY != 0 && StaticData.currentUser.isHanjanAvailableToday) {
             upperBarLeftIcon.setImageResource(R.drawable.icon);
-        }else if(StaticData.currentUser.expireYYYY != 0 && !StaticData.currentUser.isHanzanAvailableToday) {
+        }else if(StaticData.currentUser.expireYYYY != 0 && !StaticData.currentUser.isHanjanAvailableToday) {
             upperBarLeftIcon.setImageResource(R.drawable.icon_used);
         }else {
             upperBarLeftIcon.setImageResource(R.drawable.icon_deactivated);
