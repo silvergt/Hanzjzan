@@ -69,9 +69,7 @@ public class Settings extends JActivity {
         });
 
         facebook.setOnClickListener(view -> openFacebook());
-
         instagram.setOnClickListener(view -> openInstagram());
-
         webpage.setOnClickListener(view -> openWebpage());
 
         back.setOnClickListener(view -> finish());
@@ -82,7 +80,7 @@ public class Settings extends JActivity {
         try {
             ApplicationInfo applicationInfo = getPackageManager().getApplicationInfo("com.facebook.katana", 0);
             if (applicationInfo.enabled) {
-                uri = Uri.parse("fb://facewebmodal/f?href=" + "https://www.facebook.com/HANZANN/");
+                uri = Uri.parse("fb://facewebmodal/f?href=https://www.facebook.com/HANZANN/");
             }
         } catch (PackageManager.NameNotFoundException ignored) {
         }

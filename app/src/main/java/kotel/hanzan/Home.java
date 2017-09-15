@@ -754,13 +754,15 @@ public class Home extends JActivity {
         new Thread(() -> {
             HashMap<String, String> map = new HashMap<>();
 
-            map.put("at", Integer.toString(pubInfoArray.size()));
-            map.put("id_member", Long.toString(StaticData.currentUser.id));
-            map.put("user_lat", Double.toString(StaticData.myLatestLocation.getLatitude()));
-            map.put("user_lng", Double.toString(StaticData.myLatestLocation.getLongitude()));
-            for(int i=0;i<filter_checkboxChecked.length;i++){
-                map.put("filter_"+Integer.toString(i+1),filter_checkboxChecked[i] ? "TRUE" : "FALSE");
-            }
+            try {
+                map.put("at", Integer.toString(pubInfoArray.size()));
+                map.put("id_member", Long.toString(StaticData.currentUser.id));
+                map.put("user_lat", Double.toString(StaticData.myLatestLocation.getLatitude()));
+                map.put("user_lng", Double.toString(StaticData.myLatestLocation.getLongitude()));
+                for (int i = 0; i < filter_checkboxChecked.length; i++) {
+                    map.put("filter_" + Integer.toString(i + 1), filter_checkboxChecked[i] ? "TRUE" : "FALSE");
+                }
+            }catch (Exception e){e.printStackTrace();return;}
             map = ServerConnectionHelper.connect("retrieve nearby places", "nearbyplace", map);
 
             int i = 0;
@@ -1445,7 +1447,7 @@ public class Home extends JActivity {
                     try{
                         Thread.sleep(2500);
                         finishIfBackButtonClickedOnceMore = false;
-                    }catch (Exception e){}
+                    }catch (Exception e){e.printStackTrace();}
                 }).start();
             }
 

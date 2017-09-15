@@ -93,7 +93,6 @@ public class Announcement extends JActivity {
         });
 
 
-
         back.setOnClickListener(view -> finish());
     }
 

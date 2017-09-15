@@ -120,5 +120,10 @@
     <string name="enterName">Enter name you want to use</string>
     <string name="alreadyUsedPromotionCode">This code is already used!</string>
     <string name="alreadyAppliedPromotion">You already applied this promotion!</string>
+    <string name="tossApiKey" translatable="false">sk_live_Rb201xQNngRb201xQNng</string>
+    <string name="askPurchasing">Purchase this item?</string>
+    <string name="purchaseWithToss">Purchase with Toss</string>
+    <string name="purchaseFailed">Purchase failed!</string>
+    <string name="pleaseTryAgain">Please try again</string>
 
 </resources>

@@ -105,5 +105,9 @@
     <string name="enterName">사용할 이름을 입력해 주세요</string>
     <string name="alreadyUsedPromotionCode">이미 사용된 코드입니다!</string>
     <string name="alreadyAppliedPromotion">이미 참여한 프로모션입니다!</string>
+    <string name="askPurchasing">다음을 구매하시겠습니까?</string>
+    <string name="purchaseWithToss">토스로 결제하기</string>
+    <string name="purchaseFailed">구매에 실패했습니다!</string>
+    <string name="pleaseTryAgain">다시 한번 시도해주세요</string>
 
 </resources>

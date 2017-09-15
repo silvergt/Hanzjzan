@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -370,16 +371,20 @@ public class Login extends JActivity {
     }
 
     private void onLoginFailed(){
-        layout.setVisibility(View.VISIBLE);
-        loading.setLoadingCompleted();
+        new Handler(getMainLooper()).post(()->{
+            layout.setVisibility(View.VISIBLE);
+            loading.setLoadingCompleted();
+        }) ;
     }
 
 
     private void makeUserInfoAndLogin(HashMap<String, String> map) {
-        StaticData.currentUser = new UserInfo(map);
-        Intent intent = new Intent(getApplicationContext(), Home.class);
-        startActivity(intent);
-        finish();
+        new Handler(getMainLooper()).post(()-> {
+            StaticData.currentUser = new UserInfo(map);
+            Intent intent = new Intent(getApplicationContext(), Home.class);
+            startActivity(intent);
+            finish();
+        });
     }
 
     @Override

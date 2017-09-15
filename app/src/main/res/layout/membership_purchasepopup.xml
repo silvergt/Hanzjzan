@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="kotel.hanzan.PurchaseSuccess"
+    android:background="@drawable/roundbox_white"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/askPurchasing"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:textSize="@dimen/purchaseSuccess_bigFontSize"
+            />
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+
+        <ImageView
+            android:layout_width="@dimen/purchaseSuccess_ImageHeight"
+            android:layout_height="@dimen/purchaseSuccess_ImageHeight"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/purchasesuccess"
+            />
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+
+        <TextView
+            android:id="@+id/membership_purchaseMembershipName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="1 month membership"
+            android:textSize="@dimen/purchaseSuccess_mediumFontSize"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp"
+            />
+        <TextView
+            android:id="@+id/membership_purchaseMembershipPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="9,900won"
+            android:textSize="@dimen/purchaseSuccess_bigFontSize"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:layout_marginBottom="5dp"
+            />
+        <TextView
+            android:id="@+id/membership_purchaseExpireDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="~17.09.13"
+            android:textSize="@dimen/purchaseSuccess_mediumFontSize"
+            android:gravity="center"
+            />
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1.5"
+            />
+
+
+        <RelativeLayout
+            android:id="@+id/membership_purchaseWithToss"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/purchaseSuccess_buttonHeight"
+            android:layout_marginLeft="@dimen/leftRightMargin"
+            android:layout_marginRight="@dimen/leftRightMargin"
+            android:layout_marginBottom="15dp"
+            android:background="@drawable/roundbox_tosscolor"
+            >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:orientation="horizontal"
+                >
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/tosslogo"
+                    android:layout_marginRight="12dp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/purchaseSuccess_buttonHeight"
+                    android:text="@string/purchaseWithToss"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    />
+
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/membership_purchaseCancel"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/purchaseSuccess_buttonHeight"
+            android:background="@drawable/roundbox_gray"
+            android:text="@string/cancel"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/white"
+            android:layout_marginLeft="@dimen/leftRightMargin"
+            android:layout_marginRight="@dimen/leftRightMargin"
+            />
+
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

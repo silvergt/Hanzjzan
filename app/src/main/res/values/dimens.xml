@@ -91,11 +91,6 @@
     <dimen name="membership_discountFontSize">13sp</dimen>
     <dimen name="membership_saleFontSize">10sp</dimen>
 
-    <dimen name="membershipSuccess_buttonHeight">60dp</dimen>
-    <dimen name="membershipSuccess_buttonWidth">150dp</dimen>
-    <dimen name="membershipSuccess_mainFontSize">17sp</dimen>
-    <dimen name="membershipSuccess_subFontSize">12sp</dimen>
-
 
     <dimen name="history_itemHeight">110dp</dimen>
     <dimen name="history_itemWidth">100dp</dimen>
@@ -146,6 +141,13 @@
     <dimen name="promotion_mainFontSize">16sp</dimen>
     <dimen name="promotion_editTextHeight">30dp</dimen>
     <dimen name="promotion_buttonHeight">40dp</dimen>
+
+    <dimen name="purchaseSuccess_buttonHeight">50dp</dimen>
+    <dimen name="purchaseSuccess_ImageHeight">100dp</dimen>
+    <dimen name="purchaseSuccess_buttonWidth">150dp</dimen>
+    <dimen name="purchaseSuccess_bigFontSize">20dp</dimen>
+    <dimen name="purchaseSuccess_mediumFontSize">17dp</dimen>
+    <dimen name="purchaseSuccess_smallFontSize">15dp</dimen>
 
 
     <!-- Default screen margins, per the Android Design guidelines. -->
