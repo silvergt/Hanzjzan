@@ -1,15 +1,19 @@
 package kotel.hanzan;
 
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.os.Handler;
+import android.view.View;
 import android.widget.TextView;
 
 import kotel.hanzan.Data.StaticData;
 import kotel.hanzan.function.JLog;
 import kotel.hanzan.function.PaymentHelper;
+import kotel.hanzan.view.JActivity;
 
-public class PurchaseSuccess extends AppCompatActivity {
+public class PurchaseSuccess extends JActivity {
     public static String tossPayToken="";
+    public static String ticketID="";
 
     private TextView title,membershipName,membershipDue,confirm;
 
@@ -27,15 +31,40 @@ public class PurchaseSuccess extends AppCompatActivity {
 
         if(!tossPayToken.equals("") && PaymentHelper.tossPaymentConfirm(StaticData.TESTAPI,tossPayToken)){
             JLog.v("Toss payment Success!");
-            membershipName.setText(name);
-            membershipDue.setText(dueDate);
-            tossPayToken = "";
+            registerNewMembershipInfo();
         }else{
+            JLog.e("User not accessed properly");
             title.setText(getString(R.string.purchaseFailed));
             membershipName.setText(getString(R.string.pleaseTryAgain));
+            membershipDue.setVisibility(View.INVISIBLE);
         }
 
         confirm.setOnClickListener(view -> finish());
+
+    }
+
+
+    private void registerNewMembershipInfo(){
+        new Thread(()->{
+            Uri uri = getIntent().getData();
+            if(uri!=null){
+                JLog.v("URI ",uri.toString());
+                JLog.v("URI QUERY ",uri.getQuery());
+                JLog.v("URI QUERY PARAM",uri.getQueryParameter("orderNo"));
+
+                new Handler(getMainLooper()).post(()->{
+                    membershipName.setText(name);
+                    membershipDue.setText(dueDate);
+                });
+            }else{
+                JLog.e("URI HAS NO VALUE!");
+                title.setText(getString(R.string.purchaseFailed));
+                membershipName.setText(getString(R.string.pleaseTryAgain));
+                membershipDue.setVisibility(View.INVISIBLE);
+            }
+            tossPayToken = "";
+            ticketID = "";
+        }).start();
 
     }
 }

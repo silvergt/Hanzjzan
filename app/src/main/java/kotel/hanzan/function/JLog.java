@@ -14,28 +14,28 @@ public class JLog {
     }
 
     public static void v(String message){
-        if (logIsEnabled) Log.v("Log",message);
+        if (logIsEnabled && message!=null) Log.v("Log",message);
     }
 
     public static void v(String title,String message){
-        if (logIsEnabled) Log.v(title,message);
+        if (logIsEnabled && message!=null && title!=null) Log.v(title,message);
     }
 
 
     public static void v(String prefix,int content, String suffix){
-        if (logIsEnabled) Log.v("Log",prefix+Integer.toString(content)+suffix);
+        if (logIsEnabled && prefix!=null && suffix!=null) Log.v("Log",prefix+Integer.toString(content)+suffix);
     }
 
     public static void v(String prefix,int content){
-        if (logIsEnabled) Log.v("Log",prefix+Integer.toString(content));
+        if (logIsEnabled && prefix!=null) Log.v("Log",prefix+Integer.toString(content));
     }
 
     public static void v(String prefix,double content, String suffix){
-        if (logIsEnabled) Log.v("Log",prefix+Double.toString(content)+suffix);
+        if (logIsEnabled && prefix!=null && suffix!=null) Log.v("Log",prefix+Double.toString(content)+suffix);
     }
 
     public static void v(String prefix,double content){
-        if (logIsEnabled) Log.v("Log",prefix+Double.toString(content));
+        if (logIsEnabled && prefix!=null) Log.v("Log",prefix+Double.toString(content));
     }
 
 
@@ -46,20 +46,20 @@ public class JLog {
     }
 
     public static void e(String message){
-        if (logIsEnabled) Log.e("Log",message);
+        if (logIsEnabled && message!=null) Log.e("Log",message);
     }
 
     public static void e(String title,String message){
-        if (logIsEnabled) Log.e(title,message);
+        if (logIsEnabled && message!=null && title!=null) Log.e(title,message);
     }
 
 
     public static void e(String prefix,int content, String suffix){
-        if (logIsEnabled) Log.e("Log",prefix+Integer.toString(content)+suffix);
+        if (logIsEnabled && prefix!=null && suffix!=null) Log.e("Log",prefix+Integer.toString(content)+suffix);
     }
 
     public static void e(String prefix,int content){
-        if (logIsEnabled) Log.e("Log",prefix+Integer.toString(content));
+        if (logIsEnabled && prefix!=null) Log.e("Log",prefix+Integer.toString(content));
     }
 
 }

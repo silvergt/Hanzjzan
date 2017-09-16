@@ -17,7 +17,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.nhn.android.maps.NMapActivity;
 import com.nhn.android.maps.NMapOverlayItem;
 import com.nhn.android.maps.NMapView;
 import com.nhn.android.maps.maplib.NGeoPoint;
@@ -39,9 +38,10 @@ import kotel.hanzan.function.LocaleHelper;
 import kotel.hanzan.function.LocationHelper;
 import kotel.hanzan.function.ServerConnectionHelper;
 import kotel.hanzan.listener.LocationHelperListener;
+import kotel.hanzan.view.JNMapActivity;
 import kotel.hanzan.view.Loading;
 
-public class NearbyPlaces extends NMapActivity {
+public class NearbyPlaces extends JNMapActivity {
     final private String LOCATION_MYLOCATION = "LOCATION_MYLOCATION";
 
     private NMapView mapView;// 지도 화면 View

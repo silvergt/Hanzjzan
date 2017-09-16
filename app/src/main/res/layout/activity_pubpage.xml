@@ -37,8 +37,8 @@
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
                 android:textColor="@color/black"
-                android:text=""
                 android:textSize="@dimen/pubpage_upperTitleFontSize"
+                android:textStyle="bold"
                 />
 
             <ImageView

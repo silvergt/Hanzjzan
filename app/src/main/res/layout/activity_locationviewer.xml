@@ -44,6 +44,7 @@
                 android:textSize="@dimen/upperBar_MainFontSize"
                 android:layout_toRightOf="@id/locationViewer_back"
                 android:layout_marginRight="5dp"
+                android:textStyle="bold"
                 />
 
         </RelativeLayout>

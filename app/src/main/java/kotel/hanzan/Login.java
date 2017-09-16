@@ -252,9 +252,6 @@ public class Login extends JActivity {
     }
 
     private void tryLoginWithKakaoTalk(UserProfile userProfile) {
-        JLog.v("profile ID", Long.toString(userProfile.getId()));
-        JLog.v("profile Image", userProfile.getThumbnailImagePath());
-        JLog.v("profile Name", userProfile.getNickname());
 
         new Thread(() -> {
             map = new HashMap<>();

@@ -104,7 +104,7 @@ public class Membership extends JActivity {
                 holder.currentPrice.setText( NumericHelper.toMoneyFormat(Integer.toString(ticketInfo.discountPrice))+getString(R.string.won) );
             }else{
                 holder.saleIcon.setVisibility(View.INVISIBLE);
-                holder.strikeThroughedPrice.setText("");
+                holder.strikeThroughedPrice.setVisibility(View.INVISIBLE);
                 holder.currentPrice.setText( NumericHelper.toMoneyFormat(Integer.toString(ticketInfo.originalPrice))+getString(R.string.won) );
             }
 
@@ -362,20 +362,17 @@ public class Membership extends JActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (isNowPurchasingWithToss) {
-            updateMembershipInfo();
-        }
+        updateMembershipInfo();
     }
 
 
     //TOSS
 
-    private boolean isNowPurchasingWithToss = false;
     private void purchaseWithToss(String ticketID,String itemName, int price){
         HashMap<String,String> tossHashMap = PaymentHelper.tossPayment(ticketID,itemName,price);
         if(tossHashMap.get("code").equals("0")) {
-            isNowPurchasingWithToss = true;
             PurchaseSuccess.tossPayToken = tossHashMap.get("payToken");
+            PurchaseSuccess.ticketID = tossHashMap.get("ticketID");
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(tossHashMap.get("checkoutPage")));
             startActivity(intent);
         }

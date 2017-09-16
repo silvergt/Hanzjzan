@@ -36,6 +36,7 @@
                 android:textColor="@color/black"
                 android:text="@string/announcement"
                 android:paddingLeft="5dp"
+                android:textStyle="bold"
                 />
 
         </LinearLayout>

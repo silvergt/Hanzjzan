@@ -6,18 +6,45 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:background="@color/gray"
+        android:background="@color/darkGray"
         />
 
-    <TextView
-        android:id="@+id/announcement_itemText"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:paddingLeft="@dimen/leftRightMargin"
-        android:text="Announcement description"
-        android:textColor="@color/black"
-        android:textSize="@dimen/announcement_titleFontSize"
-        />
+        android:orientation="vertical"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        >
+        <TextView
+            android:id="@+id/announcement_itemTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:text="Announcement title"
+            android:textColor="@color/black"
+            android:paddingLeft="@dimen/leftRightMargin"
+            android:textStyle="bold"
+            android:textSize="@dimen/announcement_titleFontSize"
+            android:layout_marginBottom="10dp"
+            android:maxLines="1"
+            />
+
+        <TextView
+            android:id="@+id/announcement_itemEntity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/leftRightMargin"
+            android:text="Announcement description"
+            android:textColor="@color/black"
+            android:textSize="@dimen/announcement_entityFontSize"
+            android:maxLines="3"
+            android:ellipsize="end"
+            />
+
+    </LinearLayout>
+
 
 </RelativeLayout>

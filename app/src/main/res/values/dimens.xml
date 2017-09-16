@@ -134,8 +134,9 @@
     <dimen name="locationFilter_bigFontSize">17sp</dimen>
     <dimen name="locationFilter_comingSoonFontSize">12sp</dimen>
 
-    <dimen name="announcement_itemHeight">50dp</dimen>
+    <dimen name="announcement_itemHeight">100dp</dimen>
     <dimen name="announcement_titleFontSize">16sp</dimen>
+    <dimen name="announcement_entityFontSize">12sp</dimen>
 
     <dimen name="promotion_iconHeight">60dp</dimen>
     <dimen name="promotion_mainFontSize">16sp</dimen>

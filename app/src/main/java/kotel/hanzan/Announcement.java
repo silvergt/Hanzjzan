@@ -30,29 +30,33 @@ public class Announcement extends JActivity {
 
 
     private class AnnouncementInfo{
-        String title,entity;
+        int id;
+        String title,entity,date;
 
-        public AnnouncementInfo(String title, String entity) {
+        public AnnouncementInfo(int id, String title, String entity, String date) {
+            this.id = id;
             this.title = title;
             this.entity = entity;
+            this.date = date;
         }
     }
 
     private class AnnouncementRecyclerViewAdapter extends RecyclerView.Adapter<AnnouncementRecyclerViewAdapter.ViewHolder> {
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            TextView titleTextView;
+            TextView titleTextView,entityTextView;
 
             public ViewHolder(View itemView) {
                 super(itemView);
-                titleTextView = (TextView)itemView.findViewById(R.id.announcement_itemText);
+                titleTextView = (TextView)itemView.findViewById(R.id.announcement_itemTitle);
+                entityTextView = (TextView)itemView.findViewById(R.id.announcement_itemEntity);
             }
         }
 
 
         @Override
         public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.pubitem, parent, false);
+            View view = LayoutInflater.from(getApplicationContext()).inflate(R.layout.announcement_item, parent, false);
             return new ViewHolder(view);
         }
 
@@ -61,6 +65,7 @@ public class Announcement extends JActivity {
             AnnouncementInfo info = infoArray.get(position);
 
             holder.titleTextView.setText(info.title);
+            holder.entityTextView.setText(info.entity);
         }
 
         @Override
@@ -92,6 +97,8 @@ public class Announcement extends JActivity {
             }
         });
 
+        retrieveAnnouncements(true);
+
 
         back.setOnClickListener(view -> finish());
     }
@@ -110,13 +117,15 @@ public class Announcement extends JActivity {
             int i = 0;
             while (true) {
                 String num = Integer.toString(i++);
-                if(map.get("title_" + num)==null){
+                if(map.get("id_announcement_" + num)==null){
                     break;
                 }
-                String title = map.get("title_" + num);
-                String entity = map.get("entity_" + num);
+                int id = Integer.parseInt(map.get("id_announcement_" + num));
+                String title = map.get("title_announcement_" + num);
+                String entity = map.get("entity_announcement_" + num);
+                String date = map.get("date_announcement_" + num);
 
-                infoArray.add(new AnnouncementInfo(title,entity));
+                infoArray.add(new AnnouncementInfo(id,title,entity,date));
             }
 
             String dataleft = map.get("datalefts");

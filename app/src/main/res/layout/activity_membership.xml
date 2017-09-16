@@ -36,6 +36,7 @@
                 android:textColor="@color/black"
                 android:text="@string/joinMembership"
                 android:paddingLeft="5dp"
+                android:textStyle="bold"
                 />
 
         </LinearLayout>
@@ -144,6 +145,7 @@
         android:id="@+id/membership_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

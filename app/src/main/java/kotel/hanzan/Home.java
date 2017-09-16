@@ -382,6 +382,8 @@ public class Home extends JActivity {
             Intent intent = new Intent(getApplicationContext(),Login.class);
             startActivity(intent);
             finish();
+        }else if(StaticData.currentUser.expireYYYY == 0){
+            openMembershipPopup();
         }
 
         inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -461,10 +463,6 @@ public class Home extends JActivity {
                 }
             }
         });
-
-        if (StaticData.currentUser.expireYYYY == 0) {
-            openMembershipPopup();
-        }
 
         openHomeTab();
     }

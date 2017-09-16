@@ -38,6 +38,7 @@
                 android:textColor="@color/black"
                 android:text="@string/search"
                 android:paddingLeft="5dp"
+                android:textStyle="bold"
                 />
 
         </LinearLayout>

@@ -107,7 +107,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="hanjan" />
+                <data android:scheme="hanjan" android:host="purchase"/>
             </intent-filter>
         </activity>
     </application>

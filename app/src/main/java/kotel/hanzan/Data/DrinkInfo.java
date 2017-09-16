@@ -29,13 +29,8 @@ public class DrinkInfo implements Serializable{
         this.drinkName = drinkName;
     }
 
-    public int getDrinkPrice(){
-        return 4000;
-    }
-
-
     public static String getDrinkName(Context context,String code){
-        String returnValue = "";
+        String returnValue;
 
         Resources res = context.getResources();
 

@@ -45,6 +45,7 @@
                 android:textSize="@dimen/upperBar_MainFontSize"
                 android:layout_toRightOf="@id/nearbyPlaces_back"
                 android:layout_marginRight="5dp"
+                android:textStyle="bold"
                 />
 
         </RelativeLayout>

@@ -1,6 +1,8 @@
 package kotel.hanzan.view;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -12,9 +14,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import kotel.hanzan.Data.StaticData;
 import kotel.hanzan.R;
 import kotel.hanzan.function.ColorHelper;
+import kotel.hanzan.function.ServerConnectionHelper;
 import kotel.hanzan.listener.LocationFilterListener;
 
 public class LocationFilterView extends RelativeLayout{
@@ -39,13 +44,13 @@ public class LocationFilterView extends RelativeLayout{
 
     private class Location{
         String locationName;
-        ArrayList<String> specificLocations;
-        ArrayList<Boolean> specificLocationsIsActivated;
+        ArrayList<String> specificLocations = new ArrayList<>();
+        ArrayList<Boolean> specificLocationsIsActivated = new ArrayList<>();
 
-        public Location(String locationName, ArrayList<String> specificLocations, ArrayList<Boolean> specificLocationsIsActivated) {
+        public Location(String locationName, String specificLocations, boolean specificLocationsIsActivated) {
             this.locationName = locationName;
-            this.specificLocations = specificLocations;
-            this.specificLocationsIsActivated = specificLocationsIsActivated;
+            this.specificLocations.add(specificLocations);
+            this.specificLocationsIsActivated.add(specificLocationsIsActivated);
         }
     }
 
@@ -167,84 +172,88 @@ public class LocationFilterView extends RelativeLayout{
     }
 
 
-    private void test(){
-        ArrayList<String> loc1 = new ArrayList<>();
-        loc1.add("신촌");
-        loc1.add("건대입구");
-        loc1.add("회기");
-        loc1.add("혜화");
-        loc1.add("이태원");
-        loc1.add("안암");
-        loc1.add("강남");
-        ArrayList<Boolean> loc1isActivated = new ArrayList<>();
-        loc1isActivated.add(true);
-        loc1isActivated.add(false);
-        loc1isActivated.add(false);
-        loc1isActivated.add(false);
-        loc1isActivated.add(false);
-        loc1isActivated.add(false);
-        loc1isActivated.add(false);
-        locationList.add(new Location("서울",loc1,loc1isActivated));
-
-        ArrayList<String> loc2 = new ArrayList<>();
-        loc2.add("일산");
-        loc2.add("분당");
-        loc2.add("판교");
-        loc2.add("안산");
-        ArrayList<Boolean> loc2isActivated = new ArrayList<>();
-        loc2isActivated.add(false);
-        loc2isActivated.add(false);
-        loc2isActivated.add(false);
-        loc2isActivated.add(false);
-        locationList.add(new Location("경기",loc2,loc2isActivated));
-
-    }
-
     public void retrieveLocationDataFromServer(){
         locationList.clear();
 
 
-        test();
+        new Thread(()-> {
 
+            HashMap<String,String> map = new HashMap<>();
+            map.put("id_member",Long.toString(StaticData.currentUser.id));
+            map = ServerConnectionHelper.connect("retrieving filter location data","filterlist",map);
+            int t=0;
+            while(true){
+                String num = Integer.toString(t++);
+                if(map.get("name_district_"+num)==null){
+                    break;
+                }
+                String location = map.get("name_district_"+num);
+                String city = map.get("city_district_"+num);
+                boolean status = false;
+                if(map.get("status_district_"+num).equals("TRUE")){
+                    status = true;
+                }
 
+                for(int i=0;i<locationList.size();i++){
+                    if(locationList.get(i).locationName.equals(city)){
+                        locationList.get(i).specificLocations.add(location);
+                        locationList.get(i).specificLocationsIsActivated.add(status);
+                        break;
+                    }else{
+                        if(i == locationList.size()-1){
+                            locationList.add(new Location(city,location,status));
+                            break;
+                        }
+                    }
+                }
 
-        for(int i=0;i<locationList.size();i++){
-            final int number = i;
+                if(locationList.size()==0){
+                    locationList.add(new Location(city,location,status));
+                }
 
-            LinearLayout locationUpperItem = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.locationfilter_upperitem,null);
-            LinearLayout.LayoutParams locationUpperItemParams = new LinearLayout.LayoutParams(
-                    (int)getResources().getDimension(R.dimen.locationFilter_upperBarItemWidth), ViewGroup.LayoutParams.MATCH_PARENT);
-
-            TextView locationItemText = (TextView)locationUpperItem.findViewById(R.id.locationFilter_upperItem_text);
-            View locationItemLowerBar = locationUpperItem.findViewById(R.id.locationFilter_upperItem_lowerbar);
-
-            locationItemText.setText(locationList.get(number).locationName);
-            if(number == 0){
-                lastClickedUpperBarItemText = locationItemText;
-                lastClickedUpperBarItemText.setTextColor(ColorHelper.getColor(getResources(),R.color.mainColor_light));
-                lastClickedUpperBarItemLowerBar = locationItemLowerBar;
-                lastClickedUpperBarItemLowerBar.setBackgroundColor(ColorHelper.getColor(getResources(),R.color.mainColor_light));
             }
 
-            locationItemText.setOnClickListener(view -> {
-                clickedNewLocationList(number);
 
-                if(lastClickedUpperBarItemText!=null) {
-                    lastClickedUpperBarItemText.setTextColor(ColorHelper.getColor(getResources(),R.color.black));
+            new Handler(Looper.getMainLooper()).post(()->{
+                for(int i=0;i<locationList.size();i++){
+                    final int number = i;
+
+                    LinearLayout locationUpperItem = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.locationfilter_upperitem,null);
+                    LinearLayout.LayoutParams locationUpperItemParams = new LinearLayout.LayoutParams(
+                            (int)getResources().getDimension(R.dimen.locationFilter_upperBarItemWidth), ViewGroup.LayoutParams.MATCH_PARENT);
+
+                    TextView locationItemText = (TextView)locationUpperItem.findViewById(R.id.locationFilter_upperItem_text);
+                    View locationItemLowerBar = locationUpperItem.findViewById(R.id.locationFilter_upperItem_lowerbar);
+
+                    locationItemText.setText(locationList.get(number).locationName);
+                    if(number == 0){
+                        lastClickedUpperBarItemText = locationItemText;
+                        lastClickedUpperBarItemText.setTextColor(ColorHelper.getColor(getResources(),R.color.mainColor_light));
+                        lastClickedUpperBarItemLowerBar = locationItemLowerBar;
+                        lastClickedUpperBarItemLowerBar.setBackgroundColor(ColorHelper.getColor(getResources(),R.color.mainColor_light));
+                    }
+
+                    locationItemText.setOnClickListener(view -> {
+                        clickedNewLocationList(number);
+
+                        if(lastClickedUpperBarItemText!=null) {
+                            lastClickedUpperBarItemText.setTextColor(ColorHelper.getColor(getResources(),R.color.black));
+                        }
+                        lastClickedUpperBarItemText = locationItemText;
+                        lastClickedUpperBarItemText.setTextColor(ColorHelper.getColor(getResources(),R.color.mainColor_light));
+                        if(lastClickedUpperBarItemLowerBar!=null){
+                            lastClickedUpperBarItemLowerBar.setBackgroundColor(0);
+                        }
+                        lastClickedUpperBarItemLowerBar = locationItemLowerBar;
+                        lastClickedUpperBarItemLowerBar.setBackgroundColor(ColorHelper.getColor(getResources(),R.color.mainColor_light));
+                    });
+
+                    upperScrollContainer.addView(locationUpperItem,locationUpperItemParams);
+
+                    adapter.notifyDataSetChanged();
                 }
-                lastClickedUpperBarItemText = locationItemText;
-                lastClickedUpperBarItemText.setTextColor(ColorHelper.getColor(getResources(),R.color.mainColor_light));
-                if(lastClickedUpperBarItemLowerBar!=null){
-                    lastClickedUpperBarItemLowerBar.setBackgroundColor(0);
-                }
-                lastClickedUpperBarItemLowerBar = locationItemLowerBar;
-                lastClickedUpperBarItemLowerBar.setBackgroundColor(ColorHelper.getColor(getResources(),R.color.mainColor_light));
             });
-
-            upperScrollContainer.addView(locationUpperItem,locationUpperItemParams);
-        }
-
-
+        }).start();
     }
 
 
