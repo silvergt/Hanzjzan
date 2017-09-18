@@ -81,6 +81,7 @@
                 android:layout_marginTop="@dimen/leftRightMargin"
                 android:layout_marginBottom="@dimen/leftRightMargin"
                 android:autoLink="all"
+                android:layout_below="@id/event_mainImage"
                 />
 
         </RelativeLayout>

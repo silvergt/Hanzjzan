@@ -114,6 +114,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".TermsConditions" />
+        <activity android:name=".AnnouncementDetail"></activity>
     </application>
 
 </manifest>

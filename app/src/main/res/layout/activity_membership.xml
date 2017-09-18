@@ -110,7 +110,7 @@
         <RelativeLayout
             android:id="@+id/membership_promotion"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/upperBar"
+            android:layout_height="60dp"
             android:orientation="horizontal"
             android:background="@color/mainColor_light"
             >

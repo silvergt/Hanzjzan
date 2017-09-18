@@ -377,46 +377,52 @@ public class NearbyPlaces extends JNMapActivity {
     private void onMarkerClicked(NMapOverlayItem nMapOverlayItem) {
         JLog.v("marker title",nMapOverlayItem.getTitle());
 
-        int position;
-        if (nMapOverlayItem.getTitle().equals(LOCATION_MYLOCATION)) {
-            return;
-        } else {
-            try {
-                position = Integer.parseInt(nMapOverlayItem.getTitle());
-            } catch (Exception e) {
-                JLog.e("parsing integer error");
+        try {
+            int position;
+            if (nMapOverlayItem.getTitle().equals(LOCATION_MYLOCATION)) {
                 return;
+            } else {
+                try {
+                    position = Integer.parseInt(nMapOverlayItem.getTitle());
+                } catch (Exception e) {
+                    JLog.e("parsing integer error");
+                    return;
+                }
             }
+
+            if (currentlyFocusedMarker != null) {
+                currentlyFocusedMarker.setMarker(unselected);
+            }
+
+            currectlyFocusedPubInfo = pubInfoArray.get(position);
+            currentlyFocusedMarker = nMapOverlayItem;
+            currentlyFocusedMarker.setMarker(selected);
+
+            pubInfoLayout.setVisibility(View.VISIBLE);
+
+            String distanceString = "";
+
+            if (StaticData.myLatestLocation != null && myLocationMarkerIsVisible) {
+                Double distance = GeoHelper.getActualKilometer(StaticData.myLatestLocation.latitude, StaticData.myLatestLocation.longitude,
+                        nMapOverlayItem.getPoint().getLatitude(), nMapOverlayItem.getPoint().getLongitude());
+                distanceString = GeoHelper.getDistanceString(distance);
+            }
+
+            Picasso.with(this).load(currectlyFocusedPubInfo.imageAddress.get(0)).placeholder(R.drawable.loading_store).into(pubImage);
+            pubText1.setText(currectlyFocusedPubInfo.name + "  " + distanceString);
+            pubText2.setText(currectlyFocusedPubInfo.district);
+            pubText4.setText(currectlyFocusedPubInfo.address);
+
+            pubInfoLayout.setOnClickListener(view -> {
+                Intent intent = new Intent(NearbyPlaces.this, PubPage.class);
+                intent.putExtra("info", currectlyFocusedPubInfo);
+                startActivity(intent);
+            });
+        }catch (Exception e){
+            e.printStackTrace();
+            pubInfoArray.clear();
+            getNearbyPubs(mapView.getMapController().getMapCenter(), false);
         }
-
-        if (currentlyFocusedMarker != null) {
-            currentlyFocusedMarker.setMarker(unselected);
-        }
-
-        currectlyFocusedPubInfo = pubInfoArray.get(position);
-        currentlyFocusedMarker = nMapOverlayItem;
-        currentlyFocusedMarker.setMarker(selected);
-
-        pubInfoLayout.setVisibility(View.VISIBLE);
-
-        String distanceString = "";
-
-        if (StaticData.myLatestLocation != null && myLocationMarkerIsVisible) {
-            Double distance = GeoHelper.getActualKilometer(StaticData.myLatestLocation.latitude, StaticData.myLatestLocation.longitude,
-                    nMapOverlayItem.getPoint().getLatitude(), nMapOverlayItem.getPoint().getLongitude());
-            distanceString = GeoHelper.getDistanceString(distance);
-        }
-
-        Picasso.with(this).load(currectlyFocusedPubInfo.imageAddress.get(0)).placeholder(R.drawable.loading_store).into(pubImage);
-        pubText1.setText(currectlyFocusedPubInfo.name + "  " + distanceString);
-        pubText2.setText(currectlyFocusedPubInfo.district);
-        pubText4.setText(currectlyFocusedPubInfo.address);
-
-        pubInfoLayout.setOnClickListener(view -> {
-            Intent intent = new Intent(NearbyPlaces.this, PubPage.class);
-            intent.putExtra("info", currectlyFocusedPubInfo);
-            startActivity(intent);
-        });
     }
 
     private synchronized void getNearbyPubs(NGeoPoint geoPoint, boolean returnToMyLocation) {
@@ -470,16 +476,18 @@ public class NearbyPlaces extends JNMapActivity {
         for (int i = 0; i < pubInfoArray.size(); i++) {
             NGeoPoint geoPoint = new NGeoPoint(pubInfoArray.get(i).longitude, pubInfoArray.get(i).latitude);
 
-            if (i == 0 && returnToMyLocation) mapView.getMapController().setMapCenter(geoPoint, 13);
-
             addMarkerTo(geoPoint, false, false, Integer.toString(i));
+        }
+
+        if (returnToMyLocation) {
+            if(StaticData.myLatestLocation == null) {
+                StaticData.myLatestLocation = StaticData.defaultLocation;
+            }
+            mapView.getMapController().setMapCenter(StaticData.myLatestLocation, 13);
         }
 
         if (StaticData.myLatestLocation != null && myLocationMarkerIsVisible) {
             addMarkerTo(StaticData.myLatestLocation, true, false, LOCATION_MYLOCATION);
-            if (returnToMyLocation) {
-                mapView.getMapController().setMapCenter(StaticData.myLatestLocation, 13);
-            }
         }
 
         overlayManager.clearOverlays();

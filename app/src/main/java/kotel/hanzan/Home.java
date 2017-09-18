@@ -465,6 +465,7 @@ public class Home extends JActivity {
         });
 
         openHomeTab();
+        setUpperBarLeftIconStatus();
     }
 
     private void openMembershipPopup() {
@@ -524,14 +525,6 @@ public class Home extends JActivity {
         setUpperBarVisibility(true);
 
         upperBarMainText.setText(getString(R.string.aroundMe));
-
-        if(StaticData.currentUser.expireYYYY != 0 && StaticData.currentUser.isHanjanAvailableToday) {
-            upperBarLeftIcon.setImageResource(R.drawable.icon);
-        }else if(StaticData.currentUser.expireYYYY != 0 && !StaticData.currentUser.isHanjanAvailableToday){
-            upperBarLeftIcon.setImageResource(R.drawable.icon_used);
-        }else {
-            upperBarLeftIcon.setImageResource(R.drawable.icon_deactivated);
-        }
 
         homeLayout = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.home_home, null);
         pubInfoRecyclerView = (JRecyclerView) homeLayout.findViewById(R.id.home_homeRecycler);
@@ -690,9 +683,11 @@ public class Home extends JActivity {
         String expireDate;
         if(StaticData.currentUser.expireYYYY==0){
             expireDate = getString(R.string.notMemberYet);
+            mypageCurrentMembership.setImageResource(R.drawable.ticket_deactive);
         }else{
             expireDate = "~ "+Integer.toString(StaticData.currentUser.expireYYYY)+"."+Integer.toString(StaticData.currentUser.expireMM)
                     +"."+Integer.toString(StaticData.currentUser.expireDD);
+            mypageCurrentMembership.setImageResource(R.drawable.ticket);
         }
         mypageProfileText2.setText(getString(R.string.myMembership) + expireDate);
 
@@ -1340,6 +1335,19 @@ public class Home extends JActivity {
 
 
 
+
+    private void setUpperBarLeftIconStatus(){
+        if(StaticData.currentUser.expireYYYY != 0 && StaticData.currentUser.isHanjanAvailableToday) {
+            upperBarLeftIcon.setImageResource(R.drawable.icon);
+        }else if(StaticData.currentUser.expireYYYY != 0 && !StaticData.currentUser.isHanjanAvailableToday){
+            upperBarLeftIcon.setImageResource(R.drawable.icon_used);
+        }else {
+            upperBarLeftIcon.setImageResource(R.drawable.icon_deactivated);
+        }
+    }
+
+
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -1387,12 +1395,11 @@ public class Home extends JActivity {
                                 +"."+Integer.toString(StaticData.currentUser.expireDD);
                     }
                     try {
-                        if(StaticData.currentUser.expireYYYY != 0 && StaticData.currentUser.isHanjanAvailableToday) {
-                            upperBarLeftIcon.setImageResource(R.drawable.icon);
-                        }else if(StaticData.currentUser.expireYYYY != 0 && !StaticData.currentUser.isHanjanAvailableToday){
-                            upperBarLeftIcon.setImageResource(R.drawable.icon_used);
+                        setUpperBarLeftIconStatus();
+                        if(StaticData.currentUser.expireYYYY != 0){
+                            mypageCurrentMembership.setImageResource(R.drawable.ticket);
                         }else {
-                            upperBarLeftIcon.setImageResource(R.drawable.icon_deactivated);
+                            mypageCurrentMembership.setImageResource(R.drawable.ticket_deactive);
                         }
                         mypageProfileText2.setText(getString(R.string.myMembership) + expireDate);
                     }catch (Exception e){e.printStackTrace();}
@@ -1404,16 +1411,19 @@ public class Home extends JActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if(StaticData.currentUser.expireYYYY != 0 && StaticData.currentUser.isHanjanAvailableToday) {
-            upperBarLeftIcon.setImageResource(R.drawable.icon);
-        }else if(StaticData.currentUser.expireYYYY != 0 && !StaticData.currentUser.isHanjanAvailableToday) {
-            upperBarLeftIcon.setImageResource(R.drawable.icon_used);
-        }else {
-            upperBarLeftIcon.setImageResource(R.drawable.icon_deactivated);
-        }
+        setUpperBarLeftIconStatus();
+        try {
+            if (StaticData.currentUser.expireYYYY != 0 && StaticData.currentUser.isHanjanAvailableToday) {
+                mypageCurrentMembership.setImageResource(R.drawable.ticket);
+            } else {
+                mypageCurrentMembership.setImageResource(R.drawable.ticket_deactive);
+            }
+        }catch (Exception e){}
+
         try{
             pubInfoRecyclerView.finishRefreshing();
         }catch (Exception e){e.printStackTrace();}
+
     }
 
 
@@ -1422,7 +1432,6 @@ public class Home extends JActivity {
         super.onStop();
         locationHelper.onStop();
     }
-
 
 
     boolean finishIfBackButtonClickedOnceMore = false;

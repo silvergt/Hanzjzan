@@ -16,8 +16,11 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import kotel.hanzan.Data.DrinkInfo;
 import kotel.hanzan.Data.StaticData;
 import kotel.hanzan.R;
@@ -58,11 +61,11 @@ public class DrinkSelector extends RelativeLayout{
     class drinkListAdapter extends RecyclerView.Adapter<drinkListAdapter.itemViewHolder>{
         class itemViewHolder extends RecyclerView.ViewHolder{
             TextView name;
-            ImageView image;
+            CircleImageView image;
             public itemViewHolder(View itemView) {
                 super(itemView);
                 name=(TextView) itemView.findViewById(R.id.drinkSelector_drinkList_text);
-                image=(ImageView)itemView.findViewById(R.id.drinkSelector_drinkList_image);
+                image=(CircleImageView) itemView.findViewById(R.id.drinkSelector_drinkList_image);
             }
         }
         @Override
@@ -76,6 +79,12 @@ public class DrinkSelector extends RelativeLayout{
         @Override
         public void onBindViewHolder(drinkListAdapter.itemViewHolder holder, int position) {
             holder.name.setText((String)drinkList[currentSelectedType].get(position));
+            if(drinkImageList[currentSelectedType].get(position)==null ||
+                    ((String)drinkImageList[currentSelectedType].get(position)).equals("NULL")){
+                Picasso.with(context).load(R.drawable.drinkselector_default).into(holder.image);
+            }else {
+                Picasso.with(context).load((String) drinkImageList[currentSelectedType].get(position)).placeholder(R.drawable.drinkselector_default).into(holder.image);
+            }
             holder.itemView.setOnClickListener(view -> {
                 listItemSelected(currentSelectedType,position);
             });

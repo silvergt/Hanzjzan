@@ -40,7 +40,7 @@
     <string name="pubPagePopup_joinMembership">아직 한잔 멤버가 아니시네요!\n지금 가입하실래요?</string>
     <string name="yesJoin">네 가입할래요!</string>
     <string name="noLater">아니요, 나중에 할게요</string>
-    <string name="isYourChoice">로 하시겠습니까?</string>
+    <string name="isYourChoice">(으)로 하시겠습니까?</string>
     <string name="providing">에서 제공하는</string>
     <string name="alreadyUsedTicket">오늘 이미 한잔을 사용하셨네요!\n내일 다시 사용해주세요</string>
     <string name="willComebackLater">내일 다시 올게요!</string>
@@ -49,7 +49,7 @@
     <string name="clerkCheck">직원 확인</string>
     <string name="SuccessfullyUsed">사용 성공!</string>
     <string name="isComing">한잔 하세요!</string>
-    <string name="membershipPopupText">아직 한잔 멤버쉽에 가입하지 않으셨네요!\n지금 가입하실래요?</string>
+    <string name="membershipPopupText">아직 한잔 멤버쉽에 가입하지 않으셨네요!\n지금 가입하시겠어요?</string>
     <string name="membershipPopupTextAlmostEnd">멤버쉽 기간이 거의 끝나갑니다!\n지금 멤버쉽을 연장하실래요?</string>
     <string name="aroundMe">내 주변</string>
     <string name="favorite">즐겨찾기</string>

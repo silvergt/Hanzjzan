@@ -1,5 +1,6 @@
 package kotel.hanzan;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,7 @@ import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import kotel.hanzan.Data.AnnouncementInfo;
 import kotel.hanzan.function.ServerConnectionHelper;
 import kotel.hanzan.listener.JRecyclerViewListener;
 import kotel.hanzan.view.JActivity;
@@ -27,18 +29,6 @@ public class Announcement extends JActivity {
     private AnnouncementRecyclerViewAdapter adapter = new AnnouncementRecyclerViewAdapter();
     private ArrayList<AnnouncementInfo> infoArray = new ArrayList<>();
 
-
-    private class AnnouncementInfo{
-        int id;
-        String title,entity,date;
-
-        public AnnouncementInfo(int id, String title, String entity, String date) {
-            this.id = id;
-            this.title = title;
-            this.entity = entity;
-            this.date = date;
-        }
-    }
 
     private class AnnouncementRecyclerViewAdapter extends RecyclerView.Adapter<AnnouncementRecyclerViewAdapter.ViewHolder> {
 
@@ -64,7 +54,13 @@ public class Announcement extends JActivity {
             AnnouncementInfo info = infoArray.get(position);
 
             holder.titleTextView.setText(info.title);
-            holder.entityTextView.setText(info.entity);
+            holder.entityTextView.setText(info.content);
+
+            holder.itemView.setOnClickListener(view -> {
+                Intent intent = new Intent(getApplicationContext(),AnnouncementDetail.class);
+                intent.putExtra("info",info);
+                startActivity(intent);
+            });
         }
 
         @Override
@@ -86,9 +82,7 @@ public class Announcement extends JActivity {
         recyclerView.setAdapter(adapter);
         recyclerView.setOnJRecyclerViewListener(new JRecyclerViewListener() {
             @Override
-            public void onRefresh(TwinklingRefreshLayout refreshLayout) {
-                retrieveAnnouncements(true);
-            }
+            public void onRefresh(TwinklingRefreshLayout refreshLayout) {retrieveAnnouncements(true);}
 
             @Override
             public void onLoadMore() {
@@ -119,10 +113,10 @@ public class Announcement extends JActivity {
                 }
                 int id = Integer.parseInt(map.get("id_announcement_" + num));
                 String title = map.get("title_announcement_" + num);
-                String entity = map.get("entity_announcement_" + num);
+                String content = map.get("content_announcement_" + num);
                 String date = map.get("date_announcement_" + num);
 
-                infoArray.add(new AnnouncementInfo(id,title,entity,date));
+                infoArray.add(new AnnouncementInfo(id,title,content,date));
             }
 
             String dataleft = map.get("datalefts");

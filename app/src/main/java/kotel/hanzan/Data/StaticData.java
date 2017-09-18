@@ -29,8 +29,8 @@ public class StaticData {
      *  If GPS service suddenly become unavailable, system uses myLatestLocation as default location. */
     public static NGeoPoint myLatestLocation;
 
-    /** Used when GPS service isn't available. Default loc : Shinchon Station (lng, lat order) */
-    final public static NGeoPoint defaultLocation = new NGeoPoint(126.936862,37.555255);
+    /** Used when GPS service isn't available. Default loc : Center of Shinchon street (lng, lat order) */
+    final public static NGeoPoint defaultLocation = new NGeoPoint(126.935606,37.557528);
 
 
     /** Default email address that receives message when user presses 'inquire' button. */
