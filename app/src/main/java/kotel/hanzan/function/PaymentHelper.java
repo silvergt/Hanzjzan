@@ -18,7 +18,7 @@ public class PaymentHelper {
     public static HashMap<String,String> tossPayment(String ticketID, String itemName, int amount){
         final HashMap<String,String> map = new HashMap<>();
 
-        map.put("apiKey",StaticData.TOSSTESTKEY);
+        map.put("apiKey",StaticData.TOSSKEY);
         map.put("ticketID",ticketID);
 
         Thread thread = new Thread(()->{
@@ -36,7 +36,7 @@ public class PaymentHelper {
                 jsonBody.put("amount", amount);
                 jsonBody.put("autoExecute", false);
                 jsonBody.put("productDesc", itemName);
-                jsonBody.put("apiKey", StaticData.TOSSTESTKEY);
+                jsonBody.put("apiKey", StaticData.TOSSKEY);
                 jsonBody.put("retUrl","https://90labs.com/%ea%b2%b0%ec%a0%9c-%ec%84%b1%ea%b3%b5-%ed%8e%98%ec%9d%b4%ec%a7%80/");
 
                 BufferedOutputStream bos = new BufferedOutputStream(connection.getOutputStream());

@@ -15,7 +15,6 @@ import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import kotel.hanzan.Data.StaticData;
 import kotel.hanzan.function.ServerConnectionHelper;
 import kotel.hanzan.listener.JRecyclerViewListener;
 import kotel.hanzan.view.JActivity;
@@ -97,8 +96,7 @@ public class Announcement extends JActivity {
             }
         });
 
-        retrieveAnnouncements(true);
-
+        recyclerView.startRefresh();
 
         back.setOnClickListener(view -> finish());
     }
@@ -107,7 +105,6 @@ public class Announcement extends JActivity {
         if(clearArray) {
             infoArray.clear();
         }
-        if(StaticData.myLatestLocation == null )StaticData.myLatestLocation = StaticData.defaultLocation;
         new Thread(() -> {
             HashMap<String, String> map = new HashMap<>();
 

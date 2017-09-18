@@ -320,7 +320,7 @@ public class Membership extends JActivity {
 
 
 
-    private void retrieveMembershipTicketInfo(){
+    private synchronized void retrieveMembershipTicketInfo(){
         ticketArray.clear();
         new Thread(()->{
             HashMap<String,String> map = new HashMap<>();

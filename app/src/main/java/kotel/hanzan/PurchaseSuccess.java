@@ -43,7 +43,7 @@ public class PurchaseSuccess extends JActivity {
 
     private void startTossPayment(){
         if(!tossPayToken.equals("") && !ticketID.equals("") ){
-            int paymentResult = PaymentHelper.tossPaymentConfirm(StaticData.TOSSTESTKEY,tossPayToken);
+            int paymentResult = PaymentHelper.tossPaymentConfirm(StaticData.TOSSKEY,tossPayToken);
 
             if(paymentResult == PAYMENT_SUCCESS){
                 JLog.v("Toss payment Success!");

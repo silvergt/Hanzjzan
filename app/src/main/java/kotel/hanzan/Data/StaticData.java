@@ -3,7 +3,7 @@ package kotel.hanzan.Data;
 import com.nhn.android.maps.maplib.NGeoPoint;
 
 public class StaticData {
-    final public static String TOSSTESTKEY="sk_test_Q0kzLGdNWyQ0kzLGdNWy";
+//    final public static String TOSSTESTKEY="sk_test_Q0kzLGdNWyQ0kzLGdNWy";
     public static String TOSSKEY;
 
     /** These strings are used as prefix of new member's key, which is sended to server to perform sign in request.
