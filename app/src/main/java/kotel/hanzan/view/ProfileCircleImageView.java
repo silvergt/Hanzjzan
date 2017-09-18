@@ -48,14 +48,12 @@ public class ProfileCircleImageView extends CircleImageView {
     public void openProfilePage(Context context){
         try{
             if(image!=null&&!image.equals("")&&!image.equals("NULL")){
-//                Log.v("Log","opening profile page... image address : "+image);
                 new ImageViewer.Builder(context,new String[]{image}).show();
             }else{
                 return;
             }
 
         }catch (Exception e){
-//            Log.e("Log","opening profile page failed");
             e.printStackTrace();
 
         }
@@ -69,15 +67,9 @@ public class ProfileCircleImageView extends CircleImageView {
             image=imageAddress;
             Picasso.with(context).load(image).placeholder(R.drawable.profile_null).into(this);
         }
-//        setOnClickListener(v -> openProfilePage(context));
     }
 
     public void setImage(final Context context, int res){
-        try {
-//            Log.v("Log","image address PCIV : "+res);
-        }catch (Exception e){
-//            Log.v("Log","image address PCIV is null !! ");
-        }
         Picasso.with(context).load(res).into(this);
     }
 

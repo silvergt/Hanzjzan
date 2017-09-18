@@ -125,5 +125,9 @@
     <string name="purchaseWithToss">Purchase with Toss</string>
     <string name="purchaseFailed">Purchase failed!</string>
     <string name="pleaseTryAgain">Please try again</string>
+    <string name="notEnoughCash">Not enough cash</string>
+    <string name="priceNotAccurate">Total cost you saved may not be accurate</string>
+    <string name="agree">Agree</string>
+    <string name="paymentError">Server error! Please contact out support team</string>
 
 </resources>

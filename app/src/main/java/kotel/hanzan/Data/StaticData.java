@@ -3,8 +3,8 @@ package kotel.hanzan.Data;
 import com.nhn.android.maps.maplib.NGeoPoint;
 
 public class StaticData {
-    final public static String TESTAPI="sk_test_Q0kzLGdNWyQ0kzLGdNWy";
-
+    final public static String TOSSTESTKEY="sk_test_Q0kzLGdNWyQ0kzLGdNWy";
+    public static String TOSSKEY;
 
     /** These strings are used as prefix of new member's key, which is sended to server to perform sign in request.
      *  This makes sure that there won't be any repeated key among KAKAO id, FACEBOOK id, and other login account id. */
@@ -34,6 +34,6 @@ public class StaticData {
 
 
     /** Default email address that receives message when user presses 'inquire' button. */
-    final public static String adminEmail = "silvergt@naver.com";
+    final public static String adminEmail = "support@90labs.com";
 }
 

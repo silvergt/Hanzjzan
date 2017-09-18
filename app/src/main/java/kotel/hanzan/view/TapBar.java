@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import kotel.hanzan.Data.StaticData;
 import kotel.hanzan.R;
-import kotel.hanzan.function.AssetImageHelper;
+import kotel.hanzan.function.AssetsHelper;
 import kotel.hanzan.function.ColorHelper;
 import kotel.hanzan.function.JLog;
 import kotel.hanzan.listener.TapBarItemClickListener;
@@ -112,7 +112,7 @@ public class TapBar extends RelativeLayout{
             imageView[i].setLayoutParams(itemImageParams);
             imageView[i].setPadding(itemMargin,itemMargin,itemMargin,itemMargin);
 
-            imageView[i].setImageDrawable(AssetImageHelper.loadTapBarImageDrawable(context,image[i]+"_off"));
+            imageView[i].setImageDrawable(AssetsHelper.loadTapBarImageDrawable(context,image[i]+"_off"));
             itemTitle.setText(title[i]);
 
 
@@ -181,12 +181,12 @@ public class TapBar extends RelativeLayout{
 
     private void setItemToClicked(int number){
 
-        imageView[currentlyFocusedTapNumber].setImageDrawable(AssetImageHelper.loadTapBarImageDrawable(context,image[currentlyFocusedTapNumber]+"_off"));
+        imageView[currentlyFocusedTapNumber].setImageDrawable(AssetsHelper.loadTapBarImageDrawable(context,image[currentlyFocusedTapNumber]+"_off"));
         titleTextView[currentlyFocusedTapNumber].setTextColor(Color.BLACK);
 
         currentlyFocusedTapNumber = number;
 
-        imageView[currentlyFocusedTapNumber].setImageDrawable(AssetImageHelper.loadTapBarImageDrawable(context,image[currentlyFocusedTapNumber]+"_on"));
+        imageView[currentlyFocusedTapNumber].setImageDrawable(AssetsHelper.loadTapBarImageDrawable(context,image[currentlyFocusedTapNumber]+"_on"));
         titleTextView[currentlyFocusedTapNumber].setTextColor(mainColor);
 
     }

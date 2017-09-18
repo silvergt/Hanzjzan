@@ -63,6 +63,11 @@ public class Settings extends JActivity {
             }
         });
 
+        termsConditions.setOnClickListener(view -> {
+            Intent intent = new Intent(getApplicationContext(),TermsConditions.class);
+            startActivity(intent);
+        });
+
         announcements.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(),Announcement.class);
             startActivity(intent);

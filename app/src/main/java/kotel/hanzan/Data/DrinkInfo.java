@@ -23,10 +23,12 @@ public class DrinkInfo implements Serializable{
 
     public String drinkType;
     public String drinkName;
+    public String drinkImageAddress;
 
-    public DrinkInfo(String drinkType, String drinkName) {
+    public DrinkInfo(String drinkType, String drinkName,String drinkImageAddress) {
         this.drinkType = drinkType;
         this.drinkName = drinkName;
+        this.drinkImageAddress = drinkImageAddress;
     }
 
     public static String getDrinkName(Context context,String code){

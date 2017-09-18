@@ -1,6 +1,8 @@
 package kotel.hanzan.listener;
 
 
+import kotel.hanzan.Data.DrinkInfo;
+
 public interface DrinkSelectorListener {
-    void itemSelected(String drinkName,String drinkType);
+    void itemSelected(DrinkInfo drinkInfo);
 }

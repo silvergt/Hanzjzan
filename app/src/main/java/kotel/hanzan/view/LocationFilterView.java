@@ -38,7 +38,6 @@ public class LocationFilterView extends RelativeLayout{
     private FilterRecyclerViewAdapter adapter = new FilterRecyclerViewAdapter();
 
     private int currentFocusedLocationListNumber = 0;
-
     private String currentClickedLocationName = "";
 
 

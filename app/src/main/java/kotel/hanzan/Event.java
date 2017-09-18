@@ -13,7 +13,7 @@ import kotel.hanzan.view.JActivity;
 
 public class Event extends JActivity {
     ImageView back,image,share;
-    TextView title;
+    TextView title,content;
 
     EventInfo eventInfo;
 
@@ -25,6 +25,7 @@ public class Event extends JActivity {
         back = (ImageView)findViewById(R.id.event_back);
         image = (ImageView)findViewById(R.id.event_mainImage);
         title = (TextView)findViewById(R.id.event_title);
+        content = (TextView)findViewById(R.id.event_content);
         share = (ImageView) findViewById(R.id.event_share);
         Intent data = getIntent();
         eventInfo = (EventInfo) data.getSerializableExtra("info");
@@ -33,6 +34,7 @@ public class Event extends JActivity {
         title.setText(eventInfo.title);
         Picasso.with(this).load(eventInfo.mainImageAddress).into(image);
 
+        content.setText(eventInfo.content);
 
         back.setOnClickListener(view -> finish());
 

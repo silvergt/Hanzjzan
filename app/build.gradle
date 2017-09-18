@@ -7,7 +7,7 @@ android {
         applicationId "kotel.hanzan"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 5
+        versionCode 6
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
@@ -63,6 +63,8 @@ dependencies {
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.8'
     testCompile 'junit:junit:4.12'
 }
+
+
 
 
 

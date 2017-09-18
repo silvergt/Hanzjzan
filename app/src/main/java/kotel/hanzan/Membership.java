@@ -321,6 +321,7 @@ public class Membership extends JActivity {
 
 
     private void retrieveMembershipTicketInfo(){
+        ticketArray.clear();
         new Thread(()->{
             HashMap<String,String> map = new HashMap<>();
             map.put("id_member",Long.toString(currentUser.id));
@@ -332,7 +333,6 @@ public class Membership extends JActivity {
                 if (map.get("durationdays_" + num)==null){
                     break;
                 }
-                int durationDays = Integer.parseInt(map.get("durationdays_" + num));
                 String ticketName = map.get("name_ticket_" + num);
                 String ticketID = map.get("id_ticket_" + num);
                 String ticketDue = map.get("new_membershipdue_" + num);
@@ -351,17 +351,42 @@ public class Membership extends JActivity {
     private void updateMembershipInfo(){
         setResult(RESULT_MEMBERSHIP_APPLIED);
 
-        if(StaticData.currentUser.expireYYYY == 0){
-            expireDate.setText(getString(R.string.notMemberYet));
-        }else{
-            expireDate.setText(Integer.toString(StaticData.currentUser.expireYYYY) + "." + Integer.toString(StaticData.currentUser.expireMM) + "." + Integer.toString(StaticData.currentUser.expireDD));
-        }
+        new Thread(()->{
+            HashMap<String, String> map = new HashMap<>();
+            map.put("id_member",Long.toString(StaticData.currentUser.id));
+            map = ServerConnectionHelper.connect("retrieving membership status","membershipinfo",map);
+
+            if(map.get("availabletoday")==null){
+                return;
+            }
+            int[] newExpireDate = CalendarHelper.parseDate(map.get("membershipdue"));
+            boolean availableToday = false;
+            if(map.get("availabletoday").equals("TRUE")){
+                availableToday = true;
+            }
+            StaticData.currentUser.expireYYYY = newExpireDate[0];
+            StaticData.currentUser.expireMM = newExpireDate[1];
+            StaticData.currentUser.expireDD = newExpireDate[2];
+            StaticData.currentUser.isHanjanAvailableToday = availableToday;
+
+            new Handler(getMainLooper()).post(()->{
+                if(StaticData.currentUser.expireYYYY == 0){
+                    expireDate.setText(getString(R.string.notMemberYet));
+                }else{
+                    expireDate.setText(Integer.toString(StaticData.currentUser.expireYYYY) + "." + Integer.toString(StaticData.currentUser.expireMM) + "." + Integer.toString(StaticData.currentUser.expireDD));
+                }
+                retrieveMembershipTicketInfo();
+                loading.setLoadingCompleted();
+            });
+        }).start();
+
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
+        loading.setLoadingStarted();
         updateMembershipInfo();
     }
 

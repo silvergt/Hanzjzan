@@ -94,22 +94,26 @@
             android:name=".Settings"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".Announcement"
+        <activity
+            android:name=".Announcement"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".PurchaseSuccess"
+        <activity
+            android:name=".PurchaseSuccess"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-            >
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="hanjan" android:host="purchase"/>
+                <data
+                    android:host="purchase"
+                    android:scheme="hanjan" />
             </intent-filter>
         </activity>
+        <activity android:name=".TermsConditions" />
     </application>
 
 </manifest>

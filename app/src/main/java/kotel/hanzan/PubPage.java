@@ -174,7 +174,7 @@ public class PubPage extends JActivity {
         retrieveDetailInfo();
     }
 
-    private void openDrinkSelectDialog(String drinkName,String drinkType){
+    private void openDrinkSelectDialog(DrinkInfo drinkInfo){
         drinkSelectorDialog = new Dialog(this);
         drinkSelectorDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
@@ -192,6 +192,7 @@ public class PubPage extends JActivity {
 
         if(StaticData.currentUser.expireYYYY==0){
             //아직 멤버가 아닌 경우 - 0
+            Picasso.with(getApplicationContext()).load(R.drawable.purchasesuccess).into(drinkImage);
             dialogText1.setText(getString(R.string.pubPagePopup_joinMembership));
             dialogText2.setVisibility(View.INVISIBLE);
             button1.setText(getString(R.string.yesJoin));
@@ -199,7 +200,8 @@ public class PubPage extends JActivity {
             dialogStep = 0;
         }else if(StaticData.currentUser.isHanjanAvailableToday){
             //멤버이고, 오늘 한잔을 사용하지 않은 경우 - 1
-            dialogText1.setText(title.getText().toString() +getString(R.string.providing)+"\n"+drinkName+getString(R.string.isYourChoice));
+            Picasso.with(getApplicationContext()).load(drinkInfo.drinkImageAddress).placeholder(R.drawable.hite).into(drinkImage);
+            dialogText1.setText(title.getText().toString() +getString(R.string.providing)+"\n"+drinkInfo.drinkName+getString(R.string.isYourChoice));
             dialogText1.setVisibility(View.VISIBLE);
             dialogText2.setVisibility(View.INVISIBLE);
             button1.setText(getString(R.string.yes));
@@ -207,6 +209,7 @@ public class PubPage extends JActivity {
             dialogStep = 1;
         }else{
             //멤버이고, 오늘 한잔을 사용한 경우 - 2
+            Picasso.with(getApplicationContext()).load(R.drawable.purchasesuccess).into(drinkImage);
             dialogText1.setText(getString(R.string.alreadyUsedTicket));
             dialogText1.setVisibility(View.VISIBLE);
             dialogText2.setVisibility(View.INVISIBLE);
@@ -220,7 +223,7 @@ public class PubPage extends JActivity {
             switch (dialogStep){
 
                 case 1:
-                    dialogText2.setText(drinkName+"\n"+getString(R.string.oneGlassPlease));
+                    dialogText2.setText(drinkInfo.drinkName+"\n"+getString(R.string.oneGlassPlease));
                     dialogText1.setVisibility(View.INVISIBLE);
                     dialogText2.setVisibility(View.VISIBLE);
                     button1.setBackgroundResource(R.drawable.roundbox_gray);
@@ -243,7 +246,7 @@ public class PubPage extends JActivity {
         button2.setOnClickListener(view -> {
             switch (dialogStep) {
                 case 3:
-                    useVoucher(drinkName,drinkType);
+                    useVoucher(drinkInfo.drinkName,drinkInfo.drinkType);
                     break;
                 default:
                     drinkSelectorDialog.cancel();
@@ -324,7 +327,7 @@ public class PubPage extends JActivity {
             i = 0;
             while (true){
                 if(map.get("category_drink_"+Integer.toString(i))!=null) {
-                    pubInfo.drinkList.add(new DrinkInfo(map.get("category_drink_" + Integer.toString(i)), map.get("name_drink_" + Integer.toString(i++))));
+                    pubInfo.drinkList.add(new DrinkInfo(map.get("category_drink_" + Integer.toString(i)), map.get("name_drink_" + Integer.toString(i)),map.get("imgadd_drink_" + Integer.toString(i++))));
                 }else{
                     break;
                 }

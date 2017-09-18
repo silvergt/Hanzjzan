@@ -101,12 +101,13 @@
     <dimen name="historyItem_padding">11dp</dimen>
 
 
-    <dimen name="login_buttonHeight">40dp</dimen>
+    <dimen name="login_buttonHeight">50dp</dimen>
     <dimen name="login_buttonWidth">200dp</dimen>
     <dimen name="login_buttonIconWidth">25dp</dimen>
     <dimen name="login_marginBottom">20dp</dimen>
     <dimen name="login_mainFontSize">16sp</dimen>
     <dimen name="login_subFontSize">12sp</dimen>
+    <dimen name="login_termsFontSize">13sp</dimen>
 
     <dimen name="JRecyclerView_buttonWidth">50dp</dimen>
 

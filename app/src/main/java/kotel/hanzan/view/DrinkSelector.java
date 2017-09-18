@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import kotel.hanzan.Data.DrinkInfo;
 import kotel.hanzan.Data.StaticData;
 import kotel.hanzan.R;
-import kotel.hanzan.function.AssetImageHelper;
+import kotel.hanzan.function.AssetsHelper;
 import kotel.hanzan.function.ColorHelper;
 import kotel.hanzan.function.JLog;
 import kotel.hanzan.listener.DrinkSelectorListener;
@@ -39,6 +39,7 @@ public class DrinkSelector extends RelativeLayout{
     private Context context;
     ArrayList<String> drinkType;
     ArrayList[] drinkList;
+    ArrayList[] drinkImageList;
     private DrinkSelectorListener listener;
     private int itemHeight = 50;
 
@@ -122,6 +123,8 @@ public class DrinkSelector extends RelativeLayout{
         drinkType = new ArrayList<>();
         drinkList = new ArrayList[1];
         drinkList[0] = new ArrayList();
+        drinkImageList = new ArrayList[1];
+        drinkImageList[0] = new ArrayList();
 
         drinkListViewLayout.setOnClickListener(view -> {
             closeDrinkListView();
@@ -162,13 +165,16 @@ public class DrinkSelector extends RelativeLayout{
         }
 
         drinkList = new ArrayList[drinkType.size()];
+        drinkImageList = new ArrayList[drinkType.size()];
         for(int i=0;i<drinkList.length;i++){
             drinkList[i] = new ArrayList<>();
+            drinkImageList[i] = new ArrayList<>();
         }
         for(int i=0;i<array.size();i++){
             for(int j=0; j<drinkType.size();j++){
                 if(drinkType.get(j).equals(array.get(i).drinkType)){
                     drinkList[j].add(array.get(i).drinkName);
+                    drinkImageList[j].add(array.get(i).drinkImageAddress);
                 }
             }
         }
@@ -290,7 +296,7 @@ public class DrinkSelector extends RelativeLayout{
             ImageView drinktypeImage = (ImageView) item.findViewById(R.id.drinkSelector_drinkType_image);
             TextView drinkTypeName = (TextView) item.findViewById(R.id.drinkSelector_drinkType_text);
 
-            AssetImageHelper.loadDrinkImage(context,drinkType.get(num)).into(drinktypeImage);
+            AssetsHelper.loadDrinkImage(context,drinkType.get(num)).into(drinktypeImage);
             drinkTypeName.setText(DrinkInfo.getDrinkName(context,drinkType.get(num)));
 
             drinkTypeLayout[i] = item.findViewById(R.id.drinkSelector_drinkType_layout);
@@ -315,7 +321,8 @@ public class DrinkSelector extends RelativeLayout{
 
     private void listItemSelected(int typeNum, int itemNum){
         if(listener!=null) {
-            listener.itemSelected((String)drinkList[typeNum].get(itemNum),drinkType.get(typeNum));
+            DrinkInfo drinkInfo = new DrinkInfo(drinkType.get(typeNum),(String)drinkList[typeNum].get(itemNum),(String)drinkImageList[typeNum].get(itemNum));
+            listener.itemSelected(drinkInfo);
         }
         JLog.v((String)drinkList[typeNum].get(itemNum));
         closeDrinkListView();

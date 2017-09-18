@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    >
+
+    <ImageButton
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/termCondition"
+            android:textSize="@dimen/login_mainFontSize"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:padding="@dimen/leftRightMargin"
+            />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:scrollbars="vertical"
+            android:overScrollMode="never"
+            android:paddingLeft="@dimen/leftRightMargin"
+            android:paddingRight="@dimen/leftRightMargin"
+            >
+
+            <TextView
+                android:id="@+id/login_termsText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="@dimen/login_termsFontSize"
+                />
+
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/login_buttonHeight"
+            android:orientation="horizontal"
+            >
+            <TextView
+                android:id="@+id/login_termsCancel"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@color/darkGray"
+                android:textColor="@color/white"
+                android:text="@string/cancel"
+                android:gravity="center"
+                android:textSize="@dimen/login_mainFontSize"
+                />
+
+            <TextView
+                android:id="@+id/login_termsAgree"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="@color/mainColor_light"
+                android:textColor="@color/white"
+                android:text="@string/agree"
+                android:gravity="center"
+                android:textSize="@dimen/login_mainFontSize"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

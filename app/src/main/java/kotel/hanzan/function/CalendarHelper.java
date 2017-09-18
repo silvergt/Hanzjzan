@@ -3,35 +3,6 @@ package kotel.hanzan.function;
 import java.util.Calendar;
 
 public class CalendarHelper {
-
-    public static String getCurrentYear(){
-        Calendar calendar = Calendar.getInstance();
-        return Integer.toString(calendar.get(Calendar.YEAR));
-    }
-
-    public static String getCurrentMonthInNormal(){
-        Calendar calendar = Calendar.getInstance();
-        String returnValue;
-        if(calendar.get(Calendar.MONTH)+1>=10){
-            returnValue = Integer.toString(calendar.get(Calendar.MONTH)+1);
-        }else{
-            returnValue = "0"+Integer.toString(calendar.get(Calendar.MONTH)+1);
-        }
-
-        return returnValue;
-    }
-
-    public static String getCurrentDay(){
-        Calendar calendar = Calendar.getInstance();
-        String returnValue;
-        if(calendar.get(Calendar.DATE)>=10){
-            returnValue = Integer.toString(calendar.get(Calendar.DATE));
-        }else{
-            returnValue = "0"+Integer.toString(calendar.get(Calendar.DATE));
-        }
-        return returnValue;
-    }
-
     public static int[] getCurrentDate(){
         int[] returnValue = new int[3];
 

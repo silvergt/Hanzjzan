@@ -23,12 +23,12 @@ public class Initial extends JActivity {
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         StaticData.displayWidth=metrics.widthPixels;
         StaticData.displayHeight=metrics.heightPixels;
-        displayWidthWithoutMargin = (int)(StaticData.displayWidth - 2*getResources().getDimension(R.dimen.leftRightMargin));
+        displayWidthWithoutMargin = (int)(StaticData.displayWidth - 2 * getResources().getDimension(R.dimen.leftRightMargin));
+        StaticData.TOSSKEY = getString(R.string.tossApiKey);
 
         if(!Fresco.hasBeenInitialized()) {
             Fresco.initialize(this);
         }
-
 
         new Thread(()->{
             try{

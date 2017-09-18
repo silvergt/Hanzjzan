@@ -109,5 +109,9 @@
     <string name="purchaseWithToss">토스로 결제하기</string>
     <string name="purchaseFailed">구매에 실패했습니다!</string>
     <string name="pleaseTryAgain">다시 한번 시도해주세요</string>
+    <string name="notEnoughCash">잔액이 부족합니다!</string>
+    <string name="priceNotAccurate">전체 절약한 가격이 정확하지 않을 수 있습니다</string>
+    <string name="agree">동의</string>
+    <string name="paymentError">서버 에러! 한잔 서비스팀에 연락바랍니다</string>
 
 </resources>

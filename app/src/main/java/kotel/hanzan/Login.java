@@ -5,12 +5,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -34,6 +36,7 @@ import java.util.HashMap;
 
 import kotel.hanzan.Data.StaticData;
 import kotel.hanzan.Data.UserInfo;
+import kotel.hanzan.function.AssetsHelper;
 import kotel.hanzan.function.BitmapHelper;
 import kotel.hanzan.function.JLog;
 import kotel.hanzan.function.ServerConnectionHelper;
@@ -252,7 +255,6 @@ public class Login extends JActivity {
     }
 
     private void tryLoginWithKakaoTalk(UserProfile userProfile) {
-
         new Thread(() -> {
             map = new HashMap<>();
             map.put("member_key", StaticData.IDENTIFIER_KAKAO + Long.toString(userProfile.getId()));
@@ -267,40 +269,48 @@ public class Login extends JActivity {
             if (map.get("signup_history").equals("TRUE")) {
                 makeUserInfoAndLogin(map);
             } else if (map.get("signup_history").equals("FALSE")) {
-                map.clear();
-                try {
-                    URL imageURL = new URL(userProfile.getThumbnailImagePath());
-                    bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    onLoginFailed();
-                    return;
-                }
-                try {
-                    map.put("member_key", StaticData.IDENTIFIER_KAKAO + Long.toString(userProfile.getId()));
-                    map.put("imageincluded", "1");
-                    map.put("name_member", userProfile.getNickname());
-                    if(userProfile.getEmail()!=null){
-                        map.put("member_email",userProfile.getEmail());
-                    }
+                openTermsPage(userProfile);
+            }
+        }).start();
+    }
 
-                    map = ServerConnectionHelper.connect("signing up", "signup", map, "profileimage", BitmapHelper.getCompressedImageByteArray(bitmap));
-                    if (map.get("signupresult").equals("TRUE")) {
-                        map.clear();
-                        map.put("member_key", StaticData.IDENTIFIER_KAKAO + Long.toString(userProfile.getId()));
-                        map = ServerConnectionHelper.connect("checking account existence", "login", map);
-                        if (map.get("signup_history").equals("TRUE")) {
-                            makeUserInfoAndLogin(map);
-                        } else {
-                            onLoginFailed();
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
+    private void signUpWithKakaoTalk(UserProfile userProfile){
+        map = new HashMap<>();
+        try {
+            URL imageURL = new URL(userProfile.getThumbnailImagePath());
+            bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+            map.put("imageincluded", "1");
+        } catch (Exception e) {
+            e.printStackTrace();
+            map.put("imageincluded", "0");
+        }
+        try {
+            map.put("member_key", StaticData.IDENTIFIER_KAKAO + Long.toString(userProfile.getId()));
+            map.put("name_member", userProfile.getNickname());
+            if(userProfile.getEmail()!=null){
+                map.put("member_email",userProfile.getEmail());
+            }
+
+            if(map.get("imageincluded").equals("1")) {
+                map = ServerConnectionHelper.connect("signing up", "signup", map, "profileimage", BitmapHelper.getCompressedImageByteArray(bitmap));
+            }else{
+                map = ServerConnectionHelper.connect("signing up", "signup", map);
+            }
+
+            if (map.get("signupresult").equals("TRUE")) {
+                map.clear();
+                map.put("member_key", StaticData.IDENTIFIER_KAKAO + Long.toString(userProfile.getId()));
+                map = ServerConnectionHelper.connect("checking account existence", "login", map);
+                if (map.get("signup_history").equals("TRUE")) {
+                    makeUserInfoAndLogin(map);
+                } else {
                     onLoginFailed();
                 }
             }
-        }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+            onLoginFailed();
+        }
     }
 
     private void tryLoginWithFacebook() {
@@ -326,45 +336,48 @@ public class Login extends JActivity {
             if (map.get("signup_history").equals("TRUE")) {
                 makeUserInfoAndLogin(map);
             } else if (map.get("signup_history").equals("FALSE")) {
-                map.clear();
-                try {
-                    URL imageURL = new URL("https://graph.facebook.com/" + AccessToken.getCurrentAccessToken().getUserId() + "/picture?type=large");
-                    bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    onLoginFailed();
-                    return;
-                }
-                GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), (object, response) -> {
-                    try{
-                        map.put("member_email", object.get("email").toString());
-                    }catch (Exception e){}
-
-                    try {
-                        map.put("member_key", StaticData.IDENTIFIER_FACEBOOK + AccessToken.getCurrentAccessToken().getUserId());
-                        map.put("imageincluded", "1");
-                        map.put("name_member", object.get("name").toString());
-
-
-                        map = ServerConnectionHelper.connect("signing up", "signup", map, "profileimage", BitmapHelper.getCompressedImageByteArray(bitmap));
-                        if (map.get("signupresult").equals("TRUE")) {
-                            map.clear();
-                            map.put("member_key", StaticData.IDENTIFIER_FACEBOOK + AccessToken.getCurrentAccessToken().getUserId());
-                            map = ServerConnectionHelper.connect("checking account existence", "login", map);
-                            if (map.get("signup_history").equals("TRUE")) {
-                                makeUserInfoAndLogin(map);
-                            } else {
-                                onLoginFailed();
-                            }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        onLoginFailed();
-                    }
-                });
-                request.executeAsync();
+                openTermsPage(null);
             }
         }).start();
+    }
+
+    private void signUpWithFacebook(){
+        map.clear();
+        try {
+            URL imageURL = new URL("https://graph.facebook.com/" + AccessToken.getCurrentAccessToken().getUserId() + "/picture?type=large");
+            bitmap = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
+        } catch (Exception e) {
+            e.printStackTrace();
+            onLoginFailed();
+            return;
+        }
+        GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), (object, response) -> {
+            try{
+                map.put("member_email", object.get("email").toString());
+            }catch (Exception e){e.printStackTrace();}
+
+            try {
+                map.put("member_key", StaticData.IDENTIFIER_FACEBOOK + AccessToken.getCurrentAccessToken().getUserId());
+                map.put("imageincluded", "1");
+                map.put("name_member", object.get("name").toString());
+
+                map = ServerConnectionHelper.connect("signing up", "signup", map, "profileimage", BitmapHelper.getCompressedImageByteArray(bitmap));
+                if (map.get("signupresult").equals("TRUE")) {
+                    map.clear();
+                    map.put("member_key", StaticData.IDENTIFIER_FACEBOOK + AccessToken.getCurrentAccessToken().getUserId());
+                    map = ServerConnectionHelper.connect("checking account existence", "login", map);
+                    if (map.get("signup_history").equals("TRUE")) {
+                        makeUserInfoAndLogin(map);
+                    } else {
+                        onLoginFailed();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                onLoginFailed();
+            }
+        });
+        request.executeAsync();
     }
 
     private void onLoginFailed(){
@@ -375,6 +388,43 @@ public class Login extends JActivity {
     }
 
 
+
+    private void openTermsPage(@Nullable UserProfile userProfile){
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        RelativeLayout termPage = (RelativeLayout)getLayoutInflater().inflate(R.layout.login_agreeterms,null);
+        termPage.setLayoutParams(params);
+
+        TextView terms = (TextView)termPage.findViewById(R.id.login_termsText);
+        TextView cancel = (TextView)termPage.findViewById(R.id.login_termsCancel);
+        TextView agree = (TextView)termPage.findViewById(R.id.login_termsAgree);
+
+        terms.setText(AssetsHelper.loadText(getApplicationContext(),"terms","terms"));
+
+        cancel.setOnClickListener(view -> {
+            map.clear();
+            deleteTemporaryLoginData();
+            onLoginFailed();
+            layout.removeView(termPage);
+        });
+
+        agree.setOnClickListener(view -> {
+            new Thread(()->{
+                if(userProfile == null){
+                    signUpWithFacebook();
+                }else{
+                    signUpWithKakaoTalk(userProfile);
+                }
+            }).start();
+        });
+
+        new Handler(getMainLooper()).post(()->{
+            layout.addView(termPage);
+        });
+
+    }
+
+
+
     private void makeUserInfoAndLogin(HashMap<String, String> map) {
         new Handler(getMainLooper()).post(()-> {
             StaticData.currentUser = new UserInfo(map);
@@ -383,6 +433,14 @@ public class Login extends JActivity {
             finish();
         });
     }
+
+    private void deleteTemporaryLoginData() {
+        StaticData.currentUser = null;
+        AccessToken.setCurrentAccessToken(null);
+        UserManagement.requestLogout(null);
+        Session.getCurrentSession().close();
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -405,6 +463,22 @@ public class Login extends JActivity {
         } catch (Exception e) {}
     }
 
+    boolean finishIfBackButtonClickedOnceMore = false;
+    @Override
+    public void onBackPressed() {
+        if(finishIfBackButtonClickedOnceMore){
+            super.onBackPressed();
+        }else{
+            Toast.makeText(this,getString(R.string.oneMoreBackButton),Toast.LENGTH_SHORT).show();
+            finishIfBackButtonClickedOnceMore = true;
+            new Thread(()->{
+                try{
+                    Thread.sleep(2500);
+                    finishIfBackButtonClickedOnceMore = false;
+                }catch (Exception e){e.printStackTrace();}
+            }).start();
+        }
+    }
 
 
     //****KAKAO
@@ -420,11 +494,6 @@ public class Login extends JActivity {
                 public void onFailure(ErrorResult errorResult) {
                     String message = "failed to get user info. msg=" + errorResult;
                     JLog.v(message);
-
-//                    ErrorCode result = ErrorCode.valueOf(errorResult.getErrorCode());
-//                    if (result == ErrorCode.CLIENT_ERROR_CODE) {
-//                        finish();
-//                    }
                 }
 
                 @Override

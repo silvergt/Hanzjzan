@@ -42,7 +42,7 @@ import kotel.hanzan.Data.EventInfo;
 import kotel.hanzan.Data.PubHistoryInfo;
 import kotel.hanzan.Data.PubInfo;
 import kotel.hanzan.Data.StaticData;
-import kotel.hanzan.function.AssetImageHelper;
+import kotel.hanzan.function.AssetsHelper;
 import kotel.hanzan.function.CalendarHelper;
 import kotel.hanzan.function.DrawableHelper;
 import kotel.hanzan.function.GeoHelper;
@@ -304,7 +304,7 @@ public class Home extends JActivity {
             holder.name.setText(pubInfo.name);
             holder.address.setText(pubInfo.address);
             JLog.v(historyInfoArray.get(position).drinkInfo.drinkType);
-            AssetImageHelper.loadDrinkImage(getApplicationContext(),historyInfoArray.get(position).drinkInfo.drinkType).into(holder.drinkImage);
+            AssetsHelper.loadDrinkImage(getApplicationContext(),historyInfoArray.get(position).drinkInfo.drinkType).into(holder.drinkImage);
 
             holder.itemView.setOnClickListener(view -> {
                 Intent intent = new Intent(Home.this, PubPage.class);
@@ -922,15 +922,15 @@ public class Home extends JActivity {
 
 
     private boolean isAnyFilterChecked(){
-        for(int i=0;i<filter_checkboxChecked.length;i++){
-            if(filter_checkboxChecked[i])return true;
+        for (boolean aFilter_checkboxChecked : filter_checkboxChecked) {
+            if (aFilter_checkboxChecked) return true;
         }
         return false;
     }
 
     private boolean isAnyFilterCheckedTemporarily(){
-        for(int i=0;i<filterCheckbox.length;i++){
-            if(filterCheckbox[i].isChecked())return true;
+        for (JCheckBox aFilterCheckbox : filterCheckbox) {
+            if (aFilterCheckbox.isChecked()) return true;
         }
         return false;
     }
@@ -1095,11 +1095,10 @@ public class Home extends JActivity {
 
                 String drinkCategory = map.get("category_drink_" + num);
                 String drinkName = map.get("name_drink_" + num);
-
-//                        JLog.v("retrieving number "+num);
+                String drinkImageAddress = map.get("imgadd_drink_" + num);
 
                 PubInfo pubInfo = new PubInfo(id, name, address, district, imageAddress, favorite, lat, lng);
-                DrinkInfo drinkInfo = new DrinkInfo(drinkCategory,drinkName);
+                DrinkInfo drinkInfo = new DrinkInfo(drinkCategory,drinkName,drinkImageAddress);
                 historyInfoArray.add(new PubHistoryInfo(pubInfo,drinkInfo,year,month,day));
             }
 
@@ -1142,8 +1141,9 @@ public class Home extends JActivity {
                 String titleImage = map.get("titleimgadd_event_"+num);
                 String mainImage = map.get("mainimgadd_event_"+num);
                 String title = map.get("title_event_"+num);
+                String content = map.get("content_event_"+num);
 
-                eventInfoArray.add(new EventInfo(id,titleImage,mainImage,title));
+                eventInfoArray.add(new EventInfo(id,titleImage,mainImage,title,content));
             }
 
             new Handler(getMainLooper()).post(() -> {
@@ -1402,8 +1402,8 @@ public class Home extends JActivity {
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
+    protected void onResume() {
+        super.onResume();
         if(StaticData.currentUser.expireYYYY != 0 && StaticData.currentUser.isHanjanAvailableToday) {
             upperBarLeftIcon.setImageResource(R.drawable.icon);
         }else if(StaticData.currentUser.expireYYYY != 0 && !StaticData.currentUser.isHanjanAvailableToday) {
@@ -1413,9 +1413,9 @@ public class Home extends JActivity {
         }
         try{
             pubInfoRecyclerView.finishRefreshing();
-        }catch (Exception e){}
-
+        }catch (Exception e){e.printStackTrace();}
     }
+
 
     @Override
     protected void onStop() {
