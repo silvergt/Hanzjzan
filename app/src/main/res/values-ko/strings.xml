@@ -23,7 +23,7 @@
     <string name="freeSize">프리사이즈</string>
     <string name="confirm">확인</string>
     <string name="next">다음으로</string>
-    <string name="joinMembership">멤버쉽 가입</string>
+    <string name="joinMembership">멤버쉽 가입 / 프로모션 코드</string>
     <string name="currentExpireDate">멤버쉽 만료일</string>
     <string name="nearbyPlaces">내 주변</string>
     <string name="phone">전화</string>
@@ -72,10 +72,10 @@
     <string name="settings">설정</string>
     <string name="loginText1Sub">한잔 멤버쉽에 가입하면 하루에 한번,\n다양한 종류의 술 한병, 혹은 한잔이 무료입니다.</string>
     <string name="loginText1Main">하루에 한번 한잔 하세요!</string>
-    <string name="loginText2Main">앱을 보여주세요!</string>
-    <string name="loginText2Sub">매장 점원에게 한잔 앱을 보여주세요.\n원하시는 음료를 가져다 드릴 것 입니다.\n무료로요!</string>
-    <string name="loginText3Main">다양한 제휴 매장을 확인해 보세요</string>
-    <string name="loginText3Sub">한잔과 여러 매장이 제휴되어 있습니다.\n주변의 매장을 확인해보고 원하는 매장을 방문해주세요.</string>
+    <string name="loginText2Main">다양한 제휴 매장을 확인해 보세요</string>
+    <string name="loginText2Sub">한잔과 여러 매장이 제휴되어 있습니다.\n주변의 매장을 확인해보고 원하는 매장을 방문해주세요.</string>
+    <string name="loginText3Main">앱을 보여주세요!</string>
+    <string name="loginText3Sub">매장 점원에게 한잔 앱을 보여주세요.\n원하시는 음료를 가져다 드릴 것 입니다.\n무료로요!</string>
     <string name="loginText4Main">지금 사용해보세요!</string>
     <string name="loginText4Sub">한잔은 카카오톡, 페이스북을 통해\n간단히 회원가입할 수 있습니다.\n버튼 몇번만 누르면 끝나요!</string>
     <string name="startWithFacebook">페이스북으로 시작하기</string>
@@ -113,5 +113,22 @@
     <string name="priceNotAccurate">전체 절약한 가격이 정확하지 않을 수 있습니다</string>
     <string name="agree">동의</string>
     <string name="paymentError">서버 에러! 한잔 서비스팀에 연락바랍니다</string>
+    <string name="serverChecking">서버 점검중입니다!</string>
+    <string name="tutorial_drinkName">튜토리주</string>
+    <string name="tutorial_pubCity">신촌</string>
+    <string name="tutorial_pubAddress">신촌 어딘가</string>
+    <string name="tutorial_pubName">튜토리얼 펍</string>
+    <string name="tutorial_pubDescription">매일 한잔 무료로 받아가세요!</string>
+    <string name="tutorial_text1">한잔에 가입하신걸 환영합니다</string>
+    <string name="tutorial_text10">조심하세요! 이 버튼은 점원이 클릭해야만 합니다!</string>
+    <string name="tutorial_text2">매일, 한잔, 무료</string>
+    <string name="tutorial_text3">그러면, 앱 사용 방법 알아볼까요?</string>
+    <string name="tutorial_text4">먼저, 방문할 술집을 터치하세요!</string>
+    <string name="tutorial_text5">원하는 종류의 술을 선택하세요</string>
+    <string name="tutorial_text6">이제, 원하는 술을 선택하세요</string>
+    <string name="tutorial_text7">선택한 술이 맞는지 확인하세요</string>
+    <string name="tutorial_text8">네 버튼을 눌러 다음으로 넘어가세요</string>
+    <string name="tutorial_text9">이 화면을 직원에게 보여드리면,\n\n직원이 확인하고 버튼을 눌러줄거에요!</string>
+    <string name="startHanjan">클릭하여 한잔 시작하기</string>
 
 </resources>

@@ -1,6 +1,8 @@
 package kotel.hanzan;
 
 import android.Manifest;
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,10 +19,12 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.BounceInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.stfalcon.frescoimageviewer.ImageViewer;
@@ -30,7 +34,9 @@ import java.util.HashMap;
 import kotel.hanzan.Data.DrinkInfo;
 import kotel.hanzan.Data.PubInfo;
 import kotel.hanzan.Data.StaticData;
+import kotel.hanzan.function.ColorHelper;
 import kotel.hanzan.function.ServerConnectionHelper;
+import kotel.hanzan.listener.DrinkSelectorListener;
 import kotel.hanzan.view.DrinkSelector;
 import kotel.hanzan.view.JActivity;
 
@@ -44,6 +50,7 @@ public class PubPage extends JActivity {
 
     private PubInfo pubInfo;
 
+    private RelativeLayout mainLayout;
     private TextView upperTitle, title, address, phoneNumber, workingHour_weekday,workingHour_weekend, dayOff, description;
     private ImageView back, share, favorite, pubImage, call, location;
 
@@ -58,6 +65,10 @@ public class PubPage extends JActivity {
     private TextView button1;
     private TextView button2;
 
+
+    //************************TUTORIAL Tab************************
+    private RelativeLayout tutorialLayout,layout1,layout2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +76,7 @@ public class PubPage extends JActivity {
 
         pubInfo = (PubInfo) getIntent().getSerializableExtra("info");
 
+        mainLayout = (RelativeLayout)findViewById(R.id.pubpage_pubpage);
         drinkSelector = (DrinkSelector) findViewById(R.id.pubpage_drinkSelector);
         upperTitle = (TextView) findViewById(R.id.pubpage_upperTitle);
         title = (TextView) findViewById(R.id.pubpage_title);
@@ -100,6 +112,7 @@ public class PubPage extends JActivity {
         back.setOnClickListener(view -> finish());
 
         share.setOnClickListener(view -> {
+            if(pubInfo.tutorialPub){return;}
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.addCategory(Intent.CATEGORY_DEFAULT);
             intent.putExtra(Intent.EXTRA_TEXT,pubInfo.name+" "+getString(R.string.shallWeHaveDrink)+"\n"+pubInfo.imageAddress.get(0));
@@ -111,12 +124,14 @@ public class PubPage extends JActivity {
         });
 
         location.setOnClickListener(view -> {
+            if(pubInfo.tutorialPub){return;}
             Intent intent = new Intent(PubPage.this,LocationViewer.class);
             intent.putExtra("info",pubInfo);
             startActivity(intent);
         });
 
         call.setOnClickListener(view -> {
+            if(pubInfo.tutorialPub){return;}
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage(getString(R.string.makeCall));
             builder.setNegativeButton(getString(R.string.no),null);
@@ -137,6 +152,7 @@ public class PubPage extends JActivity {
         });
 
         pubImage.setOnClickListener(view -> {
+            if(pubInfo.tutorialPub){return;}
             String[] images = new String[pubInfo.imageAddress.size()];
             for(int i=0;i<pubInfo.imageAddress.size();i++){
                 images[i] = pubInfo.imageAddress.get(i);
@@ -158,6 +174,7 @@ public class PubPage extends JActivity {
         });
 
         favorite.setOnClickListener(view -> {
+            if(pubInfo.tutorialPub){return;}
             pubInfo.setFavorite(!pubInfo.getFavorite());
             if(pubInfo.getFavorite()){
                 favorite.setImageResource(R.drawable.pubpage_favorite_selected);
@@ -169,18 +186,123 @@ public class PubPage extends JActivity {
             setResult(RESULT_FAVORITECHANGED,data);
         });
 
-        drinkSelector.setListener(this::openDrinkSelectDialog);
+        drinkSelector.setListener(new DrinkSelectorListener() {
+            @Override
+            public void itemSelected(DrinkInfo drinkInfo) {
+                if(pubInfo.tutorialPub){
+                    openTutorialDrinkSelectDialog(drinkInfo);
+                }else {
+                    openDrinkSelectDialog(drinkInfo);
+                }
+            }
+
+            @Override
+            public void typeSelected(String typeName) {
+                if(pubInfo.tutorialPub){
+                    layout1.setVisibility(View.GONE);
+                    layout2.setVisibility(View.VISIBLE);
+                    ObjectAnimator.ofFloat(layout2,"alpha",0,1).setDuration(900).start();
+                }
+            }
+        });
 
         retrieveDetailInfo();
+        if(pubInfo.tutorialPub){
+            openTutorial();
+        }
+    }
+
+    private void openTutorial(){
+        RelativeLayout tutorialLayout = (RelativeLayout)getLayoutInflater().inflate(R.layout.pubpage_tutorial,null);
+        layout1 = (RelativeLayout)tutorialLayout.findViewById(R.id.pubpage_tutorial_layout1);
+        layout2 = (RelativeLayout)tutorialLayout.findViewById(R.id.pubpage_tutorial_layout2);
+
+        ObjectAnimator.ofFloat(layout1,"alpha",0,1).setDuration(900).start();
+
+        mainLayout.addView(tutorialLayout);
+    }
+
+    private void openTutorialDrinkSelectDialog(DrinkInfo drinkInfo){
+        Dialog tutorialDrinkSelectorDialog = new Dialog(this);
+        tutorialDrinkSelectorDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        tutorialDrinkSelectorDialog.setCancelable(false);
+
+        ViewGroup.LayoutParams dialogParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        LinearLayout dialogLayout = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.pubpage_tutorial_popup,null);
+
+        ImageView tutorialDrinkImage = (ImageView)dialogLayout.findViewById(R.id.pubpage_tutorialPopup_drinkImage);
+        TextView tutorialDialogText = (TextView)dialogLayout.findViewById(R.id.pubpage_tutorialPopup_text1);
+        TextView tutorialButton1 = (TextView)dialogLayout.findViewById(R.id.pubpage_tutorialPopup_button1);
+        TextView tutorialButton2 = (TextView)dialogLayout.findViewById(R.id.pubpage_tutorialPopup_button2);
+        ImageView tutorialArrow = (ImageView)dialogLayout.findViewById(R.id.pubpagePopup_tutorial_arrow);
+        TextView tutorialStartButton = (TextView)dialogLayout.findViewById(R.id.pubpagePopup_tutorial_start);
+
+        Picasso.with(getApplicationContext()).load(drinkInfo.drinkImageAddress).placeholder(R.drawable.drinkselector_default).into(tutorialDrinkImage);
+        tutorialDialogText.setText(getString(R.string.tutorial_text7));
+        tutorialDialogText.setVisibility(View.VISIBLE);
+        dialogStep = 0;
+
+        tutorialButton1.setOnClickListener(view -> {
+            switch (dialogStep){
+                case 0:
+                    tutorialDialogText.setText(getString(R.string.tutorial_text9));
+                    tutorialButton1.setTextColor(ColorHelper.getColor(getResources(),R.color.Yellow));
+                    tutorialButton1.setBackgroundResource(0);
+                    tutorialButton2.setBackgroundResource(R.drawable.roundbox_maincolor);
+                    tutorialButton1.setText(getString(R.string.tutorial_text10));
+                    tutorialButton2.setText(getString(R.string.clerkCheck));
+                    tutorialStartButton.setVisibility(View.VISIBLE);
+                    tutorialArrow.setRotation(180);
+
+                    int startButtonHeight = (int)getResources().getDimension(R.dimen.tutorial_startButtonHeight);
+                    ValueAnimator anim = ValueAnimator.ofInt(0,(int)getResources().getDimension(R.dimen.tutorial_startButtonMarginTop)).setDuration(2000);
+                    anim.setInterpolator(new BounceInterpolator());
+                    anim.addUpdateListener(valueAnimator -> {
+                        int i = (int)valueAnimator.getAnimatedValue();
+                        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,startButtonHeight);
+                        params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                        params.setMargins(0,i,0,i/3);
+                        tutorialStartButton.setLayoutParams(params);
+                    });
+                    anim.start();
+                    dialogStep = 1;
+                    break;
+            }
+        });
+
+        tutorialStartButton.setOnClickListener(view -> {
+            new Thread(()->{
+                HashMap<String,String> map = new HashMap<>();
+                map.put("id_member",Long.toString(StaticData.currentUser.id));
+                map = ServerConnectionHelper.connect("tutorial finished","tutorialfinished",map);
+
+                final String returned = map.get("tutorialfinished");
+
+                new Handler(getMainLooper()).post(() -> {
+                    if(returned == null || returned.equals("FALSE")){
+                        Toast.makeText(getApplicationContext(),getString(R.string.networkFailure),Toast.LENGTH_SHORT).show();
+                    }else if(returned.equals("TRUE")){
+                        StaticData.currentUser.finishedTutorial = true;
+                    }
+                    Intent intent = new Intent(getApplicationContext(),Home.class);
+                    startActivity(intent);
+                    finishAffinity();
+                });
+
+            }).start();
+
+        });
+
+        tutorialDrinkSelectorDialog.setContentView(dialogLayout,dialogParams);
+
+        tutorialDrinkSelectorDialog.show();
     }
 
     private void openDrinkSelectDialog(DrinkInfo drinkInfo){
         drinkSelectorDialog = new Dialog(this);
         drinkSelectorDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-
         dialogStep=0;
 
-//        ViewGroup.LayoutParams dialogParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, StaticData.displayHeight*7/10);
         ViewGroup.LayoutParams dialogParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         RelativeLayout dialogLayout = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.drinkselector_popup,null);
 
@@ -200,7 +322,7 @@ public class PubPage extends JActivity {
             dialogStep = 0;
         }else if(StaticData.currentUser.isHanjanAvailableToday){
             //멤버이고, 오늘 한잔을 사용하지 않은 경우 - 1
-            Picasso.with(getApplicationContext()).load(drinkInfo.drinkImageAddress).placeholder(R.drawable.hite).into(drinkImage);
+            Picasso.with(getApplicationContext()).load(drinkInfo.drinkImageAddress).placeholder(R.drawable.drinkselector_default).into(drinkImage);
             dialogText1.setText(title.getText().toString() +getString(R.string.providing)+"\n"+drinkInfo.drinkName+getString(R.string.isYourChoice));
             dialogText1.setVisibility(View.VISIBLE);
             dialogText2.setVisibility(View.INVISIBLE);
@@ -221,7 +343,6 @@ public class PubPage extends JActivity {
 
         button1.setOnClickListener(view -> {
             switch (dialogStep){
-
                 case 1:
                     dialogText2.setText(drinkInfo.drinkName+"\n"+getString(R.string.oneGlassPlease));
                     dialogText1.setVisibility(View.INVISIBLE);
@@ -304,6 +425,26 @@ public class PubPage extends JActivity {
 
 
     private synchronized void retrieveDetailInfo(){
+        if(pubInfo.tutorialPub){
+            map = new HashMap<>();
+            pubInfo.phone = "";
+            pubInfo.dayoff = "";
+            pubInfo.description = getString(R.string.tutorial_pubDescription);
+            pubInfo.work_weekday = "";
+            pubInfo.work_weekend = "";
+            pubInfo.drinkList.add(new DrinkInfo("beer", getString(R.string.tutorial_drinkName),"https://s3.ap-northeast-2.amazonaws.com/hanjan/drink_craft.png"));
+
+            new Handler(getMainLooper()).post(()->{
+                phoneNumber.setText(pubInfo.phone);
+                dayOff.setText(pubInfo.dayoff);
+                description.setText(pubInfo.description);
+                workingHour_weekday.setText(pubInfo.work_weekday);
+                workingHour_weekend.setText(pubInfo.work_weekend);
+
+                drinkSelector.setDrinkList(pubInfo.drinkList);
+            });
+            return;
+        }
 
         new Thread(()->{
             map = new HashMap<>();

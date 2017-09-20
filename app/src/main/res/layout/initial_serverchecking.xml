@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true"
+        android:background="@drawable/roundbox_white"
+        android:layout_marginLeft="@dimen/leftRightMargin"
+        android:layout_marginRight="@dimen/leftRightMargin"
+        >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/leftRightMargin"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="@color/black"
+            android:text="@string/serverChecking"
+            android:gravity="center"
+            android:textSize="16sp"
+            />
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/leftRightMargin"
+            />
+
+
+        <TextView
+            android:id="@+id/serverChecking_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="@dimen/leftRightMargin"
+            android:paddingLeft="@dimen/leftRightMargin"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:text="@string/confirm"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@drawable/roundbox_maincolor"
+            android:textColor="@color/white"
+            />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/leftRightMargin"
+            />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

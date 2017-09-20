@@ -166,9 +166,6 @@ public class Membership extends JActivity {
         promotionLowerBar.setOnClickListener(view -> {
             openPromotionPopup();
         });
-
-
-        retrieveMembershipTicketInfo();
     }
 
 
@@ -311,6 +308,7 @@ public class Membership extends JActivity {
             purchaseDialog.cancel();
         });
 
+
         cancel.setOnClickListener(view -> purchaseDialog.cancel());
 
 
@@ -343,12 +341,12 @@ public class Membership extends JActivity {
             }
             new Handler(getMainLooper()).post(()->{
                 adapter.notifyDataSetChanged();
-
             });
         }).start();
     }
 
     private void updateMembershipInfo(){
+        loading.setLoadingStarted();
         setResult(RESULT_MEMBERSHIP_APPLIED);
 
         new Thread(()->{
@@ -357,6 +355,7 @@ public class Membership extends JActivity {
             map = ServerConnectionHelper.connect("retrieving membership status","membershipinfo",map);
 
             if(map.get("availabletoday")==null){
+                loading.setLoadingCompleted();
                 return;
             }
             int[] newExpireDate = CalendarHelper.parseDate(map.get("membershipdue"));
@@ -386,7 +385,6 @@ public class Membership extends JActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        loading.setLoadingStarted();
         updateMembershipInfo();
     }
 

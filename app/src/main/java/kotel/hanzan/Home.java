@@ -1,6 +1,7 @@
 package kotel.hanzan;
 
 import android.Manifest;
+import android.animation.ObjectAnimator;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -65,7 +66,7 @@ import kotel.hanzan.view.TapBar;
 
 public class Home extends JActivity {
     private TapBar tapBar;
-    private RelativeLayout container;
+    private RelativeLayout container,mainLayout;
 
     private RelativeLayout upperBarLocationFilterContainer;
     private ImageView upperBarLeftIcon, upperBarMap, upperBarSearch, upperBarFilter, upperBarLocationFilter;
@@ -141,7 +142,12 @@ public class Home extends JActivity {
             } else {
                 holder.favorite.setImageResource(R.drawable.favorite_unselected);
             }
-            holder.text1.setText(pubInfo.name + "  " + distanceString);
+
+            if(StaticData.currentUser.finishedTutorial){
+                holder.text1.setText(pubInfo.name + "  " + distanceString);
+            }else{
+                holder.text1.setText(pubInfo.name);
+            }
             holder.text2.setText(pubInfo.district);
             holder.text3.setText(pubInfo.address);
 
@@ -155,6 +161,7 @@ public class Home extends JActivity {
 
 
             holder.favorite.setOnClickListener(view -> {
+                if(!StaticData.currentUser.finishedTutorial){return;}
                 pubInfoArray.get(position).setFavorite(!pubInfoArray.get(position).getFavorite());
                 if (pubInfoArray.get(position).getFavorite()) {
                     holder.favorite.setImageResource(R.drawable.favorite_selected);
@@ -373,21 +380,20 @@ public class Home extends JActivity {
     private DrinkCalendar mypageCalendar;
 
 
+    //************************TUTORIAL Tab************************
+    private RelativeLayout tutorialLayout,tutorial1,tutorial2;
+    private TextView tutorialNext;
+    private View tutorialPubView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        if(StaticData.currentUser==null){
-            Intent intent = new Intent(getApplicationContext(),Login.class);
-            startActivity(intent);
-            finish();
-        }else if(StaticData.currentUser.expireYYYY == 0){
-            openMembershipPopup();
-        }
 
         inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
+        mainLayout = (RelativeLayout)findViewById(R.id.home_home);
         upperBarLocationFilterContainer = (RelativeLayout)findViewById(R.id.home_upperBarLocationFilterContainer);
         upperBarLeftIcon = (ImageView) findViewById(R.id.home_upperBarLeftIcon);
         upperBarMap = (ImageView) findViewById(R.id.home_upperBarMapIcon);
@@ -466,6 +472,39 @@ public class Home extends JActivity {
 
         openHomeTab();
         setUpperBarLeftIconStatus();
+
+        if(StaticData.currentUser==null){
+            logoutToLoginPage();
+        }else if(StaticData.currentUser.finishedTutorial){
+            if(StaticData.currentUser.expireYYYY == 0){
+                openMembershipPopup();
+            }
+        }else if(!StaticData.currentUser.finishedTutorial){
+            openTutorial();
+        }
+
+    }
+
+    private void openTutorial(){
+        tutorialLayout = (RelativeLayout)getLayoutInflater().inflate(R.layout.home_tutorial,null);
+        tutorial1 = (RelativeLayout)tutorialLayout.findViewById(R.id.home_tutorial_layout1);
+        tutorial2 = (RelativeLayout)tutorialLayout.findViewById(R.id.home_tutorial_layout2);
+        tutorialNext = (TextView) tutorialLayout.findViewById(R.id.home_tutorial_next);
+        tutorialPubView = tutorialLayout.findViewById(R.id.home_tutorial_pubView);
+
+        LinearLayout.LayoutParams pubViewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, StaticData.displayWidth * 3 / 5 + (int)getResources().getDimension(R.dimen.drinkSelector_height));
+        tutorialPubView.setLayoutParams(pubViewParams);
+        tutorialNext.setOnClickListener(view -> {
+            tutorial1.setVisibility(View.GONE);
+            tutorial2.setVisibility(View.VISIBLE);
+            ObjectAnimator.ofFloat(tutorial2,"alpha",0,1).setDuration(900).start();
+        });
+
+        mainLayout.addView(tutorialLayout);
+
+        ObjectAnimator.ofFloat(tutorial1,"alpha",0,1).setDuration(900).start();
+
+        retrievePubList(true);
     }
 
     private void openMembershipPopup() {
@@ -742,6 +781,19 @@ public class Home extends JActivity {
     private synchronized void retrievePubList(boolean clearArray) {
         if(clearArray) {
             pubInfoArray.clear();
+        }
+        if(!StaticData.currentUser.finishedTutorial){
+            PubInfo tutorialPub = new PubInfo(-1,getString(R.string.tutorial_pubName),getString(R.string.tutorial_pubAddress),
+                    getString(R.string.tutorial_pubCity),"https://s3.ap-northeast-2.amazonaws.com/hanjan/drink_craft.png",
+                    false,0,0);
+            tutorialPub.tutorialPub = true;
+            if(pubInfoArray.size()==0) {
+                pubInfoArray.add(tutorialPub);
+                homeAdapter.notifyDataSetChanged();
+            }
+            pubInfoRecyclerView.finishRefreshing();
+
+            return;
         }
         if(StaticData.myLatestLocation == null )StaticData.myLatestLocation = StaticData.defaultLocation;
         new Thread(() -> {

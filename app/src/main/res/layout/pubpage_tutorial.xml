@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/pubpage_tutorial_layout1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:background="@color/tutorial_Blur"
+                >
+            </ImageButton>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/drinkSelector_height"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="@string/tutorial_text5"
+                android:textSize="@dimen/tutorial_fontSize"
+                android:gravity="center"
+                android:layout_marginBottom="@dimen/leftRightMargin"
+                />
+
+            <ImageView
+                android:layout_width="@dimen/tutorial_arrowWidth"
+                android:layout_height="@dimen/tutorial_arrowWidth"
+                android:src="@drawable/tutorialarrow"
+                android:layout_gravity="center"
+                android:rotation="180"
+                android:layout_marginBottom="@dimen/leftRightMargin"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/drinkSelector_height"
+                />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/pubpage_tutorial_layout2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            >
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="#00000000"
+                />
+
+            <View
+                android:layout_width="@dimen/drinkSelector_height"
+                android:layout_height="match_parent"
+                />
+
+            <ImageButton
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:background="#00000000"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentBottom="true"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="@string/tutorial_text6"
+                android:textSize="@dimen/tutorial_fontSize"
+                android:gravity="center"
+                android:layout_marginBottom="@dimen/leftRightMargin"
+                />
+
+            <ImageView
+                android:layout_width="@dimen/tutorial_arrowWidth"
+                android:layout_height="@dimen/tutorial_arrowWidth"
+                android:src="@drawable/tutorialarrow"
+                android:layout_gravity="center"
+                android:rotation="180"
+                android:layout_marginBottom="@dimen/leftRightMargin"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/drinkSelector_height"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/drinkSelector_height"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/leftRightMargin"
+                />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

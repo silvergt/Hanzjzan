@@ -276,6 +276,10 @@ public class DrinkSelector extends RelativeLayout{
             drinkListView.setX(drinkTypeView.getChildAt(typeNum).getX()-drinkTypeViewScroll.getScrollX()+drinkTypeViewScroll.getX());
         });
         anim.start();
+
+        if(listener!=null){
+            listener.typeSelected(drinkType.get(typeNum));
+        }
     }
 
 

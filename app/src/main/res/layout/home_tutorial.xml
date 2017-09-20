@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <RelativeLayout
+        android:id="@+id/home_tutorial_layout1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/tutorial_Blur"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                />
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/icon"
+                android:tint="@color/white"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/leftRightMargin"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="@string/tutorial_text1"
+                android:textSize="@dimen/tutorial_fontSize"
+                android:gravity="center"
+                android:layout_marginBottom="@dimen/leftRightMargin"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="@string/tutorial_text2"
+                android:textSize="@dimen/tutorial_fontSize"
+                android:gravity="center"
+                android:layout_marginBottom="@dimen/leftRightMargin"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="@string/tutorial_text3"
+                android:textSize="@dimen/tutorial_fontSize"
+                android:gravity="center"
+                android:layout_marginBottom="@dimen/leftRightMargin"
+                />
+
+            <TextView
+                android:id="@+id/home_tutorial_next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="@string/next"
+                android:textSize="@dimen/tutorial_fontSize"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:background="@drawable/roundbox_white_hollow"
+                android:layout_marginTop="@dimen/leftRightMargin"
+                android:paddingLeft="25dp"
+                android:paddingRight="25dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                />
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/home_tutorial_layout2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/upperBar"
+                android:background="@color/tutorial_Blur"
+                />
+
+            <View
+                android:id="@+id/home_tutorial_pubView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                />
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="@color/tutorial_Blur"
+                />
+
+            <ImageButton
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/home_bottomLayoutHeight"
+                android:background="@color/tutorial_Blur"
+                android:layout_alignParentBottom="true"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                />
+
+            <ImageView
+                android:layout_width="@dimen/tutorial_arrowWidth"
+                android:layout_height="@dimen/tutorial_arrowWidth"
+                android:layout_gravity="center"
+                android:src="@drawable/tutorialarrow"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="@string/tutorial_text4"
+                android:textSize="@dimen/tutorial_fontSize"
+                android:gravity="center"
+                android:layout_marginTop="@dimen/leftRightMargin"
+                />
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/home_bottomLayoutHeight"
+            />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/home_bottomLayoutHeight"
+                />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

@@ -18,6 +18,8 @@ public class PubInfo implements Serializable{
     public ArrayList<String> imageAddress;
     public ArrayList<DrinkInfo> drinkList;
 
+    public boolean tutorialPub = false;
+
     public PubInfo(long id, String name, String address, String district, String imageAddress, boolean favorite, double latitude, double longitude) {
         this.id = id;
         this.name = name;

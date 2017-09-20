@@ -1,13 +1,19 @@
 package kotel.hanzan;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 
+import java.util.HashMap;
+
 import kotel.hanzan.Data.StaticData;
+import kotel.hanzan.function.ServerConnectionHelper;
 import kotel.hanzan.view.JActivity;
 
 import static kotel.hanzan.Data.StaticData.displayWidthWithoutMargin;
@@ -34,18 +40,43 @@ public class Initial extends JActivity {
             try{
                 Thread.sleep(1500);
             }catch (Exception e){e.printStackTrace();}
+            testServerConnection();
+        }).start();
+    }
+
+
+    private void testServerConnection(){
+        HashMap<String,String> map =new HashMap<>();
+        map.put("member_key","NULLKEY");
+        map = ServerConnectionHelper.connect("server connection test","login",map);
+
+        if(map.get("signup_history")==null){
+            new Handler(getMainLooper()).post(this::openServerCheckingDialog);
+        }else{
             new Handler(getMainLooper()).post(()->{
                 Intent intent = new Intent(getApplicationContext(),Login.class);
                 startActivity(intent);
                 finish();
             });
-        }).start();
+        }
+    }
+
+    private void openServerCheckingDialog(){
+        Dialog dialog = new Dialog(this);
+
+        RelativeLayout layout = (RelativeLayout)getLayoutInflater().inflate(R.layout.initial_serverchecking,null);
+        TextView confirm = (TextView)layout.findViewById(R.id.serverChecking_confirm);
+
+        confirm.setOnClickListener(view -> finish());
+
+        dialog.setContentView(layout);
+        dialog.show();
     }
 
     @Override
     public void startActivity(Intent intent) {
         try{
-            Thread.sleep(2000);
+            Thread.sleep(1500);
         }catch (Exception e){e.printStackTrace();}
         super.startActivity(intent);
         overridePendingTransition(0,0);

@@ -15,6 +15,8 @@
 
     <color name="drinkSelector_Blur">#44000000</color>
 
+    <color name="tutorial_Blur">#66000000</color>
+
     <color name="filter_Blur">#44000000</color>
 
 
@@ -34,6 +36,8 @@
     <color name="kakaotalk">#F8EF0A</color>
     <color name="facebook">#2D4486</color>
     <color name="toss">#4068FE</color>
+
+    <color name="tutorialGray">#717171</color>
 
 
 

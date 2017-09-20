@@ -226,13 +226,10 @@ public class Search extends JActivity {
 
         recyclerView.setOnJRecyclerViewListener(new JRecyclerViewListener() {
             @Override
-            public void onRefresh(TwinklingRefreshLayout refreshLayout) {
-
-            }
+            public void onRefresh(TwinklingRefreshLayout refreshLayout) {}
 
             @Override
             public void onLoadMore() {
-                JLog.v("Log","loading...!");
                 retrievePubList(false);
             }
         });
@@ -258,19 +255,14 @@ public class Search extends JActivity {
     }
 
     private void getMyLocation(){
-//        locationHelper = new LocationHelper();
 
         if(StaticData.myLatestLocation==null) {
             locationHelper.getMyLocationOnlyOneTime(this, new LocationHelperListener() {
                 @Override
-                public void onSearchingStarted() {
-//                loading.setLoadingStarted();
-                }
+                public void onSearchingStarted() {}
 
                 @Override
-                public void onSearchingEnded() {
-//                loading.setLoadingCompleted();
-                }
+                public void onSearchingEnded() {}
 
                 @Override
                 public void onLocationFound(NGeoPoint nGeoPoint) {
@@ -353,7 +345,6 @@ public class Search extends JActivity {
             pubInfoArray.clear();
         }
 
-//        Toast.makeText(getApplicationContext(),Double.toString(StaticData.myLatestLocation.getLatitude())+","+Double.toString(StaticData.myLatestLocation.getLongitude()),Toast.LENGTH_SHORT).show();
         new Thread(()->{
             String userLat = Double.toString(StaticData.myLatestLocation.getLatitude());
             String userLng = Double.toString(StaticData.myLatestLocation.getLongitude());
@@ -398,7 +389,7 @@ public class Search extends JActivity {
                 recyclerView.finishRefreshing();
                 adapter.notifyDataSetChanged();
                 loading.setLoadingCompleted();
-                if (dataleft!=null&&dataleft.equals("TRUE")){
+                if (dataleft!=null && dataleft.equals("TRUE")){
                     recyclerView.finishLoadmore();
                 }
             });

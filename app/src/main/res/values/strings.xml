@@ -36,7 +36,7 @@
     <string name="freeSize">Free size</string>
     <string name="confirm">Confirm</string>
     <string name="next">Next</string>
-    <string name="joinMembership">Join membership</string>
+    <string name="joinMembership">Join membership / Promotion</string>
     <string name="currentExpireDate">Membership expire date</string>
     <string name="nearbyPlaces">Nearby places</string>
     <string name="phone">Phone</string>
@@ -87,10 +87,10 @@
     <string name="startWithKakaoTalk">Start with KakaoTalk</string>
     <string name="loginText1Main">Have one drink every day!</string>
     <string name="loginText1Sub">1 free drink is provided every day\nif you join our membership</string>
-    <string name="loginText2Main">Show application!</string>
-    <string name="loginText2Sub">Show application to clerks.\nThey will bring you the drink ordered.\nFor free!</string>
-    <string name="loginText3Main">Check out our various pubs</string>
-    <string name="loginText3Sub">We have many pubs contracted.\nLook around nearby pubs and visit the pub you like.</string>
+    <string name="loginText2Main">Check out our various pubs</string>
+    <string name="loginText2Sub">We have many affiliated pubs.\nLook around nearby pubs and visit the pub you like.</string>
+    <string name="loginText3Main">Show application! </string>
+    <string name="loginText3Sub">Show application to clerks.\nThey will bring you the drink ordered.\nFor free!</string>
     <string name="loginText4Main">Try now!</string>
     <string name="loginText4Sub">You can sign-up simply\nwith your KakaoTalk or Facebook.\nIt only takes few clicks!</string>
     <string name="successfullyPurchased">Successfully purchased!</string>
@@ -129,5 +129,22 @@
     <string name="priceNotAccurate">Total cost you saved may not be accurate</string>
     <string name="agree">Agree</string>
     <string name="paymentError">Server error! Please contact out support team</string>
+    <string name="serverChecking">Server is now being checked!</string>
+    <string name="tutorial_pubName">Tutorial pub</string>
+    <string name="tutorial_pubCity">Shinchon</string>
+    <string name="tutorial_pubAddress">Somewhere in Shinchon</string>
+    <string name="tutorial_drinkName">Tutorink</string>
+    <string name="tutorial_pubDescription">Have one free drink everyday!</string>
+    <string name="tutorial_text1">Welcome to Hanjan!</string>
+    <string name="tutorial_text2">Everyday, one glass, free</string>
+    <string name="tutorial_text3">So, let\'s learn how to use Hanjan</string>
+    <string name="tutorial_text4">First, click a pub you want to visit</string>
+    <string name="tutorial_text5">Choose category you want to drink</string>
+    <string name="tutorial_text6">Now, choose a drink you want to have!</string>
+    <string name="tutorial_text7">Check if you chose right drink</string>
+    <string name="tutorial_text8">Click yes to precede to the next step</string>
+    <string name="tutorial_text9">Show this to clerk,\n\nthen clerk will check your order.</string>
+    <string name="tutorial_text10">Careful! This button must be clicked by clerk!</string>
+    <string name="startHanjan">Click to start Hanjan</string>
 
 </resources>
