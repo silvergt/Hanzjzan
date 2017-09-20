@@ -206,6 +206,8 @@ public class Membership extends JActivity {
             }
             if (word.length() == 0) {
                 Toast.makeText(getApplicationContext(),getString(R.string.notValidPromotionCode),Toast.LENGTH_SHORT).show();
+            }else if(word.equals("JUNYORU")){
+                Toast.makeText(getApplicationContext(),getString(R.string.yes)+"?",Toast.LENGTH_SHORT).show();
             }else{
                 loading.setLoadingStarted();
                 usePromotionCode(word);

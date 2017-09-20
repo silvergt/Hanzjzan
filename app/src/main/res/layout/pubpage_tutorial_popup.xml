@@ -1,22 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     >
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        />
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@drawable/roundbox_gray_heavy"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true">
+        android:layout_centerInParent="true"
+        >
 
         <RelativeLayout
             android:layout_width="@dimen/drinkSelectorDialog_imageHeight"
@@ -108,17 +104,24 @@
 
     </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="@dimen/tutorial_startButtonContainer"
         android:orientation="vertical"
+        android:layout_alignParentBottom="true"
         >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
 
         <TextView
             android:id="@+id/pubpagePopup_tutorial_start"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/tutorial_startButtonHeight"
+            android:minHeight="@dimen/tutorial_startButtonHeight"
             android:gravity="center"
             android:text="@string/startHanjan"
             android:textSize="25sp"
@@ -127,9 +130,17 @@
             android:background="@drawable/roundbox_white_hollow"
             android:paddingLeft="@dimen/leftRightMargin"
             android:paddingRight="@dimen/leftRightMargin"
-            android:layout_centerInParent="true"
+            android:layout_gravity="center"
             android:visibility="gone"
             />
 
-    </RelativeLayout>
-</LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

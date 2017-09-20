@@ -157,6 +157,7 @@
     <dimen name="tutorial_arrowWidth">30dp</dimen>
     <dimen name="tutorial_startButtonMarginTop">30dp</dimen>
     <dimen name="tutorial_startButtonHeight">60dp</dimen>
+    <dimen name="tutorial_startButtonContainer">90dp</dimen>
     <dimen name="tutorial_fontSize">18sp</dimen>
 
 

@@ -2,6 +2,8 @@ package kotel.hanzan;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
@@ -13,6 +15,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import java.util.HashMap;
 
 import kotel.hanzan.Data.StaticData;
+import kotel.hanzan.function.JLog;
 import kotel.hanzan.function.ServerConnectionHelper;
 import kotel.hanzan.view.JActivity;
 
@@ -46,6 +49,16 @@ public class Initial extends JActivity {
 
 
     private void testServerConnection(){
+        try {
+            PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
+            String version = pInfo.versionName;
+            JLog.v("VERSION",version);
+            int code = pInfo.versionCode;
+            JLog.v("VERSION CODE : ",code);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
         HashMap<String,String> map =new HashMap<>();
         map.put("member_key","NULLKEY");
         map = ServerConnectionHelper.connect("server connection test","login",map);

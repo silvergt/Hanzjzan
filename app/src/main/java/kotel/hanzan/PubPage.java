@@ -2,7 +2,6 @@ package kotel.hanzan;
 
 import android.Manifest;
 import android.animation.ObjectAnimator;
-import android.animation.ValueAnimator;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -19,7 +18,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.BounceInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -228,7 +226,7 @@ public class PubPage extends JActivity {
         tutorialDrinkSelectorDialog.setCancelable(false);
 
         ViewGroup.LayoutParams dialogParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        LinearLayout dialogLayout = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.pubpage_tutorial_popup,null);
+        RelativeLayout dialogLayout = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.pubpage_tutorial_popup,null);
 
         ImageView tutorialDrinkImage = (ImageView)dialogLayout.findViewById(R.id.pubpage_tutorialPopup_drinkImage);
         TextView tutorialDialogText = (TextView)dialogLayout.findViewById(R.id.pubpage_tutorialPopup_text1);
@@ -254,17 +252,18 @@ public class PubPage extends JActivity {
                     tutorialStartButton.setVisibility(View.VISIBLE);
                     tutorialArrow.setRotation(180);
 
-                    int startButtonHeight = (int)getResources().getDimension(R.dimen.tutorial_startButtonHeight);
-                    ValueAnimator anim = ValueAnimator.ofInt(0,(int)getResources().getDimension(R.dimen.tutorial_startButtonMarginTop)).setDuration(2000);
-                    anim.setInterpolator(new BounceInterpolator());
-                    anim.addUpdateListener(valueAnimator -> {
-                        int i = (int)valueAnimator.getAnimatedValue();
-                        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,startButtonHeight);
-                        params.addRule(RelativeLayout.CENTER_HORIZONTAL);
-                        params.setMargins(0,i,0,i/3);
-                        tutorialStartButton.setLayoutParams(params);
-                    });
-                    anim.start();
+                    ObjectAnimator.ofFloat(tutorialStartButton,"alpha",0,1).setDuration(900).start();
+
+//                    int startButtonHeight = (int)getResources().getDimension(R.dimen.tutorial_startButtonHeight);
+//                    ValueAnimator anim = ValueAnimator.ofInt(0,(int)getResources().getDimension(R.dimen.tutorial_startButtonMarginTop)).setDuration(2000);
+//                    anim.setInterpolator(new BounceInterpolator());
+//                    anim.addUpdateListener(valueAnimator -> {
+//                        int i = (int)valueAnimator.getAnimatedValue();
+//                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,startButtonHeight);
+//                        params.setMargins(0,i,0,i/3);
+//                        tutorialStartButton.setLayoutParams(params);
+//                    });
+//                    anim.start();
                     dialogStep = 1;
                     break;
             }

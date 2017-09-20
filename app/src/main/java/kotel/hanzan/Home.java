@@ -376,7 +376,7 @@ public class Home extends JActivity {
     private ProfileCircleImageView mypageProfileImage;
     private TextView mypageProfileText1, mypageProfileText2;
     private ImageView mypageCurrentMembership,profileNameChange;
-    private LinearLayout mypageMembership, mypageInquire, mypageSetting, mypageLogout;
+    private LinearLayout mypageMembership, mypageInquire, mypageTutorial, mypageSetting, mypageLogout;
     private DrinkCalendar mypageCalendar;
 
 
@@ -704,6 +704,7 @@ public class Home extends JActivity {
         mypageCalendar = (DrinkCalendar) layout.findViewById(R.id.mypage_calendar);
         mypageMembership = (LinearLayout) layout.findViewById(R.id.mypage_joinMembership);
         mypageInquire = (LinearLayout) layout.findViewById(R.id.mypage_inquire);
+        mypageTutorial = (LinearLayout) layout.findViewById(R.id.mypage_tutorial);
         mypageSetting = (LinearLayout) layout.findViewById(R.id.mypage_setting);
         mypageLogout = (LinearLayout) layout.findViewById(R.id.mypage_logout);
         profileNameChange = (ImageView) layout.findViewById(R.id.mypage_profileNameChange);
@@ -762,7 +763,13 @@ public class Home extends JActivity {
 //            intent.setType("text/plain");
 
             startActivity(Intent.createChooser(intent,getString(R.string.chooseEmailApp)));
+        });
 
+        mypageTutorial.setOnClickListener(view -> {
+            StaticData.currentUser.finishedTutorial = false;
+            Intent intent = new Intent(getApplicationContext(),Home.class);
+            startActivity(intent);
+            finishAffinity();
         });
 
         mypageSetting.setOnClickListener(view -> {
@@ -1389,12 +1396,16 @@ public class Home extends JActivity {
 
 
     private void setUpperBarLeftIconStatus(){
-        if(StaticData.currentUser.expireYYYY != 0 && StaticData.currentUser.isHanjanAvailableToday) {
-            upperBarLeftIcon.setImageResource(R.drawable.icon);
-        }else if(StaticData.currentUser.expireYYYY != 0 && !StaticData.currentUser.isHanjanAvailableToday){
-            upperBarLeftIcon.setImageResource(R.drawable.icon_used);
+        if(StaticData.currentUser==null){
+            logoutToLoginPage();
         }else {
-            upperBarLeftIcon.setImageResource(R.drawable.icon_deactivated);
+            if (StaticData.currentUser.expireYYYY != 0 && StaticData.currentUser.isHanjanAvailableToday) {
+                upperBarLeftIcon.setImageResource(R.drawable.icon);
+            } else if (StaticData.currentUser.expireYYYY != 0 && !StaticData.currentUser.isHanjanAvailableToday) {
+                upperBarLeftIcon.setImageResource(R.drawable.icon_used);
+            } else {
+                upperBarLeftIcon.setImageResource(R.drawable.icon_deactivated);
+            }
         }
     }
 

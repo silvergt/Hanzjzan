@@ -146,5 +146,6 @@
     <string name="tutorial_text9">Show this to clerk,\n\nthen clerk will check your order.</string>
     <string name="tutorial_text10">Careful! This button must be clicked by clerk!</string>
     <string name="startHanjan">Click to start Hanjan</string>
+    <string name="tutorial">Tutorial</string>
 
 </resources>

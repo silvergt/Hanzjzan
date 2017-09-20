@@ -130,5 +130,6 @@
     <string name="tutorial_text8">네 버튼을 눌러 다음으로 넘어가세요</string>
     <string name="tutorial_text9">이 화면을 직원에게 보여드리면,\n\n직원이 확인하고 버튼을 눌러줄거에요!</string>
     <string name="startHanjan">클릭하여 한잔 시작하기</string>
+    <string name="tutorial">튜토리얼</string>
 
 </resources>

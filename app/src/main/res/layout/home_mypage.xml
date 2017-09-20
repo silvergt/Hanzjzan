@@ -88,18 +88,6 @@
                     />
 
             </LinearLayout>
-            <!--
-
-                            <RelativeLayout
-                                android:id="@+id/mypage_calendarContainer"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                >
-
-
-                            </RelativeLayout>
-            -->
-
 
             <kotel.hanzan.view.DrinkCalendar
                 android:id="@+id/mypage_calendar"
@@ -192,6 +180,43 @@
                     android:layout_marginRight="@dimen/mypage_dividerMargin"
                     />
 
+                <LinearLayout
+                    android:id="@+id/mypage_tutorial"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/mypage_itemHeight"
+                    android:orientation="horizontal"
+                    >
+                    <ImageView
+                        android:layout_width="@dimen/mypage_itemWidth"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/tutorial"
+                        android:tint="@color/black"
+                        android:padding="5dp"
+                        />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:textSize="@dimen/mypage_itemFontSize"
+                        android:text="@string/tutorial"
+                        android:textColor="@color/black"
+                        android:paddingLeft="5dp"
+                        />
+                    <ImageView
+                        android:layout_width="@dimen/mypage_itemWidth"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/arrow_right"
+                        android:padding="5dp"
+                        />
+                </LinearLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="@color/grayBackground"
+                    android:layout_marginLeft="@dimen/mypage_dividerMargin"
+                    android:layout_marginRight="@dimen/mypage_dividerMargin"
+                    />
 
                 <LinearLayout
                     android:id="@+id/mypage_setting"
@@ -261,8 +286,8 @@
                 </LinearLayout>
 
 
-            </LinearLayout>
 
+            </LinearLayout>
 
         </LinearLayout>
 

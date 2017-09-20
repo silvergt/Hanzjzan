@@ -22,7 +22,7 @@ import kotel.hanzan.R;
 import kotel.hanzan.kakao.GlobalApplication;
 
 public class ServerConnectionHelper {
-    private final static String serverIP="ec2-52-78-207-207.ap-northeast-2.compute.amazonaws.com";
+    private final static String serverIP="elbhanjan-1863892783.ap-northeast-2.elb.amazonaws.com";
     private int connectTimeout=10000;
 
     public static HashMap<String,String> connect(String recognizer, String phpAddress, HashMap<String,String> data, String imageName, byte[] image){
