@@ -42,7 +42,7 @@
     <string name="noLater">아니요, 나중에 할게요</string>
     <string name="isYourChoice">(으)로 하시겠습니까?</string>
     <string name="providing">에서 제공하는</string>
-    <string name="alreadyUsedTicket">오늘 이미 한잔을 사용하셨네요!\n내일 다시 사용해주세요</string>
+    <string name="alreadyUsedTicket">오늘 이미 한잔을 사용하셨네요,\n내일 다시 사용해주세요</string>
     <string name="willComebackLater">내일 다시 올게요!</string>
     <string name="oneGlassPlease">한잔 주세요!</string>
     <string name="cancel">취소</string>
@@ -63,7 +63,7 @@
     <string name="emailBody">여기에 문의 내용을 적어주세요</string>
     <string name="chooseEmailApp">이메일을 보낼 앱을 선택하세요</string>
     <string name="won">원</string>
-    <string name="failedGPS">\"현재 위치를 불러오지 못했습니다\"</string>
+    <string name="failedGPS">현재 위치를 불러오지 못했습니다</string>
     <string name="allowGPS">설정에서 GPS를 켜 주세요</string>
     <string name="turnOnGPS">위치정보 사용을 켜 주세요</string>
     <string name="logoutMessage">정말 로그아웃 할래요?</string>

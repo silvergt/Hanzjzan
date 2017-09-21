@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,6 +22,8 @@ import kotel.hanzan.R;
 import kotel.hanzan.function.ColorHelper;
 import kotel.hanzan.function.ServerConnectionHelper;
 import kotel.hanzan.listener.LocationFilterListener;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class LocationFilterView extends RelativeLayout{
     private Context context;
@@ -97,6 +100,7 @@ public class LocationFilterView extends RelativeLayout{
             }
 
             holder.itemView.setOnClickListener(view -> {
+                itemClicked(locationName);
                 if(isActive){
                     currentClickedLocationName = locationName;
                     selectLocation.setBackgroundResource(R.drawable.roundbox_maincolor);
@@ -278,6 +282,27 @@ public class LocationFilterView extends RelativeLayout{
         this.listener = listener;
     }
 
-
+    int ilsanClicked = 0;
+    private void itemClicked(String name) {
+        if (name.equals("일산")) {
+            if (ilsanClicked == 0) {
+                ilsanClicked++;
+                new Thread(() -> {
+                    try {
+                        Thread.sleep(5000);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    ilsanClicked = 0;
+                }).start();
+            } else {
+                ilsanClicked++;
+                if (ilsanClicked == 7) {
+                    Toast.makeText(getApplicationContext(), "JJCOP is.......", Toast.LENGTH_SHORT).show();
+                    ilsanClicked = 0;
+                }
+            }
+        }
+    }
 
 }

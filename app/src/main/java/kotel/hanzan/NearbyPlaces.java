@@ -49,7 +49,6 @@ public class NearbyPlaces extends JNMapActivity {
     private NMapResourceProvider provider;
     private NMapOverlayManager overlayManager;
     private NMapPOIdata poiData;
-//    private NGeoPoint myLocation;
 
     private NMapOverlayItem currentlyFocusedMarker;
     private PubInfo currectlyFocusedPubInfo;
@@ -63,7 +62,7 @@ public class NearbyPlaces extends JNMapActivity {
     private Loading loading;
     private ImageView myLocationButton, back, pubImage;
     private LinearLayout pubInfoLayout;
-    private TextView pubText1, pubText2, pubText3, pubText4;
+    private TextView pubText1, pubText2, pubText3;
 
     private ArrayList<PubInfo> pubInfoArray = new ArrayList<>();
 
@@ -90,7 +89,6 @@ public class NearbyPlaces extends JNMapActivity {
         pubText1 = (TextView) findViewById(R.id.nearbyPlaces_pubText1);
         pubText2 = (TextView) findViewById(R.id.nearbyPlaces_pubText2);
         pubText3 = (TextView) findViewById(R.id.nearbyPlaces_pubText3);
-        pubText4 = (TextView) findViewById(R.id.nearbyPlaces_pubText4);
 
         mapView = (NMapView) findViewById(R.id.nearbyPlaces_mapView);
         mapView.setClientId(getString(R.string.naver_client_id));
@@ -411,7 +409,7 @@ public class NearbyPlaces extends JNMapActivity {
             Picasso.with(this).load(currectlyFocusedPubInfo.imageAddress.get(0)).placeholder(R.drawable.loading_store).into(pubImage);
             pubText1.setText(currectlyFocusedPubInfo.name + "  " + distanceString);
             pubText2.setText(currectlyFocusedPubInfo.district);
-            pubText4.setText(currectlyFocusedPubInfo.address);
+            pubText3.setText(currectlyFocusedPubInfo.address);
 
             pubInfoLayout.setOnClickListener(view -> {
                 Intent intent = new Intent(NearbyPlaces.this, PubPage.class);

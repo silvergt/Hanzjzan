@@ -113,8 +113,14 @@
                     android:scheme="hanjan" />
             </intent-filter>
         </activity>
-        <activity android:name=".TermsConditions" />
-        <activity android:name=".AnnouncementDetail"></activity>
+        <activity android:name=".TermsConditions"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            />
+        <activity android:name=".AnnouncementDetail"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            />
     </application>
 
 </manifest>

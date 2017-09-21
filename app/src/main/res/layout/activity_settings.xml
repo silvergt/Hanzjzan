@@ -135,7 +135,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="25dp"
+                android:layout_height="20dp"
                 />
 
             <TextView
@@ -149,6 +149,24 @@
                 android:textSize="@dimen/setting_textFontSize"
                 android:gravity="center"
                 android:text="@string/announcement"
+                />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                />
+
+            <TextView
+                android:id="@+id/settings_tutorial"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_optionHeight"
+                android:layout_marginLeft="@dimen/setting_sideMargin"
+                android:layout_marginRight="@dimen/setting_sideMargin"
+                android:background="@drawable/roundbox_maincolor"
+                android:textColor="@color/white"
+                android:textSize="@dimen/setting_textFontSize"
+                android:gravity="center"
+                android:text="@string/tutorial"
                 />
 
             <View

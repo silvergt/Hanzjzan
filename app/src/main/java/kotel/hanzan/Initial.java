@@ -9,8 +9,7 @@ import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.facebook.drawee.backends.pipeline.Fresco;
+import android.widget.Toast;
 
 import java.util.HashMap;
 
@@ -19,8 +18,6 @@ import kotel.hanzan.function.JLog;
 import kotel.hanzan.function.ServerConnectionHelper;
 import kotel.hanzan.view.JActivity;
 
-import static kotel.hanzan.Data.StaticData.displayWidthWithoutMargin;
-
 public class Initial extends JActivity {
 
     @Override
@@ -28,16 +25,17 @@ public class Initial extends JActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_initial);
 
+        if(!ServerConnectionHelper.isRegularServer()){
+            Toast.makeText(getApplicationContext(),"TEST SERVER",Toast.LENGTH_SHORT).show();
+        }
+
         DisplayMetrics metrics=new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         StaticData.displayWidth=metrics.widthPixels;
         StaticData.displayHeight=metrics.heightPixels;
-        displayWidthWithoutMargin = (int)(StaticData.displayWidth - 2 * getResources().getDimension(R.dimen.leftRightMargin));
+        StaticData.displayWidthWithoutMargin = (int)(StaticData.displayWidth - 2 * getResources().getDimension(R.dimen.leftRightMargin));
         StaticData.TOSSKEY = getString(R.string.tossApiKey);
 
-        if(!Fresco.hasBeenInitialized()) {
-            Fresco.initialize(this);
-        }
 
         new Thread(()->{
             try{

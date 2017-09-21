@@ -55,7 +55,7 @@
     <string name="noLater">No, later!</string>
     <string name="isYourChoice">is your choice?</string>
     <string name="providing">\'s</string>
-    <string name="alreadyUsedTicket">You already used today\'s ticket!\nCome back tomorrow!</string>
+    <string name="alreadyUsedTicket">You already used today\'s ticket,\nCome back tomorrow</string>
     <string name="willComebackLater">Okay, see you tomorrow!</string>
     <string name="oneGlassPlease">one glass please!</string>
     <string name="cancel">Cancel</string>

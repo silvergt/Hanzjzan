@@ -11,6 +11,7 @@
         android:background="@drawable/roundbox_white"
         >
 
+
         <kotel.hanzan.view.ProfileCircleImageView
             android:id="@+id/drinkSelectorDialog_drinkImage"
             android:layout_width="@dimen/drinkSelectorDialog_imageHeight"

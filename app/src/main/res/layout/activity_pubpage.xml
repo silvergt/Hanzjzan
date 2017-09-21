@@ -73,12 +73,10 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 >
-                <ImageView
+                <kotel.hanzan.view.HorizontalSlideView
                     android:id="@+id/pubpage_pubImage"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
-                    android:src="@drawable/test"
-                    android:scaleType="centerCrop"
                     />
                 <LinearLayout
                     android:layout_width="match_parent"

@@ -36,6 +36,8 @@ import kotel.hanzan.function.ColorHelper;
 import kotel.hanzan.function.ServerConnectionHelper;
 import kotel.hanzan.listener.DrinkSelectorListener;
 import kotel.hanzan.view.DrinkSelector;
+import kotel.hanzan.view.HorizontalSlideView;
+import kotel.hanzan.view.HorizontalSlideViewChild;
 import kotel.hanzan.view.JActivity;
 
 public class PubPage extends JActivity {
@@ -50,7 +52,8 @@ public class PubPage extends JActivity {
 
     private RelativeLayout mainLayout;
     private TextView upperTitle, title, address, phoneNumber, workingHour_weekday,workingHour_weekend, dayOff, description;
-    private ImageView back, share, favorite, pubImage, call, location;
+    private ImageView back, share, favorite, call, location;
+    private HorizontalSlideView pubImage;
 
     private Dialog drinkSelectorDialog;
     private int dialogStep=0;
@@ -87,14 +90,13 @@ public class PubPage extends JActivity {
         description = (TextView) findViewById(R.id.pubpage_description);
         back = (ImageView) findViewById(R.id.pubpage_back);
         favorite = (ImageView) findViewById(R.id.pubpage_favorite);
-        pubImage = (ImageView) findViewById(R.id.pubpage_pubImage);
+        pubImage = (HorizontalSlideView) findViewById(R.id.pubpage_pubImage);
         call = (ImageView) findViewById(R.id.pubpage_call);
         location = (ImageView) findViewById(R.id.pubpage_location);
 
         LinearLayout.LayoutParams pubImageParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, StaticData.displayWidth*3/5);
         pubImage.setLayoutParams(pubImageParams);
-
-        Picasso.with(this).load(pubInfo.imageAddress.get(0)).placeholder(R.drawable.loading_store).into(pubImage);
+        pubImage.setChildWidth(StaticData.displayWidth);
 
         upperTitle.setText(pubInfo.name);
         title.setText(pubInfo.name);
@@ -106,7 +108,6 @@ public class PubPage extends JActivity {
             favorite.setImageResource(R.drawable.pubpage_favorite_unselected);
         }
 
-        
         back.setOnClickListener(view -> finish());
 
         share.setOnClickListener(view -> {
@@ -147,28 +148,6 @@ public class PubPage extends JActivity {
             });
             builder.show();
 
-        });
-
-        pubImage.setOnClickListener(view -> {
-            if(pubInfo.tutorialPub){return;}
-            String[] images = new String[pubInfo.imageAddress.size()];
-            for(int i=0;i<pubInfo.imageAddress.size();i++){
-                images[i] = pubInfo.imageAddress.get(i);
-            }
-            ImageViewer.Builder builder = new ImageViewer.Builder(this, images);
-
-            TextView imageCounter = new TextView(this);
-            imageCounter.setPadding(0,50,0,0);
-            imageCounter.setGravity(Gravity.CENTER);
-            imageCounter.setTextColor(Color.WHITE);
-            imageCounter.setWidth(StaticData.displayWidth);
-
-            builder.setImageChangeListener(position -> {
-                imageCounter.setText(Integer.toString(position+1)+"/"+Integer.toString(pubInfo.imageAddress.size()));
-            });
-
-            builder.setOverlayView(imageCounter);
-            builder.show();
         });
 
         favorite.setOnClickListener(view -> {
@@ -254,16 +233,6 @@ public class PubPage extends JActivity {
 
                     ObjectAnimator.ofFloat(tutorialStartButton,"alpha",0,1).setDuration(900).start();
 
-//                    int startButtonHeight = (int)getResources().getDimension(R.dimen.tutorial_startButtonHeight);
-//                    ValueAnimator anim = ValueAnimator.ofInt(0,(int)getResources().getDimension(R.dimen.tutorial_startButtonMarginTop)).setDuration(2000);
-//                    anim.setInterpolator(new BounceInterpolator());
-//                    anim.addUpdateListener(valueAnimator -> {
-//                        int i = (int)valueAnimator.getAnimatedValue();
-//                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,startButtonHeight);
-//                        params.setMargins(0,i,0,i/3);
-//                        tutorialStartButton.setLayoutParams(params);
-//                    });
-//                    anim.start();
                     dialogStep = 1;
                     break;
             }
@@ -283,6 +252,7 @@ public class PubPage extends JActivity {
                     }else if(returned.equals("TRUE")){
                         StaticData.currentUser.finishedTutorial = true;
                     }
+                    tutorialDrinkSelectorDialog.cancel();
                     Intent intent = new Intent(getApplicationContext(),Home.class);
                     startActivity(intent);
                     finishAffinity();
@@ -292,9 +262,10 @@ public class PubPage extends JActivity {
 
         });
 
-        tutorialDrinkSelectorDialog.setContentView(dialogLayout,dialogParams);
-
-        tutorialDrinkSelectorDialog.show();
+        try {
+            tutorialDrinkSelectorDialog.setContentView(dialogLayout, dialogParams);
+            tutorialDrinkSelectorDialog.show();
+        }catch (Exception e){e.printStackTrace();}
     }
 
     private void openDrinkSelectDialog(DrinkInfo drinkInfo){
@@ -458,7 +429,7 @@ public class PubPage extends JActivity {
 
             int i=0;
             while(true){
-                if(map.get("imgadd_place_" + Integer.toString(i++))!=null){
+                if(map.get("imgadd_place_" + Integer.toString(i))!=null){
                     pubInfo.imageAddress.add(map.get("imgadd_place_" + Integer.toString(i++)));
                 }else{
                     break;
@@ -479,10 +450,50 @@ public class PubPage extends JActivity {
                 workingHour_weekday.setText(pubInfo.work_weekday);
                 workingHour_weekend.setText(pubInfo.work_weekend);
 
+                setPubImageView();
+
                 drinkSelector.setDrinkList(pubInfo.drinkList);
             });
 
         }).start();
+    }
+
+    private void setPubImageView(){
+        for(int i=0;i<pubInfo.imageAddress.size();i++){
+            HorizontalSlideViewChild viewChild = new HorizontalSlideViewChild(this);
+            ImageView image = new ImageView(this);
+            image.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+
+            Picasso.with(this).load(pubInfo.imageAddress.get(i)).placeholder(R.drawable.loading_store).into(image);
+            viewChild.addView(image,params);
+
+            int finalI = i;
+            viewChild.setSlideViewChildClickListener(() -> {
+                if(pubInfo.tutorialPub){return;}
+                String[] images = new String[pubInfo.imageAddress.size()];
+                for(int j=0;j<pubInfo.imageAddress.size();j++){
+                    images[j] = pubInfo.imageAddress.get(j);
+                }
+                ImageViewer.Builder builder = new ImageViewer.Builder(this, images);
+
+                TextView imageCounter = new TextView(this);
+                imageCounter.setPadding(0,50,0,0);
+                imageCounter.setGravity(Gravity.CENTER);
+                imageCounter.setTextColor(Color.WHITE);
+                imageCounter.setWidth(StaticData.displayWidth);
+
+                builder.setImageChangeListener(position -> {
+                    imageCounter.setText(Integer.toString(position+1)+"/"+Integer.toString(pubInfo.imageAddress.size()));
+                });
+
+                builder.setStartPosition(finalI);
+                builder.setOverlayView(imageCounter);
+                builder.show();
+            });
+
+            pubImage.addViewToList(viewChild);
+        }
     }
 
     @Override

@@ -22,7 +22,10 @@ import kotel.hanzan.R;
 import kotel.hanzan.kakao.GlobalApplication;
 
 public class ServerConnectionHelper {
-    private final static String serverIP="elbhanjan-1863892783.ap-northeast-2.elb.amazonaws.com";
+    private final static String REGULAR_SERVER = "elbhanjan-1863892783.ap-northeast-2.elb.amazonaws.com";
+    private final static String TEST_SERVER = "ec2-52-78-207-207.ap-northeast-2.compute.amazonaws.com";
+
+    private final static String serverIP = REGULAR_SERVER;
     private int connectTimeout=10000;
 
     public static HashMap<String,String> connect(String recognizer, String phpAddress, HashMap<String,String> data, String imageName, byte[] image){
@@ -96,6 +99,11 @@ public class ServerConnectionHelper {
             e.printStackTrace();
         }
         return returnValue;
+    }
+
+
+    public static boolean isRegularServer(){
+        return serverIP.equals(REGULAR_SERVER);
     }
 }
 

@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -67,7 +68,10 @@ public class ImageCropper extends JActivity {
             finish();
         });
 
-        rotate.setOnClickListener(v -> cropper.rotateImage(90));
+        rotate.setOnClickListener(v -> {
+            rotationClicked();
+            cropper.rotateImage(90);
+        });
 
         cropper.setImageUriAsync(imageUri);
     }
@@ -84,5 +88,26 @@ public class ImageCropper extends JActivity {
     public void onBackPressed() {
         setResult(IMAGE_CROP_RESELECT_IMAGE);
         super.onBackPressed();
+    }
+
+    int rotationClicked = 0;
+    private void rotationClicked(){
+        if(rotationClicked==0){
+            rotationClicked++;
+            new Thread(()->{
+                try{
+                    Thread.sleep(5000);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                rotationClicked=0;
+            }).start();
+        }else{
+            rotationClicked++;
+            if(rotationClicked == 10){
+                Toast.makeText(getApplicationContext(),"Thumbelina ♥ KwB",Toast.LENGTH_SHORT).show();
+                rotationClicked = 0;
+            }
+        }
     }
 }

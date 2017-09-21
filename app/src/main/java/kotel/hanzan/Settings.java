@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import java.util.Locale;
 
+import kotel.hanzan.Data.StaticData;
 import kotel.hanzan.function.ColorHelper;
 import kotel.hanzan.function.LocaleHelper;
 import kotel.hanzan.view.JActivity;
@@ -17,7 +18,7 @@ import kotel.hanzan.view.JActivity;
 public class Settings extends JActivity {
     ImageView back;
 
-    TextView korean,english,termsConditions,announcements;
+    TextView korean,english,termsConditions,announcements, tutorial;
     ImageView facebook,instagram,webpage;
 
     @Override
@@ -30,6 +31,7 @@ public class Settings extends JActivity {
         english = (TextView)findViewById(R.id.settings_english);
         termsConditions = (TextView)findViewById(R.id.settings_termsConditions);
         announcements = (TextView)findViewById(R.id.settings_announcements);
+        tutorial = (TextView)findViewById(R.id.settings_tutorial);
         facebook = (ImageView)findViewById(R.id.settings_facebook);
         instagram = (ImageView)findViewById(R.id.settings_instagram);
         webpage = (ImageView)findViewById(R.id.settings_website);
@@ -71,6 +73,13 @@ public class Settings extends JActivity {
         announcements.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(),Announcement.class);
             startActivity(intent);
+        });
+
+        tutorial.setOnClickListener(view -> {
+            StaticData.currentUser.finishedTutorial = false;
+            Intent intent = new Intent(getApplicationContext(),Home.class);
+            startActivity(intent);
+            finishAffinity();
         });
 
         facebook.setOnClickListener(view -> openFacebook());

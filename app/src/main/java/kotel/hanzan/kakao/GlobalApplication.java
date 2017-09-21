@@ -2,6 +2,7 @@ package kotel.hanzan.kakao;
 
 import android.app.Application;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.kakao.auth.KakaoSDK;
 
 public class GlobalApplication extends Application{
@@ -14,6 +15,11 @@ public class GlobalApplication extends Application{
         instance = this;
 
         KakaoSDK.init(new KakaoSDKAdapter());
+
+        if(!Fresco.hasBeenInitialized()) {
+            Fresco.initialize(this);
+        }
+
     }
 
 
