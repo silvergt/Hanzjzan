@@ -35,14 +35,21 @@ public class PurchaseSuccess extends JActivity {
         membershipDue = (TextView)findViewById(R.id.purchaseSuccess_expireDate);
         confirm = (TextView)findViewById(R.id.purchaseSuccess_confirm);
 
-        startTossPayment();
+        if(StaticData.currentUser!=null){
+            startTossPayment();
+        }else{
+            JLog.e("User info is empty");
+            title.setText(getString(R.string.purchaseFailed));
+            membershipName.setText(getString(R.string.pleaseTryAgain));
+            membershipDue.setVisibility(View.INVISIBLE);
+        }
 
         confirm.setOnClickListener(view -> finish());
     }
 
 
     private void startTossPayment(){
-        if(!tossPayToken.equals("") && !ticketID.equals("") ){
+        if(!tossPayToken.equals("") && !ticketID.equals("")){
             int paymentResult = PaymentHelper.tossPaymentConfirm(StaticData.TOSSKEY,tossPayToken);
 
             if(paymentResult == PAYMENT_SUCCESS){

@@ -63,8 +63,50 @@ public class Login extends JActivity {
     private ImageView lowerIcon;
     private LinearLayout lowerButton;
 
+
+    //****KAKAO
+
     private SessionCallback callback;
     private Session session;
+    private class SessionCallback implements ISessionCallback {
+
+        @Override
+        public void onSessionOpened() {
+            loading.setLoadingStarted();
+
+            UserManagement.requestMe(new MeResponseCallback() {
+                @Override
+                public void onFailure(ErrorResult errorResult) {
+                    String message = "failed to get user info. msg=" + errorResult;
+                    JLog.v(message);
+                }
+
+                @Override
+                public void onSessionClosed(ErrorResult errorResult) {
+                    String message = "Session closed. msg=" + errorResult;
+                    JLog.v(message);
+                }
+
+                @Override
+                public void onNotSignedUp() {
+                }
+
+                @Override
+                public void onSuccess(UserProfile userProfile) {
+                    tryLoginWithKakaoTalk(userProfile);
+                }
+            });
+        }
+
+        @Override
+        public void onSessionOpenFailed(KakaoException exception) {
+            // 세션 연결이 실패했을때
+            if (exception != null) {
+                Logger.e(exception);
+            }
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -206,11 +248,9 @@ public class Login extends JActivity {
             case 0:
             case 1:
             case 2:
-//                lowerButton.setBackgroundResource(R.drawable.roundbox_maingradient);
                 lowerButton.setVisibility(View.VISIBLE);
                 break;
             case 3:
-//                lowerButton.setBackgroundResource(R.drawable.roundbox_gray);
                 lowerButton.setVisibility(View.INVISIBLE);
                 break;
         }
@@ -388,7 +428,19 @@ public class Login extends JActivity {
     }
 
 
+    private void makeUserInfoAndLogin(HashMap<String, String> map) {
+        new Handler(getMainLooper()).post(()-> {
+            StaticData.currentUser = new UserInfo(map);
+            Intent intent = new Intent(getApplicationContext(), Home.class);
+            startActivity(intent);
+            finish();
+        });
+    }
 
+
+
+
+    /** Terms and conditions popup */
     private void openTermsPage(@Nullable UserProfile userProfile){
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         RelativeLayout termPage = (RelativeLayout)getLayoutInflater().inflate(R.layout.login_agreeterms,null);
@@ -423,16 +475,6 @@ public class Login extends JActivity {
 
     }
 
-
-
-    private void makeUserInfoAndLogin(HashMap<String, String> map) {
-        new Handler(getMainLooper()).post(()-> {
-            StaticData.currentUser = new UserInfo(map);
-            Intent intent = new Intent(getApplicationContext(), Home.class);
-            startActivity(intent);
-            finish();
-        });
-    }
 
     private void deleteTemporaryLoginData() {
         StaticData.currentUser = null;
@@ -477,48 +519,6 @@ public class Login extends JActivity {
                     finishIfBackButtonClickedOnceMore = false;
                 }catch (Exception e){e.printStackTrace();}
             }).start();
-        }
-    }
-
-
-    //****KAKAO
-
-    private class SessionCallback implements ISessionCallback {
-
-        @Override
-        public void onSessionOpened() {
-            loading.setLoadingStarted();
-
-            UserManagement.requestMe(new MeResponseCallback() {
-                @Override
-                public void onFailure(ErrorResult errorResult) {
-                    String message = "failed to get user info. msg=" + errorResult;
-                    JLog.v(message);
-                }
-
-                @Override
-                public void onSessionClosed(ErrorResult errorResult) {
-                    String message = "Session closed. msg=" + errorResult;
-                    JLog.v(message);
-                }
-
-                @Override
-                public void onNotSignedUp() {
-                }
-
-                @Override
-                public void onSuccess(UserProfile userProfile) {
-                    tryLoginWithKakaoTalk(userProfile);
-                }
-            });
-        }
-
-        @Override
-        public void onSessionOpenFailed(KakaoException exception) {
-            // 세션 연결이 실패했을때
-            if (exception != null) {
-                Logger.e(exception);
-            }
         }
     }
 

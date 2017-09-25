@@ -83,8 +83,7 @@ public class Search extends JActivity {
                 } else {
                     lastClickedViewHolder.favorite.setImageResource(R.drawable.favorite_unselected);
                 }
-            } catch (Exception e) {
-            }
+            } catch (Exception e) {e.printStackTrace();}
         }
 
         @Override

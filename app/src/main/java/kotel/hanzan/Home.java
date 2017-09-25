@@ -178,7 +178,6 @@ public class Home extends JActivity {
         }
     }
 
-    private boolean isFirstGPSRequest = true;
     private boolean myLocationIsAvailable = false;
         //******FILTER******
         private boolean filterLayoutIsVisible = false;
@@ -574,16 +573,9 @@ public class Home extends JActivity {
         pubInfoRecyclerView.setOnJRecyclerViewListener(new JRecyclerViewListener() {
             @Override
             public void onRefresh(TwinklingRefreshLayout refreshLayout) {
-                if (isFirstGPSRequest) {
-                    isFirstGPSRequest = false;
-
-                    pubInfoArray.clear();
-                    homeAdapter.notifyDataSetChanged();
-                    requestGPSPermission();
-                }else{
-                    retrievePubList(true);
-                }
-
+                pubInfoArray.clear();
+                homeAdapter.notifyDataSetChanged();
+                requestGPSPermission();
             }
 
             @Override
@@ -1136,9 +1128,7 @@ public class Home extends JActivity {
                 double lng = Double.parseDouble(map.get("lng_" + num));
 
                 String dateString = map.get("date_visit_" + num);
-                int year = Integer.parseInt(dateString.substring(0,4));
-                int month = Integer.parseInt(dateString.substring(4,6));
-                int day = Integer.parseInt(dateString.substring(6,8));
+                int[] date = CalendarHelper.parseDate(dateString);
 
                 String drinkCategory = map.get("category_drink_" + num);
                 String drinkName = map.get("name_drink_" + num);
@@ -1146,7 +1136,7 @@ public class Home extends JActivity {
 
                 PubInfo pubInfo = new PubInfo(id, name, address, district, imageAddress, favorite, lat, lng);
                 DrinkInfo drinkInfo = new DrinkInfo(drinkCategory,drinkName,drinkImageAddress);
-                historyInfoArray.add(new PubHistoryInfo(pubInfo,drinkInfo,year,month,day));
+                historyInfoArray.add(new PubHistoryInfo(pubInfo,drinkInfo,date[0],date[1],date[0]));
             }
 
             String totalSavingCost = NumericHelper.toMoneyFormat(map.get("totalsavingcost"));
