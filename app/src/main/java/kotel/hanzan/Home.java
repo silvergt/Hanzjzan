@@ -1102,7 +1102,6 @@ public class Home extends JActivity {
         }
         new Thread(() -> {
             HashMap<String, String> map = new HashMap<>();
-
             map.put("at", Integer.toString(historyInfoArray.size()));
             map.put("id_member", Long.toString(StaticData.currentUser.id));
             map = ServerConnectionHelper.connect("retrieving drink histories", "drinkhistory", map);
@@ -1134,7 +1133,7 @@ public class Home extends JActivity {
 
                 PubInfo pubInfo = new PubInfo(id, name, address, district, imageAddress, favorite, lat, lng);
                 DrinkInfo drinkInfo = new DrinkInfo(drinkCategory,drinkName,drinkImageAddress);
-                historyInfoArray.add(new PubHistoryInfo(pubInfo,drinkInfo,date[0],date[1],date[0]));
+                historyInfoArray.add(new PubHistoryInfo(pubInfo,drinkInfo,date[0],date[1],date[2]));
             }
 
             String totalSavingCost = NumericHelper.toMoneyFormat(map.get("totalsavingcost"));

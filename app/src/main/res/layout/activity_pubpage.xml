@@ -73,11 +73,25 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 >
-                <kotel.hanzan.view.HorizontalSlideView
-                    android:id="@+id/pubpage_pubImage"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    />
+                    android:layout_height="wrap_content"
+                    >
+
+                    <kotel.hanzan.view.HorizontalSlideView
+                        android:id="@+id/pubpage_pubImage"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        />
+
+                    <kotel.hanzan.view.SlideCountView
+                        android:id="@+id/pubpage_slideCount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        />
+
+                </RelativeLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

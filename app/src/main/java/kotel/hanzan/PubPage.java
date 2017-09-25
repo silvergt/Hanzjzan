@@ -19,7 +19,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,10 +34,12 @@ import kotel.hanzan.Data.StaticData;
 import kotel.hanzan.function.ColorHelper;
 import kotel.hanzan.function.ServerConnectionHelper;
 import kotel.hanzan.listener.DrinkSelectorListener;
+import kotel.hanzan.listener.SlideListener;
 import kotel.hanzan.view.DrinkSelector;
 import kotel.hanzan.view.HorizontalSlideView;
 import kotel.hanzan.view.HorizontalSlideViewChild;
 import kotel.hanzan.view.JActivity;
+import kotel.hanzan.view.SlideCountView;
 
 public class PubPage extends JActivity {
     final public static int REQUEST_OPENPUBPAGE=10;
@@ -54,6 +55,7 @@ public class PubPage extends JActivity {
     private TextView upperTitle, title, address, phoneNumber, workingHour_weekday,workingHour_weekend, dayOff, description;
     private ImageView back, share, favorite, call, location;
     private HorizontalSlideView pubImage;
+    private SlideCountView slideCount;
 
     private Dialog drinkSelectorDialog;
     private int dialogStep=0;
@@ -79,6 +81,7 @@ public class PubPage extends JActivity {
 
         mainLayout = (RelativeLayout)findViewById(R.id.pubpage_pubpage);
         drinkSelector = (DrinkSelector) findViewById(R.id.pubpage_drinkSelector);
+        slideCount = (SlideCountView)findViewById(R.id.pubpage_slideCount);
         upperTitle = (TextView) findViewById(R.id.pubpage_upperTitle);
         title = (TextView) findViewById(R.id.pubpage_title);
         share = (ImageView)findViewById(R.id.pubpage_share);
@@ -94,9 +97,25 @@ public class PubPage extends JActivity {
         call = (ImageView) findViewById(R.id.pubpage_call);
         location = (ImageView) findViewById(R.id.pubpage_location);
 
-        LinearLayout.LayoutParams pubImageParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, StaticData.displayWidth*3/5);
+        RelativeLayout.LayoutParams pubImageParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, StaticData.displayWidth*3/5);
         pubImage.setLayoutParams(pubImageParams);
         pubImage.setChildWidth(StaticData.displayWidth);
+        pubImage.setOnSlideListener(new SlideListener() {
+            @Override
+            public void afterSlide() {
+                slideCount.setCountTo(pubImage.getCurrentIndex());
+            }
+
+            @Override
+            public void beforeSlide() {
+
+            }
+
+            @Override
+            public void whileSlide() {
+
+            }
+        });
 
         upperTitle.setText(pubInfo.name);
         title.setText(pubInfo.name);
@@ -449,6 +468,7 @@ public class PubPage extends JActivity {
                 description.setText(pubInfo.description);
                 workingHour_weekday.setText(pubInfo.work_weekday);
                 workingHour_weekend.setText(pubInfo.work_weekend);
+                slideCount.initialize(pubInfo.imageAddress.size(), 30, 5);
 
                 setPubImageView();
 

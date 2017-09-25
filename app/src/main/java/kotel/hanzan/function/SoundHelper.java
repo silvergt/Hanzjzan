@@ -5,6 +5,11 @@ import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
 
+/** This class is to play sound without worrying about deprecation of older version of Android OS.
+ * Create new SoundHelper wherever you want to play sound(put sound resource in soundRes).
+ * Then call playSound() to play sound.
+ * If soundIsOn has been set to false, sound won't be played. */
+
 public class SoundHelper{
     private static boolean soundIsOn=true;
     private SoundPool soundPool;

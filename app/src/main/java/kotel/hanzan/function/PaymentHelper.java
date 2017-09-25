@@ -15,6 +15,8 @@ public class PaymentHelper {
     final public static int PAYMENT_UNKNOWN_ISSUE=2;
 
 
+    /** amount is price of ticket user wants to purchase.
+     *  after executing tossPayment(), successively run tossPaymentConfirm() to make an actual purchase. */
     public static HashMap<String,String> tossPayment(String ticketID, String itemName, int amount){
         final HashMap<String,String> map = new HashMap<>();
 
@@ -110,13 +112,13 @@ public class PaymentHelper {
 
                 if(map.get("code")!=null && Integer.parseInt(map.get("code"))==0){
                     JLog.v("PURCHASE SUCCESS!!");
-                    returnValue[0] = 0;
+                    returnValue[0] = PAYMENT_SUCCESS;
                 }else{
                     JLog.v("PURCHASE FAILED!!");
                     if(map.get("errorCode")!=null && map.get("errorCode").equals("COMMON_NOT_ENOUGH_CASH")){
-                        returnValue[0] = 1;
+                        returnValue[0] = PAYMENT_NOT_ENOUGH_CASH;
                     }else{
-                        returnValue[0] = 2;
+                        returnValue[0] = PAYMENT_UNKNOWN_ISSUE;
                     }
 
                 }

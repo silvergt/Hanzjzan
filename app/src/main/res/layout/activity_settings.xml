@@ -173,6 +173,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 />
+<!--
 
             <TextView
                 android:id="@+id/settings_withdrawal"
@@ -186,6 +187,7 @@
                 android:gravity="center"
                 android:text="@string/withdrawal"
                 />
+-->
 
             <View
                 android:layout_width="match_parent"
