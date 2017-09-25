@@ -32,7 +32,7 @@ public class Event extends JActivity {
 
 
         title.setText(eventInfo.title);
-        Picasso.with(this).load(eventInfo.mainImageAddress).into(image);
+        Picasso.with(this).load(eventInfo.mainImageAddress).placeholder(R.drawable.loading_store).into(image);
 
         content.setText(eventInfo.content);
 

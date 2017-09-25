@@ -306,10 +306,11 @@ public class DrinkSelector extends RelativeLayout{
             RelativeLayout item = (RelativeLayout) LayoutInflater.from(context).inflate(R.layout.drinkselector_drinktype, null);
             item.setLayoutParams(params);
 
-            ImageView drinktypeImage = (ImageView) item.findViewById(R.id.drinkSelector_drinkType_image);
+            ImageView drinkTypeImage = (ImageView) item.findViewById(R.id.drinkSelector_drinkType_image);
             TextView drinkTypeName = (TextView) item.findViewById(R.id.drinkSelector_drinkType_text);
 
-            AssetsHelper.loadDrinkImage(context,drinkType.get(num)).into(drinktypeImage);
+            drinkTypeImage.setImageDrawable(AssetsHelper.loadDrinkImage(context,drinkType.get(num)));
+//            AssetsHelper.loadDrinkImage(context,drinkType.get(num)).into(drinkTypeImage);
             drinkTypeName.setText(DrinkInfo.getDrinkName(context,drinkType.get(num)));
 
             drinkTypeLayout[i] = item.findViewById(R.id.drinkSelector_drinkType_layout);

@@ -442,6 +442,9 @@ public class Login extends JActivity {
 
     /** Terms and conditions popup */
     private void openTermsPage(@Nullable UserProfile userProfile){
+        loading.setLoadingCompleted();
+        RelativeLayout termsContainer = (RelativeLayout) findViewById(R.id.login_termsContainer);
+
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         RelativeLayout termPage = (RelativeLayout)getLayoutInflater().inflate(R.layout.login_agreeterms,null);
         termPage.setLayoutParams(params);
@@ -456,10 +459,11 @@ public class Login extends JActivity {
             map.clear();
             deleteTemporaryLoginData();
             onLoginFailed();
-            layout.removeView(termPage);
+            termsContainer.removeView(termPage);
         });
 
         agree.setOnClickListener(view -> {
+            loading.setLoadingStarted();
             new Thread(()->{
                 if(userProfile == null){
                     signUpWithFacebook();
@@ -470,7 +474,7 @@ public class Login extends JActivity {
         });
 
         new Handler(getMainLooper()).post(()->{
-            layout.addView(termPage);
+            termsContainer.addView(termPage);
         });
 
     }

@@ -171,6 +171,24 @@
 
             <View
                 android:layout_width="match_parent"
+                android:layout_height="20dp"
+                />
+
+            <TextView
+                android:id="@+id/settings_withdrawal"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/setting_optionHeight"
+                android:layout_marginLeft="@dimen/setting_sideMargin"
+                android:layout_marginRight="@dimen/setting_sideMargin"
+                android:background="@drawable/roundbox_maincolor"
+                android:textColor="@color/white"
+                android:textSize="@dimen/setting_textFontSize"
+                android:gravity="center"
+                android:text="@string/withdrawal"
+                />
+
+            <View
+                android:layout_width="match_parent"
                 android:layout_height="60dp"
                 />
 
@@ -213,5 +231,11 @@
         </LinearLayout>
 
     </LinearLayout>
+
+    <kotel.hanzan.view.Loading
+        android:id="@+id/settings_loading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 
 </RelativeLayout>

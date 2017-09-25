@@ -120,7 +120,7 @@
     <dimen name="profileNameChange_profileWidth">60dp</dimen>
     <dimen name="profileNameChange_height">150dp</dimen>
 
-    <dimen name="setting_optionHeight">50dp</dimen>
+    <dimen name="setting_optionHeight">40dp</dimen>
     <dimen name="setting_roundIconSize">40dp</dimen>
     <dimen name="setting_textFontSize">15sp</dimen>
     <dimen name="setting_sideMargin">40dp</dimen>

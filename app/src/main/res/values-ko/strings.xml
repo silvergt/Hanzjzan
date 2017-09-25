@@ -131,5 +131,7 @@
     <string name="tutorial_text9">이 화면을 직원에게 보여드리면,\n\n직원이 확인하고 버튼을 눌러줄거에요!</string>
     <string name="startHanjan">클릭하여 한잔 시작하기</string>
     <string name="tutorial">튜토리얼</string>
+    <string name="withdrawal">회원 탈퇴</string>
+    <string name="withdrawalDialog">정말로 회원 탈퇴를 하시겠습니까?\n탈퇴시 모든 멤버쉽이 사라집니다!</string>
 
 </resources>

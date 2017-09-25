@@ -310,7 +310,8 @@ public class Home extends JActivity {
             holder.name.setText(pubInfo.name);
             holder.address.setText(pubInfo.address);
             JLog.v(historyInfoArray.get(position).drinkInfo.drinkType);
-            AssetsHelper.loadDrinkImage(getApplicationContext(),historyInfoArray.get(position).drinkInfo.drinkType).into(holder.drinkImage);
+            holder.drinkImage.setImageDrawable(AssetsHelper.loadDrinkImage(getApplicationContext(),historyInfoArray.get(position).drinkInfo.drinkType));
+//            AssetsHelper.loadDrinkImage(getApplicationContext(),historyInfoArray.get(position).drinkInfo.drinkType).into(holder.drinkImage);
 
             holder.itemView.setOnClickListener(view -> {
                 Intent intent = new Intent(Home.this, PubPage.class);
@@ -388,7 +389,6 @@ public class Home extends JActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
 
         inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -469,9 +469,6 @@ public class Home extends JActivity {
             }
         });
 
-        openHomeTab();
-        setUpperBarLeftIconStatus();
-
         if(StaticData.currentUser==null){
             logoutToLoginPage();
         }else if(StaticData.currentUser.finishedTutorial){
@@ -481,6 +478,10 @@ public class Home extends JActivity {
         }else if(!StaticData.currentUser.finishedTutorial){
             openTutorial();
         }
+
+        openHomeTab();
+        setUpperBarLeftIconStatus();
+
 
     }
 
@@ -502,8 +503,6 @@ public class Home extends JActivity {
         mainLayout.addView(tutorialLayout);
 
         ObjectAnimator.ofFloat(tutorial1,"alpha",0,1).setDuration(900).start();
-
-        retrievePubList(true);
     }
 
     private void openMembershipPopup() {
@@ -790,7 +789,6 @@ public class Home extends JActivity {
         if(StaticData.myLatestLocation == null )StaticData.myLatestLocation = StaticData.defaultLocation;
         new Thread(() -> {
             HashMap<String, String> map = new HashMap<>();
-
             try {
                 map.put("at", Integer.toString(pubInfoArray.size()));
                 map.put("id_member", Long.toString(StaticData.currentUser.id));

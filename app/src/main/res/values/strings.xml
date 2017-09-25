@@ -147,5 +147,7 @@
     <string name="tutorial_text10">Careful! This button must be clicked by clerk!</string>
     <string name="startHanjan">Click to start Hanjan</string>
     <string name="tutorial">Tutorial</string>
+    <string name="withdrawal">Withdrawal</string>
+    <string name="withdrawalDialog">Are you sure you want to withdraw your account?\nAll of your remaining membership will be deleted!</string>
 
 </resources>

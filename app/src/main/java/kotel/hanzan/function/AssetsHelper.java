@@ -15,8 +15,18 @@ public class AssetsHelper {
 
     /** IMAGE HELPER */
 
-    public static RequestCreator loadDrinkImage(Context context, String drink){
-        return Picasso.with(context).load("file:///android_asset/drinks/"+drink+".png");
+//    public static RequestCreator loadDrinkImage(Context context, String drink){
+//        return Picasso.with(context).load("file:///android_asset/drinks/"+drink+".png");
+//    }
+
+    public static Drawable loadDrinkImage(Context context, String drink){
+        Drawable drawable = null;
+        try{
+            drawable = Drawable.createFromStream(context.getAssets().open("drinks/"+drink+".png"),null);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return drawable;
     }
 
     public static Drawable loadTapBarImageDrawable(Context context, String name){

@@ -80,6 +80,12 @@
 
     </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/login_termsContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
 
     <kotel.hanzan.view.Loading
         android:id="@+id/login_loading"
