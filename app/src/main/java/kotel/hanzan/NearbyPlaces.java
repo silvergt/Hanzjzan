@@ -1,7 +1,6 @@
 package kotel.hanzan;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
@@ -34,7 +33,6 @@ import kotel.hanzan.Data.StaticData;
 import kotel.hanzan.function.DrawableHelper;
 import kotel.hanzan.function.GeoHelper;
 import kotel.hanzan.function.JLog;
-import kotel.hanzan.function.LocaleHelper;
 import kotel.hanzan.function.LocationHelper;
 import kotel.hanzan.function.ServerConnectionHelper;
 import kotel.hanzan.listener.LocationHelperListener;
@@ -51,7 +49,7 @@ public class NearbyPlaces extends JNMapActivity {
     private NMapPOIdata poiData;
 
     private NMapOverlayItem currentlyFocusedMarker;
-    private PubInfo currectlyFocusedPubInfo;
+    private PubInfo currentlyFocusedPubInfo;
 
     private LocationHelper locationHelper = new LocationHelper();
 
@@ -392,7 +390,7 @@ public class NearbyPlaces extends JNMapActivity {
                 currentlyFocusedMarker.setMarker(unselected);
             }
 
-            currectlyFocusedPubInfo = pubInfoArray.get(position);
+            currentlyFocusedPubInfo = pubInfoArray.get(position);
             currentlyFocusedMarker = nMapOverlayItem;
             currentlyFocusedMarker.setMarker(selected);
 
@@ -406,14 +404,14 @@ public class NearbyPlaces extends JNMapActivity {
                 distanceString = GeoHelper.getDistanceString(distance);
             }
 
-            Picasso.with(this).load(currectlyFocusedPubInfo.imageAddress.get(0)).placeholder(R.drawable.loading_store).into(pubImage);
-            pubText1.setText(currectlyFocusedPubInfo.name + "  " + distanceString);
-            pubText2.setText(currectlyFocusedPubInfo.district);
-            pubText3.setText(currectlyFocusedPubInfo.address);
+            Picasso.with(this).load(currentlyFocusedPubInfo.imageAddress.get(0)).placeholder(R.drawable.loading_store).into(pubImage);
+            pubText1.setText(currentlyFocusedPubInfo.name + "  " + distanceString);
+            pubText2.setText(currentlyFocusedPubInfo.district);
+            pubText3.setText(currentlyFocusedPubInfo.address);
 
             pubInfoLayout.setOnClickListener(view -> {
                 Intent intent = new Intent(NearbyPlaces.this, PubPage.class);
-                intent.putExtra("info", currectlyFocusedPubInfo);
+                intent.putExtra("info", currentlyFocusedPubInfo);
                 startActivity(intent);
             });
         }catch (Exception e){
@@ -505,10 +503,4 @@ public class NearbyPlaces extends JNMapActivity {
         super.onStop();
         locationHelper.onStop();
     }
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleHelper.onAttach(newBase));
-    }
-
 }

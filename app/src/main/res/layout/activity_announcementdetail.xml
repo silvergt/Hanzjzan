@@ -37,6 +37,7 @@
                 android:text="@string/announcement"
                 android:paddingLeft="5dp"
                 android:textStyle="bold"
+                android:autoLink="all"
                 />
 
         </LinearLayout>

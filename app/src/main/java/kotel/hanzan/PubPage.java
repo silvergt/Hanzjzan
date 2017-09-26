@@ -70,7 +70,7 @@ public class PubPage extends JActivity {
 
 
     //************************TUTORIAL Tab************************
-    private RelativeLayout tutorialLayout,layout1,layout2;
+    private RelativeLayout layout1,layout2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -333,7 +333,7 @@ public class PubPage extends JActivity {
         button1.setOnClickListener(view -> {
             switch (dialogStep){
                 case 1:
-                    dialogText2.setText(drinkInfo.drinkName+"\n"+getString(R.string.oneGlassPlease));
+                    dialogText2.setText(drinkInfo.drinkName+"\n"+getString(R.string.showThisToClerk));
                     dialogText1.setVisibility(View.INVISIBLE);
                     dialogText2.setVisibility(View.VISIBLE);
                     button1.setBackgroundResource(R.drawable.roundbox_gray);
@@ -468,7 +468,7 @@ public class PubPage extends JActivity {
                 description.setText(pubInfo.description);
                 workingHour_weekday.setText(pubInfo.work_weekday);
                 workingHour_weekend.setText(pubInfo.work_weekend);
-                slideCount.initialize(pubInfo.imageAddress.size(), 30, 5);
+                slideCount.initialize(pubInfo.imageAddress.size(), (int)getResources().getDimension(R.dimen.pubpage_slideCountWidth), 5);
 
                 setPubImageView();
 

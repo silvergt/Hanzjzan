@@ -128,7 +128,7 @@ public class Login extends JActivity {
         slideView.setLayoutParams(slideViewParams);
         addSlideChildViews();
 
-        slideCountView.initialize(slideView.getListChildCount(), 40, 5);
+        slideCountView.initialize(slideView.getListChildCount(), (int)getResources().getDimension(R.dimen.login_slideCountWidth), 5);
 
         lowerIcon.setVisibility(View.GONE);
 

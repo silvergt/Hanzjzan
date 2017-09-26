@@ -33,12 +33,12 @@ public class Announcement extends JActivity {
     private class AnnouncementRecyclerViewAdapter extends RecyclerView.Adapter<AnnouncementRecyclerViewAdapter.ViewHolder> {
 
         class ViewHolder extends RecyclerView.ViewHolder {
-            TextView titleTextView,entityTextView;
+            TextView titleTextView, entityTextView;
 
-            public ViewHolder(View itemView) {
+            ViewHolder(View itemView) {
                 super(itemView);
-                titleTextView = (TextView)itemView.findViewById(R.id.announcement_itemTitle);
-                entityTextView = (TextView)itemView.findViewById(R.id.announcement_itemEntity);
+                titleTextView = (TextView) itemView.findViewById(R.id.announcement_itemTitle);
+                entityTextView = (TextView) itemView.findViewById(R.id.announcement_itemEntity);
             }
         }
 
@@ -57,8 +57,8 @@ public class Announcement extends JActivity {
             holder.entityTextView.setText(info.content);
 
             holder.itemView.setOnClickListener(view -> {
-                Intent intent = new Intent(getApplicationContext(),AnnouncementDetail.class);
-                intent.putExtra("info",info);
+                Intent intent = new Intent(getApplicationContext(), AnnouncementDetail.class);
+                intent.putExtra("info", info);
                 startActivity(intent);
             });
         }
@@ -74,15 +74,17 @@ public class Announcement extends JActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_announcement);
 
-        back = (ImageView)findViewById(R.id.announcement_back);
-        recyclerView = (JRecyclerView)findViewById(R.id.announcement_recycler);
+        back = (ImageView) findViewById(R.id.announcement_back);
+        recyclerView = (JRecyclerView) findViewById(R.id.announcement_recycler);
 
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         recyclerView.setOnJRecyclerViewListener(new JRecyclerViewListener() {
             @Override
-            public void onRefresh(TwinklingRefreshLayout refreshLayout) {retrieveAnnouncements(true);}
+            public void onRefresh(TwinklingRefreshLayout refreshLayout) {
+                retrieveAnnouncements(true);
+            }
 
             @Override
             public void onLoadMore() {
@@ -96,7 +98,7 @@ public class Announcement extends JActivity {
     }
 
     private synchronized void retrieveAnnouncements(boolean clearArray) {
-        if(clearArray) {
+        if (clearArray) {
             infoArray.clear();
         }
         new Thread(() -> {
@@ -108,7 +110,7 @@ public class Announcement extends JActivity {
             int i = 0;
             while (true) {
                 String num = Integer.toString(i++);
-                if(map.get("id_announcement_" + num)==null){
+                if (map.get("id_announcement_" + num) == null) {
                     break;
                 }
                 int id = Integer.parseInt(map.get("id_announcement_" + num));
@@ -116,7 +118,7 @@ public class Announcement extends JActivity {
                 String content = map.get("content_announcement_" + num);
                 String date = map.get("date_announcement_" + num);
 
-                infoArray.add(new AnnouncementInfo(id,title,content,date));
+                infoArray.add(new AnnouncementInfo(id, title, content, date));
             }
 
             String dataleft = map.get("datalefts");
@@ -124,7 +126,7 @@ public class Announcement extends JActivity {
             new Handler(getMainLooper()).post(() -> {
                 recyclerView.finishRefreshing();
                 adapter.notifyDataSetChanged();
-                if(dataleft!=null&&dataleft.equals("TRUE")){
+                if (dataleft != null && dataleft.equals("TRUE")) {
                     recyclerView.finishLoadmore();
                 }
             });

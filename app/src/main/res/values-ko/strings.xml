@@ -47,8 +47,8 @@
     <string name="oneGlassPlease">한잔 주세요!</string>
     <string name="cancel">취소</string>
     <string name="clerkCheck">직원 확인</string>
-    <string name="SuccessfullyUsed">사용 성공!</string>
-    <string name="isComing">한잔 하세요!</string>
+    <string name="SuccessfullyUsed">승인되었습니다!</string>
+    <string name="isComing">이(가) 무료로 제공됩니다</string>
     <string name="membershipPopupText">아직 한잔 멤버쉽에 가입하지 않으셨네요!\n지금 가입하시겠어요?</string>
     <string name="membershipPopupTextAlmostEnd">멤버쉽 기간이 거의 끝나갑니다!\n지금 멤버쉽을 연장하실래요?</string>
     <string name="aroundMe">내 주변</string>
@@ -133,5 +133,6 @@
     <string name="tutorial">튜토리얼</string>
     <string name="withdrawal">회원 탈퇴</string>
     <string name="withdrawalDialog">정말로 회원 탈퇴를 하시겠습니까?\n탈퇴시 모든 멤버쉽이 사라집니다!</string>
+    <string name="showThisToClerk">직원에게 보여주세요</string>
 
 </resources>

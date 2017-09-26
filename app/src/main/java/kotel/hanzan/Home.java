@@ -583,7 +583,9 @@ public class Home extends JActivity {
             }
         });
 
-        pubInfoRecyclerView.startRefresh();
+        if(pubInfoArray.size() == 0) {
+            pubInfoRecyclerView.startRefresh();
+        }
 
         container.addView(homeLayout);
     }

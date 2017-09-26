@@ -61,7 +61,7 @@
     <string name="cancel">Cancel</string>
     <string name="clerkCheck">Clerk check</string>
     <string name="SuccessfullyUsed">Successfully used!</string>
-    <string name="isComing">is coming!</string>
+    <string name="isComing">is coming for free!</string>
     <string name="membershipPopupText">You are not member yet!\nDo you want to join now?</string>
     <string name="membershipPopupTextAlmostEnd">"Your membership due is coming!\nDo you want to extend your membership? "</string>
     <string name="aroundMe">Around me</string>
@@ -149,5 +149,6 @@
     <string name="tutorial">Tutorial</string>
     <string name="withdrawal">Withdrawal</string>
     <string name="withdrawalDialog">Are you sure you want to withdraw your account?\nAll of your remaining membership will be deleted!</string>
+    <string name="showThisToClerk">Show this to clerk</string>
 
 </resources>

@@ -135,40 +135,23 @@
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="20dp"
+                        android:layout_height="15dp"
                         />
 
-                    <LinearLayout
+
+                    <TextView
+                        android:id="@+id/pubpage_address"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        >
-
-                        <TextView
-                            android:id="@+id/pubpage_address"
-                            android:layout_width="0dp"
-                            android:layout_weight="1"
-                            android:layout_height="wrap_content"
-                            android:text=""
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/pubpage_subTextFontSize"
-                            android:layout_gravity="center_vertical"
-                            />
-
-                        <ImageView
-                            android:id="@+id/pubpage_provideType"
-                            android:layout_width="@dimen/pubpage_itemSize"
-                            android:layout_height="@dimen/pubpage_itemSize"
-                            android:tint="@color/black"
-                            android:paddingRight="10dp"
-                            />
-
-
-                    </LinearLayout>
+                        android:text=""
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/pubpage_subTextFontSize"
+                        android:layout_gravity="center_vertical"
+                        />
 
                     <View
                         android:layout_width="match_parent"
-                        android:layout_height="30dp"
+                        android:layout_height="15dp"
                         />
 
                     <RelativeLayout

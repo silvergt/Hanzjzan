@@ -21,7 +21,6 @@
         android:id="@+id/locationFilter_locationName"
         android:layout_width="match_parent"
         android:layout_height="@dimen/locationFilter_itemHeight"
-        android:text="신촌"
         android:gravity="center"
         android:textColor="@color/black"
         android:textSize="@dimen/locationFilter_itemFontSize"

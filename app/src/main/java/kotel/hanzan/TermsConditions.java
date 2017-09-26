@@ -1,13 +1,13 @@
 package kotel.hanzan;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import kotel.hanzan.function.AssetsHelper;
+import kotel.hanzan.view.JActivity;
 
-public class TermsConditions extends AppCompatActivity {
+public class TermsConditions extends JActivity {
     ImageView back;
     TextView termsText;
 

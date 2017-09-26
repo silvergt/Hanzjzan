@@ -164,12 +164,10 @@ public class Search extends JActivity {
         recyclerView = (JRecyclerView) findViewById(R.id.search_recycler);
         loading = (Loading)findViewById(R.id.search_loading);
 
-
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         recyclerView.setEnableRefresh(false);
         recyclerView.setOverScrollRefreshShow(false);
-
 
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override

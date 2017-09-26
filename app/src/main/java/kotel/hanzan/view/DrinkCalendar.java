@@ -22,10 +22,9 @@ public class DrinkCalendar extends RelativeLayout {
     private Context context;
 
     private RelativeLayout layout;
-    private TextView monthText, lowerText;
+    private TextView monthText;
     private LinearLayout calendarLayout;
     private LinearLayout[] calendarRow;
-//    private Calendar calendar;
     private ImageView leftButton, rightButton;
 
     private RelativeLayout[] cells;
@@ -52,7 +51,6 @@ public class DrinkCalendar extends RelativeLayout {
         layout = (RelativeLayout) LayoutInflater.from(context).inflate(R.layout.drinkcalendar, null);
         monthText = (TextView) layout.findViewById(R.id.drinkCalendar_month);
         calendarLayout = (LinearLayout) layout.findViewById(R.id.drinkCalendar_calendarLayout);
-        lowerText = (TextView) layout.findViewById(R.id.drinkCalendar_lowerText);
         leftButton = (ImageView) layout.findViewById(R.id.drinkCalendar_left);
         rightButton = (ImageView) layout.findViewById(R.id.drinkCalendar_right);
 
@@ -113,10 +111,6 @@ public class DrinkCalendar extends RelativeLayout {
 
     public int getViewingMonthInNormal() {
         return calendar.get(Calendar.MONTH) + 1;
-    }
-
-    public void setLowerText(String str) {
-        lowerText.setText(str);
     }
 
 

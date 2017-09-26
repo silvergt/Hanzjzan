@@ -1,7 +1,6 @@
 package kotel.hanzan;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -27,7 +26,6 @@ import kotel.hanzan.Data.PubInfo;
 import kotel.hanzan.Data.StaticData;
 import kotel.hanzan.function.DrawableHelper;
 import kotel.hanzan.function.GeoHelper;
-import kotel.hanzan.function.LocaleHelper;
 import kotel.hanzan.function.LocationHelper;
 import kotel.hanzan.listener.LocationHelperListener;
 import kotel.hanzan.view.JNMapActivity;
@@ -331,10 +329,4 @@ public class LocationViewer extends JNMapActivity {
         super.onStop();
         locationHelper.onStop();
     }
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleHelper.onAttach(newBase));
-    }
-
 }

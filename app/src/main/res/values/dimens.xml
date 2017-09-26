@@ -75,7 +75,7 @@
     <dimen name="pubpage_upperTitleFontSize">17sp</dimen>
     <dimen name="pubpage_TitleFontSize">17sp</dimen>
     <dimen name="pubpage_subTextFontSize">12sp</dimen>
-
+    <dimen name="pubpage_slideCountWidth">9dp</dimen>
 
     <dimen name="search_searchBarHeight">45dp</dimen>
     <dimen name="search_subTextFontSize">13sp</dimen>
@@ -108,6 +108,7 @@
     <dimen name="login_mainFontSize">16sp</dimen>
     <dimen name="login_subFontSize">12sp</dimen>
     <dimen name="login_termsFontSize">13sp</dimen>
+    <dimen name="login_slideCountWidth">12dp</dimen>
 
     <dimen name="JRecyclerView_buttonWidth">50dp</dimen>
 
