@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Hanjan</string>
+    <string name="app_name">Drinkat</string>
 
     <string name="naver_client_id" translatable="false">vTyKRfxeLRkzu3OELYyw</string>
 
@@ -55,7 +55,7 @@
     <string name="noLater">No, later!</string>
     <string name="isYourChoice">is your choice?</string>
     <string name="providing">\'s</string>
-    <string name="alreadyUsedTicket">You already used today\'s ticket,\nCome back tomorrow</string>
+    <string name="alreadyUsedTicket">You already used today\'s drinkat,\nCome back tomorrow</string>
     <string name="willComebackLater">Okay, see you tomorrow!</string>
     <string name="oneGlassPlease">one glass please!</string>
     <string name="cancel">Cancel</string>
@@ -85,7 +85,7 @@
     <string name="logout">Logout</string>
     <string name="startWithFacebook">Start with Facebook</string>
     <string name="startWithKakaoTalk">Start with KakaoTalk</string>
-    <string name="loginText1Main">Have one drink every day!</string>
+    <string name="loginText1Main">Have one drinkat every day!</string>
     <string name="loginText1Sub">1 free drink is provided every day\nif you join our membership</string>
     <string name="loginText2Main">Check out our various pubs</string>
     <string name="loginText2Sub">We have many affiliated pubs.\nLook around nearby pubs and visit the pub you like.</string>
@@ -135,7 +135,7 @@
     <string name="tutorial_pubAddress">Somewhere in Shinchon</string>
     <string name="tutorial_drinkName">Tutorink</string>
     <string name="tutorial_pubDescription">Have one free drink everyday!</string>
-    <string name="tutorial_text1">Welcome to Hanjan!</string>
+    <string name="tutorial_text1">Welcome to Drinkat!</string>
     <string name="tutorial_text2">Everyday, one glass, free</string>
     <string name="tutorial_text3">So, let\'s learn how to use Hanjan</string>
     <string name="tutorial_text4">First, click a pub you want to visit</string>
@@ -143,12 +143,18 @@
     <string name="tutorial_text6">Now, choose a drink you want to have!</string>
     <string name="tutorial_text7">Check if you chose right drink</string>
     <string name="tutorial_text8">Click yes to precede to the next step</string>
-    <string name="tutorial_text9">Show this to clerk,\n\nthen clerk will check your order.</string>
+    <string name="tutorial_text9">Show this page to clerk,\nthen clerk will check your order.\n\nNow, click button below to start Drinkat!</string>
     <string name="tutorial_text10">Careful! This button must be clicked by clerk!</string>
-    <string name="startHanjan">Click to start Hanjan</string>
     <string name="tutorial">Tutorial</string>
     <string name="withdrawal">Withdrawal</string>
     <string name="withdrawalDialog">Are you sure you want to withdraw your account?\nAll of your remaining membership will be deleted!</string>
     <string name="showThisToClerk">Show this to clerk</string>
+    <string name="nearbyPlacesLimits">Retrieving 30 nearby pubs from center of the map.\nIf you want to see more pubs, please zoom in</string>
+    <string name="zoomToSeeMore">Zoom in to see pubs\' location</string>
+    <string name="DrinkSelectorPopup_text2">clerk is right?\nPlease click confirm and provide product.</string>
+    <string name="DrinkSelectorPopup_text3">Today\'s membership has been successfully used!</string>
+    <string name="DrinkSelectorPopup_text4">You can use membership again after 6AM</string>
+    <string name="DrinkSelectorPopup_text1">Show this to clerk.\nClerk will check order and click button.</string>
+    <string name="startDrinkat">Click to start Drinkat</string>
 
 </resources>

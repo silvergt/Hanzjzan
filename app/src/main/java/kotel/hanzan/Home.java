@@ -188,6 +188,7 @@ public class Home extends JActivity {
         //******LOCATION FILTER******
         private boolean locationFilterLayoutIsVisible = false;
         private LocationFilterView locationFilterLayout;
+        private String filterDistrict="";
 
     //************************My Favorite Tab************************
     private JRecyclerView pubInfoFavoriteRecyclerView;
@@ -311,7 +312,6 @@ public class Home extends JActivity {
             holder.address.setText(pubInfo.address);
             JLog.v(historyInfoArray.get(position).drinkInfo.drinkType);
             holder.drinkImage.setImageDrawable(AssetsHelper.loadDrinkImage(getApplicationContext(),historyInfoArray.get(position).drinkInfo.drinkType));
-//            AssetsHelper.loadDrinkImage(getApplicationContext(),historyInfoArray.get(position).drinkInfo.drinkType).into(holder.drinkImage);
 
             holder.itemView.setOnClickListener(view -> {
                 Intent intent = new Intent(Home.this, PubPage.class);
@@ -470,7 +470,8 @@ public class Home extends JActivity {
         });
 
         if(StaticData.currentUser==null){
-            logoutToLoginPage();
+            reopenLoginPage();
+            return;
         }else if(StaticData.currentUser.finishedTutorial){
             if(StaticData.currentUser.expireYYYY == 0){
                 openMembershipPopup();
@@ -510,13 +511,13 @@ public class Home extends JActivity {
 
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-        LinearLayout layout = (LinearLayout) getLayoutInflater().inflate(R.layout.home_membershippopup, null);
+        LinearLayout layout = (LinearLayout) getLayoutInflater().inflate(R.layout.popupbox_normal, null);
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout.setLayoutParams(params);
 
-        TextView text = (TextView)layout.findViewById(R.id.homeMembershipPopup_text);
-        TextView no = (TextView) layout.findViewById(R.id.homeMembershipPopup_no);
-        TextView yes = (TextView) layout.findViewById(R.id.homeMembershipPopup_yes);
+        TextView text = (TextView)layout.findViewById(R.id.popupBox_text);
+        TextView yes = (TextView) layout.findViewById(R.id.popupBox_yes);
+        TextView no = (TextView) layout.findViewById(R.id.popupBox_no);
 
         if (StaticData.currentUser.expireYYYY==0){
             text.setText(getString(R.string.membershipPopupText));
@@ -541,11 +542,9 @@ public class Home extends JActivity {
     private void setUpperBarVisibility(boolean setToVisible){
         int visibility = setToVisible ? View.VISIBLE : View.INVISIBLE;
 
-//        upperBarLeftIcon.setVisibility(visibility);
         upperBarMap.setVisibility(visibility);
         upperBarSearch.setVisibility(visibility);
         upperBarLocationFilter.setVisibility(visibility);
-//        upperBarSubText.setVisibility(visibility);
         upperBarFilter.setVisibility(View.INVISIBLE);
 
 
@@ -585,6 +584,8 @@ public class Home extends JActivity {
 
         if(pubInfoArray.size() == 0) {
             pubInfoRecyclerView.startRefresh();
+        }else{
+            retrievePubList(true);
         }
 
         container.addView(homeLayout);
@@ -763,7 +764,7 @@ public class Home extends JActivity {
             startActivity(intent);
         });
 
-        mypageLogout.setOnClickListener(view -> logoutToLoginPage());
+        mypageLogout.setOnClickListener(view -> openLogoutDialog());
 
         container.addView(layout);
 
@@ -796,6 +797,7 @@ public class Home extends JActivity {
                 map.put("id_member", Long.toString(StaticData.currentUser.id));
                 map.put("user_lat", Double.toString(StaticData.myLatestLocation.getLatitude()));
                 map.put("user_lng", Double.toString(StaticData.myLatestLocation.getLongitude()));
+                map.put("filter_district",filterDistrict);
                 for (int i = 0; i < filter_checkboxChecked.length; i++) {
                     map.put("filter_" + Integer.toString(i + 1), filter_checkboxChecked[i] ? "TRUE" : "FALSE");
                 }
@@ -870,7 +872,6 @@ public class Home extends JActivity {
             @Override
             public void onLocationFound(NGeoPoint nGeoPoint) {
                 myLocationIsAvailable = true;
-                pubInfoArray.clear();
                 JLog.v("Normal GPS calling");
                 StaticData.myLatestLocation = nGeoPoint;
                 retrievePubList(true);
@@ -879,7 +880,6 @@ public class Home extends JActivity {
             @Override
             public void onLocationTimeout() {
                 myLocationIsAvailable = false;
-                pubInfoArray.clear();
                 Toast.makeText(getApplicationContext(), getString(R.string.failedGPS), Toast.LENGTH_SHORT).show();
                 StaticData.myLatestLocation = StaticData.defaultLocation;
                 retrievePubList(true);
@@ -888,7 +888,6 @@ public class Home extends JActivity {
             @Override
             public void onLocationUnavailableArea(NGeoPoint nGeoPoint) {
                 myLocationIsAvailable = false;
-                pubInfoArray.clear();
                 Toast.makeText(getApplicationContext(), getString(R.string.failedGPS), Toast.LENGTH_SHORT).show();
                 StaticData.myLatestLocation = StaticData.defaultLocation;
                 retrievePubList(true);
@@ -897,7 +896,6 @@ public class Home extends JActivity {
             @Override
             public void onHasNoLocationPermission() {
                 myLocationIsAvailable = false;
-                pubInfoArray.clear();
                 Toast.makeText(getApplicationContext(), getString(R.string.allowGPS), Toast.LENGTH_SHORT).show();
                 StaticData.myLatestLocation = StaticData.defaultLocation;
                 retrievePubList(true);
@@ -906,7 +904,6 @@ public class Home extends JActivity {
             @Override
             public void onGpsIsOff() {
                 myLocationIsAvailable = false;
-                pubInfoArray.clear();
                 Toast.makeText(getApplicationContext(), getString(R.string.turnOnGPS), Toast.LENGTH_SHORT).show();
                 StaticData.myLatestLocation = StaticData.defaultLocation;
                 retrievePubList(true);
@@ -941,12 +938,17 @@ public class Home extends JActivity {
 
             @Override
             public void onSelectLocationClick(String locationName) {
+                filterDistrict = locationName;
+                upperBarMainText.setText(filterDistrict);
+                pubInfoRecyclerView.startRefresh();
                 container.removeView(locationFilterLayout);
                 locationFilterLayoutIsVisible = false;
             }
 
             @Override
             public void onSearchAroundMeClick() {
+                filterDistrict = "";
+                upperBarMainText.setText(getString(R.string.aroundMe));
                 pubInfoRecyclerView.startRefresh();
                 container.removeView(locationFilterLayout);
                 locationFilterLayoutIsVisible = false;
@@ -1304,21 +1306,30 @@ public class Home extends JActivity {
         dialog.show();
     }
 
-    private void logoutToLoginPage() {
+    private void openLogoutDialog(){
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
         dialogBuilder.setMessage(getString(R.string.logoutMessage));
         dialogBuilder.setNegativeButton(getString(R.string.no), null);
         dialogBuilder.setPositiveButton(getString(R.string.yes), (dialogInterface, i) -> {
-            StaticData.currentUser = null;
-            AccessToken.setCurrentAccessToken(null);
-            UserManagement.requestLogout(null);
-            Session.getCurrentSession().close();
-            Intent intent = new Intent(Home.this, Login.class);
-            startActivity(intent);
-            finishAffinity();
+            logoutToLoginPage();
         });
         dialogBuilder.create().show();
+    }
 
+    private void logoutToLoginPage() {
+        StaticData.currentUser = null;
+        AccessToken.setCurrentAccessToken(null);
+        UserManagement.requestLogout(null);
+        Session.getCurrentSession().close();
+        Intent intent = new Intent(Home.this, Initial.class);
+        startActivity(intent);
+        finishAffinity();
+    }
+
+    private void reopenLoginPage(){
+        Intent intent = new Intent(Home.this, Initial.class);
+        startActivity(intent);
+        finishAffinity();
     }
 
     private void setCalendarChecked(int year, int monthInNormal){
@@ -1376,16 +1387,18 @@ public class Home extends JActivity {
 
 
 
-
     private void setUpperBarLeftIconStatus(){
         if(StaticData.currentUser==null){
-            logoutToLoginPage();
+            reopenLoginPage();
         }else {
             if (StaticData.currentUser.expireYYYY != 0 && StaticData.currentUser.isHanjanAvailableToday) {
+                // Member, able to use today
                 upperBarLeftIcon.setImageResource(R.drawable.icon);
             } else if (StaticData.currentUser.expireYYYY != 0 && !StaticData.currentUser.isHanjanAvailableToday) {
-                upperBarLeftIcon.setImageResource(R.drawable.icon_used);
+                // Member, not able to use today
+                upperBarLeftIcon.setImageResource(R.drawable.icon_deactivated);
             } else {
+                // Not member
                 upperBarLeftIcon.setImageResource(R.drawable.icon_deactivated);
             }
         }

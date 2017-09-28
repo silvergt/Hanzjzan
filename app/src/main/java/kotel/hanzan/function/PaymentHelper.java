@@ -39,7 +39,7 @@ public class PaymentHelper {
                 jsonBody.put("autoExecute", false);
                 jsonBody.put("productDesc", itemName);
                 jsonBody.put("apiKey", StaticData.TOSSKEY);
-                jsonBody.put("retUrl","https://90labs.com/%ea%b2%b0%ec%a0%9c-%ec%84%b1%ea%b3%b5-%ed%8e%98%ec%9d%b4%ec%a7%80/");
+                jsonBody.put("retUrl","https://90labs.com/purchase_toss");
 
                 BufferedOutputStream bos = new BufferedOutputStream(connection.getOutputStream());
                 bos.write(jsonBody.toJSONString().getBytes());

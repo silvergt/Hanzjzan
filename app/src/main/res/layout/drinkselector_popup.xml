@@ -11,15 +11,55 @@
         android:background="@drawable/roundbox_white"
         >
 
-
-        <kotel.hanzan.view.ProfileCircleImageView
-            android:id="@+id/drinkSelectorDialog_drinkImage"
-            android:layout_width="@dimen/drinkSelectorDialog_imageHeight"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="@dimen/drinkSelectorDialog_imageHeight"
-            android:layout_gravity="center"
-            android:src="@drawable/test"
+            android:orientation="horizontal"
             android:layout_marginTop="30dp"
-            />
+            android:layout_gravity="center"
+            >
+
+            <kotel.hanzan.view.ProfileCircleImageView
+                android:id="@+id/drinkSelectorDialog_drinkImage"
+                android:layout_width="@dimen/drinkSelectorDialog_imageHeight"
+                android:layout_height="@dimen/drinkSelectorDialog_imageHeight"
+                android:src="@drawable/test"
+                android:layout_gravity="center"
+                />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/leftRightMargin"
+                android:layout_gravity="center"
+                >
+
+                <TextView
+                    android:id="@+id/drinkSelectorDialog_pubName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/drinkSelectorDialog_BigFontSize"
+                    android:text="Osaka~"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"
+                    />
+
+                <TextView
+                    android:id="@+id/drinkSelectorDialog_drinkName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/drinkSelectorDialog_BigFontSize"
+                    android:text="Soonhari~~~~~~"
+                    android:textColor="@color/black"
+                    android:layout_gravity="center"
+                    />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,35 +69,33 @@
             android:padding="@dimen/drinkSelectorDialog_leftRightMargin"
             >
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="@dimen/drinkSelectorDialog_leftRightMargin"
+                android:orientation="horizontal"
+                android:layout_marginBottom="@dimen/leftRightMargin"
                 >
+                <ImageView
+                    android:id="@+id/drinkSelectorDialog_checkIcon"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/pubpagepopup_check"
+                    android:layout_gravity="center"
+                    android:visibility="gone"
+                    />
                 <TextView
-                    android:id="@+id/drinkSelectorDialog_text1"
+                    android:id="@+id/drinkSelectorDialog_mainText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="우주술집펍에서 제공하는\n카스 병맥주로 하시겠습니까?"
+                    android:layout_gravity="center"
+                    android:text="@string/DrinkSelectorPopup_text1"
+                    android:gravity="center"
                     android:textColor="@color/black"
                     android:textSize="@dimen/drinkSelectorDialog_subFontSize"
-                    android:gravity="center_horizontal"
                     />
 
-                <TextView
-                    android:id="@+id/drinkSelectorDialog_text2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="카스 병맥주\n한잔 주세요!"
-                    android:lineSpacingExtra="10dp"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/drinkSelectorDialog_BigFontSize"
-                    android:textColor="@color/black"
-                    android:gravity="center_horizontal"
-                    />
+            </LinearLayout>
 
-            </RelativeLayout>
 
             <TextView
                 android:id="@+id/drinkSelectorDialog_button1"
@@ -65,10 +103,20 @@
                 android:layout_height="@dimen/drinkSelectorDialog_buttonHeight"
                 android:background="@drawable/roundbox_maincolor"
                 android:gravity="center"
-                android:text="네, 맞아요"
+                android:text="@string/clerkCheck"
                 android:textColor="@color/white"
                 android:textSize="@dimen/drinkSelectorDialog_subFontSize"
                 android:layout_marginBottom="20dp"
+                />
+
+            <TextView
+                android:id="@+id/drinkSelectorDialog_reuseInfo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/DrinkSelectorPopup_text4"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/leftRightMargin"
+                android:visibility="gone"
                 />
 
             <TextView
@@ -77,7 +125,7 @@
                 android:layout_height="@dimen/drinkSelectorDialog_buttonHeight"
                 android:background="@drawable/roundbox_gray"
                 android:gravity="center"
-                android:text="다시 생각해볼게요"
+                android:text="@string/cancel"
                 android:textColor="@color/white"
                 android:textSize="@dimen/drinkSelectorDialog_subFontSize"
                 />

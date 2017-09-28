@@ -51,16 +51,37 @@
         </RelativeLayout>
 
 
-        <ImageView
-            android:id="@+id/nearbyPlaces_myLocation"
-            android:layout_width="@dimen/upperBar_myLocationWidth"
+        <RelativeLayout
+            android:layout_width="match_parent"
             android:layout_height="@dimen/upperBar_myLocationWidth"
-            android:src="@drawable/mylocation"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
-            android:padding="3dp"
             android:layout_below="@id/nearbyPlaces_upperBar"
-            />
+            >
+
+            <TextView
+                android:id="@+id/nearbyPlaces_information"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="15sp"
+                android:background="@color/white"
+                android:text="@string/zoomToSeeMore"
+                android:visibility="gone"
+                android:paddingLeft="@dimen/upperBar_myLocationWidth"
+                android:paddingRight="@dimen/upperBar_myLocationWidth"
+                />
+
+            <ImageView
+                android:id="@+id/nearbyPlaces_myLocation"
+                android:layout_width="@dimen/upperBar_myLocationWidth"
+                android:layout_height="@dimen/upperBar_myLocationWidth"
+                android:src="@drawable/mylocation"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:padding="3dp"
+                />
+
+        </RelativeLayout>
 
 
         <LinearLayout

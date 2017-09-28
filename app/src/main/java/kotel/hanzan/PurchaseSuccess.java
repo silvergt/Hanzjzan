@@ -4,6 +4,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -24,6 +25,7 @@ public class PurchaseSuccess extends JActivity {
     public static String ticketID="";
 
     private TextView title,membershipName,membershipDue,confirm;
+    private ImageView image;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,21 +36,38 @@ public class PurchaseSuccess extends JActivity {
         membershipName = (TextView)findViewById(R.id.purchaseSuccess_membershipName);
         membershipDue = (TextView)findViewById(R.id.purchaseSuccess_expireDate);
         confirm = (TextView)findViewById(R.id.purchaseSuccess_confirm);
+        image = (ImageView)findViewById(R.id.purchaseSuccess_image);
 
-        if(StaticData.currentUser!=null){
-            startTossPayment();
-        }else{
-            JLog.e("User info is empty");
-            title.setText(getString(R.string.purchaseFailed));
-            membershipName.setText(getString(R.string.pleaseTryAgain));
-            membershipDue.setVisibility(View.INVISIBLE);
+        Uri uri = getIntent().getData();
+        try{
+            JLog.v("URI ",uri.toString());
+            JLog.v("URI QUERY ",uri.getQuery());
+            JLog.v("URI QUERY PARAM peymentMethod : ",uri.getQueryParameter("paymentMethod"));
+
+            String paymentMethod = uri.getQueryParameter("paymentMethod");
+
+            if(StaticData.currentUser!=null){
+                if(paymentMethod.equals("TOSS")) {
+                    JLog.v("URI QUERY PARAM orderNo : ",uri.getQueryParameter("orderNo"));
+                    String orderNumber = uri.getQueryParameter("orderNo");
+                    startTossPayment(orderNumber);
+                }
+            }else{
+                JLog.e("User info is empty");
+                title.setText(getString(R.string.purchaseFailed));
+                membershipName.setText(getString(R.string.pleaseTryAgain));
+                membershipDue.setVisibility(View.INVISIBLE);
+                image.setImageResource(R.drawable.purchasefailed);
+            }
+        }catch (Exception e){
+            return;
         }
 
         confirm.setOnClickListener(view -> finish());
     }
 
 
-    private void startTossPayment(){
+    private void startTossPayment(String orderNumber){
         if(!tossPayToken.equals("") && !ticketID.equals("")){
             int paymentResult = PaymentHelper.tossPaymentConfirm(StaticData.TOSSKEY,tossPayToken);
 
@@ -60,11 +79,13 @@ public class PurchaseSuccess extends JActivity {
                 title.setText(getString(R.string.purchaseFailed));
                 membershipName.setText(getString(R.string.notEnoughCash));
                 membershipDue.setVisibility(View.INVISIBLE);
+                image.setImageResource(R.drawable.purchasefailed);
             }else if(paymentResult == PAYMENT_UNKNOWN_ISSUE){
                 JLog.e("User not accessed properly");
                 title.setText(getString(R.string.purchaseFailed));
                 membershipName.setText(getString(R.string.pleaseTryAgain));
                 membershipDue.setVisibility(View.INVISIBLE);
+                image.setImageResource(R.drawable.purchasefailed);
             }
         }
     }
@@ -74,9 +95,6 @@ public class PurchaseSuccess extends JActivity {
         new Thread(()->{
             Uri uri = getIntent().getData();
             if(uri!=null){
-                JLog.v("URI ",uri.toString());
-                JLog.v("URI QUERY ",uri.getQuery());
-                JLog.v("URI QUERY PARAM",uri.getQueryParameter("orderNo"));
 
                 HashMap<String,String> map = new HashMap<>();
                 map.put("id_member",Long.toString(StaticData.currentUser.id));
@@ -89,6 +107,7 @@ public class PurchaseSuccess extends JActivity {
                         title.setText(getString(R.string.purchaseFailed));
                         membershipName.setText(getString(R.string.paymentError));
                         membershipDue.setText(StaticData.adminEmail);
+                        image.setImageResource(R.drawable.purchasefailed);
                     });
                 }else{
                     boolean availableToday = false;
@@ -118,6 +137,7 @@ public class PurchaseSuccess extends JActivity {
                     title.setText(getString(R.string.purchaseFailed));
                     membershipName.setText(getString(R.string.pleaseTryAgain));
                     membershipDue.setVisibility(View.INVISIBLE);
+                    image.setImageResource(R.drawable.purchasefailed);
                 });
             }
             tossPayToken = "";

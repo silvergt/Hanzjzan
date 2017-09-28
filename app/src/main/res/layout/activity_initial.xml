@@ -5,13 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="kotel.hanzan.Initial"
+    android:background="@drawable/initial_gradation"
     >
 
     <ImageView
         android:id="@+id/initial_image"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:src="@drawable/logo"
+        android:src="@drawable/logo_withname_white"
         android:layout_centerInParent="true"
         />
 

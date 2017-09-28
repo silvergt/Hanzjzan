@@ -7,104 +7,140 @@
 
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@drawable/roundbox_gray_heavy"
-        android:layout_centerInParent="true"
-        >
-
-        <RelativeLayout
-            android:layout_width="@dimen/drinkSelectorDialog_imageHeight"
-            android:layout_height="@dimen/drinkSelectorDialog_imageHeight"
-            android:layout_gravity="center"
-            android:layout_marginTop="30dp"
-            >
-
-            <kotel.hanzan.view.ProfileCircleImageView
-                android:id="@+id/pubpage_tutorialPopup_drinkImage"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/test"
-                />
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@color/tutorial_Blur"
-                />
-        </RelativeLayout>
-
-
-        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/drinkSelectorDialog_leftRightMargin"
+            android:background="@drawable/roundbox_white"
+            android:layout_centerInParent="true"
             >
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginBottom="@dimen/drinkSelectorDialog_leftRightMargin"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/drinkSelectorDialog_imageHeight"
+                android:orientation="horizontal"
+                android:layout_marginTop="30dp"
+                android:layout_gravity="center"
                 >
-                <TextView
-                    android:id="@+id/pubpage_tutorialPopup_text1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/tutorial_text7"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/tutorial_fontSize"
-                    android:gravity="center_horizontal"
+
+                <kotel.hanzan.view.ProfileCircleImageView
+                    android:id="@+id/pubpagePopup_tutorial_drinkImage"
+                    android:layout_width="@dimen/drinkSelectorDialog_imageHeight"
+                    android:layout_height="@dimen/drinkSelectorDialog_imageHeight"
+                    android:src="@drawable/test"
+                    android:layout_gravity="center"
                     />
 
-            </RelativeLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="@dimen/leftRightMargin"
+                    android:layout_gravity="center"
+                    >
 
-            <RelativeLayout
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/drinkSelectorDialog_BigFontSize"
+                        android:text="@string/tutorial_pubName"
+                        android:textColor="@color/black"
+                        android:layout_gravity="center"
+                        />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/drinkSelectorDialog_BigFontSize"
+                        android:text="@string/tutorial_drinkName"
+                        android:textColor="@color/black"
+                        android:layout_gravity="center"
+                        />
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="@dimen/drinkSelectorDialog_leftRightMargin"
                 >
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="@dimen/leftRightMargin"
+                    >
+                    <ImageView
+                        android:id="@+id/pubpagePopup_tutorial_checkIcon"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/pubpagepopup_check"
+                        android:layout_gravity="center"
+                        android:visibility="gone"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="@string/DrinkSelectorPopup_text1"
+                        android:gravity="center"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/drinkSelectorDialog_subFontSize"
+                        />
+
+                </LinearLayout>
+
+
                 <TextView
-                    android:id="@+id/pubpage_tutorialPopup_button1"
+                    android:id="@+id/pubpagePopup_tutorial_button1"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/drinkSelectorDialog_buttonHeight"
                     android:background="@drawable/roundbox_maincolor"
                     android:gravity="center"
-                    android:text="@string/yes"
-                    android:textStyle="bold"
+                    android:text="@string/clerkCheck"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/tutorial_fontSize"
+                    android:textSize="@dimen/drinkSelectorDialog_subFontSize"
                     android:layout_marginBottom="20dp"
                     />
 
                 <TextView
-                    android:id="@+id/pubpage_tutorialPopup_button2"
+                    android:id="@+id/pubpagePopup_tutorial_reuseInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/DrinkSelectorPopup_text4"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/leftRightMargin"
+                    android:visibility="gone"
+                    />
+
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/drinkSelectorDialog_buttonHeight"
+                    android:background="@drawable/roundbox_gray"
                     android:gravity="center"
-                    android:text="@string/tutorial_text8"
+                    android:text="@string/cancel"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/tutorial_fontSize"
-                    android:layout_below="@id/pubpage_tutorialPopup_button1"
+                    android:textSize="@dimen/drinkSelectorDialog_subFontSize"
                     />
 
-                <ImageView
-                    android:id="@+id/pubpagePopup_tutorial_arrow"
-                    android:layout_width="@dimen/tutorial_arrowWidth"
-                    android:layout_height="@dimen/tutorial_arrowWidth"
-                    android:layout_centerInParent="true"
-                    android:src="@drawable/tutorialarrow"
-                    />
+            </LinearLayout>
 
-            </RelativeLayout>
         </LinearLayout>
 
-    </LinearLayout>
+    <ImageButton
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/tutorial_Blur"
+        />
 
     <LinearLayout
+        android:id="@+id/pubpagePopup_tutorial_lowerContainer"
         android:layout_width="match_parent"
         android:layout_height="@dimen/tutorial_startButtonContainer"
         android:orientation="vertical"
@@ -123,7 +159,7 @@
             android:layout_height="@dimen/tutorial_startButtonHeight"
             android:minHeight="@dimen/tutorial_startButtonHeight"
             android:gravity="center"
-            android:text="@string/startHanjan"
+            android:text="@string/startDrinkat"
             android:textSize="25sp"
             android:textColor="@color/white"
             android:textStyle="bold"
@@ -131,7 +167,6 @@
             android:paddingLeft="@dimen/leftRightMargin"
             android:paddingRight="@dimen/leftRightMargin"
             android:layout_gravity="center"
-            android:visibility="gone"
             />
 
         <View
@@ -141,6 +176,26 @@
             />
 
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/pubpagePopup_tutorial_descriptionText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tutorial_text9"
+        android:textSize="@dimen/tutorial_fontSize"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:textColor="@color/white"
+        android:layout_above="@id/pubpagePopup_tutorial_lowerContainer"
+        />
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/tutorialarrow"
+        android:layout_above="@id/pubpagePopup_tutorial_descriptionText"
+        android:layout_centerHorizontal="true"
+        />
 
 
 </RelativeLayout>

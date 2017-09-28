@@ -27,7 +27,7 @@
             android:id="@+id/purchaseSuccess_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/successfullyPurchased"
+            android:text="@string/purchaseFailed"
             android:textColor="@color/black"
             android:gravity="center"
             android:textStyle="bold"
@@ -41,6 +41,7 @@
             />
 
         <ImageView
+            android:id="@+id/purchaseSuccess_image"
             android:layout_width="@dimen/purchaseSuccess_ImageHeight"
             android:layout_height="@dimen/purchaseSuccess_ImageHeight"
             android:layout_gravity="center_horizontal"
@@ -58,7 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:text="1 month membership"
+            android:text="@string/pleaseTryAgain"
             android:textSize="@dimen/purchaseSuccess_mediumFontSize"
             android:gravity="center"
             android:textStyle="bold"
@@ -69,7 +70,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
-            android:text="~17.09.13"
             android:textSize="@dimen/purchaseSuccess_mediumFontSize"
             android:gravity="center"
             android:layout_marginBottom="10dp"

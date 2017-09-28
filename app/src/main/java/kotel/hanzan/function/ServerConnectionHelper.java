@@ -1,6 +1,5 @@
 package kotel.hanzan.function;
 
-
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
@@ -106,5 +105,3 @@ public class ServerConnectionHelper {
         return serverIP.equals(REGULAR_SERVER);
     }
 }
-
-

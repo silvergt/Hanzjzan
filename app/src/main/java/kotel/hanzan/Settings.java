@@ -1,25 +1,38 @@
 package kotel.hanzan;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.AccessToken;
+import com.kakao.auth.Session;
+import com.kakao.usermgmt.UserManagement;
+
+import java.util.HashMap;
 import java.util.Locale;
 
 import kotel.hanzan.Data.StaticData;
 import kotel.hanzan.function.ColorHelper;
+import kotel.hanzan.function.JLog;
 import kotel.hanzan.function.LocaleHelper;
+import kotel.hanzan.function.ServerConnectionHelper;
 import kotel.hanzan.view.JActivity;
+import kotel.hanzan.view.Loading;
 
 public class Settings extends JActivity {
     ImageView back;
 
-    TextView korean,english,termsConditions,announcements, tutorial, withdrawal;
+    TextView korean,english,termsConditions,announcements, tutorial, withdrawal, buildVersion;
     ImageView facebook,instagram,webpage;
 
     @Override
@@ -33,10 +46,11 @@ public class Settings extends JActivity {
         termsConditions = (TextView)findViewById(R.id.settings_termsConditions);
         announcements = (TextView)findViewById(R.id.settings_announcements);
         tutorial = (TextView)findViewById(R.id.settings_tutorial);
-//        withdrawal = (TextView)findViewById(R.id.settings_withdrawal);
+        withdrawal = (TextView)findViewById(R.id.settings_withdrawal);
         facebook = (ImageView)findViewById(R.id.settings_facebook);
         instagram = (ImageView)findViewById(R.id.settings_instagram);
         webpage = (ImageView)findViewById(R.id.settings_website);
+        buildVersion = (TextView)findViewById(R.id.settings_buildVersion);
 
 
         if(Locale.getDefault().getLanguage().equals(Locale.KOREA.getLanguage())){
@@ -84,16 +98,37 @@ public class Settings extends JActivity {
             finishAffinity();
         });
 
-//        withdrawal.setOnClickListener(view -> openWithdrawalConfirm());
+        withdrawal.setOnClickListener(view -> openWithdrawalConfirm());
 
         facebook.setOnClickListener(view -> openFacebook());
         instagram.setOnClickListener(view -> openInstagram());
         webpage.setOnClickListener(view -> openWebpage());
 
+        buildVersion.setOnLongClickListener(view -> {
+            Dialog dialog = new Dialog(Settings.this);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+            ImageView image = new ImageView(Settings.this);
+            image.setImageResource(R.drawable.cutedrinkat);
+
+            dialog.setContentView(image);
+            dialog.show();
+            return false;
+        });
+
+        try {
+            PackageInfo pInfo = this.getPackageManager().getPackageInfo(getPackageName(), 0);
+            String version = pInfo.versionName;
+            String versionCode = Integer.toString(pInfo.versionCode);
+
+            buildVersion.setText(version+"("+versionCode+")");
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
         back.setOnClickListener(view -> finish());
     }
 
-/*
 
     private void openWithdrawalConfirm(){
         Loading loading = (Loading)findViewById(R.id.settings_loading);
@@ -134,7 +169,6 @@ public class Settings extends JActivity {
         dialog.show();
     }
 
-*/
 
 
     private void openFacebook() {

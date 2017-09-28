@@ -94,6 +94,11 @@ public class HorizontalSlideView extends HorizontalScrollView implements View.On
         }
     }
 
+    public void removeAllViewFromList(){
+        layout.removeAllViews();
+        slideTo(0);
+    }
+
 
     public int getCurrentIndex() {
         return currentIndex;

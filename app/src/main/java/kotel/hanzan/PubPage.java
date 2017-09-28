@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,7 +32,7 @@ import java.util.HashMap;
 import kotel.hanzan.Data.DrinkInfo;
 import kotel.hanzan.Data.PubInfo;
 import kotel.hanzan.Data.StaticData;
-import kotel.hanzan.function.ColorHelper;
+import kotel.hanzan.function.JLog;
 import kotel.hanzan.function.ServerConnectionHelper;
 import kotel.hanzan.listener.DrinkSelectorListener;
 import kotel.hanzan.listener.SlideListener;
@@ -62,11 +63,10 @@ public class PubPage extends JActivity {
 
 
     //*****************Dialog*****************
-    private ImageView drinkImage;
-    private TextView dialogText1;
-    private TextView dialogText2;
-    private TextView button1;
-    private TextView button2;
+    private ImageView dialogDrinkImage,dialogCheckIcon;
+    private TextView dialogText,dialogPubName,dialogDrinkName,dialogReuseInfo;
+    private TextView dialogButton1;
+    private TextView dialogButton2;
 
 
     //************************TUTORIAL Tab************************
@@ -76,8 +76,6 @@ public class PubPage extends JActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pubpage);
-
-        pubInfo = (PubInfo) getIntent().getSerializableExtra("info");
 
         mainLayout = (RelativeLayout)findViewById(R.id.pubpage_pubpage);
         drinkSelector = (DrinkSelector) findViewById(R.id.pubpage_drinkSelector);
@@ -117,23 +115,13 @@ public class PubPage extends JActivity {
             }
         });
 
-        upperTitle.setText(pubInfo.name);
-        title.setText(pubInfo.name);
-        address.setText(pubInfo.address);
-        phoneNumber.setText(pubInfo.phone);
-        if(pubInfo.getFavorite()){
-            favorite.setImageResource(R.drawable.pubpage_favorite_selected);
-        }else{
-            favorite.setImageResource(R.drawable.pubpage_favorite_unselected);
-        }
-
         back.setOnClickListener(view -> finish());
 
         share.setOnClickListener(view -> {
             if(pubInfo.tutorialPub){return;}
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.addCategory(Intent.CATEGORY_DEFAULT);
-            intent.putExtra(Intent.EXTRA_TEXT,pubInfo.name+" "+getString(R.string.shallWeHaveDrink)+"\n"+pubInfo.imageAddress.get(0));
+            intent.putExtra(Intent.EXTRA_TEXT,pubInfo.name+" "+getString(R.string.shallWeHaveDrink)+"\nhttps://90labs.com/share_place/?provider=Drinkat&pubId="+Long.toString(pubInfo.id));
 
             intent.setType("text/plain");
 
@@ -202,10 +190,36 @@ public class PubPage extends JActivity {
             }
         });
 
-        retrieveDetailInfo();
-        if(pubInfo.tutorialPub){
-            openTutorial();
+        Uri uri = getIntent().getData();
+        if(uri != null){
+            if(StaticData.currentUser == null){
+                reopenLoginPage();
+                return;
+            }
+            //Case if user entered this activity by clicking pubPage link
+            JLog.v("QUERY",uri.getQuery());
+            JLog.v("QUERY pubID",uri.getQueryParameter("pubId"));
+            long pubId = Long.parseLong(uri.getQueryParameter("pubId"));
+            retrieveFullInfo(pubId);
+        }else {
+            //Case if user entered via our application
+            pubInfo = (PubInfo) getIntent().getSerializableExtra("info");
+            upperTitle.setText(pubInfo.name);
+            title.setText(pubInfo.name);
+            address.setText(pubInfo.address);
+            phoneNumber.setText(pubInfo.phone);
+            if(pubInfo.getFavorite()){
+                favorite.setImageResource(R.drawable.pubpage_favorite_selected);
+            }else{
+                favorite.setImageResource(R.drawable.pubpage_favorite_unselected);
+            }
+
+            retrieveDetailInfo();
+            if (pubInfo.tutorialPub) {
+                openTutorial();
+            }
         }
+
     }
 
     private void openTutorial(){
@@ -226,38 +240,12 @@ public class PubPage extends JActivity {
         ViewGroup.LayoutParams dialogParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         RelativeLayout dialogLayout = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.pubpage_tutorial_popup,null);
 
-        ImageView tutorialDrinkImage = (ImageView)dialogLayout.findViewById(R.id.pubpage_tutorialPopup_drinkImage);
-        TextView tutorialDialogText = (TextView)dialogLayout.findViewById(R.id.pubpage_tutorialPopup_text1);
-        TextView tutorialButton1 = (TextView)dialogLayout.findViewById(R.id.pubpage_tutorialPopup_button1);
-        TextView tutorialButton2 = (TextView)dialogLayout.findViewById(R.id.pubpage_tutorialPopup_button2);
-        ImageView tutorialArrow = (ImageView)dialogLayout.findViewById(R.id.pubpagePopup_tutorial_arrow);
-        TextView tutorialStartButton = (TextView)dialogLayout.findViewById(R.id.pubpagePopup_tutorial_start);
+        ImageView tutorialDrinkImage = (ImageView)dialogLayout.findViewById(R.id.pubpagePopup_tutorial_drinkImage);
+        TextView tutorialStartApp = (TextView)dialogLayout.findViewById(R.id.pubpagePopup_tutorial_start);
 
-        Picasso.with(getApplicationContext()).load(drinkInfo.drinkImageAddress).placeholder(R.drawable.drinkselector_default).into(tutorialDrinkImage);
-        tutorialDialogText.setText(getString(R.string.tutorial_text7));
-        tutorialDialogText.setVisibility(View.VISIBLE);
-        dialogStep = 0;
+        Picasso.with(PubPage.this).load(drinkInfo.drinkImageAddress).placeholder(R.drawable.drinkselector_default).into(tutorialDrinkImage);
 
-        tutorialButton1.setOnClickListener(view -> {
-            switch (dialogStep){
-                case 0:
-                    tutorialDialogText.setText(getString(R.string.tutorial_text9));
-                    tutorialButton1.setTextColor(ColorHelper.getColor(getResources(),R.color.Yellow));
-                    tutorialButton1.setBackgroundResource(0);
-                    tutorialButton2.setBackgroundResource(R.drawable.roundbox_maincolor);
-                    tutorialButton1.setText(getString(R.string.tutorial_text10));
-                    tutorialButton2.setText(getString(R.string.clerkCheck));
-                    tutorialStartButton.setVisibility(View.VISIBLE);
-                    tutorialArrow.setRotation(180);
-
-                    ObjectAnimator.ofFloat(tutorialStartButton,"alpha",0,1).setDuration(900).start();
-
-                    dialogStep = 1;
-                    break;
-            }
-        });
-
-        tutorialStartButton.setOnClickListener(view -> {
+        tutorialStartApp.setOnClickListener(view -> {
             new Thread(()->{
                 HashMap<String,String> map = new HashMap<>();
                 map.put("id_member",Long.toString(StaticData.currentUser.id));
@@ -281,10 +269,8 @@ public class PubPage extends JActivity {
 
         });
 
-        try {
-            tutorialDrinkSelectorDialog.setContentView(dialogLayout, dialogParams);
-            tutorialDrinkSelectorDialog.show();
-        }catch (Exception e){e.printStackTrace();}
+        tutorialDrinkSelectorDialog.setContentView(dialogLayout,dialogParams);
+        tutorialDrinkSelectorDialog.show();
     }
 
     private void openDrinkSelectDialog(DrinkInfo drinkInfo){
@@ -295,52 +281,70 @@ public class PubPage extends JActivity {
         ViewGroup.LayoutParams dialogParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         RelativeLayout dialogLayout = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.drinkselector_popup,null);
 
-        drinkImage = (ImageView)dialogLayout.findViewById(R.id.drinkSelectorDialog_drinkImage);
-        dialogText1 = (TextView)dialogLayout.findViewById(R.id.drinkSelectorDialog_text1);
-        dialogText2 = (TextView)dialogLayout.findViewById(R.id.drinkSelectorDialog_text2);
-        button1 = (TextView)dialogLayout.findViewById(R.id.drinkSelectorDialog_button1);
-        button2 = (TextView)dialogLayout.findViewById(R.id.drinkSelectorDialog_button2);
+        dialogDrinkImage = (ImageView)dialogLayout.findViewById(R.id.drinkSelectorDialog_drinkImage);
+        dialogPubName = (TextView)dialogLayout.findViewById(R.id.drinkSelectorDialog_pubName);
+        dialogDrinkName = (TextView)dialogLayout.findViewById(R.id.drinkSelectorDialog_drinkName);
+        dialogCheckIcon = (ImageView)dialogLayout.findViewById(R.id.drinkSelectorDialog_checkIcon);
+        dialogText = (TextView)dialogLayout.findViewById(R.id.drinkSelectorDialog_mainText);
+        dialogReuseInfo = (TextView)dialogLayout.findViewById(R.id.drinkSelectorDialog_reuseInfo);
+        dialogButton1 = (TextView)dialogLayout.findViewById(R.id.drinkSelectorDialog_button1);
+        dialogButton2 = (TextView)dialogLayout.findViewById(R.id.drinkSelectorDialog_button2);
+
+        Picasso.with(this).load(drinkInfo.drinkImageAddress).placeholder(R.drawable.drinkselector_default).into(dialogDrinkImage);
+        dialogPubName.setText(pubInfo.name);
+        dialogDrinkName.setText(drinkInfo.drinkName);
 
         if(StaticData.currentUser.expireYYYY==0){
             //아직 멤버가 아닌 경우 - 0
-            Picasso.with(getApplicationContext()).load(R.drawable.purchasesuccess).into(drinkImage);
-            dialogText1.setText(getString(R.string.pubPagePopup_joinMembership));
-            dialogText2.setVisibility(View.INVISIBLE);
-            button1.setText(getString(R.string.yesJoin));
-            button2.setText(getString(R.string.noLater));
+            Picasso.with(getApplicationContext()).load(R.drawable.purchasefailed).into(dialogDrinkImage);
+            dialogText.setText(getString(R.string.pubPagePopup_joinMembership));
+            dialogButton1.setText(getString(R.string.yesJoin));
+            dialogButton2.setText(getString(R.string.noLater));
             dialogStep = 0;
         }else if(StaticData.currentUser.isHanjanAvailableToday){
             //멤버이고, 오늘 한잔을 사용하지 않은 경우 - 1
-            Picasso.with(getApplicationContext()).load(drinkInfo.drinkImageAddress).placeholder(R.drawable.drinkselector_default).into(drinkImage);
-            dialogText1.setText(title.getText().toString() +getString(R.string.providing)+"\n"+drinkInfo.drinkName+getString(R.string.isYourChoice));
-            dialogText1.setVisibility(View.VISIBLE);
-            dialogText2.setVisibility(View.INVISIBLE);
-            button1.setText(getString(R.string.yes));
-            button2.setText(getString(R.string.no));
+            Picasso.with(getApplicationContext()).load(drinkInfo.drinkImageAddress).placeholder(R.drawable.drinkselector_default).into(dialogDrinkImage);
             dialogStep = 1;
         }else{
             //멤버이고, 오늘 한잔을 사용한 경우 - 2
-            Picasso.with(getApplicationContext()).load(R.drawable.purchasesuccess).into(drinkImage);
-            dialogText1.setText(getString(R.string.alreadyUsedTicket));
-            dialogText1.setVisibility(View.VISIBLE);
-            dialogText2.setVisibility(View.INVISIBLE);
-            button1.setText(getString(R.string.willComebackLater));
-            button2.setVisibility(View.GONE);
+            Picasso.with(getApplicationContext()).load(R.drawable.purchasefailed).into(dialogDrinkImage);
+            dialogText.setText(getString(R.string.alreadyUsedTicket));
+            dialogButton1.setText(getString(R.string.willComebackLater));
+            dialogButton2.setVisibility(View.GONE);
             dialogStep = 2;
         }
 
 
-        button1.setOnClickListener(view -> {
+        dialogButton1.setOnClickListener(view -> {
             switch (dialogStep){
                 case 1:
-                    dialogText2.setText(drinkInfo.drinkName+"\n"+getString(R.string.showThisToClerk));
-                    dialogText1.setVisibility(View.INVISIBLE);
-                    dialogText2.setVisibility(View.VISIBLE);
-                    button1.setBackgroundResource(R.drawable.roundbox_gray);
-                    button2.setBackgroundResource(R.drawable.roundbox_maincolor);
-                    button1.setText(getString(R.string.cancel));
-                    button2.setText(getString(R.string.clerkCheck));
-                    dialogStep = 3;
+                    //한잔 사용 버튼을 누른 경우 - 3
+                    Dialog dialog2 = new Dialog(PubPage.this);
+
+                    dialog2.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+                    LinearLayout layout = (LinearLayout) getLayoutInflater().inflate(R.layout.popupbox_normal, null);
+                    ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    layout.setLayoutParams(params);
+
+                    TextView text = (TextView)layout.findViewById(R.id.popupBox_text);
+                    TextView yes = (TextView) layout.findViewById(R.id.popupBox_yes);
+                    TextView no = (TextView) layout.findViewById(R.id.popupBox_no);
+
+                    text.setText(getString(R.string.DrinkSelectorPopup_text2));
+
+                    yes.setText(getString(R.string.confirm));
+                    no.setText(getString(R.string.cancel));
+
+                    no.setOnClickListener(view1 -> dialog2.cancel());
+                    yes.setOnClickListener(view1 -> {
+                        useVoucher(drinkInfo.drinkName,drinkInfo.drinkType);
+                        dialog2.cancel();
+                    });
+
+                    dialog2.setContentView(layout);
+                    dialog2.show();
+
                     break;
                 case 0:
                     Intent intent = new Intent(getApplicationContext(),Membership.class);
@@ -353,15 +357,8 @@ public class PubPage extends JActivity {
             }
         });
 
-        button2.setOnClickListener(view -> {
-            switch (dialogStep) {
-                case 3:
-                    useVoucher(drinkInfo.drinkName,drinkInfo.drinkType);
-                    break;
-                default:
-                    drinkSelectorDialog.cancel();
-                    break;
-            }
+        dialogButton2.setOnClickListener(view -> {
+            drinkSelectorDialog.cancel();
         });
 
 
@@ -381,28 +378,29 @@ public class PubPage extends JActivity {
             map.put("category_drink",drinkType);
             map = ServerConnectionHelper.connect("using today's hanzan", "usevoucher", map);
 
+            if(map.get("availabletoday")==null){
+                dialogText.setText(getString(R.string.networkFailure));
+                dialogButton1.setText(getString(R.string.confirm));
+                dialogButton2.setVisibility(View.GONE);
+                dialogStep = 2;
+                return;
+            }
             String availability = map.get("availabletoday");
             String voucherUsedSuccessfully = map.get("usevoucher_result");
 
             new Handler(getMainLooper()).post(()->{
-                button1.setBackgroundResource(R.drawable.roundbox_maincolor);
-                button2.setBackgroundResource(R.drawable.roundbox_gray);
                 if(availability==null||availability.equals("FALSE")){
-                    dialogText1.setText(getString(R.string.alreadyUsedTicket));
-                    dialogText1.setVisibility(View.VISIBLE);
-                    dialogText2.setVisibility(View.INVISIBLE);
-                    button1.setText(getString(R.string.willComebackLater));
-                    button2.setVisibility(View.GONE);
+                    dialogText.setText(getString(R.string.alreadyUsedTicket));
+                    dialogButton1.setText(getString(R.string.willComebackLater));
+                    dialogButton2.setVisibility(View.GONE);
                     dialogStep = 2;
                 }else if(availability.equals("TRUE")&& voucherUsedSuccessfully.equals("TRUE")){
                     StaticData.currentUser.isHanjanAvailableToday = false;
-
-                    dialogText2.setText(getString(R.string.SuccessfullyUsed)+"\n"+drinkName+getString(R.string.isComing));
-                    drinkImage.setVisibility(View.VISIBLE);
-                    dialogText1.setVisibility(View.INVISIBLE);
-                    dialogText2.setVisibility(View.VISIBLE);
-                    button1.setText("확인");
-                    button2.setVisibility(View.GONE);
+                    dialogText.setText(getString(R.string.SuccessfullyUsed));
+                    dialogButton1.setText(getString(R.string.confirm));
+                    dialogButton2.setVisibility(View.GONE);
+                    dialogCheckIcon.setVisibility(View.VISIBLE);
+                    dialogReuseInfo.setVisibility(View.VISIBLE);
                     dialogStep = 4;
                 }else{
                     //Connection with server failed
@@ -412,6 +410,43 @@ public class PubPage extends JActivity {
         }).start();
     }
 
+
+    private synchronized void retrieveFullInfo(long pubId){
+        new Thread(()->{
+            map = new HashMap<>();
+            map.put("id_member",Long.toString(StaticData.currentUser.id));
+            map.put("id_place",Long.toString(pubId));
+            map = ServerConnectionHelper.connect("retrieving full pub info","shareplace",map);
+
+            if(map.get("name_place")==null){
+                return;
+            }
+            String name = map.get("name_place");
+            String pubAddress = map.get("address_place");
+            String imageAddress = map.get("imgadd_place");
+            String district = map.get("district");
+            boolean pubFavorite = false;
+            if (map.get("like").equals("TRUE")) {
+                pubFavorite = true;
+            }
+            double lat = Double.parseDouble(map.get("lat"));
+            double lng = Double.parseDouble(map.get("lng"));
+
+            pubInfo = new PubInfo(pubId,name,pubAddress,district,imageAddress,pubFavorite,lat,lng);
+            new Handler(getMainLooper()).post(()->{
+                upperTitle.setText(pubInfo.name);
+                title.setText(pubInfo.name);
+                address.setText(pubInfo.address);
+                phoneNumber.setText(pubInfo.phone);
+                if(pubInfo.getFavorite()){
+                    favorite.setImageResource(R.drawable.pubpage_favorite_selected);
+                }else{
+                    favorite.setImageResource(R.drawable.pubpage_favorite_unselected);
+                }
+            });
+            retrieveDetailInfo();
+        }).start();
+    }
 
     private synchronized void retrieveDetailInfo(){
         if(pubInfo.tutorialPub){
@@ -538,5 +573,11 @@ public class PubPage extends JActivity {
             return;
         }
         super.onBackPressed();
+    }
+
+    private void reopenLoginPage() {
+        Intent intent = new Intent(getApplicationContext(), Initial.class);
+        startActivity(intent);
+        finishAffinity();
     }
 }
