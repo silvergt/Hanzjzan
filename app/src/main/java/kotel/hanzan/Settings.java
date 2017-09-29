@@ -40,17 +40,17 @@ public class Settings extends JActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        back = (ImageView)findViewById(R.id.settings_back);
-        korean = (TextView)findViewById(R.id.settings_korean);
-        english = (TextView)findViewById(R.id.settings_english);
-        termsConditions = (TextView)findViewById(R.id.settings_termsConditions);
-        announcements = (TextView)findViewById(R.id.settings_announcements);
-        tutorial = (TextView)findViewById(R.id.settings_tutorial);
-        withdrawal = (TextView)findViewById(R.id.settings_withdrawal);
-        facebook = (ImageView)findViewById(R.id.settings_facebook);
-        instagram = (ImageView)findViewById(R.id.settings_instagram);
-        webpage = (ImageView)findViewById(R.id.settings_website);
-        buildVersion = (TextView)findViewById(R.id.settings_buildVersion);
+        back = findViewById(R.id.settings_back);
+        korean = findViewById(R.id.settings_korean);
+        english = findViewById(R.id.settings_english);
+        termsConditions = findViewById(R.id.settings_termsConditions);
+        announcements = findViewById(R.id.settings_announcements);
+        tutorial = findViewById(R.id.settings_tutorial);
+        withdrawal = findViewById(R.id.settings_withdrawal);
+        facebook = findViewById(R.id.settings_facebook);
+        instagram = findViewById(R.id.settings_instagram);
+        webpage = findViewById(R.id.settings_website);
+        buildVersion = findViewById(R.id.settings_buildVersion);
 
 
         if(Locale.getDefault().getLanguage().equals(Locale.KOREA.getLanguage())){
@@ -131,7 +131,7 @@ public class Settings extends JActivity {
 
 
     private void openWithdrawalConfirm(){
-        Loading loading = (Loading)findViewById(R.id.settings_loading);
+        Loading loading = findViewById(R.id.settings_loading);
 
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
         dialog.setMessage(getString(R.string.withdrawalDialog));

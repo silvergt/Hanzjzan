@@ -76,7 +76,7 @@ public class Initial extends JActivity {
         Dialog dialog = new Dialog(this);
 
         RelativeLayout layout = (RelativeLayout)getLayoutInflater().inflate(R.layout.initial_serverchecking,null);
-        TextView confirm = (TextView)layout.findViewById(R.id.serverChecking_confirm);
+        TextView confirm = layout.findViewById(R.id.serverChecking_confirm);
 
         confirm.setOnClickListener(view -> finish());
 

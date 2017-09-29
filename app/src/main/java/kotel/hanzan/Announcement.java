@@ -37,8 +37,8 @@ public class Announcement extends JActivity {
 
             ViewHolder(View itemView) {
                 super(itemView);
-                titleTextView = (TextView) itemView.findViewById(R.id.announcement_itemTitle);
-                entityTextView = (TextView) itemView.findViewById(R.id.announcement_itemEntity);
+                titleTextView = itemView.findViewById(R.id.announcement_itemTitle);
+                entityTextView = itemView.findViewById(R.id.announcement_itemEntity);
             }
         }
 
@@ -74,8 +74,8 @@ public class Announcement extends JActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_announcement);
 
-        back = (ImageView) findViewById(R.id.announcement_back);
-        recyclerView = (JRecyclerView) findViewById(R.id.announcement_recycler);
+        back = findViewById(R.id.announcement_back);
+        recyclerView = findViewById(R.id.announcement_recycler);
 
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

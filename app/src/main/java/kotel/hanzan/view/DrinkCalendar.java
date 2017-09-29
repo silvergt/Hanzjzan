@@ -49,10 +49,10 @@ public class DrinkCalendar extends RelativeLayout {
     private void init(Context context) {
         this.context = context;
         layout = (RelativeLayout) LayoutInflater.from(context).inflate(R.layout.drinkcalendar, null);
-        monthText = (TextView) layout.findViewById(R.id.drinkCalendar_month);
-        calendarLayout = (LinearLayout) layout.findViewById(R.id.drinkCalendar_calendarLayout);
-        leftButton = (ImageView) layout.findViewById(R.id.drinkCalendar_left);
-        rightButton = (ImageView) layout.findViewById(R.id.drinkCalendar_right);
+        monthText = layout.findViewById(R.id.drinkCalendar_month);
+        calendarLayout = layout.findViewById(R.id.drinkCalendar_calendarLayout);
+        leftButton = layout.findViewById(R.id.drinkCalendar_left);
+        rightButton = layout.findViewById(R.id.drinkCalendar_right);
 
 
         leftButton.setOnClickListener(view -> {

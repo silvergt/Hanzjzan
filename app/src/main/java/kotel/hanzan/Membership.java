@@ -66,11 +66,7 @@ public class Membership extends JActivity {
             this.originalPrice = originalPrice;
             this.discountPrice = discountPrice;
             this.dueDate = dueDate;
-            if(discountPrice != 0){
-                isNowDiscounted = true;
-            }else{
-                isNowDiscounted = false;
-            }
+            isNowDiscounted = discountPrice != 0;
         }
     }
 
@@ -80,11 +76,11 @@ public class Membership extends JActivity {
             TextView saleIcon,title,currentPrice,strikeThroughedPrice,duration;
             public ViewHolder(View itemView) {
                 super(itemView);
-                saleIcon = (TextView)itemView.findViewById(R.id.membership_ticket_saleIcon);
-                title = (TextView)itemView.findViewById(R.id.membership_ticket_name);
-                currentPrice = (TextView)itemView.findViewById(R.id.membership_ticket_currentPrice);
-                strikeThroughedPrice = (TextView)itemView.findViewById(R.id.membership_ticket_strikeThroughedPrice);
-                duration = (TextView)itemView.findViewById(R.id.membership_ticket_date);
+                saleIcon = itemView.findViewById(R.id.membership_ticket_saleIcon);
+                title = itemView.findViewById(R.id.membership_ticket_name);
+                currentPrice = itemView.findViewById(R.id.membership_ticket_currentPrice);
+                strikeThroughedPrice = itemView.findViewById(R.id.membership_ticket_strikeThroughedPrice);
+                duration = itemView.findViewById(R.id.membership_ticket_date);
             }
         }
 
@@ -137,11 +133,11 @@ public class Membership extends JActivity {
 
         inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        back = (ImageView)findViewById(R.id.membership_back);
-        expireDate = (TextView)findViewById(R.id.membership_expireDate);
-        recyclerView = (RecyclerView) findViewById(R.id.membership_recycler);
-        promotionLowerBar = (RelativeLayout) findViewById(R.id.membership_promotion);
-        loading = (Loading)findViewById(R.id.membership_loading);
+        back = findViewById(R.id.membership_back);
+        expireDate = findViewById(R.id.membership_expireDate);
+        recyclerView = findViewById(R.id.membership_recycler);
+        promotionLowerBar = findViewById(R.id.membership_promotion);
+        loading = findViewById(R.id.membership_loading);
 
         if(currentUser.expireYYYY==0){
             //if user is not a member of Hanzan
@@ -176,10 +172,10 @@ public class Membership extends JActivity {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
         RelativeLayout layout = (RelativeLayout)getLayoutInflater().inflate(R.layout.promotion_inputpopup,null);
-        EditText editText = (EditText)layout.findViewById(R.id.promotion_editText);
-        ImageView delete = (ImageView)layout.findViewById(R.id.promotion_delete);
-        TextView apply = (TextView) layout.findViewById(R.id.promotion_apply);
-        TextView cancel = (TextView) layout.findViewById(R.id.promotion_cancel);
+        EditText editText = layout.findViewById(R.id.promotion_editText);
+        ImageView delete = layout.findViewById(R.id.promotion_delete);
+        TextView apply = layout.findViewById(R.id.promotion_apply);
+        TextView cancel = layout.findViewById(R.id.promotion_cancel);
 
 
         editText.setOnEditorActionListener((textView, i, keyEvent) -> {
@@ -222,7 +218,7 @@ public class Membership extends JActivity {
 
     private void openPromotionSuccessPopup(){
         RelativeLayout layout = (RelativeLayout)getLayoutInflater().inflate(R.layout.promotion_successpopup,null);
-        TextView confirm = (TextView)layout.findViewById(R.id.promotion_successConfirm);
+        TextView confirm = layout.findViewById(R.id.promotion_successConfirm);
 
         confirm.setOnClickListener(view -> dialog.cancel());
 
@@ -294,11 +290,11 @@ public class Membership extends JActivity {
         RelativeLayout layout = (RelativeLayout)getLayoutInflater().inflate(R.layout.membership_purchasepopup,null);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,StaticData.displayHeight*2/3);
 
-        TextView name = (TextView)layout.findViewById(R.id.membership_purchaseMembershipName);
-        TextView purchasePrice = (TextView)layout.findViewById(R.id.membership_purchaseMembershipPrice);
-        TextView expire = (TextView)layout.findViewById(R.id.membership_purchaseExpireDate);
-        RelativeLayout purchaseWithToss = (RelativeLayout) layout.findViewById(R.id.membership_purchaseWithToss);
-        TextView cancel = (TextView)layout.findViewById(R.id.membership_purchaseCancel);
+        TextView name = layout.findViewById(R.id.membership_purchaseMembershipName);
+        TextView purchasePrice = layout.findViewById(R.id.membership_purchaseMembershipPrice);
+        TextView expire = layout.findViewById(R.id.membership_purchaseExpireDate);
+        RelativeLayout purchaseWithToss = layout.findViewById(R.id.membership_purchaseWithToss);
+        TextView cancel = layout.findViewById(R.id.membership_purchaseCancel);
 
         name.setText(ticketName);
         expire.setText(expireDate);

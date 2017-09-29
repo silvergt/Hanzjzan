@@ -54,7 +54,7 @@ public class PubPage extends JActivity {
 
     private RelativeLayout mainLayout;
     private TextView upperTitle, title, address, phoneNumber, workingHour_weekday,workingHour_weekend, dayOff, description;
-    private ImageView back, share, favorite, call, location;
+    private ImageView back, share, menu, favorite, call, location;
     private HorizontalSlideView pubImage;
     private SlideCountView slideCount;
 
@@ -77,23 +77,24 @@ public class PubPage extends JActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pubpage);
 
-        mainLayout = (RelativeLayout)findViewById(R.id.pubpage_pubpage);
-        drinkSelector = (DrinkSelector) findViewById(R.id.pubpage_drinkSelector);
-        slideCount = (SlideCountView)findViewById(R.id.pubpage_slideCount);
-        upperTitle = (TextView) findViewById(R.id.pubpage_upperTitle);
-        title = (TextView) findViewById(R.id.pubpage_title);
-        share = (ImageView)findViewById(R.id.pubpage_share);
-        address = (TextView) findViewById(R.id.pubpage_address);
-        phoneNumber = (TextView) findViewById(R.id.pubpage_phoneNumber);
-        workingHour_weekday = (TextView) findViewById(R.id.pubpage_workingHour_weekday);
-        workingHour_weekend = (TextView) findViewById(R.id.pubpage_workingHour_weekend);
-        dayOff = (TextView) findViewById(R.id.pubpage_dayOff);
-        description = (TextView) findViewById(R.id.pubpage_description);
-        back = (ImageView) findViewById(R.id.pubpage_back);
-        favorite = (ImageView) findViewById(R.id.pubpage_favorite);
-        pubImage = (HorizontalSlideView) findViewById(R.id.pubpage_pubImage);
-        call = (ImageView) findViewById(R.id.pubpage_call);
-        location = (ImageView) findViewById(R.id.pubpage_location);
+        mainLayout = findViewById(R.id.pubpage_pubpage);
+        drinkSelector = findViewById(R.id.pubpage_drinkSelector);
+        slideCount = findViewById(R.id.pubpage_slideCount);
+        upperTitle = findViewById(R.id.pubpage_upperTitle);
+        title = findViewById(R.id.pubpage_title);
+        share = findViewById(R.id.pubpage_share);
+        address = findViewById(R.id.pubpage_address);
+        phoneNumber = findViewById(R.id.pubpage_phoneNumber);
+        workingHour_weekday = findViewById(R.id.pubpage_workingHour_weekday);
+        workingHour_weekend = findViewById(R.id.pubpage_workingHour_weekend);
+        dayOff = findViewById(R.id.pubpage_dayOff);
+        description = findViewById(R.id.pubpage_description);
+        back = findViewById(R.id.pubpage_back);
+        favorite = findViewById(R.id.pubpage_favorite);
+        pubImage = findViewById(R.id.pubpage_pubImage);
+        call = findViewById(R.id.pubpage_call);
+        location = findViewById(R.id.pubpage_location);
+        menu = findViewById(R.id.pubpage_menu);
 
         RelativeLayout.LayoutParams pubImageParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, StaticData.displayWidth*3/5);
         pubImage.setLayoutParams(pubImageParams);
@@ -154,7 +155,53 @@ public class PubPage extends JActivity {
                 }
             });
             builder.show();
+        });
 
+        menu.setOnClickListener(view -> {
+            if(pubInfo.tutorialPub){return;}
+            if(pubInfo.menuImageAddress.size() == 0){
+                Dialog dialog = new Dialog(this);
+
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+                LinearLayout layout = (LinearLayout) getLayoutInflater().inflate(R.layout.popupbox_normal, null);
+                ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                layout.setLayoutParams(params);
+
+                TextView text = layout.findViewById(R.id.popupBox_text);
+                TextView yes = layout.findViewById(R.id.popupBox_yes);
+                TextView no = layout.findViewById(R.id.popupBox_no);
+
+                text.setText(getString(R.string.preparingMenu));
+                yes.setText(getString(R.string.confirm));
+                no.setVisibility(View.GONE);
+
+                yes.setOnClickListener(view1 -> {
+                    dialog.cancel();
+                });
+
+                dialog.setContentView(layout);
+                dialog.show();
+            }else {
+                String[] images = new String[pubInfo.menuImageAddress.size()];
+                for (int j = 0; j < pubInfo.menuImageAddress.size(); j++) {
+                    images[j] = pubInfo.menuImageAddress.get(j);
+                }
+                ImageViewer.Builder builder = new ImageViewer.Builder(this, images);
+
+                TextView imageCounter = new TextView(this);
+                imageCounter.setPadding(0, 50, 0, 0);
+                imageCounter.setGravity(Gravity.CENTER);
+                imageCounter.setTextColor(Color.WHITE);
+                imageCounter.setWidth(StaticData.displayWidth);
+
+                builder.setImageChangeListener(position -> {
+                    imageCounter.setText(Integer.toString(position + 1) + "/" + Integer.toString(pubInfo.menuImageAddress.size()));
+                });
+
+                builder.setOverlayView(imageCounter);
+                builder.show();
+            }
         });
 
         favorite.setOnClickListener(view -> {
@@ -224,8 +271,8 @@ public class PubPage extends JActivity {
 
     private void openTutorial(){
         RelativeLayout tutorialLayout = (RelativeLayout)getLayoutInflater().inflate(R.layout.pubpage_tutorial,null);
-        layout1 = (RelativeLayout)tutorialLayout.findViewById(R.id.pubpage_tutorial_layout1);
-        layout2 = (RelativeLayout)tutorialLayout.findViewById(R.id.pubpage_tutorial_layout2);
+        layout1 = tutorialLayout.findViewById(R.id.pubpage_tutorial_layout1);
+        layout2 = tutorialLayout.findViewById(R.id.pubpage_tutorial_layout2);
 
         ObjectAnimator.ofFloat(layout1,"alpha",0,1).setDuration(900).start();
 
@@ -233,15 +280,14 @@ public class PubPage extends JActivity {
     }
 
     private void openTutorialDrinkSelectDialog(DrinkInfo drinkInfo){
-        Dialog tutorialDrinkSelectorDialog = new Dialog(this);
+        Dialog tutorialDrinkSelectorDialog = new Dialog(PubPage.this);
         tutorialDrinkSelectorDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         tutorialDrinkSelectorDialog.setCancelable(false);
 
-        ViewGroup.LayoutParams dialogParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         RelativeLayout dialogLayout = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.pubpage_tutorial_popup,null);
-
-        ImageView tutorialDrinkImage = (ImageView)dialogLayout.findViewById(R.id.pubpagePopup_tutorial_drinkImage);
-        TextView tutorialStartApp = (TextView)dialogLayout.findViewById(R.id.pubpagePopup_tutorial_start);
+        ImageView tutorialDrinkImage = dialogLayout.findViewById(R.id.pubpagePopup_tutorial_drinkImage);
+        TextView tutorialStartApp = dialogLayout.findViewById(R.id.pubpagePopup_tutorial_start);
 
         Picasso.with(PubPage.this).load(drinkInfo.drinkImageAddress).placeholder(R.drawable.drinkselector_default).into(tutorialDrinkImage);
 
@@ -254,22 +300,21 @@ public class PubPage extends JActivity {
                 final String returned = map.get("tutorialfinished");
 
                 new Handler(getMainLooper()).post(() -> {
-                    if(returned == null || returned.equals("FALSE")){
+                    if(returned == null || returned.equals("FALSE")) {
                         Toast.makeText(getApplicationContext(),getString(R.string.networkFailure),Toast.LENGTH_SHORT).show();
+                        return;
                     }else if(returned.equals("TRUE")){
                         StaticData.currentUser.finishedTutorial = true;
                     }
                     tutorialDrinkSelectorDialog.cancel();
-                    Intent intent = new Intent(getApplicationContext(),Home.class);
+                    Intent intent = new Intent(PubPage.this,Home.class);
                     startActivity(intent);
                     finishAffinity();
                 });
-
             }).start();
-
         });
 
-        tutorialDrinkSelectorDialog.setContentView(dialogLayout,dialogParams);
+        tutorialDrinkSelectorDialog.setContentView(dialogLayout,params);
         tutorialDrinkSelectorDialog.show();
     }
 
@@ -281,14 +326,14 @@ public class PubPage extends JActivity {
         ViewGroup.LayoutParams dialogParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         RelativeLayout dialogLayout = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.drinkselector_popup,null);
 
-        dialogDrinkImage = (ImageView)dialogLayout.findViewById(R.id.drinkSelectorDialog_drinkImage);
-        dialogPubName = (TextView)dialogLayout.findViewById(R.id.drinkSelectorDialog_pubName);
-        dialogDrinkName = (TextView)dialogLayout.findViewById(R.id.drinkSelectorDialog_drinkName);
-        dialogCheckIcon = (ImageView)dialogLayout.findViewById(R.id.drinkSelectorDialog_checkIcon);
-        dialogText = (TextView)dialogLayout.findViewById(R.id.drinkSelectorDialog_mainText);
-        dialogReuseInfo = (TextView)dialogLayout.findViewById(R.id.drinkSelectorDialog_reuseInfo);
-        dialogButton1 = (TextView)dialogLayout.findViewById(R.id.drinkSelectorDialog_button1);
-        dialogButton2 = (TextView)dialogLayout.findViewById(R.id.drinkSelectorDialog_button2);
+        dialogDrinkImage = dialogLayout.findViewById(R.id.drinkSelectorDialog_drinkImage);
+        dialogPubName = dialogLayout.findViewById(R.id.drinkSelectorDialog_pubName);
+        dialogDrinkName = dialogLayout.findViewById(R.id.drinkSelectorDialog_drinkName);
+        dialogCheckIcon = dialogLayout.findViewById(R.id.drinkSelectorDialog_checkIcon);
+        dialogText = dialogLayout.findViewById(R.id.drinkSelectorDialog_mainText);
+        dialogReuseInfo = dialogLayout.findViewById(R.id.drinkSelectorDialog_reuseInfo);
+        dialogButton1 = dialogLayout.findViewById(R.id.drinkSelectorDialog_button1);
+        dialogButton2 = dialogLayout.findViewById(R.id.drinkSelectorDialog_button2);
 
         Picasso.with(this).load(drinkInfo.drinkImageAddress).placeholder(R.drawable.drinkselector_default).into(dialogDrinkImage);
         dialogPubName.setText(pubInfo.name);
@@ -327,9 +372,9 @@ public class PubPage extends JActivity {
                     ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     layout.setLayoutParams(params);
 
-                    TextView text = (TextView)layout.findViewById(R.id.popupBox_text);
-                    TextView yes = (TextView) layout.findViewById(R.id.popupBox_yes);
-                    TextView no = (TextView) layout.findViewById(R.id.popupBox_no);
+                    TextView text = layout.findViewById(R.id.popupBox_text);
+                    TextView yes = layout.findViewById(R.id.popupBox_yes);
+                    TextView no = layout.findViewById(R.id.popupBox_no);
 
                     text.setText(getString(R.string.DrinkSelectorPopup_text2));
 
@@ -432,7 +477,7 @@ public class PubPage extends JActivity {
             double lat = Double.parseDouble(map.get("lat"));
             double lng = Double.parseDouble(map.get("lng"));
 
-            pubInfo = new PubInfo(pubId,name,pubAddress,district,imageAddress,pubFavorite,lat,lng);
+            pubInfo = new PubInfo(null,pubId,name,pubAddress,district,"",imageAddress,pubFavorite,lat,lng);
             new Handler(getMainLooper()).post(()->{
                 upperTitle.setText(pubInfo.name);
                 title.setText(pubInfo.name);
@@ -490,15 +535,27 @@ public class PubPage extends JActivity {
                 }
             }
             i = 0;
+            while(true){
+                if(map.get("imgadd_menu_" + Integer.toString(i))!=null){
+                    pubInfo.menuImageAddress.add(map.get("imgadd_menu_" + Integer.toString(i++)));
+                }else{
+                    break;
+                }
+            }
+            i = 0;
             while (true){
                 if(map.get("category_drink_"+Integer.toString(i))!=null) {
-                    pubInfo.drinkList.add(new DrinkInfo(map.get("category_drink_" + Integer.toString(i)), map.get("name_drink_" + Integer.toString(i)),map.get("imgadd_drink_" + Integer.toString(i++))));
+                    pubInfo.drinkList.add(new DrinkInfo(map.get("category_drink_" + Integer.toString(i)),
+                            map.get("name_drink_" + Integer.toString(i)),map.get("imgadd_drink_" + Integer.toString(i++))));
                 }else{
                     break;
                 }
             }
             new Handler(getMainLooper()).post(()->{
                 phoneNumber.setText(pubInfo.phone);
+                if(pubInfo.menuImageAddress.size() != 0){
+                    menu.setImageResource(R.drawable.menuboard);
+                }
                 dayOff.setText(pubInfo.dayoff);
                 description.setText(pubInfo.description);
                 workingHour_weekday.setText(pubInfo.work_weekday);

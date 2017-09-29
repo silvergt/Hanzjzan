@@ -121,7 +121,15 @@
                             android:layout_width="@dimen/pubpage_itemSize"
                             android:layout_height="@dimen/pubpage_itemSize"
                             android:src="@drawable/phone"
-                            android:layout_marginRight="10dp"
+                            android:layout_marginRight="5dp"
+                            />
+
+                        <ImageView
+                            android:id="@+id/pubpage_menu"
+                            android:layout_width="@dimen/pubpage_itemSize"
+                            android:layout_height="@dimen/pubpage_itemSize"
+                            android:src="@drawable/menu_deactive"
+                            android:layout_marginRight="5dp"
                             />
 
                         <ImageView

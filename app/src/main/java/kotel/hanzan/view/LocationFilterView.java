@@ -65,8 +65,8 @@ public class LocationFilterView extends RelativeLayout{
 
             public ViewHolder(View itemView) {
                 super(itemView);
-                comingSoon = (TextView)itemView.findViewById(R.id.locationFilter_comingSoon);
-                locationName = (TextView)itemView.findViewById(R.id.locationFilter_locationName);
+                comingSoon = itemView.findViewById(R.id.locationFilter_comingSoon);
+                locationName = itemView.findViewById(R.id.locationFilter_locationName);
             }
         }
 
@@ -144,10 +144,10 @@ public class LocationFilterView extends RelativeLayout{
 
         layout = (RelativeLayout) LayoutInflater.from(context).inflate(R.layout.home_locationfilter,null);
 
-        upperScrollContainer = (LinearLayout)layout.findViewById(R.id.locationFilter_upperBarContainer);
-        itemRecycler = (RecyclerView)layout.findViewById(R.id.locationFilter_locationContainer);
-        selectLocation = (TextView)layout.findViewById(R.id.locationFilter_selectLocation);
-        searchAroundMe = (TextView)layout.findViewById(R.id.locationFilter_aroundMe);
+        upperScrollContainer = layout.findViewById(R.id.locationFilter_upperBarContainer);
+        itemRecycler = layout.findViewById(R.id.locationFilter_locationContainer);
+        selectLocation = layout.findViewById(R.id.locationFilter_selectLocation);
+        searchAroundMe = layout.findViewById(R.id.locationFilter_aroundMe);
 
 
         retrieveLocationDataFromServer();
@@ -225,7 +225,7 @@ public class LocationFilterView extends RelativeLayout{
                     LinearLayout.LayoutParams locationUpperItemParams = new LinearLayout.LayoutParams(
                             (int)getResources().getDimension(R.dimen.locationFilter_upperBarItemWidth), ViewGroup.LayoutParams.MATCH_PARENT);
 
-                    TextView locationItemText = (TextView)locationUpperItem.findViewById(R.id.locationFilter_upperItem_text);
+                    TextView locationItemText = locationUpperItem.findViewById(R.id.locationFilter_upperItem_text);
                     View locationItemLowerBar = locationUpperItem.findViewById(R.id.locationFilter_upperItem_lowerbar);
 
                     locationItemText.setText(locationList.get(number).locationName);

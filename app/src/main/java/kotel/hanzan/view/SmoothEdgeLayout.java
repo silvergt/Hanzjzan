@@ -7,6 +7,8 @@ import android.util.AttributeSet;
 import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 
 
+/** Make this as a parent view of a view you want to make it scroll smoothly at the start and end of the view. */
+
 public class SmoothEdgeLayout extends TwinklingRefreshLayout{
     Context context;
 

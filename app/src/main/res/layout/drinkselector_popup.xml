@@ -69,12 +69,26 @@
             android:padding="@dimen/drinkSelectorDialog_leftRightMargin"
             >
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginBottom="@dimen/leftRightMargin"
                 >
+                <TextView
+                    android:id="@+id/drinkSelectorDialog_mainText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/DrinkSelectorPopup_text1"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/drinkSelectorDialog_subFontSize"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="@dimen/leftRightMargin"
+                    />
+
+
                 <ImageView
                     android:id="@+id/drinkSelectorDialog_checkIcon"
                     android:layout_width="30dp"
@@ -82,19 +96,10 @@
                     android:src="@drawable/pubpagepopup_check"
                     android:layout_gravity="center"
                     android:visibility="gone"
-                    />
-                <TextView
-                    android:id="@+id/drinkSelectorDialog_mainText"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/DrinkSelectorPopup_text1"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/drinkSelectorDialog_subFontSize"
+                    android:layout_toLeftOf="@id/drinkSelectorDialog_mainText"
                     />
 
-            </LinearLayout>
+            </RelativeLayout>
 
 
             <TextView

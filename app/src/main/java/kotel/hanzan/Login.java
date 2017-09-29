@@ -113,12 +113,12 @@ public class Login extends JActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        layout = (RelativeLayout) findViewById(R.id.login_login);
-        slideView = (HorizontalSlideView) findViewById(R.id.login_slideView);
-        slideCountView = (SlideCountView) findViewById(R.id.login_slideCountView);
-        lowerButton = (LinearLayout) findViewById(R.id.login_lowerButton);
-        lowerIcon = (ImageView) findViewById(R.id.login_lowerIcon);
-        loading = (Loading) findViewById(R.id.login_loading);
+        layout = findViewById(R.id.login_login);
+        slideView = findViewById(R.id.login_slideView);
+        slideCountView = findViewById(R.id.login_slideCountView);
+        lowerButton = findViewById(R.id.login_lowerButton);
+        lowerIcon = findViewById(R.id.login_lowerIcon);
+        loading = findViewById(R.id.login_loading);
 
         initFacebook();
         initKakao();
@@ -194,9 +194,9 @@ public class Login extends JActivity {
     private void addSlideChildViews() {
         for (int i = 0; i < 3; i++) {
             LinearLayout childLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.login_slideviewchild, null);
-            GifImageView gifView = (GifImageView) childLayout.findViewById(R.id.login_gif);
-            TextView text1 = (TextView) childLayout.findViewById(R.id.login_childText1);
-            TextView text2 = (TextView) childLayout.findViewById(R.id.login_childText2);
+            GifImageView gifView = childLayout.findViewById(R.id.login_gif);
+            TextView text1 = childLayout.findViewById(R.id.login_childText1);
+            TextView text2 = childLayout.findViewById(R.id.login_childText2);
 
             RelativeLayout.LayoutParams childParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             childLayout.setLayoutParams(childParams);
@@ -228,7 +228,7 @@ public class Login extends JActivity {
         }
 
         LinearLayout childLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.login_slideviewchild_login, null);
-        LinearLayout facebookLogin = (LinearLayout) childLayout.findViewById(R.id.login_facebookLogin);
+        LinearLayout facebookLogin = childLayout.findViewById(R.id.login_facebookLogin);
         facebookLogin.setOnClickListener(view -> LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile")));
 
         RelativeLayout.LayoutParams childParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
@@ -307,7 +307,7 @@ public class Login extends JActivity {
             }
 
             if (map.get("signup_history").equals("TRUE")) {
-                makeUserInfoAndLogin(map);
+                makeUserInfoAndLogin(map,false);
             } else if (map.get("signup_history").equals("FALSE")) {
                 openTermsPage(userProfile);
             }
@@ -342,7 +342,7 @@ public class Login extends JActivity {
                 map.put("member_key", StaticData.IDENTIFIER_KAKAO + Long.toString(userProfile.getId()));
                 map = ServerConnectionHelper.connect("checking account existence", "login", map);
                 if (map.get("signup_history").equals("TRUE")) {
-                    makeUserInfoAndLogin(map);
+                    makeUserInfoAndLogin(map,true);
                 } else {
                     onLoginFailed();
                 }
@@ -374,7 +374,7 @@ public class Login extends JActivity {
             }
 
             if (map.get("signup_history").equals("TRUE")) {
-                makeUserInfoAndLogin(map);
+                makeUserInfoAndLogin(map,false);
             } else if (map.get("signup_history").equals("FALSE")) {
                 openTermsPage(null);
             }
@@ -407,7 +407,7 @@ public class Login extends JActivity {
                     map.put("member_key", StaticData.IDENTIFIER_FACEBOOK + AccessToken.getCurrentAccessToken().getUserId());
                     map = ServerConnectionHelper.connect("checking account existence", "login", map);
                     if (map.get("signup_history").equals("TRUE")) {
-                        makeUserInfoAndLogin(map);
+                        makeUserInfoAndLogin(map,true);
                     } else {
                         onLoginFailed();
                     }
@@ -428,9 +428,10 @@ public class Login extends JActivity {
     }
 
 
-    private void makeUserInfoAndLogin(HashMap<String, String> map) {
+    private void makeUserInfoAndLogin(HashMap<String, String> map,boolean justSignedUp) {
         new Handler(getMainLooper()).post(()-> {
             StaticData.currentUser = new UserInfo(map);
+            StaticData.currentUser.justSignedUp = justSignedUp;
             Intent intent = new Intent(getApplicationContext(), Home.class);
             startActivity(intent);
             finish();
@@ -443,15 +444,15 @@ public class Login extends JActivity {
     /** Terms and conditions popup */
     private void openTermsPage(@Nullable UserProfile userProfile){
         loading.setLoadingCompleted();
-        RelativeLayout termsContainer = (RelativeLayout) findViewById(R.id.login_termsContainer);
+        RelativeLayout termsContainer = findViewById(R.id.login_termsContainer);
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         RelativeLayout termPage = (RelativeLayout)getLayoutInflater().inflate(R.layout.login_agreeterms,null);
         termPage.setLayoutParams(params);
 
-        TextView terms = (TextView)termPage.findViewById(R.id.login_termsText);
-        TextView cancel = (TextView)termPage.findViewById(R.id.login_termsCancel);
-        TextView agree = (TextView)termPage.findViewById(R.id.login_termsAgree);
+        TextView terms = termPage.findViewById(R.id.login_termsText);
+        TextView cancel = termPage.findViewById(R.id.login_termsCancel);
+        TextView agree = termPage.findViewById(R.id.login_termsAgree);
 
         terms.setText(AssetsHelper.loadText(getApplicationContext(),"terms","terms"));
 

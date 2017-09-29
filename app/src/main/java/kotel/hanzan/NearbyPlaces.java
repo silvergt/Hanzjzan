@@ -64,7 +64,7 @@ public class NearbyPlaces extends JNMapActivity {
     private Loading loading;
     private ImageView myLocationButton, back, pubImage;
     private LinearLayout pubInfoLayout;
-    private TextView pubText1, pubText2, pubText3, informationText;
+    private TextView pubText1, pubText2, pubText3, pubText4, informationText;
 
     private ArrayList<PubInfo> pubInfoArray = new ArrayList<>();
     private ArrayList<DistrictInfo> districtInfoArray = new ArrayList<>();
@@ -103,17 +103,18 @@ public class NearbyPlaces extends JNMapActivity {
         drawableWidth = (int) getResources().getDimension(R.dimen.markerWidth);
         drawableHeight = (int) getResources().getDimension(R.dimen.markerHeight);
 
-        loading = (Loading) findViewById(R.id.nearbyPlaces_loading);
-        myLocationButton = (ImageView) findViewById(R.id.nearbyPlaces_myLocation);
-        back = (ImageView) findViewById(R.id.nearbyPlaces_back);
-        pubInfoLayout = (LinearLayout) findViewById(R.id.nearbyPlaces_pubInfoLayout);
-        pubImage = (ImageView) findViewById(R.id.nearbyPlaces_pubImage);
-        pubText1 = (TextView) findViewById(R.id.nearbyPlaces_pubText1);
-        pubText2 = (TextView) findViewById(R.id.nearbyPlaces_pubText2);
-        pubText3 = (TextView) findViewById(R.id.nearbyPlaces_pubText3);
-        informationText = (TextView) findViewById(R.id.nearbyPlaces_information);
+        loading = findViewById(R.id.nearbyPlaces_loading);
+        myLocationButton = findViewById(R.id.nearbyPlaces_myLocation);
+        back = findViewById(R.id.nearbyPlaces_back);
+        pubInfoLayout = findViewById(R.id.nearbyPlaces_pubInfoLayout);
+        pubImage = findViewById(R.id.nearbyPlaces_pubImage);
+        pubText1 = findViewById(R.id.nearbyPlaces_pubText1);
+        pubText2 = findViewById(R.id.nearbyPlaces_pubText2);
+        pubText3 = findViewById(R.id.nearbyPlaces_pubText3);
+        pubText4 = findViewById(R.id.nearbyPlaces_pubText4);
+        informationText = findViewById(R.id.nearbyPlaces_information);
 
-        mapView = (NMapView) findViewById(R.id.nearbyPlaces_mapView);
+        mapView = findViewById(R.id.nearbyPlaces_mapView);
         mapView.setClientId(getString(R.string.naver_client_id));
         mapView.setClickable(true);
         mapView.setEnabled(true);
@@ -223,10 +224,6 @@ public class NearbyPlaces extends JNMapActivity {
 
         overlayManager.setOnCalloutOverlayListener((nMapOverlay, nMapOverlayItem, rect) -> {
             onMarkerClicked(nMapOverlayItem);
-            nMapOverlayItem.setTitle("TTQ");
-            nMapOverlayItem.setHeadText("qqqt");
-            nMapOverlayItem.setSnippet("QWEZXC");
-            nMapOverlayItem.setTailText("MAMA");
             return null;
         });
 
@@ -452,7 +449,7 @@ public class NearbyPlaces extends JNMapActivity {
                 double lat = Double.parseDouble(map.get("lat_" + num));
                 double lng = Double.parseDouble(map.get("lng_" + num));
 
-                pubInfoArray.add(new PubInfo(id, "", "", "", "", false, lat, lng));
+                pubInfoArray.add(new PubInfo(getApplicationContext(),id, "", "", "", "","", false, lat, lng));
             }
             new Handler(getMainLooper()).post(() -> {
                 updateMarkers(returnToMyLocation);
@@ -469,7 +466,6 @@ public class NearbyPlaces extends JNMapActivity {
 
             map = ServerConnectionHelper.connect("retrieving selected pub's info", "mapplaceinfo", map);
 
-
             if (map.get("name_place") == null) {
                 return;
             }
@@ -477,6 +473,7 @@ public class NearbyPlaces extends JNMapActivity {
             String address = map.get("address_place");
             String imageAddress = map.get("imgadd_place");
             String district = map.get("district");
+            String drinkType = map.get("drink_place");
             boolean favorite = false;
             if (map.get("like").equals("TRUE")) {
                 favorite = true;
@@ -484,7 +481,7 @@ public class NearbyPlaces extends JNMapActivity {
             double lat = Double.parseDouble(map.get("lat"));
             double lng = Double.parseDouble(map.get("lng"));
 
-            currentlyFocusedPubInfo = new PubInfo(pubId, name, address, district, imageAddress, favorite, lat, lng);
+            currentlyFocusedPubInfo = new PubInfo(NearbyPlaces.this,pubId, name, address, district, drinkType, imageAddress, favorite, lat, lng);
             new Handler(getMainLooper()).post(() -> {
 
                 String distanceString = "";
@@ -497,8 +494,9 @@ public class NearbyPlaces extends JNMapActivity {
 
                 Picasso.with(this).load(currentlyFocusedPubInfo.imageAddress.get(0)).placeholder(R.drawable.loading_store).into(pubImage);
                 pubText1.setText(currentlyFocusedPubInfo.name + "  " + distanceString);
-                pubText2.setText(currentlyFocusedPubInfo.district);
-                pubText3.setText(currentlyFocusedPubInfo.address);
+                pubText2.setText(currentlyFocusedPubInfo.drinkTypes);
+                pubText3.setText(currentlyFocusedPubInfo.district);
+                pubText4.setText(currentlyFocusedPubInfo.address);
 
                 pubInfoLayout.setOnClickListener(view -> {
                     Intent intent = new Intent(NearbyPlaces.this, PubPage.class);
@@ -558,6 +556,7 @@ public class NearbyPlaces extends JNMapActivity {
                 return;
             } else {
                 try {
+                    JLog.v("INTEGER~ ",nMapOverlayItem.getTitle());
                     position = Integer.parseInt(nMapOverlayItem.getTitle());
                 } catch (Exception e) {
                     JLog.e("parsing integer error");
@@ -578,6 +577,7 @@ public class NearbyPlaces extends JNMapActivity {
             pubText1.setText("");
             pubText2.setText("");
             pubText3.setText("");
+            pubText4.setText("");
 
             retrievePubByPubId(position);
 

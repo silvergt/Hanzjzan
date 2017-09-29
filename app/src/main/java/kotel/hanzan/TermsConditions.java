@@ -16,8 +16,8 @@ public class TermsConditions extends JActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_termsconditions);
 
-        back = (ImageView)findViewById(R.id.termsConditions_back);
-        termsText = (TextView)findViewById(R.id.termsConditions_termsText);
+        back = findViewById(R.id.termsConditions_back);
+        termsText = findViewById(R.id.termsConditions_termsText);
 
         back.setOnClickListener(view -> finish());
         termsText.setText(AssetsHelper.loadText(getApplicationContext(),"terms","terms"));

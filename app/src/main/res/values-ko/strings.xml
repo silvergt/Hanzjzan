@@ -140,5 +140,8 @@
     <string name="DrinkSelectorPopup_text3">오늘의 멤버쉽이 제대로 사용되었어요!</string>
     <string name="DrinkSelectorPopup_text4">오전 6시 이후 다시 사용하실 수 있습니다.</string>
     <string name="startDrinkat">클릭하여 드링캣 시작하기</string>
+    <string name="signupFreeCode">환영합니다! 가입 기념으로\n15일 무료 쿠폰을 드립니다!</string>
+    <string name="isFree">무료 제공</string>
+    <string name="preparingMenu">이 가게는 메뉴 준비중입니다!</string>
 
 </resources>

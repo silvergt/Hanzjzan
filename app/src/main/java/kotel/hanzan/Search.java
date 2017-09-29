@@ -63,15 +63,16 @@ public class Search extends JActivity {
 
         class ViewHolder extends RecyclerView.ViewHolder {
             ImageView image, favorite;
-            TextView text1, text2, text3;
+            TextView text1, text2, text3, text4;
 
             public ViewHolder(View itemView) {
                 super(itemView);
-                image = (ImageView) itemView.findViewById(R.id.pubitem_image);
-                favorite = (ImageView) itemView.findViewById(R.id.pubitem_favorite);
-                text1 = (TextView) itemView.findViewById(R.id.pubitem_text1);
-                text2 = (TextView) itemView.findViewById(R.id.pubitem_text2);
-                text3 = (TextView) itemView.findViewById(R.id.pubitem_text3);
+                image = itemView.findViewById(R.id.pubitem_image);
+                favorite = itemView.findViewById(R.id.pubitem_favorite);
+                text1 = itemView.findViewById(R.id.pubitem_text1);
+                text2 = itemView.findViewById(R.id.pubitem_text2);
+                text3 = itemView.findViewById(R.id.pubitem_text3);
+                text4 = itemView.findViewById(R.id.pubitem_text4);
             }
         }
 
@@ -111,8 +112,9 @@ public class Search extends JActivity {
             }
 
             holder.text1.setText(pubInfo.name + "  " + distanceString);
-            holder.text2.setText(pubInfo.district);
-            holder.text3.setText(pubInfo.address);
+            holder.text2.setText(pubInfo.drinkTypes);
+            holder.text3.setText(pubInfo.district);
+            holder.text4.setText(pubInfo.address);
 
 
             holder.itemView.setOnClickListener(view -> {
@@ -154,15 +156,15 @@ public class Search extends JActivity {
 
         adapter = new SearchRecyclerViewAdapter();
 
-        back = (ImageView) findViewById(R.id.search_back);
-        upperTitle = (TextView)findViewById(R.id.search_upperTitle);
-        searchIcon = (ImageView) findViewById(R.id.search_searchIcon);
-        searchText = (ImageView) findViewById(R.id.search_search);
-        deleteText = (ImageView) findViewById(R.id.search_searchDeleteText);
-        searchEditText = (EditText) findViewById(R.id.search_searchEditText);
-        initialPanel = (LinearLayout) findViewById(R.id.search_initialPanel);
-        recyclerView = (JRecyclerView) findViewById(R.id.search_recycler);
-        loading = (Loading)findViewById(R.id.search_loading);
+        back = findViewById(R.id.search_back);
+        upperTitle = findViewById(R.id.search_upperTitle);
+        searchIcon = findViewById(R.id.search_searchIcon);
+        searchText = findViewById(R.id.search_search);
+        deleteText = findViewById(R.id.search_searchDeleteText);
+        searchEditText = findViewById(R.id.search_searchEditText);
+        initialPanel = findViewById(R.id.search_initialPanel);
+        recyclerView = findViewById(R.id.search_recycler);
+        loading = findViewById(R.id.search_loading);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
@@ -370,6 +372,7 @@ public class Search extends JActivity {
                 String address = map.get("address_place_"+num);
                 String imageAddress = map.get("imgadd_place_"+num);
                 String district = map.get("district_"+num);
+                String drinkType = map.get("drink_place_"+num);
                 boolean favorite=false;
                 if(map.get("like_"+num).equals("TRUE")){
                     favorite=true;
@@ -377,7 +380,7 @@ public class Search extends JActivity {
                 double lat = Double.parseDouble(map.get("lat_"+num));
                 double lng = Double.parseDouble(map.get("lng_"+num));
 
-                pubInfoArray.add(new PubInfo(id,name,address, district,imageAddress,favorite,lat,lng));
+                pubInfoArray.add(new PubInfo(Search.this,id,name,address, district, drinkType,imageAddress,favorite,lat,lng));
             }
 
             String dataleft = map.get("datalefts");

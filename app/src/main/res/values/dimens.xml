@@ -23,7 +23,7 @@
     <dimen name="drinkSelectorDialog_imageHeight_half">60dp</dimen>
     <dimen name="drinkSelectorDialog_leftRightMargin">20dp</dimen>
     <dimen name="drinkSelectorDialog_buttonHeight">60dp</dimen>
-    <dimen name="drinkSelectorDialog_BigFontSize">20sp</dimen>
+    <dimen name="drinkSelectorDialog_BigFontSize">18sp</dimen>
     <dimen name="drinkSelectorDialog_subFontSize">15sp</dimen>
 
     <dimen name="drinkCalendar_layoutPadding">10dp</dimen>

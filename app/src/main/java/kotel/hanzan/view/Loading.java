@@ -37,7 +37,7 @@ public class Loading extends RelativeLayout {
     private void init(Context context){
         this.context=context;
         layout = (RelativeLayout) LayoutInflater.from(context).inflate(R.layout.loading,null);
-        loadingIcon = (ImageView)layout.findViewById(R.id.loading_image);
+        loadingIcon = layout.findViewById(R.id.loading_image);
 
         handler = new Handler(Looper.getMainLooper());
 

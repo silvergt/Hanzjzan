@@ -40,14 +40,14 @@ public class ImageCropper extends JActivity {
     private void init(){
         imageUri=getIntent().getData();
 
-        back=(ImageView)findViewById(R.id.cropper_back);
-        rotate=(ImageView)findViewById(R.id.cropper_rotate);
-        cropper=(CropImageView)findViewById(R.id.cropper_cropper);
+        back= findViewById(R.id.cropper_back);
+        rotate= findViewById(R.id.cropper_rotate);
+        cropper= findViewById(R.id.cropper_cropper);
         ratios=new TextView[3];
-        ratios[0]=(TextView)findViewById(R.id.portion1);
-        ratios[1]=(TextView)findViewById(R.id.portion2);
-        ratios[2]=(TextView)findViewById(R.id.portion3);
-        confirm=(TextView)findViewById(R.id.cropper_confirm);
+        ratios[0]= findViewById(R.id.portion1);
+        ratios[1]= findViewById(R.id.portion2);
+        ratios[2]= findViewById(R.id.portion3);
+        confirm= findViewById(R.id.cropper_confirm);
 
         ratios[0].setOnClickListener(v -> cropper.setAspectRatio(1,1));
         ratios[1].setOnClickListener(v -> cropper.setAspectRatio(4,3));
@@ -80,7 +80,7 @@ public class ImageCropper extends JActivity {
     protected void onStop() {
         try{
             croppedImage.recycle();
-        }catch (Exception e){}
+        }catch (Exception e){e.printStackTrace();}
         super.onStop();
     }
 

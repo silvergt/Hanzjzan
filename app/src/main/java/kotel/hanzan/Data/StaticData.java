@@ -6,6 +6,7 @@ public class StaticData {
 //    final public static String TOSSTESTKEY="sk_test_Q0kzLGdNWyQ0kzLGdNWy";
     public static String TOSSKEY;
 
+
     /** These strings are used as prefix of new member's key, which is sended to server to perform sign in request.
      *  This makes sure that there won't be any repeated key among KAKAO id, FACEBOOK id, and other login account id. */
     final public static String IDENTIFIER_KAKAO="KAKAO";

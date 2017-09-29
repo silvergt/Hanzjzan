@@ -32,11 +32,11 @@ public class PurchaseSuccess extends JActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_purchase_success);
 
-        title = (TextView)findViewById(R.id.purchaseSuccess_title);
-        membershipName = (TextView)findViewById(R.id.purchaseSuccess_membershipName);
-        membershipDue = (TextView)findViewById(R.id.purchaseSuccess_expireDate);
-        confirm = (TextView)findViewById(R.id.purchaseSuccess_confirm);
-        image = (ImageView)findViewById(R.id.purchaseSuccess_image);
+        title = findViewById(R.id.purchaseSuccess_title);
+        membershipName = findViewById(R.id.purchaseSuccess_membershipName);
+        membershipDue = findViewById(R.id.purchaseSuccess_expireDate);
+        confirm = findViewById(R.id.purchaseSuccess_confirm);
+        image = findViewById(R.id.purchaseSuccess_image);
 
         Uri uri = getIntent().getData();
         try{

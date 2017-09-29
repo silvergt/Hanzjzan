@@ -29,11 +29,11 @@ public class Event extends JActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event);
 
-        back = (ImageView)findViewById(R.id.event_back);
-        image = (ImageView)findViewById(R.id.event_mainImage);
-        title = (TextView)findViewById(R.id.event_title);
-        content = (TextView)findViewById(R.id.event_content);
-        share = (ImageView) findViewById(R.id.event_share);
+        back = findViewById(R.id.event_back);
+        image = findViewById(R.id.event_mainImage);
+        title = findViewById(R.id.event_title);
+        content = findViewById(R.id.event_content);
+        share = findViewById(R.id.event_share);
 
         Intent data = getIntent();
 

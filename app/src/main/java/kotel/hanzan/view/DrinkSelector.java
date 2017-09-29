@@ -64,8 +64,8 @@ public class DrinkSelector extends RelativeLayout{
             CircleImageView image;
             public itemViewHolder(View itemView) {
                 super(itemView);
-                name=(TextView) itemView.findViewById(R.id.drinkSelector_drinkList_text);
-                image=(CircleImageView) itemView.findViewById(R.id.drinkSelector_drinkList_image);
+                name= itemView.findViewById(R.id.drinkSelector_drinkList_text);
+                image= itemView.findViewById(R.id.drinkSelector_drinkList_image);
             }
         }
         @Override
@@ -80,7 +80,7 @@ public class DrinkSelector extends RelativeLayout{
         public void onBindViewHolder(drinkListAdapter.itemViewHolder holder, int position) {
             holder.name.setText((String)drinkList[currentSelectedType].get(position));
             if(drinkImageList[currentSelectedType].get(position)==null ||
-                    ((String)drinkImageList[currentSelectedType].get(position)).equals("NULL")){
+                    drinkImageList[currentSelectedType].get(position).equals("NULL")){
                 Picasso.with(context).load(R.drawable.drinkselector_default).into(holder.image);
             }else {
                 Picasso.with(context).load((String) drinkImageList[currentSelectedType].get(position)).placeholder(R.drawable.drinkselector_default).into(holder.image);
@@ -119,11 +119,11 @@ public class DrinkSelector extends RelativeLayout{
     private void init(Context context){
         this.context = context;
         layout = (RelativeLayout) LayoutInflater.from(context).inflate(R.layout.drinkselector,null);
-        drinkListView = (RecyclerView) layout.findViewById(R.id.drinkSelector_itemList);
-        drinkTypeViewScroll = (HorizontalScrollView) layout.findViewById(R.id.drinkSelector_typeScroll);
-        drinkTypeView = (LinearLayout) layout.findViewById(R.id.drinkSelector_type);
-        drinkListViewLayout = (RelativeLayout) layout.findViewById(R.id.drinkSelector_itemListLayout);
-        drinkTypeViewLayout = (LinearLayout) layout.findViewById(R.id.drinkSelector_typeLayout);
+        drinkListView = layout.findViewById(R.id.drinkSelector_itemList);
+        drinkTypeViewScroll = layout.findViewById(R.id.drinkSelector_typeScroll);
+        drinkTypeView = layout.findViewById(R.id.drinkSelector_type);
+        drinkListViewLayout = layout.findViewById(R.id.drinkSelector_itemListLayout);
+        drinkTypeViewLayout = layout.findViewById(R.id.drinkSelector_typeLayout);
         leftOfScroll = layout.findViewById(R.id.drinkSelector_leftOfScroll);
         rightOfScroll = layout.findViewById(R.id.drinkSelector_rightOfScroll);
 
@@ -306,8 +306,8 @@ public class DrinkSelector extends RelativeLayout{
             RelativeLayout item = (RelativeLayout) LayoutInflater.from(context).inflate(R.layout.drinkselector_drinktype, null);
             item.setLayoutParams(params);
 
-            ImageView drinkTypeImage = (ImageView) item.findViewById(R.id.drinkSelector_drinkType_image);
-            TextView drinkTypeName = (TextView) item.findViewById(R.id.drinkSelector_drinkType_text);
+            ImageView drinkTypeImage = item.findViewById(R.id.drinkSelector_drinkType_image);
+            TextView drinkTypeName = item.findViewById(R.id.drinkSelector_drinkType_text);
 
             drinkTypeImage.setImageDrawable(AssetsHelper.loadDrinkImage(context,drinkType.get(num)));
 //            AssetsHelper.loadDrinkImage(context,drinkType.get(num)).into(drinkTypeImage);

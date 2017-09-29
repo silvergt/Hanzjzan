@@ -101,8 +101,8 @@ public class TapBar extends RelativeLayout{
             LinearLayout.LayoutParams itemParams = new LinearLayout.LayoutParams(StaticData.displayWidth/title.length, (int)getResources().getDimension(R.dimen.home_bottomLayoutHeight));
             int itemMargin = (int)getResources().getDimension(R.dimen.tapbar_itemMargin);
             LinearLayout itemLayout = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.tapbar_item,null);
-            ImageView itemImage = (ImageView) itemLayout.findViewById(R.id.tapbar_itemImage);
-            TextView itemTitle = (TextView)itemLayout.findViewById(R.id.tapbar_itemTitle);
+            ImageView itemImage = itemLayout.findViewById(R.id.tapbar_itemImage);
+            TextView itemTitle = itemLayout.findViewById(R.id.tapbar_itemTitle);
 
             imageView[i] = itemImage;
             titleTextView[i] = itemTitle;

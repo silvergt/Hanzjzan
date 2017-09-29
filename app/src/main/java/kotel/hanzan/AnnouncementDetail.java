@@ -19,9 +19,9 @@ public class AnnouncementDetail extends AppCompatActivity {
 
         announcementInfo = (AnnouncementInfo) getIntent().getSerializableExtra("info");
 
-        back = (ImageView)findViewById(R.id.announcementDetail_back);
-        title = (TextView)findViewById(R.id.announcementDetail_title);
-        content = (TextView)findViewById(R.id.announcementDetail_text);
+        back = findViewById(R.id.announcementDetail_back);
+        title = findViewById(R.id.announcementDetail_title);
+        content = findViewById(R.id.announcementDetail_text);
 
         back.setOnClickListener(view -> finish());
 

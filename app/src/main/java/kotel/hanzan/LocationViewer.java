@@ -70,18 +70,18 @@ public class LocationViewer extends JNMapActivity {
         drawableHeight=(int)getResources().getDimension(R.dimen.markerHeight);
 
 
-        loading = (Loading)findViewById(R.id.locationViewer_loading);
-        myLocationButton = (ImageView)findViewById(R.id.locationViewer_myLocation);
-        back = (ImageView)findViewById(R.id.locationViewer_back);
-        pubInfoLayout = (LinearLayout)findViewById(R.id.locationViewer_pubInfoLayout);
-        pubImage=(ImageView)findViewById(R.id.locationViewer_pubImage);
-        upperText=(TextView)findViewById(R.id.locationViewer_upperBarMainText);
-        pubText1=(TextView)findViewById(R.id.locationViewer_pubText1);
-        pubText2=(TextView)findViewById(R.id.locationViewer_pubText2);
-        pubText3=(TextView)findViewById(R.id.locationViewer_pubText3);
-        pubText4=(TextView)findViewById(R.id.locationViewer_pubText4);
+        loading = findViewById(R.id.locationViewer_loading);
+        myLocationButton = findViewById(R.id.locationViewer_myLocation);
+        back = findViewById(R.id.locationViewer_back);
+        pubInfoLayout = findViewById(R.id.locationViewer_pubInfoLayout);
+        pubImage= findViewById(R.id.locationViewer_pubImage);
+        upperText= findViewById(R.id.locationViewer_upperBarMainText);
+        pubText1= findViewById(R.id.locationViewer_pubText1);
+        pubText2= findViewById(R.id.locationViewer_pubText2);
+        pubText3= findViewById(R.id.locationViewer_pubText3);
+        pubText4= findViewById(R.id.locationViewer_pubText4);
 
-        mapView=(NMapView) findViewById(R.id.locationViewer_mapView);
+        mapView= findViewById(R.id.locationViewer_mapView);
         mapView.setClientId(getString(R.string.naver_client_id));
         mapView.setClickable(true);
         mapView.setEnabled(true);
@@ -200,9 +200,9 @@ public class LocationViewer extends JNMapActivity {
         Picasso.with(this).load(pubInfo.imageAddress.get(0)).placeholder(R.drawable.loading_store).into(pubImage);
 
         pubText1.setText(pubInfo.name);
-        pubText2.setText(pubInfo.district);
-        pubText3.setText(pubInfo.address);
-        pubText4.setText("");
+        pubText2.setText(pubInfo.drinkTypes);
+        pubText3.setText(pubInfo.district);
+        pubText4.setText(pubInfo.address);
 
         myLocationButton.setOnClickListener(view ->{
             getMyLocation();

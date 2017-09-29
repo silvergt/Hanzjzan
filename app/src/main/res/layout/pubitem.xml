@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        >
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
 
         <ImageView
             android:id="@+id/pubitem_image"
@@ -31,11 +32,20 @@
             android:layout_marginTop="10dp"
             />
 
+        <TextView
+            android:id="@+id/pubitem_text2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/mainColor_light"
+            android:textSize="@dimen/pubitem_text2"
+            android:layout_marginBottom="3dp"
+            />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="3dp"
             >
 
             <ImageView
@@ -45,7 +55,7 @@
                 />
 
             <TextView
-                android:id="@+id/pubitem_text2"
+                android:id="@+id/pubitem_text3"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
@@ -58,7 +68,7 @@
 
 
         <TextView
-            android:id="@+id/pubitem_text3"
+            android:id="@+id/pubitem_text4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/pubitem_text3"

@@ -9,18 +9,7 @@ import java.util.HashMap;
 import kotel.hanzan.R;
 
 public class DrinkInfo implements Serializable{
-    final private static HashMap<String,Integer> drinkIdMap = new HashMap<String,Integer>(){
-        {
-            put("makgeolli",100);
-            put("soju",200);
-            put("beer",300);
-            put("sake",400);
-            put("liquor",500);
-            put("misc",600);
-            put("snack",700);
-            put("cocktail",800);
-        }
-    };
+
 
     public String drinkType;
     public String drinkName;
@@ -32,8 +21,23 @@ public class DrinkInfo implements Serializable{
         this.drinkImageAddress = drinkImageAddress;
     }
 
+
+
+    /** Returns drink name(ENG,KOR). code is drink name text retrieved from server. */
     public static String getDrinkName(Context context,String code){
         String returnValue;
+        final HashMap<String,Integer> drinkIdMap = new HashMap<String,Integer>(){
+            {
+                put("makgeolli",100);
+                put("soju",200);
+                put("beer",300);
+                put("sake",400);
+                put("liquor",500);
+                put("misc",600);
+                put("snack",700);
+                put("cocktail",800);
+            }
+        };
 
         Resources res = context.getResources();
 

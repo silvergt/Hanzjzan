@@ -90,16 +90,17 @@ public class Home extends JActivity {
 
         class ViewHolder extends RecyclerView.ViewHolder {
             ImageView image, favorite;
-            TextView text1, text2, text3;
+            TextView text1, text2, text3, text4;
 
             public ViewHolder(View itemView) {
                 super(itemView);
-                image = (ImageView) itemView.findViewById(R.id.pubitem_image);
+                image = itemView.findViewById(R.id.pubitem_image);
                 image.setLayoutParams(imageParams);
-                favorite = (ImageView) itemView.findViewById(R.id.pubitem_favorite);
-                text1 = (TextView) itemView.findViewById(R.id.pubitem_text1);
-                text2 = (TextView) itemView.findViewById(R.id.pubitem_text2);
-                text3 = (TextView) itemView.findViewById(R.id.pubitem_text3);
+                favorite = itemView.findViewById(R.id.pubitem_favorite);
+                text1 = itemView.findViewById(R.id.pubitem_text1);
+                text2 = itemView.findViewById(R.id.pubitem_text2);
+                text3 = itemView.findViewById(R.id.pubitem_text3);
+                text4 = itemView.findViewById(R.id.pubitem_text4);
             }
         }
 
@@ -148,8 +149,9 @@ public class Home extends JActivity {
             }else{
                 holder.text1.setText(pubInfo.name);
             }
-            holder.text2.setText(pubInfo.district);
-            holder.text3.setText(pubInfo.address);
+            holder.text2.setText(pubInfo.drinkTypes);
+            holder.text3.setText(pubInfo.district);
+            holder.text4.setText(pubInfo.address);
 
 
             holder.itemView.setOnClickListener(view -> {
@@ -200,16 +202,17 @@ public class Home extends JActivity {
 
         class ViewHolder extends RecyclerView.ViewHolder {
             ImageView image, favorite;
-            TextView text1, text2, text3;
+            TextView text1, text2, text3, text4;
 
             public ViewHolder(View itemView) {
                 super(itemView);
-                image = (ImageView) itemView.findViewById(R.id.pubitem_image);
+                image = itemView.findViewById(R.id.pubitem_image);
                 image.setLayoutParams(imageParams);
-                favorite = (ImageView) itemView.findViewById(R.id.pubitem_favorite);
-                text1 = (TextView) itemView.findViewById(R.id.pubitem_text1);
-                text2 = (TextView) itemView.findViewById(R.id.pubitem_text2);
-                text3 = (TextView) itemView.findViewById(R.id.pubitem_text3);
+                favorite = itemView.findViewById(R.id.pubitem_favorite);
+                text1 = itemView.findViewById(R.id.pubitem_text1);
+                text2 = itemView.findViewById(R.id.pubitem_text2);
+                text3 = itemView.findViewById(R.id.pubitem_text3);
+                text4 = itemView.findViewById(R.id.pubitem_text4);
             }
         }
 
@@ -221,6 +224,7 @@ public class Home extends JActivity {
                     lastClickedViewHolder.favorite.setImageResource(R.drawable.favorite_unselected);
                 }
             } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 
@@ -245,8 +249,9 @@ public class Home extends JActivity {
                 holder.favorite.setImageResource(R.drawable.favorite_unselected);
             }
             holder.text1.setText(pubInfo.name);
-            holder.text2.setText(pubInfo.district);
-            holder.text3.setText(pubInfo.address);
+            holder.text2.setText(pubInfo.drinkTypes);
+            holder.text3.setText(pubInfo.district);
+            holder.text4.setText(pubInfo.address);
 
             holder.itemView.setOnClickListener(view -> {
                 lastClickedViewHolder = holder;
@@ -287,11 +292,11 @@ public class Home extends JActivity {
 
             public ViewHolder(View itemView) {
                 super(itemView);
-                image = (ImageView) itemView.findViewById(R.id.historyItem_image);
-                drinkImage = (ImageView) itemView.findViewById(R.id.historyItem_drinkImage);
-                dateAndDrink = (TextView) itemView.findViewById(R.id.historyItem_dateAndDrink);
-                name = (TextView) itemView.findViewById(R.id.historyItem_name);
-                address = (TextView) itemView.findViewById(R.id.historyItem_address);
+                image = itemView.findViewById(R.id.historyItem_image);
+                drinkImage = itemView.findViewById(R.id.historyItem_drinkImage);
+                dateAndDrink = itemView.findViewById(R.id.historyItem_dateAndDrink);
+                name = itemView.findViewById(R.id.historyItem_name);
+                address = itemView.findViewById(R.id.historyItem_address);
             }
         }
 
@@ -343,7 +348,7 @@ public class Home extends JActivity {
             ImageView image;
             public ViewHolder(View itemView) {
                 super(itemView);
-                image = (ImageView)itemView.findViewById(R.id.event_titleImage);
+                image = itemView.findViewById(R.id.event_titleImage);
                 image.setLayoutParams(eventImageParams);
             }
         }
@@ -392,17 +397,17 @@ public class Home extends JActivity {
 
         inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
-        mainLayout = (RelativeLayout)findViewById(R.id.home_home);
-        upperBarLocationFilterContainer = (RelativeLayout)findViewById(R.id.home_upperBarLocationFilterContainer);
-        upperBarLeftIcon = (ImageView) findViewById(R.id.home_upperBarLeftIcon);
-        upperBarMap = (ImageView) findViewById(R.id.home_upperBarMapIcon);
-        upperBarSearch = (ImageView) findViewById(R.id.home_upperBarSearchIcon);
-        upperBarFilter = (ImageView) findViewById(R.id.home_upperBarFilterIcon);
-        upperBarMainText = (TextView) findViewById(R.id.home_upperBarMainText);
-        upperBarLocationFilter = (ImageView) findViewById(R.id.home_upperBarDropdown);
-        container = (RelativeLayout) findViewById(R.id.home_contentContainer);
-        tapBar = (TapBar) findViewById(R.id.home_tapbar);
-        loading = (Loading) findViewById(R.id.home_loading);
+        mainLayout = findViewById(R.id.home_home);
+        upperBarLocationFilterContainer = findViewById(R.id.home_upperBarLocationFilterContainer);
+        upperBarLeftIcon = findViewById(R.id.home_upperBarLeftIcon);
+        upperBarMap = findViewById(R.id.home_upperBarMapIcon);
+        upperBarSearch = findViewById(R.id.home_upperBarSearchIcon);
+        upperBarFilter = findViewById(R.id.home_upperBarFilterIcon);
+        upperBarMainText = findViewById(R.id.home_upperBarMainText);
+        upperBarLocationFilter = findViewById(R.id.home_upperBarDropdown);
+        container = findViewById(R.id.home_contentContainer);
+        tapBar = findViewById(R.id.home_tapbar);
+        loading = findViewById(R.id.home_loading);
 
         upperBarFilter.setImageDrawable( isAnyFilterChecked() ? DrawableHelper.getDrawable(getResources(),R.drawable.filtericon_active) : DrawableHelper.getDrawable(getResources(),R.drawable.filtericon_inactive));
 
@@ -475,10 +480,14 @@ public class Home extends JActivity {
         }else if(StaticData.currentUser.finishedTutorial){
             if(StaticData.currentUser.expireYYYY == 0){
                 openMembershipPopup();
+            }else if(StaticData.currentUser.justSignedUp && StaticData.currentUser.expireYYYY != 0){
+                openWelcomeMembershipPopup();
+                StaticData.currentUser.justSignedUp = false;
             }
         }else if(!StaticData.currentUser.finishedTutorial){
             openTutorial();
         }
+
 
         openHomeTab();
         setUpperBarLeftIconStatus();
@@ -488,9 +497,9 @@ public class Home extends JActivity {
 
     private void openTutorial(){
         tutorialLayout = (RelativeLayout)getLayoutInflater().inflate(R.layout.home_tutorial,null);
-        tutorial1 = (RelativeLayout)tutorialLayout.findViewById(R.id.home_tutorial_layout1);
-        tutorial2 = (RelativeLayout)tutorialLayout.findViewById(R.id.home_tutorial_layout2);
-        tutorialNext = (TextView) tutorialLayout.findViewById(R.id.home_tutorial_next);
+        tutorial1 = tutorialLayout.findViewById(R.id.home_tutorial_layout1);
+        tutorial2 = tutorialLayout.findViewById(R.id.home_tutorial_layout2);
+        tutorialNext = tutorialLayout.findViewById(R.id.home_tutorial_next);
         tutorialPubView = tutorialLayout.findViewById(R.id.home_tutorial_pubView);
 
         LinearLayout.LayoutParams pubViewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, StaticData.displayWidth * 3 / 5 + (int)getResources().getDimension(R.dimen.drinkSelector_height));
@@ -515,9 +524,9 @@ public class Home extends JActivity {
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         layout.setLayoutParams(params);
 
-        TextView text = (TextView)layout.findViewById(R.id.popupBox_text);
-        TextView yes = (TextView) layout.findViewById(R.id.popupBox_yes);
-        TextView no = (TextView) layout.findViewById(R.id.popupBox_no);
+        TextView text = layout.findViewById(R.id.popupBox_text);
+        TextView yes = layout.findViewById(R.id.popupBox_yes);
+        TextView no = layout.findViewById(R.id.popupBox_no);
 
         if (StaticData.currentUser.expireYYYY==0){
             text.setText(getString(R.string.membershipPopupText));
@@ -532,6 +541,31 @@ public class Home extends JActivity {
         yes.setOnClickListener(view -> {
             Intent intent = new Intent(Home.this, Membership.class);
             startActivityForResult(intent,Membership.MEMBERSHIP_OPENED);
+            dialog.cancel();
+        });
+
+        dialog.setContentView(layout);
+        dialog.show();
+    }
+
+    private void openWelcomeMembershipPopup(){
+        Dialog dialog = new Dialog(this);
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        LinearLayout layout = (LinearLayout) getLayoutInflater().inflate(R.layout.popupbox_normal, null);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layout.setLayoutParams(params);
+
+        TextView text = layout.findViewById(R.id.popupBox_text);
+        TextView yes = layout.findViewById(R.id.popupBox_yes);
+        TextView no = layout.findViewById(R.id.popupBox_no);
+
+        text.setText(getString(R.string.signupFreeCode));
+        yes.setText(getString(R.string.confirm));
+        no.setVisibility(View.GONE);
+
+        yes.setOnClickListener(view -> {
             dialog.cancel();
         });
 
@@ -563,7 +597,7 @@ public class Home extends JActivity {
         upperBarMainText.setText(getString(R.string.aroundMe));
 
         homeLayout = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.home_home, null);
-        pubInfoRecyclerView = (JRecyclerView) homeLayout.findViewById(R.id.home_homeRecycler);
+        pubInfoRecyclerView = homeLayout.findViewById(R.id.home_homeRecycler);
         homeLayout.setBackgroundColor(Color.WHITE);
 
         pubInfoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -599,7 +633,7 @@ public class Home extends JActivity {
         upperBarMainText.setText(getString(R.string.favorite));
 
         RelativeLayout layout = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.home_favorite, null);
-        pubInfoFavoriteRecyclerView = (JRecyclerView) layout.findViewById(R.id.home_favoriteRecycler);
+        pubInfoFavoriteRecyclerView = layout.findViewById(R.id.home_favoriteRecycler);
         layout.setBackgroundColor(Color.WHITE);
 
         pubInfoFavoriteRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -630,8 +664,8 @@ public class Home extends JActivity {
 
 
         RelativeLayout layout = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.home_history, null);
-        historyPrice = (TextView) layout.findViewById(R.id.history_price);
-        historyRecyclerView = (JRecyclerView) layout.findViewById(R.id.history_recycler);
+        historyPrice = layout.findViewById(R.id.history_price);
+        historyRecyclerView = layout.findViewById(R.id.history_recycler);
         layout.setBackgroundColor(Color.WHITE);
 
         historyInfoArray = new ArrayList<>();
@@ -666,7 +700,7 @@ public class Home extends JActivity {
         upperBarMainText.setText(getString(R.string.event));
 
         RelativeLayout layout = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.home_event, null);
-        eventRecycler = (JRecyclerView) layout.findViewById(R.id.home_eventRecycler);
+        eventRecycler = layout.findViewById(R.id.home_eventRecycler);
 
         eventRecycler.setLayoutManager(new LinearLayoutManager(this));
         eventRecycler.setAdapter(eventAdapter);
@@ -691,16 +725,16 @@ public class Home extends JActivity {
         container.removeAllViews();
 
         RelativeLayout layout = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.home_mypage, null);
-        mypageProfileImage = (ProfileCircleImageView) layout.findViewById(R.id.mypage_profileImage);
-        mypageProfileText1 = (TextView) layout.findViewById(R.id.mypage_profileText1);
-        mypageProfileText2 = (TextView) layout.findViewById(R.id.mypage_profileText2);
-        mypageCurrentMembership = (ImageView) layout.findViewById(R.id.mypage_currentMembership);
-        mypageCalendar = (DrinkCalendar) layout.findViewById(R.id.mypage_calendar);
-        mypageMembership = (LinearLayout) layout.findViewById(R.id.mypage_joinMembership);
-        mypageInquire = (LinearLayout) layout.findViewById(R.id.mypage_inquire);
-        mypageSetting = (LinearLayout) layout.findViewById(R.id.mypage_setting);
-        mypageLogout = (LinearLayout) layout.findViewById(R.id.mypage_logout);
-        profileNameChange = (ImageView) layout.findViewById(R.id.mypage_profileNameChange);
+        mypageProfileImage = layout.findViewById(R.id.mypage_profileImage);
+        mypageProfileText1 = layout.findViewById(R.id.mypage_profileText1);
+        mypageProfileText2 = layout.findViewById(R.id.mypage_profileText2);
+        mypageCurrentMembership = layout.findViewById(R.id.mypage_currentMembership);
+        mypageCalendar = layout.findViewById(R.id.mypage_calendar);
+        mypageMembership = layout.findViewById(R.id.mypage_joinMembership);
+        mypageInquire = layout.findViewById(R.id.mypage_inquire);
+        mypageSetting = layout.findViewById(R.id.mypage_setting);
+        mypageLogout = layout.findViewById(R.id.mypage_logout);
+        profileNameChange = layout.findViewById(R.id.mypage_profileNameChange);
 
 
         setCalendarChecked(mypageCalendar.getViewingYear(),mypageCalendar.getViewingMonthInNormal());
@@ -777,8 +811,8 @@ public class Home extends JActivity {
             pubInfoArray.clear();
         }
         if(!StaticData.currentUser.finishedTutorial){
-            PubInfo tutorialPub = new PubInfo(-1,getString(R.string.tutorial_pubName),getString(R.string.tutorial_pubAddress),
-                    getString(R.string.tutorial_pubCity),"https://s3.ap-northeast-2.amazonaws.com/hanjan/drink_craft.png",
+            PubInfo tutorialPub = new PubInfo(Home.this,-1,getString(R.string.tutorial_pubName),getString(R.string.tutorial_pubAddress),
+                    getString(R.string.tutorial_pubCity),"","https://s3.ap-northeast-2.amazonaws.com/hanjan/drink_craft.png",
                     false,0,0);
             tutorialPub.tutorialPub = true;
             if(pubInfoArray.size()==0) {
@@ -815,6 +849,7 @@ public class Home extends JActivity {
                 String address = map.get("address_place_" + num);
                 String imageAddress = map.get("imgadd_place_" + num);
                 String district = map.get("district_"+num);
+                String drinkType = map.get("drink_place_"+num);
                 boolean favorite = false;
                 if (map.get("like_" + num).equals("TRUE")) {
                     favorite = true;
@@ -822,7 +857,7 @@ public class Home extends JActivity {
                 double lat = Double.parseDouble(map.get("lat_" + num));
                 double lng = Double.parseDouble(map.get("lng_" + num));
 
-                pubInfoArray.add(new PubInfo(id, name, address, district, imageAddress, favorite, lat, lng));
+                pubInfoArray.add(new PubInfo(Home.this,id, name, address, district,drinkType, imageAddress, favorite, lat, lng));
             }
 
             String dataleft = map.get("datalefts");
@@ -986,22 +1021,22 @@ public class Home extends JActivity {
         filterLayout = (RelativeLayout) getLayoutInflater().inflate(R.layout.home_filter, null);
         filterCheckbox = new JCheckBox[7];
         TextView[] filterTextbox = new TextView[7];
-        filterCheckbox[1] = (JCheckBox) filterLayout.findViewById(R.id.filter_checkbox1);
-        filterCheckbox[2] = (JCheckBox) filterLayout.findViewById(R.id.filter_checkbox2);
-        filterCheckbox[3] = (JCheckBox) filterLayout.findViewById(R.id.filter_checkbox3);
-        filterCheckbox[4] = (JCheckBox) filterLayout.findViewById(R.id.filter_checkbox4);
-        filterCheckbox[5] = (JCheckBox) filterLayout.findViewById(R.id.filter_checkbox5);
-        filterCheckbox[6] = (JCheckBox) filterLayout.findViewById(R.id.filter_checkbox6);
-        filterCheckbox[7] = (JCheckBox) filterLayout.findViewById(R.id.filter_checkbox7);
-        filterTextbox[1] = (TextView) filterLayout.findViewById(R.id.filter_textbox1);
-        filterTextbox[2] = (TextView) filterLayout.findViewById(R.id.filter_textbox2);
-        filterTextbox[3] = (TextView) filterLayout.findViewById(R.id.filter_textbox3);
-        filterTextbox[4] = (TextView) filterLayout.findViewById(R.id.filter_textbox4);
-        filterTextbox[5] = (TextView) filterLayout.findViewById(R.id.filter_textbox5);
-        filterTextbox[6] = (TextView) filterLayout.findViewById(R.id.filter_textbox6);
-        filterTextbox[7] = (TextView) filterLayout.findViewById(R.id.filter_textbox7);
-        TextView filterApply = (TextView) filterLayout.findViewById(R.id.filter_apply);
-        TextView filterRemove = (TextView) filterLayout.findViewById(R.id.filter_remove);
+        filterCheckbox[1] = filterLayout.findViewById(R.id.filter_checkbox1);
+        filterCheckbox[2] = filterLayout.findViewById(R.id.filter_checkbox2);
+        filterCheckbox[3] = filterLayout.findViewById(R.id.filter_checkbox3);
+        filterCheckbox[4] = filterLayout.findViewById(R.id.filter_checkbox4);
+        filterCheckbox[5] = filterLayout.findViewById(R.id.filter_checkbox5);
+        filterCheckbox[6] = filterLayout.findViewById(R.id.filter_checkbox6);
+        filterCheckbox[7] = filterLayout.findViewById(R.id.filter_checkbox7);
+        filterTextbox[1] = filterLayout.findViewById(R.id.filter_textbox1);
+        filterTextbox[2] = filterLayout.findViewById(R.id.filter_textbox2);
+        filterTextbox[3] = filterLayout.findViewById(R.id.filter_textbox3);
+        filterTextbox[4] = filterLayout.findViewById(R.id.filter_textbox4);
+        filterTextbox[5] = filterLayout.findViewById(R.id.filter_textbox5);
+        filterTextbox[6] = filterLayout.findViewById(R.id.filter_textbox6);
+        filterTextbox[7] = filterLayout.findViewById(R.id.filter_textbox7);
+        TextView filterApply = filterLayout.findViewById(R.id.filter_apply);
+        TextView filterRemove = filterLayout.findViewById(R.id.filter_remove);
         View filterCancel = filterLayout.findViewById(R.id.filter_cancel);
 
         for(int i=0;i<filterCheckbox.length;i++){
@@ -1079,10 +1114,11 @@ public class Home extends JActivity {
                 String address = map.get("address_place_" + num);
                 String imageAddress = map.get("imgadd_place_" + num);
                 String district = map.get("district_"+num);
+                String drinkType = map.get("drink_place_"+num);
                 double lat = Double.parseDouble(map.get("lat_" + num));
                 double lng = Double.parseDouble(map.get("lng_" + num));
 
-                pubInfoFavoriteArray.add(new PubInfo(id, name, address, district, imageAddress, true, lat, lng));
+                pubInfoFavoriteArray.add(new PubInfo(Home.this,id, name, address, district, drinkType, imageAddress, true, lat, lng));
             }
 
 
@@ -1135,7 +1171,7 @@ public class Home extends JActivity {
                 String drinkName = map.get("name_drink_" + num);
                 String drinkImageAddress = map.get("imgadd_drink_" + num);
 
-                PubInfo pubInfo = new PubInfo(id, name, address, district, imageAddress, favorite, lat, lng);
+                PubInfo pubInfo = new PubInfo(Home.this,id, name, address, district,"", imageAddress, favorite, lat, lng);
                 DrinkInfo drinkInfo = new DrinkInfo(drinkCategory,drinkName,drinkImageAddress);
                 historyInfoArray.add(new PubHistoryInfo(pubInfo,drinkInfo,date[0],date[1],date[2]));
             }
@@ -1200,9 +1236,9 @@ public class Home extends JActivity {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
         LinearLayout layout = (LinearLayout) LayoutInflater.from(this).inflate(R.layout.mypage_profilephoto_popup, null);
-        TextView see = (TextView) layout.findViewById(R.id.profilePhotoPopup_see);
-        TextView change = (TextView) layout.findViewById(R.id.profilePhotoPopup_change);
-        TextView delete = (TextView) layout.findViewById(R.id.profilePhotoPopup_delete);
+        TextView see = layout.findViewById(R.id.profilePhotoPopup_see);
+        TextView change = layout.findViewById(R.id.profilePhotoPopup_change);
+        TextView delete = layout.findViewById(R.id.profilePhotoPopup_delete);
 
         see.setOnClickListener(view -> {
             mypageProfileImage.openProfilePage(this);
@@ -1236,11 +1272,11 @@ public class Home extends JActivity {
         RelativeLayout layout = (RelativeLayout) getLayoutInflater().inflate(R.layout.mypage_profilenamechange_popup,null);
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
-        ProfileCircleImageView profileImage = (ProfileCircleImageView)layout.findViewById(R.id.profileNameChange_image);
-        EditText profileEditText = (EditText)layout.findViewById(R.id.profileNameChange_editText);
-        ImageView delete = (ImageView)layout.findViewById(R.id.profileNameChange_xmark);
-        TextView cancel = (TextView)layout.findViewById(R.id.profileNameChange_cancel);
-        TextView confirm = (TextView)layout.findViewById(R.id.profileNameChange_confirm);
+        ProfileCircleImageView profileImage = layout.findViewById(R.id.profileNameChange_image);
+        EditText profileEditText = layout.findViewById(R.id.profileNameChange_editText);
+        ImageView delete = layout.findViewById(R.id.profileNameChange_xmark);
+        TextView cancel = layout.findViewById(R.id.profileNameChange_cancel);
+        TextView confirm = layout.findViewById(R.id.profileNameChange_confirm);
 
         profileImage.setImage(this,StaticData.currentUser.profileImageAddress);
         profileEditText.setText(StaticData.currentUser.name);

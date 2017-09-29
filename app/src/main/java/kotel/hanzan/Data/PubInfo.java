@@ -1,26 +1,30 @@
 package kotel.hanzan.Data;
 
+import android.content.Context;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import kotel.hanzan.R;
 import kotel.hanzan.function.JLog;
 import kotel.hanzan.function.ServerConnectionHelper;
 
 public class PubInfo implements Serializable{
 
     public long id;
-    public String name,address,district;
+    public String name,address,district,drinkTypes;
     protected boolean favorite;
     public double latitude,longitude;
 
     public String phone,dayoff,work_weekday,work_weekend,description;
     public ArrayList<String> imageAddress;
     public ArrayList<DrinkInfo> drinkList;
+    public ArrayList<String> menuImageAddress;
 
     public boolean tutorialPub = false;
 
-    public PubInfo(long id, String name, String address, String district, String imageAddress, boolean favorite, double latitude, double longitude) {
+    public PubInfo(Context context, long id, String name, String address, String district, String drinkTypes, String imageAddress, boolean favorite, double latitude, double longitude) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -30,8 +34,20 @@ public class PubInfo implements Serializable{
         this.favorite = favorite;
         this.latitude = latitude;
         this.longitude = longitude;
-
-        drinkList = new ArrayList<>();
+        this.drinkList = new ArrayList<>();
+        this.menuImageAddress = new ArrayList<>();
+        this.drinkTypes="";
+        if(!drinkTypes.equals("")) {
+            String[] drinkTypesTemp = drinkTypes.split(",");
+            for (int i = 0; i < drinkTypesTemp.length; i++) {
+                this.drinkTypes += DrinkInfo.getDrinkName(context, drinkTypesTemp[i]);
+                if (i != drinkTypesTemp.length - 1) {
+                    this.drinkTypes += ", ";
+                }else{
+                    this.drinkTypes += (" "+context.getString(R.string.isFree));
+                }
+            }
+        }
     }
 
     public boolean setFavorite(boolean favoriteIsOn){

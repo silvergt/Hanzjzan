@@ -9,6 +9,8 @@ public class UserInfo{
     public boolean isHanjanAvailableToday;
     public boolean finishedTutorial;
 
+    public boolean justSignedUp = false;
+
     public UserInfo(HashMap<String,String> map){
         long id = Long.parseLong(map.get("id_member"));
         String name = map.get("name_member");
