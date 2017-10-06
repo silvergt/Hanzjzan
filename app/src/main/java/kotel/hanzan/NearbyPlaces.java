@@ -3,8 +3,10 @@ package kotel.hanzan;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,8 +29,9 @@ import com.nhn.android.mapviewer.overlay.NMapOverlayManager;
 import com.nhn.android.mapviewer.overlay.NMapResourceProvider;
 import com.squareup.picasso.Picasso;
 
-import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -45,6 +48,7 @@ import kotel.hanzan.view.Loading;
 
 public class NearbyPlaces extends JNMapActivity {
     final private String LOCATION_MYLOCATION = "LOCATION_MYLOCATION";
+    final private String LOCATION_DISTRICT = "LOCATION_DISTRICT";
 
     private NMapView mapView;
 
@@ -71,6 +75,8 @@ public class NearbyPlaces extends JNMapActivity {
 
     private boolean myLocationMarkerIsVisible = false;
 
+    private Bitmap districtBitmap;
+
     private class DistrictInfo{
         Drawable image;
         int quantity;
@@ -78,16 +84,20 @@ public class NearbyPlaces extends JNMapActivity {
 
         public DistrictInfo(String imageAddress,int quantity, double lat, double lng) {
             try {
-                Uri uri = Uri.parse(imageAddress);
-                InputStream inputStream = getContentResolver().openInputStream(uri);
-                image = Drawable.createFromStream(inputStream, uri.toString());
-            } catch (FileNotFoundException e) {
+                HttpURLConnection connection = (HttpURLConnection) new URL(imageAddress).openConnection();
+                connection.connect();
+                InputStream input = connection.getInputStream();
+
+                districtBitmap = BitmapFactory.decodeStream(input);
+                image = new BitmapDrawable(getResources(),districtBitmap);
+            } catch (Exception e) {
+                e.printStackTrace();
                 image = DrawableHelper.getDrawable(getResources(),R.drawable.drinkselector_default);
             }
             this.quantity = quantity;
             this.lat = lat;
             this.lng = lng;
-            image.setBounds(-drawableWidth * 2/ 3, -drawableHeight * 2/ 3, drawableWidth * 2/ 3, drawableHeight * 2/ 3);
+            image.setBounds(-drawableHeight * 3 / 4, -drawableHeight * 3 / 4, drawableHeight * 3 / 4, drawableHeight * 3 / 4);
         }
     }
 
@@ -283,7 +293,6 @@ public class NearbyPlaces extends JNMapActivity {
 
             @Override
             public void onMapCenterChangeFine(NMapView nMapView) {
-                JLog.v("QQQ");
                 retrieveMapDataFromServer(mapView.getMapController().getMapCenter(), false);
             }
 
@@ -401,27 +410,28 @@ public class NearbyPlaces extends JNMapActivity {
 
 
     private void retrieveMapDataFromServer(NGeoPoint geo, boolean returnToMyLocation){
-        if(mapView.getMapController().getZoomLevel()>=0) {
-            informationText.setVisibility(View.GONE);
-            pubInfoArray.clear();
-            retrieveNearbyPubs(geo, returnToMyLocation);
-        }else{
-            pubInfoArray.clear();
-            updateMarkers(false);
-
-            informationText.setVisibility(View.VISIBLE);
-            if(districtInfoArray.size()==0){
-                retrieveDistrictInfo(returnToMyLocation);
+        new Handler(getMainLooper()).post(()->{
+            if(mapView.getMapController().getZoomLevel()>=11) {
+                //Case if zoomed in, zoom level >=11.
+                informationText.setVisibility(View.GONE);
+                retrieveNearbyPubs(geo, returnToMyLocation);
             }else{
-                updateDistrictMarkers(returnToMyLocation);
+                //Case if zoomed out, zoom level <11.
+                informationText.setVisibility(View.VISIBLE);
+                if(districtInfoArray.size()==0){
+                    retrieveDistrictInfo(returnToMyLocation);
+                }else{
+                    updateDistrictMarkers(returnToMyLocation);
+                }
             }
-        }
+        });
     }
 
 
     //ZOOM LEVEL ABOVE OR EQUALS 11
 
     private synchronized void retrieveNearbyPubs(NGeoPoint geoPoint, boolean returnToMyLocation) {
+        pubInfoArray.clear();
         NGeoPoint[] edgeGeo = GeoHelper.getMapStartEndPoint(geoPoint.getLatitudeE6(), geoPoint.getLongitudeE6(),
                 mapView.getMapProjection().getLatitudeSpan(), mapView.getMapProjection().getLongitudeSpan());
 
@@ -532,7 +542,6 @@ public class NearbyPlaces extends JNMapActivity {
     }
 
     private void addMarkerTo(NGeoPoint geoPoint, boolean isMyLocation, boolean setSelected, String name) {
-
         poiData.beginPOIdata(1);
         if (isMyLocation) {
             poiData.addPOIitem(geoPoint, LOCATION_MYLOCATION, myLocationMarker, 0);
@@ -589,19 +598,60 @@ public class NearbyPlaces extends JNMapActivity {
     }
 
 
+
     //ZOOM LEVEL BELOW 11
 
-    private void retrieveDistrictInfo(boolean returnToMyLocation){
+    private synchronized void retrieveDistrictInfo(boolean returnToMyLocation){
+        new Thread(() -> {
+            HashMap<String, String> map = new HashMap<>();
+            map.put("id_member", Long.toString(StaticData.currentUser.id));
+            map = ServerConnectionHelper.connect("retrieving nearby districts", "mapdistrict", map);
 
+            int i = 0;
+            while (true) {
+                String num = Integer.toString(i++);
+                if (map.get("imgadd_district_" + num) == null) {
+                    break;
+                }
+                String districtImageAddress = map.get("imgadd_district_" + num);
+                double lat = Double.parseDouble(map.get("lat_" + num));
+                double lng = Double.parseDouble(map.get("lng_" + num));
+
+                districtInfoArray.add(new DistrictInfo(districtImageAddress,0,lat,lng));
+            }
+            new Handler(getMainLooper()).post(() -> {
+                updateDistrictMarkers(returnToMyLocation);
+            });
+            loading.setLoadingCompleted();
+        }).start();
     }
 
     private void updateDistrictMarkers(boolean returnToMyLocation) {
+        poiData.removeAllPOIdata();
 
+        for (int i = 0; i < districtInfoArray.size(); i++) {
+            NGeoPoint geoPoint = new NGeoPoint(districtInfoArray.get(i).lng, districtInfoArray.get(i).lat);
+            addDistrictMarkerTo(geoPoint, districtInfoArray.get(i).image);
+        }
+
+        if (returnToMyLocation) {
+            if(StaticData.myLatestLocation == null) {
+                StaticData.myLatestLocation = StaticData.defaultLocation;
+            }
+            mapView.getMapController().setMapCenter(StaticData.myLatestLocation, 13);
+        }
+        if (StaticData.myLatestLocation != null && myLocationMarkerIsVisible) {
+            addMarkerTo(StaticData.myLatestLocation, true, false, LOCATION_MYLOCATION);
+        }
+        overlayManager.clearOverlays();
+        overlayManager.createPOIdataOverlay(poiData, null);
+
+        pubInfoLayout.setVisibility(View.INVISIBLE);
     }
 
-    private void addDistrictMarkerTo(NGeoPoint geoPoint, String districtName, int pubQuantity){
+    private void addDistrictMarkerTo(NGeoPoint geoPoint, Drawable image){
         poiData.beginPOIdata(1);
-        poiData.addPOIitem(geoPoint, LOCATION_MYLOCATION, myLocationMarker, 0);
+        poiData.addPOIitem(geoPoint, LOCATION_DISTRICT, image, 2);
         poiData.endPOIdata();
 
         overlayManager.clearOverlays();
@@ -623,5 +673,13 @@ public class NearbyPlaces extends JNMapActivity {
     protected void onStop() {
         super.onStop();
         locationHelper.onStop();
+    }
+
+    @Override
+    public void finish() {
+        try {
+            districtBitmap.recycle();
+        }catch (Exception e){e.printStackTrace();}
+        super.finish();
     }
 }

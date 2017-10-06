@@ -73,22 +73,25 @@ public class Login extends JActivity {
         @Override
         public void onSessionOpened() {
             loading.setLoadingStarted();
-
+            UserManagement.requestLogout(null);
             UserManagement.requestMe(new MeResponseCallback() {
                 @Override
                 public void onFailure(ErrorResult errorResult) {
-                    String message = "failed to get user info. msg=" + errorResult;
+                    String message = "failed to get user info.";
                     JLog.v(message);
+                    UserManagement.requestLogout(null);
                 }
 
                 @Override
                 public void onSessionClosed(ErrorResult errorResult) {
-                    String message = "Session closed. msg=" + errorResult;
+                    String message = "Session closed";
                     JLog.v(message);
+                    UserManagement.requestLogout(null);
                 }
 
                 @Override
                 public void onNotSignedUp() {
+                    UserManagement.requestLogout(null);
                 }
 
                 @Override

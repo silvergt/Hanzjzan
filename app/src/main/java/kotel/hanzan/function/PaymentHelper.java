@@ -71,7 +71,6 @@ public class PaymentHelper {
         }catch (Exception e){
             e.printStackTrace();
         }
-
         return map;
     }
 
@@ -120,7 +119,6 @@ public class PaymentHelper {
                     }else{
                         returnValue[0] = PAYMENT_UNKNOWN_ISSUE;
                     }
-
                 }
 
                 br.close();
@@ -136,9 +134,5 @@ public class PaymentHelper {
         }
 
         return returnValue[0];
-
     }
-
-
-
 }
