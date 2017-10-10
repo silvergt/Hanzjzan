@@ -78,8 +78,6 @@ public class Home extends JActivity {
 
     private InputMethodManager inputMethodManager;
 
-    //************************Home Tab************************
-    private RelativeLayout homeLayout;
     private JRecyclerView pubInfoRecyclerView;
     private ArrayList<PubInfo> pubInfoArray = new ArrayList<>();
     private HomeRecyclerViewAdapter homeAdapter = new HomeRecyclerViewAdapter();
@@ -428,12 +426,12 @@ public class Home extends JActivity {
 
         upperBarSearch.setOnClickListener(view -> {
             Intent intent = new Intent(Home.this, Search.class);
-            startActivity(intent);
+            startActivityForResult(intent,0);
         });
 
         upperBarMap.setOnClickListener(view -> {
             Intent intent = new Intent(Home.this, NearbyPlaces.class);
-            startActivity(intent);
+            startActivityForResult(intent,0);
         });
 
         tapBar.setItems(new String[]{getString(R.string.home), getString(R.string.favorite), getString(R.string.history)
@@ -596,7 +594,7 @@ public class Home extends JActivity {
 
         upperBarMainText.setText(getString(R.string.aroundMe));
 
-        homeLayout = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.home_home, null);
+        RelativeLayout homeLayout = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.home_home, null);
         pubInfoRecyclerView = homeLayout.findViewById(R.id.home_homeRecycler);
         homeLayout.setBackgroundColor(Color.WHITE);
 
@@ -1441,7 +1439,6 @@ public class Home extends JActivity {
     }
 
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -1467,7 +1464,10 @@ public class Home extends JActivity {
                 break;
 
             case PubPage.REQUEST_OPENPUBPAGE :
-                if (resultCode == PubPage.RESULT_FAVORITECHANGED) {
+                if (resultCode == PubPage.RESULT_VOUCHERUSED) {
+                    openHistoryTab();
+                    tapBar.setFocusedItem(2);
+                }else if(requestCode == PubPage.RESULT_FAVORITECHANGED){
                     switch (tapBar.getCurrentlyFocusedTapNumber()) {
                         case 0:
                             homeAdapter.setFavoriteButton(data.getBooleanExtra("favorite", false));
@@ -1497,6 +1497,13 @@ public class Home extends JActivity {
                         }
                         mypageProfileText2.setText(getString(R.string.myMembership) + expireDate);
                     }catch (Exception e){e.printStackTrace();}
+                }
+                break;
+
+            default:
+                if (resultCode == PubPage.RESULT_VOUCHERUSED) {
+                    openHistoryTab();
+                    tapBar.setFocusedItem(2);
                 }
                 break;
         }

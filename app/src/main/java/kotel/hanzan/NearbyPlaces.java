@@ -511,7 +511,7 @@ public class NearbyPlaces extends JNMapActivity {
                 pubInfoLayout.setOnClickListener(view -> {
                     Intent intent = new Intent(NearbyPlaces.this, PubPage.class);
                     intent.putExtra("info", currentlyFocusedPubInfo);
-                    startActivity(intent);
+                    startActivityForResult(intent,PubPage.REQUEST_OPENPUBPAGE);
                 });
             });
             loading.setLoadingCompleted();
@@ -668,6 +668,19 @@ public class NearbyPlaces extends JNMapActivity {
             currentlyFocusedMarker = null;
         }
     }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == PubPage.REQUEST_OPENPUBPAGE){
+            if (resultCode == PubPage.RESULT_VOUCHERUSED) {
+                setResult(PubPage.RESULT_VOUCHERUSED);
+                finish();
+            }
+        }
+    }
+
 
     @Override
     protected void onStop() {

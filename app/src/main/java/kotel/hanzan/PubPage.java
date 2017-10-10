@@ -45,6 +45,7 @@ import kotel.hanzan.view.SlideCountView;
 public class PubPage extends JActivity {
     final public static int REQUEST_OPENPUBPAGE=10;
     final public static int RESULT_FAVORITECHANGED=11;
+    final public static int RESULT_VOUCHERUSED=12;
 
     private HashMap<String,String> map;
 
@@ -396,8 +397,13 @@ public class PubPage extends JActivity {
                     startActivity(intent);
                 case 2:
                 case 3:
-                case 4:
                     drinkSelectorDialog.cancel();
+                    break;
+                case 4:
+                    // 한잔 사용 승인 후, 확인 버튼을 눌러 다이얼로그 종료시.
+                    setResult(RESULT_VOUCHERUSED);
+                    drinkSelectorDialog.cancel();
+                    finish();
                     break;
             }
         });

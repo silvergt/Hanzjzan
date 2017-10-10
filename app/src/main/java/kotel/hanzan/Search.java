@@ -402,10 +402,15 @@ public class Search extends JActivity {
         locationHelper.onStop();
     }
 
+
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == PubPage.REQUEST_OPENPUBPAGE){
-            if(resultCode == PubPage.RESULT_FAVORITECHANGED){
+            if (resultCode == PubPage.RESULT_VOUCHERUSED) {
+                setResult(PubPage.RESULT_VOUCHERUSED);
+                finish();
+            }else if(resultCode == PubPage.RESULT_FAVORITECHANGED){
                 adapter.setFavoriteButton(data.getBooleanExtra("favorite",false));
             }
         }

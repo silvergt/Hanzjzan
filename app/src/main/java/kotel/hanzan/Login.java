@@ -73,7 +73,6 @@ public class Login extends JActivity {
         @Override
         public void onSessionOpened() {
             loading.setLoadingStarted();
-            UserManagement.requestLogout(null);
             UserManagement.requestMe(new MeResponseCallback() {
                 @Override
                 public void onFailure(ErrorResult errorResult) {
@@ -331,7 +330,7 @@ public class Login extends JActivity {
             map.put("member_key", StaticData.IDENTIFIER_KAKAO + Long.toString(userProfile.getId()));
             map.put("name_member", userProfile.getNickname());
             if(userProfile.getEmail()!=null){
-                map.put("member_email",userProfile.getEmail());
+                map.put("email_member",userProfile.getEmail());
             }
 
             if(map.get("imageincluded").equals("1")) {
@@ -396,7 +395,7 @@ public class Login extends JActivity {
         }
         GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), (object, response) -> {
             try{
-                map.put("member_email", object.get("email").toString());
+                map.put("email_member", object.get("email").toString());
             }catch (Exception e){e.printStackTrace();}
 
             try {
