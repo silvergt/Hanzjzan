@@ -52,17 +52,6 @@
             android:layout_margin="@dimen/login_marginBottom"
             >
 
-            <ImageView
-                android:id="@+id/login_lowerIcon"
-                android:layout_width="@dimen/login_buttonIconWidth"
-                android:layout_height="@dimen/login_buttonIconWidth"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/facebookicon"
-                android:visibility="gone"
-                android:scaleType="fitXY"
-                android:layout_marginLeft="10dp"
-                />
-
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

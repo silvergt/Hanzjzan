@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -60,7 +59,6 @@ public class Login extends JActivity {
 
     private HorizontalSlideView slideView;
     private SlideCountView slideCountView;
-    private ImageView lowerIcon;
     private LinearLayout lowerButton;
 
 
@@ -119,7 +117,6 @@ public class Login extends JActivity {
         slideView = findViewById(R.id.login_slideView);
         slideCountView = findViewById(R.id.login_slideCountView);
         lowerButton = findViewById(R.id.login_lowerButton);
-        lowerIcon = findViewById(R.id.login_lowerIcon);
         loading = findViewById(R.id.login_loading);
 
         initFacebook();
@@ -131,8 +128,6 @@ public class Login extends JActivity {
         addSlideChildViews();
 
         slideCountView.initialize(slideView.getListChildCount(), (int)getResources().getDimension(R.dimen.login_slideCountWidth), 5);
-
-        lowerIcon.setVisibility(View.GONE);
 
         slideView.setOnSlideListener(new SlideListener() {
             @Override

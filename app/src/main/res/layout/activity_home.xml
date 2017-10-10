@@ -107,7 +107,7 @@
             <ImageView
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/logo_onlyname"
+                android:src="@drawable/logo_name"
                 android:layout_centerInParent="true"
                 />
 

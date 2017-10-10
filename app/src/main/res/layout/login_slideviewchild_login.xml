@@ -102,7 +102,7 @@
                         android:layout_width="@dimen/login_buttonIconWidth"
                         android:layout_height="@dimen/login_buttonIconWidth"
                         android:layout_gravity="center_vertical"
-                        android:src="@drawable/facebookicon"
+                        android:src="@drawable/facebook_white"
                         android:scaleType="fitXY"
                         android:layout_marginLeft="10dp"
                         />
