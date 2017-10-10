@@ -59,11 +59,7 @@ public class ImageCropper extends JActivity {
         });
 
         confirm.setOnClickListener(v -> {
-//            croppedImage = new BitmapDrawable(getResources(),cropper.getCroppedImage());
-//            croppedImage = cropper.getCroppedImage();
             croppedImageByteArray = BitmapHelper.getResizedCompressedByteArray(cropper.getCroppedImage());
-
-
             setResult(RESULT_OK);
             finish();
         });

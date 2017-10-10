@@ -29,9 +29,9 @@ import com.stfalcon.frescoimageviewer.ImageViewer;
 
 import java.util.HashMap;
 
-import kotel.hanzan.Data.DrinkInfo;
-import kotel.hanzan.Data.PubInfo;
-import kotel.hanzan.Data.StaticData;
+import kotel.hanzan.data.DrinkInfo;
+import kotel.hanzan.data.PubInfo;
+import kotel.hanzan.data.StaticData;
 import kotel.hanzan.function.JLog;
 import kotel.hanzan.function.ServerConnectionHelper;
 import kotel.hanzan.listener.DrinkSelectorListener;

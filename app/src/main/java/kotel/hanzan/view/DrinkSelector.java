@@ -21,8 +21,8 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import kotel.hanzan.Data.DrinkInfo;
-import kotel.hanzan.Data.StaticData;
+import kotel.hanzan.data.DrinkInfo;
+import kotel.hanzan.data.StaticData;
 import kotel.hanzan.R;
 import kotel.hanzan.function.AssetsHelper;
 import kotel.hanzan.function.ColorHelper;

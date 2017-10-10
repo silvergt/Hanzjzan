@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import kotel.hanzan.Data.AnnouncementInfo;
+import kotel.hanzan.data.AnnouncementInfo;
 
 public class AnnouncementDetail extends AppCompatActivity {
     AnnouncementInfo announcementInfo;

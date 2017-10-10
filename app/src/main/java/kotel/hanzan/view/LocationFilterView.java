@@ -17,7 +17,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import kotel.hanzan.Data.StaticData;
+import kotel.hanzan.data.StaticData;
 import kotel.hanzan.R;
 import kotel.hanzan.function.ColorHelper;
 import kotel.hanzan.function.ServerConnectionHelper;

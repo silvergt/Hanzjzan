@@ -33,8 +33,8 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import kotel.hanzan.Data.StaticData;
-import kotel.hanzan.Data.UserInfo;
+import kotel.hanzan.data.StaticData;
+import kotel.hanzan.data.UserInfo;
 import kotel.hanzan.function.AssetsHelper;
 import kotel.hanzan.function.BitmapHelper;
 import kotel.hanzan.function.JLog;

@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import java.util.HashMap;
 
-import kotel.hanzan.Data.StaticData;
+import kotel.hanzan.data.StaticData;
 import kotel.hanzan.function.CalendarHelper;
 import kotel.hanzan.function.JLog;
 import kotel.hanzan.function.PaymentHelper;

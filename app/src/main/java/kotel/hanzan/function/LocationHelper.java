@@ -13,7 +13,7 @@ import com.nhn.android.maps.maplib.NGeoPoint;
 
 import java.util.List;
 
-import kotel.hanzan.Data.StaticData;
+import kotel.hanzan.data.StaticData;
 import kotel.hanzan.R;
 import kotel.hanzan.listener.LocationHelperListener;
 

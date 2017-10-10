@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import java.util.HashMap;
 
-import kotel.hanzan.Data.StaticData;
+import kotel.hanzan.data.StaticData;
 import kotel.hanzan.function.ServerConnectionHelper;
 import kotel.hanzan.view.JActivity;
 

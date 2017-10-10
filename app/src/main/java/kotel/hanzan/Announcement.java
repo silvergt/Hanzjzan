@@ -16,7 +16,7 @@ import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import kotel.hanzan.Data.AnnouncementInfo;
+import kotel.hanzan.data.AnnouncementInfo;
 import kotel.hanzan.function.ServerConnectionHelper;
 import kotel.hanzan.listener.JRecyclerViewListener;
 import kotel.hanzan.view.JActivity;

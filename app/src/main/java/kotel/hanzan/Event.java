@@ -12,8 +12,8 @@ import com.stfalcon.frescoimageviewer.ImageViewer;
 
 import java.util.HashMap;
 
-import kotel.hanzan.Data.EventInfo;
-import kotel.hanzan.Data.StaticData;
+import kotel.hanzan.data.EventInfo;
+import kotel.hanzan.data.StaticData;
 import kotel.hanzan.function.JLog;
 import kotel.hanzan.function.ServerConnectionHelper;
 import kotel.hanzan.view.JActivity;
@@ -53,7 +53,7 @@ public class Event extends JActivity {
             eventInfo = (EventInfo) data.getSerializableExtra("info");
             title.setText(eventInfo.title);
             Picasso.with(this).load(eventInfo.mainImageAddress).placeholder(R.drawable.loading_store).into(image);
-            content.setText(eventInfo.content);
+            content.setText(eventInfo.content + "\n" + eventInfo.eventlink);
         }
 
 
@@ -91,12 +91,13 @@ public class Event extends JActivity {
             String titleText = map.get("title_event");
             String mainImageAddress = map.get("mainimgadd_event");
             String contentText = map.get("content_event");
+            String eventlink = map.get("url_event");
 
-            eventInfo = new EventInfo(eventId,titleImageAddress,mainImageAddress,titleText,contentText);
+            eventInfo = new EventInfo(eventId,titleImageAddress,mainImageAddress,titleText,contentText,eventlink);
             new Handler(getMainLooper()).post(()->{
                 title.setText(eventInfo.title);
                 Picasso.with(this).load(eventInfo.mainImageAddress).placeholder(R.drawable.loading_store).into(image);
-                content.setText(eventInfo.content);
+                content.setText(eventInfo.content + "\n" + eventlink);
             });
         }).start();
     }

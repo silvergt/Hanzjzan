@@ -21,7 +21,7 @@ import com.kakao.usermgmt.UserManagement;
 import java.util.HashMap;
 import java.util.Locale;
 
-import kotel.hanzan.Data.StaticData;
+import kotel.hanzan.data.StaticData;
 import kotel.hanzan.function.ColorHelper;
 import kotel.hanzan.function.JLog;
 import kotel.hanzan.function.LocaleHelper;

@@ -23,7 +23,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import kotel.hanzan.Data.StaticData;
+import kotel.hanzan.data.StaticData;
 import kotel.hanzan.function.CalendarHelper;
 import kotel.hanzan.function.NumericHelper;
 import kotel.hanzan.function.PaymentHelper;
@@ -31,7 +31,7 @@ import kotel.hanzan.function.ServerConnectionHelper;
 import kotel.hanzan.view.JActivity;
 import kotel.hanzan.view.Loading;
 
-import static kotel.hanzan.Data.StaticData.currentUser;
+import static kotel.hanzan.data.StaticData.currentUser;
 
 public class Membership extends JActivity {
     final public static int MEMBERSHIP_OPENED = 880;

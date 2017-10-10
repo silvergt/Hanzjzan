@@ -304,7 +304,7 @@
                     android:textSize="@dimen/filter_buttonTextSize"
                     android:gravity="center"
                     android:textColor="@color/white"
-                    android:background="@drawable/button_inactive"
+                    android:background="@drawable/button_deactivated"
                     />
 
 

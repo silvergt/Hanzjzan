@@ -7,7 +7,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.HashMap;
 
-import kotel.hanzan.Data.StaticData;
+import kotel.hanzan.data.StaticData;
 
 public class PaymentHelper {
     final public static int PAYMENT_SUCCESS=0;

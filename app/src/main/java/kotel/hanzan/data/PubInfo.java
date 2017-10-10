@@ -1,4 +1,4 @@
-package kotel.hanzan.Data;
+package kotel.hanzan.data;
 
 import android.content.Context;
 

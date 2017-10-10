@@ -38,11 +38,11 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import kotel.hanzan.Data.DrinkInfo;
-import kotel.hanzan.Data.EventInfo;
-import kotel.hanzan.Data.PubHistoryInfo;
-import kotel.hanzan.Data.PubInfo;
-import kotel.hanzan.Data.StaticData;
+import kotel.hanzan.data.DrinkInfo;
+import kotel.hanzan.data.EventInfo;
+import kotel.hanzan.data.PubHistoryInfo;
+import kotel.hanzan.data.PubInfo;
+import kotel.hanzan.data.StaticData;
 import kotel.hanzan.function.AssetsHelper;
 import kotel.hanzan.function.CalendarHelper;
 import kotel.hanzan.function.DrawableHelper;
@@ -748,7 +748,7 @@ public class Home extends JActivity {
         String expireDate;
         if(StaticData.currentUser.expireYYYY==0){
             expireDate = getString(R.string.notMemberYet);
-            mypageCurrentMembership.setImageResource(R.drawable.ticket_deactive);
+            mypageCurrentMembership.setImageResource(R.drawable.ticket_deactivated);
         }else{
             expireDate = "~ "+Integer.toString(StaticData.currentUser.expireYYYY)+"."+Integer.toString(StaticData.currentUser.expireMM)
                     +"."+Integer.toString(StaticData.currentUser.expireDD);
@@ -1042,12 +1042,12 @@ public class Home extends JActivity {
             filterCheckbox[num].setChecked(filter_checkboxChecked[num]);
             filterTextbox[num].setOnClickListener(view -> filterCheckbox[num].callOnClick());
             filterCheckbox[num].setOnCheckListener(() -> {
-                filterApply.setBackground(isAnyFilterCheckedTemporarily() ? DrawableHelper.getDrawable(getResources(),R.drawable.button_active) : DrawableHelper.getDrawable(getResources(),R.drawable.button_inactive));
+                filterApply.setBackground(isAnyFilterCheckedTemporarily() ? DrawableHelper.getDrawable(getResources(),R.drawable.button_active) : DrawableHelper.getDrawable(getResources(),R.drawable.button_deactivated));
             });
         }
         
-        filterApply.setBackground(isAnyFilterCheckedTemporarily() ? DrawableHelper.getDrawable(getResources(),R.drawable.button_active) : DrawableHelper.getDrawable(getResources(),R.drawable.button_inactive));
-        filterRemove.setBackground(isAnyFilterChecked() ? DrawableHelper.getDrawable(getResources(),R.drawable.button_active) : DrawableHelper.getDrawable(getResources(),R.drawable.button_inactive));
+        filterApply.setBackground(isAnyFilterCheckedTemporarily() ? DrawableHelper.getDrawable(getResources(),R.drawable.button_active) : DrawableHelper.getDrawable(getResources(),R.drawable.button_deactivated));
+        filterRemove.setBackground(isAnyFilterChecked() ? DrawableHelper.getDrawable(getResources(),R.drawable.button_active) : DrawableHelper.getDrawable(getResources(),R.drawable.button_deactivated));
 
 
         filterApply.setOnClickListener(view -> {
@@ -1214,8 +1214,9 @@ public class Home extends JActivity {
                 String mainImage = map.get("mainimgadd_event_"+num);
                 String title = map.get("title_event_"+num);
                 String content = map.get("content_event_"+num);
+                String eventlink = map.get("url_event_"+num);
 
-                eventInfoArray.add(new EventInfo(id,titleImage,mainImage,title,content));
+                eventInfoArray.add(new EventInfo(id,titleImage,mainImage,title,content,eventlink));
             }
 
             new Handler(getMainLooper()).post(() -> {
@@ -1493,7 +1494,7 @@ public class Home extends JActivity {
                         if(StaticData.currentUser.expireYYYY != 0){
                             mypageCurrentMembership.setImageResource(R.drawable.ticket);
                         }else {
-                            mypageCurrentMembership.setImageResource(R.drawable.ticket_deactive);
+                            mypageCurrentMembership.setImageResource(R.drawable.ticket_deactivated);
                         }
                         mypageProfileText2.setText(getString(R.string.myMembership) + expireDate);
                     }catch (Exception e){e.printStackTrace();}
@@ -1517,7 +1518,7 @@ public class Home extends JActivity {
             if (StaticData.currentUser.expireYYYY != 0 && StaticData.currentUser.isHanjanAvailableToday) {
                 mypageCurrentMembership.setImageResource(R.drawable.ticket);
             } else {
-                mypageCurrentMembership.setImageResource(R.drawable.ticket_deactive);
+                mypageCurrentMembership.setImageResource(R.drawable.ticket_deactivated);
             }
         }catch (Exception e){}
 

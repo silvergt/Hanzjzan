@@ -35,8 +35,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import kotel.hanzan.Data.PubInfo;
-import kotel.hanzan.Data.StaticData;
+import kotel.hanzan.data.PubInfo;
+import kotel.hanzan.data.StaticData;
 import kotel.hanzan.function.DrawableHelper;
 import kotel.hanzan.function.GeoHelper;
 import kotel.hanzan.function.JLog;

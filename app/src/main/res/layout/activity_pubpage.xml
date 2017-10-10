@@ -128,7 +128,7 @@
                             android:id="@+id/pubpage_menu"
                             android:layout_width="@dimen/pubpage_itemSize"
                             android:layout_height="@dimen/pubpage_itemSize"
-                            android:src="@drawable/menu_deactive"
+                            android:src="@drawable/menu_deactivated"
                             android:layout_marginRight="5dp"
                             />
 
