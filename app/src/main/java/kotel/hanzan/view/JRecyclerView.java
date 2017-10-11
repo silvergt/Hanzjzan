@@ -18,7 +18,7 @@ import kotel.hanzan.R;
 import kotel.hanzan.function.ColorHelper;
 import kotel.hanzan.listener.JRecyclerViewListener;
 
-import static kotel.hanzan.R.color.mainColor_medium;
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class JRecyclerView extends TwinklingRefreshLayout {
     private RecyclerView recyclerView;
@@ -194,5 +194,41 @@ public class JRecyclerView extends TwinklingRefreshLayout {
     @Override
     public void setEnableLoadmore(boolean enableLoadmore1) {
         super.setEnableLoadmore(enableLoadmore1);
+    }
+
+    public void disableRefresh(){
+        setEnableRefresh(false);
+        setHeaderView(new IHeaderView() {
+            @Override
+            public View getView() {
+                return new View(getApplicationContext());
+            }
+
+            @Override
+            public void onPullingDown(float fraction, float maxHeadHeight, float headHeight) {
+
+            }
+
+            @Override
+            public void onPullReleasing(float fraction, float maxHeadHeight, float headHeight) {
+
+            }
+
+            @Override
+            public void startAnim(float maxHeadHeight, float headHeight) {
+
+            }
+
+            @Override
+            public void onFinish(OnAnimEndListener animEndListener) {
+
+            }
+
+            @Override
+            public void reset() {
+
+            }
+        });
+        setHeaderHeight(0);
     }
 }

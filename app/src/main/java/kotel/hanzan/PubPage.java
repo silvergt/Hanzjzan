@@ -517,6 +517,8 @@ public class PubPage extends JActivity {
                 workingHour_weekend.setText(pubInfo.work_weekend);
 
                 drinkSelector.setDrinkList(pubInfo.drinkList);
+
+                setPubImageView();
             });
             return;
         }

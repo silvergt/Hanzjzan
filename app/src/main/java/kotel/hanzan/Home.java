@@ -486,7 +486,6 @@ public class Home extends JActivity {
             openTutorial();
         }
 
-
         openHomeTab();
         setUpperBarLeftIconStatus();
 
@@ -668,9 +667,9 @@ public class Home extends JActivity {
 
         historyInfoArray = new ArrayList<>();
 
-
         historyAdapter = new HistoryRecyclerViewAdapter();
 
+        historyRecyclerView.disableRefresh();
         historyRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         historyRecyclerView.setAdapter(historyAdapter);
         historyRecyclerView.setOnJRecyclerViewListener(new JRecyclerViewListener() {
@@ -700,6 +699,7 @@ public class Home extends JActivity {
         RelativeLayout layout = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.home_event, null);
         eventRecycler = layout.findViewById(R.id.home_eventRecycler);
 
+        eventRecycler.disableRefresh();
         eventRecycler.setLayoutManager(new LinearLayoutManager(this));
         eventRecycler.setAdapter(eventAdapter);
         eventRecycler.setOnJRecyclerViewListener(new JRecyclerViewListener() {
