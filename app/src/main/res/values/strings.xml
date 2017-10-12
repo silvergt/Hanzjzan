@@ -156,8 +156,9 @@
     <string name="DrinkSelectorPopup_text4">You can use membership again after 6AM</string>
     <string name="DrinkSelectorPopup_text1">Show this to clerk.\nClerk will check order and click button.</string>
     <string name="startDrinkat">Click to start Drinkat</string>
-    <string name="signupFreeCode">Welcome! We are offering you\nfree 15 days coupon!</string>
+    <string name="signupFreeCode">Welcome! We are offering you\nwelcome free coupon!</string>
     <string name="isFree">is free</string>
     <string name="preparingMenu">This store is preparing menu!</string>
+    <string name="seeDetail">See detail</string>
 
 </resources>

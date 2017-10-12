@@ -67,11 +67,9 @@ import kotel.hanzan.view.TapBar;
 public class Home extends JActivity {
     private TapBar tapBar;
     private RelativeLayout container,mainLayout;
-
     private RelativeLayout upperBarLocationFilterContainer;
     private ImageView upperBarLeftIcon, upperBarMap, upperBarSearch, upperBarFilter, upperBarLocationFilter;
     private TextView upperBarMainText;
-
     private Loading loading;
 
     private LocationHelper locationHelper = new LocationHelper();
@@ -488,8 +486,6 @@ public class Home extends JActivity {
 
         openHomeTab();
         setUpperBarLeftIconStatus();
-
-
     }
 
     private void openTutorial(){
@@ -559,10 +555,15 @@ public class Home extends JActivity {
         TextView no = layout.findViewById(R.id.popupBox_no);
 
         text.setText(getString(R.string.signupFreeCode));
-        yes.setText(getString(R.string.confirm));
-        no.setVisibility(View.GONE);
+        yes.setText(getString(R.string.seeDetail));
+        no.setBackgroundResource(R.drawable.roundbox_maincolor);
+        no.setText(getString(R.string.confirm));
 
         yes.setOnClickListener(view -> {
+            startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse("https://www.90labs.com/welcomecoupon")));
+        });
+
+        no.setOnClickListener(view -> {
             dialog.cancel();
         });
 
@@ -1520,7 +1521,7 @@ public class Home extends JActivity {
             } else {
                 mypageCurrentMembership.setImageResource(R.drawable.ticket_deactivated);
             }
-        }catch (Exception e){}
+        }catch (Exception e){e.printStackTrace();}
 
         try{
             pubInfoRecyclerView.finishRefreshing();

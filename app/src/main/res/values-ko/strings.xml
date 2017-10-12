@@ -143,5 +143,6 @@
     <string name="signupFreeCode">환영합니다! 가입 기념으로\n15일 무료 쿠폰을 드립니다!</string>
     <string name="isFree">무료 제공</string>
     <string name="preparingMenu">이 가게는 메뉴 준비중입니다!</string>
+    <string name="seeDetail">자세히 보기</string>
 
 </resources>
