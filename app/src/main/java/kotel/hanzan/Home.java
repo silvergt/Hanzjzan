@@ -381,11 +381,6 @@ public class Home extends JActivity {
     private DrinkCalendar mypageCalendar;
 
 
-    //************************TUTORIAL Tab************************
-    private RelativeLayout tutorialLayout,tutorial1,tutorial2;
-    private TextView tutorialNext;
-    private View tutorialPubView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -489,11 +484,11 @@ public class Home extends JActivity {
     }
 
     private void openTutorial(){
-        tutorialLayout = (RelativeLayout)getLayoutInflater().inflate(R.layout.home_tutorial,null);
-        tutorial1 = tutorialLayout.findViewById(R.id.home_tutorial_layout1);
-        tutorial2 = tutorialLayout.findViewById(R.id.home_tutorial_layout2);
-        tutorialNext = tutorialLayout.findViewById(R.id.home_tutorial_next);
-        tutorialPubView = tutorialLayout.findViewById(R.id.home_tutorial_pubView);
+        final RelativeLayout tutorialLayout = (RelativeLayout)getLayoutInflater().inflate(R.layout.home_tutorial,null);
+        final RelativeLayout tutorial1 = tutorialLayout.findViewById(R.id.home_tutorial_layout1);
+        final RelativeLayout tutorial2 = tutorialLayout.findViewById(R.id.home_tutorial_layout2);
+        final TextView tutorialNext = tutorialLayout.findViewById(R.id.home_tutorial_next);
+        final View tutorialPubView = tutorialLayout.findViewById(R.id.home_tutorial_pubView);
 
         LinearLayout.LayoutParams pubViewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, StaticData.displayWidth * 3 / 5 + (int)getResources().getDimension(R.dimen.drinkSelector_height));
         tutorialPubView.setLayoutParams(pubViewParams);

@@ -7,7 +7,7 @@ android {
         applicationId "kotel.hanzan"
         minSdkVersion 19
         targetSdkVersion 26
-        versionCode 27
+        versionCode 28
         versionName "1.1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
