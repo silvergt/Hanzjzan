@@ -521,7 +521,7 @@ public class Home extends JActivity {
 
         }else if(CalendarHelper.getDaysBetweenDates(CalendarHelper.getCurrentDate(),
                 new int[]{StaticData.currentUser.expireYYYY,StaticData.currentUser.expireMM,StaticData.currentUser.expireDD})
-                <= 7 ){
+                <= 4 ){
             text.setText(getString(R.string.membershipPopupTextAlmostEnd));
         }
 
@@ -806,7 +806,7 @@ public class Home extends JActivity {
         }
         if(!StaticData.currentUser.finishedTutorial){
             PubInfo tutorialPub = new PubInfo(Home.this,-1,getString(R.string.tutorial_pubName),getString(R.string.tutorial_pubAddress),
-                    getString(R.string.tutorial_pubCity),"","https://s3.ap-northeast-2.amazonaws.com/hanjan/drink_craft.png",
+                    getString(R.string.tutorial_pubCity),"","https://s3.ap-northeast-2.amazonaws.com/hanjan/tutorial_00001.png",
                     false,0,0);
             tutorialPub.tutorialPub = true;
             if(pubInfoArray.size()==0) {

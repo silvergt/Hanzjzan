@@ -114,7 +114,7 @@
     <string name="agree">동의</string>
     <string name="paymentError">서버 에러! 드링캣 서비스팀에 연락바랍니다</string>
     <string name="serverChecking">서버 점검중입니다!</string>
-    <string name="tutorial_drinkName">튜토리주</string>
+    <string name="tutorial_drinkName">생맥주</string>
     <string name="tutorial_pubCity">신촌</string>
     <string name="tutorial_pubAddress">신촌 어딘가</string>
     <string name="tutorial_pubName">튜토리얼 펍</string>
