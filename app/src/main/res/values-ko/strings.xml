@@ -114,7 +114,7 @@
     <string name="agree">동의</string>
     <string name="paymentError">서버 에러! 드링캣 서비스팀에 연락바랍니다</string>
     <string name="serverChecking">서버 점검중입니다!</string>
-    <string name="tutorial_drinkName">생맥주</string>
+    <string name="tutorial_drinkName">튜토리주</string>
     <string name="tutorial_pubCity">신촌</string>
     <string name="tutorial_pubAddress">신촌 어딘가</string>
     <string name="tutorial_pubName">튜토리얼 펍</string>
@@ -122,7 +122,7 @@
     <string name="tutorial_text1">드링캣에 가입하신걸 환영합니다</string>
     <string name="tutorial_text10">조심하세요! 이 버튼은 점원이 클릭해야만 합니다!</string>
     <string name="tutorial_text2">매일, 한잔, 무료</string>
-    <string name="tutorial_text3">그러면, 앱 사용 방법 알아볼까요?</string>
+    <string name="tutorial_text3">그러면, 앱 사용 방법을 알아볼까요?</string>
     <string name="tutorial_text4">먼저, 방문할 술집을 터치하세요!</string>
     <string name="tutorial_text5">원하는 종류의 술을 선택하세요</string>
     <string name="tutorial_text6">이제, 원하는 술을 선택하세요</string>

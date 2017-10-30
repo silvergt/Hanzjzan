@@ -17,7 +17,7 @@
     <string name="wine">Wine</string>
     <string name="sake">Sake</string>
     <string name="cocktail">Cocktail</string>
-
+ㅇ
     <string name="kakao_app_key" translatable="false">7ff7bd46a972baee55ee0f73e5beb506</string>
     <string name="filter_1">Beer</string>
     <string name="filter_2">Soju</string>
@@ -133,7 +133,7 @@
     <string name="tutorial_pubName">Tutorial pub</string>
     <string name="tutorial_pubCity">Shinchon</string>
     <string name="tutorial_pubAddress">Somewhere in Shinchon</string>
-    <string name="tutorial_drinkName">Draft beer</string>
+    <string name="tutorial_drinkName">Tutorink</string>
     <string name="tutorial_pubDescription">Have one free drink everyday!</string>
     <string name="tutorial_text1">Welcome to Drinkat!</string>
     <string name="tutorial_text2">Everyday, one glass, free</string>
