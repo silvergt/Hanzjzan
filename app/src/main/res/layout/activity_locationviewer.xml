@@ -11,12 +11,6 @@
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         >
-        <com.nhn.android.maps.NMapView
-            android:id="@+id/locationViewer_mapView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            />
-
         <RelativeLayout
             android:id="@+id/locationViewer_upperBar"
             android:layout_width="match_parent"
@@ -48,6 +42,14 @@
                 />
 
         </RelativeLayout>
+
+
+        <com.nhn.android.maps.NMapView
+            android:id="@+id/locationViewer_mapView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/locationViewer_upperBar"
+            />
 
         <ImageView
             android:id="@+id/locationViewer_myLocation"

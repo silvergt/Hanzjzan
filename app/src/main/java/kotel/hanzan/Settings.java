@@ -172,18 +172,18 @@ public class Settings extends JActivity {
 
 
     private void openFacebook() {
-        Uri uri = Uri.parse("https://www.facebook.com/HANZANN/");
+        Uri uri = Uri.parse("https://www.facebook.com/Drinkat.90labs/");
         try {
             ApplicationInfo applicationInfo = getPackageManager().getApplicationInfo("com.facebook.katana", 0);
             if (applicationInfo.enabled) {
-                uri = Uri.parse("fb://facewebmodal/f?href=https://www.facebook.com/HANZANN/");
+                uri = Uri.parse("fb://facewebmodal/f?href=https://www.facebook.com/Drinkat.90labs/");
             }
         } catch (PackageManager.NameNotFoundException ignored) {}
         startActivity(new Intent(Intent.ACTION_VIEW, uri));
     }
 
     private void openInstagram(){
-        Uri uri = Uri.parse("https://www.instagram.com/hanjan_ninetylabs/");
+        Uri uri = Uri.parse("https://www.instagram.com/drinkat_ninetylabs/");
         Intent likeIng = new Intent(Intent.ACTION_VIEW, uri);
 
         likeIng.setPackage("com.instagram.android");
@@ -192,7 +192,7 @@ public class Settings extends JActivity {
             startActivity(likeIng);
         } catch (ActivityNotFoundException e) {
             e.printStackTrace();
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/hanjan_ninetylabs/")));
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.instagram.com/drinkat_ninetylabs/")));
         }
     }
 
