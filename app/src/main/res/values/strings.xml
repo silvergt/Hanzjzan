@@ -160,5 +160,6 @@
     <string name="isFree">is free</string>
     <string name="preparingMenu">This store is preparing menu!</string>
     <string name="seeDetail">See detail</string>
+    <string name="purchaseErrorMessage">An error occured! Please try again</string>
 
 </resources>

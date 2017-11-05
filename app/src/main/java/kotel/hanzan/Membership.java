@@ -16,6 +16,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -315,7 +316,6 @@ public class Membership extends JActivity {
     }
 
 
-
     private synchronized void retrieveMembershipTicketInfo(){
         ticketArray.clear();
         new Thread(()->{
@@ -391,11 +391,38 @@ public class Membership extends JActivity {
 
     private void purchaseWithToss(String ticketID,String itemName, int price){
         HashMap<String,String> tossHashMap = PaymentHelper.tossPayment(ticketID,itemName,price);
-        if(tossHashMap.get("code").equals("0")) {
+        if(tossHashMap.get("code") == null) {
+            openPurchaseErrorPopup();
+        }else if(tossHashMap.get("code").equals("0")) {
             PurchaseSuccess.tossPayToken = tossHashMap.get("payToken");
             PurchaseSuccess.ticketID = tossHashMap.get("ticketID");
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(tossHashMap.get("checkoutPage")));
             startActivity(intent);
         }
+    }
+
+
+    private void openPurchaseErrorPopup(){
+        Dialog dialog = new Dialog(this);
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        LinearLayout layout = (LinearLayout) getLayoutInflater().inflate(R.layout.popupbox_normal, null);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layout.setLayoutParams(params);
+
+        TextView text = layout.findViewById(R.id.popupBox_text);
+        TextView yes = layout.findViewById(R.id.popupBox_yes);
+        TextView no = layout.findViewById(R.id.popupBox_no);
+
+        text.setText(getString(R.string.purchaseErrorMessage));
+
+        no.setVisibility(View.INVISIBLE);
+        yes.setOnClickListener(view -> {
+            dialog.cancel();
+        });
+
+        dialog.setContentView(layout);
+        dialog.show();
     }
 }
