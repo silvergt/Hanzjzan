@@ -161,5 +161,6 @@
     <string name="preparingMenu">This store is preparing menu!</string>
     <string name="seeDetail">See detail</string>
     <string name="purchaseErrorMessage">An error occured! Please try again</string>
+    <string name="drink">Drink</string>
 
 </resources>

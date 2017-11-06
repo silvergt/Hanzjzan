@@ -36,6 +36,7 @@ public class DrinkInfo implements Serializable{
                 put("misc",600);
                 put("snack",700);
                 put("cocktail",800);
+                put("wine",900);
             }
         };
 
@@ -45,7 +46,7 @@ public class DrinkInfo implements Serializable{
         try {
             drinkCode = drinkIdMap.get(code);
         }catch (Exception e){
-            return "UNKNOWN";
+            return res.getString(R.string.drink);
         }
 
         switch (drinkCode){
@@ -57,8 +58,8 @@ public class DrinkInfo implements Serializable{
             case 600:returnValue = res.getString(R.string.misc); break;
             case 700:returnValue = res.getString(R.string.snack); break;
             case 800:returnValue = res.getString(R.string.cocktail); break;
-            default:returnValue = "UNKNOWN";break;
-
+            case 900:returnValue = res.getString(R.string.wine); break;
+            default :returnValue = res.getString(R.string.drink);break;
         }
 
         return returnValue;

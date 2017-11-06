@@ -145,5 +145,6 @@
     <string name="preparingMenu">이 가게는 메뉴 준비중입니다!</string>
     <string name="seeDetail">자세히 보기</string>
     <string name="purchaseErrorMessage">결제 도중 에러가 발생했습니다</string>
+    <string name="drink">술</string>
 
 </resources>
