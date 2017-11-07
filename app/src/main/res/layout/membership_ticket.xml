@@ -15,6 +15,7 @@
         android:layout_height="@dimen/membership_itemHeight">
 
         <ImageView
+            android:id="@+id/membership_ticket_image"
             android:layout_width="@dimen/membership_ticketImageWidth"
             android:layout_height="@dimen/membership_ticketImageWidth"
             android:layout_centerVertical="true"

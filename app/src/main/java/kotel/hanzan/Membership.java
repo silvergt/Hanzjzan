@@ -21,6 +21,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -53,7 +55,7 @@ public class Membership extends JActivity {
 
             
     private class MembershipTicketInfo{
-        String name,id;
+        String name,id,imageAddress;
 
         int originalPrice;
         int discountPrice;
@@ -61,12 +63,13 @@ public class Membership extends JActivity {
         int[] dueDate;
 
 
-        public MembershipTicketInfo(String id,String name, int[] dueDate, int originalPrice, int discountPrice) {
+        public MembershipTicketInfo(String id,String name,String imageAddress, int[] dueDate, int originalPrice, int discountPrice) {
             this.id = id;
             this.name = name;
             this.originalPrice = originalPrice;
             this.discountPrice = discountPrice;
             this.dueDate = dueDate;
+            this.imageAddress = imageAddress;
             isNowDiscounted = discountPrice != 0;
         }
     }
@@ -75,6 +78,7 @@ public class Membership extends JActivity {
 
         class ViewHolder extends RecyclerView.ViewHolder{
             TextView saleIcon,title,currentPrice,strikeThroughedPrice,duration;
+            ImageView ticketImage;
             public ViewHolder(View itemView) {
                 super(itemView);
                 saleIcon = itemView.findViewById(R.id.membership_ticket_saleIcon);
@@ -82,6 +86,7 @@ public class Membership extends JActivity {
                 currentPrice = itemView.findViewById(R.id.membership_ticket_currentPrice);
                 strikeThroughedPrice = itemView.findViewById(R.id.membership_ticket_strikeThroughedPrice);
                 duration = itemView.findViewById(R.id.membership_ticket_date);
+                ticketImage = itemView.findViewById(R.id.membership_ticket_image);
             }
         }
 
@@ -104,6 +109,8 @@ public class Membership extends JActivity {
                 holder.strikeThroughedPrice.setVisibility(View.INVISIBLE);
                 holder.currentPrice.setText( NumericHelper.toMoneyFormat(Integer.toString(ticketInfo.originalPrice))+getString(R.string.won) );
             }
+
+            Picasso.with(Membership.this).load(ticketInfo.imageAddress).placeholder(R.drawable.ticket).into(holder.ticketImage);
 
             holder.title.setText(ticketInfo.name);
 
@@ -334,8 +341,9 @@ public class Membership extends JActivity {
                 String ticketDue = map.get("new_membershipdue_" + num);
                 int originalPrice = Integer.parseInt(map.get("originalprice_" + num));
                 int discountPrice = Integer.parseInt(map.get("discountprice_" + num));
+                String ticketImage = map.get("imgadd_ticket_" + num);
 
-                ticketArray.add(new MembershipTicketInfo(ticketID,ticketName, CalendarHelper.parseDate(ticketDue),originalPrice,discountPrice));
+                ticketArray.add(new MembershipTicketInfo(ticketID,ticketName,ticketImage, CalendarHelper.parseDate(ticketDue),originalPrice,discountPrice));
             }
             new Handler(getMainLooper()).post(()->{
                 adapter.notifyDataSetChanged();
