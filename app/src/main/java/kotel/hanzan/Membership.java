@@ -122,7 +122,7 @@ public class Membership extends JActivity {
             holder.duration.setText(expireDate);
 
             holder.itemView.setOnClickListener(view -> {
-                openPurchasePopup( ticketInfo.id, ticketInfo.name,
+                openPurchasePopup( ticketInfo.id, ticketInfo.name, ticketInfo.imageAddress,
                         ticketInfo.isNowDiscounted ? ticketInfo.discountPrice : ticketInfo.originalPrice, expireDate );
             });
         }
@@ -290,20 +290,23 @@ public class Membership extends JActivity {
 
 
 
-    private void openPurchasePopup(String ticketID, String ticketName, int price, String expireDate){
-        Dialog purchaseDialog = new Dialog(this);
+    private void openPurchasePopup(String ticketID, String ticketName, String ticketImage, int price, String expireDate){
+        Dialog purchaseDialog = new Dialog(Membership.this);
 
         purchaseDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
         RelativeLayout layout = (RelativeLayout)getLayoutInflater().inflate(R.layout.membership_purchasepopup,null);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,StaticData.displayHeight*2/3);
 
+        ImageView image = layout.findViewById(R.id.membership_purchaseImage);
         TextView name = layout.findViewById(R.id.membership_purchaseMembershipName);
         TextView purchasePrice = layout.findViewById(R.id.membership_purchaseMembershipPrice);
         TextView expire = layout.findViewById(R.id.membership_purchaseExpireDate);
         RelativeLayout purchaseWithToss = layout.findViewById(R.id.membership_purchaseWithToss);
+        RelativeLayout purchaseWithBankTransfer = layout.findViewById(R.id.membership_purchaseWithBankTransfer);
         TextView cancel = layout.findViewById(R.id.membership_purchaseCancel);
 
+        Picasso.with(Membership.this).load(ticketImage).into(image);
         name.setText(ticketName);
         expire.setText(expireDate);
         purchasePrice.setText(NumericHelper.toMoneyFormat(Integer.toString(price))+getString(R.string.won));
@@ -314,12 +317,35 @@ public class Membership extends JActivity {
             purchaseDialog.cancel();
         });
 
+        purchaseWithBankTransfer.setOnClickListener(view -> {
+            openPurchaseBankTransferPopup(price);
+            purchaseDialog.cancel();
+        });
+
 
         cancel.setOnClickListener(view -> purchaseDialog.cancel());
 
 
         purchaseDialog.setContentView(layout,params);
         purchaseDialog.show();
+    }
+
+    private void openPurchaseBankTransferPopup(int price){
+        Dialog bankTransferDialog = new Dialog(Membership.this);
+
+        bankTransferDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        RelativeLayout layout = (RelativeLayout)getLayoutInflater().inflate(R.layout.membership_purchasebanktransferpopup,null);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,StaticData.displayHeight*2/3);
+
+        TextView priceText = layout.findViewById(R.id.membership_purchaseBankTransfer_price);
+        TextView confirm = layout.findViewById(R.id.membership_purchaseBankTransfer_confirm);
+
+        priceText.setText(NumericHelper.toMoneyFormat(Integer.toString(price))+getString(R.string.won));
+        confirm.setOnClickListener(view -> bankTransferDialog.cancel());
+
+        bankTransferDialog.setContentView(layout,params);
+        bankTransferDialog.show();
     }
 
 

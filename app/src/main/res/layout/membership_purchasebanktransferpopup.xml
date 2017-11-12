@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="kotel.hanzan.PurchaseSuccess"
+    android:background="@drawable/roundbox_white"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+
+
+        <TextView
+            android:id="@+id/membership_purchaseBankTransfer_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="-"
+            android:textColor="@color/black"
+            android:gravity="center"
+            android:textSize="25sp"
+            />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="1."
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:layout_marginTop="@dimen/leftRightMargin"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/bankTransferGuide1"
+            android:textColor="@color/black"
+            android:layout_marginLeft="@dimen/leftRightMargin"
+            android:layout_marginRight="@dimen/leftRightMargin"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="2."
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:layout_marginTop="@dimen/leftRightMargin"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/bankTransferGuide2"
+            android:textColor="@color/black"
+            android:layout_marginLeft="@dimen/leftRightMargin"
+            android:layout_marginRight="@dimen/leftRightMargin"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="3."
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:layout_marginTop="@dimen/leftRightMargin"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/bankTransferGuide3"
+            android:textColor="@color/black"
+            android:layout_marginLeft="@dimen/leftRightMargin"
+            android:layout_marginRight="@dimen/leftRightMargin"
+            />
+
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+
+
+
+        <TextView
+            android:id="@+id/membership_purchaseBankTransfer_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/purchaseSuccess_buttonHeight"
+            android:background="@drawable/roundbox_maincolor"
+            android:text="@string/confirm"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/white"
+            android:layout_marginLeft="@dimen/leftRightMargin"
+            android:layout_marginRight="@dimen/leftRightMargin"
+            />
+
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            />
+
+
+    </LinearLayout>
+
+
+</RelativeLayout>

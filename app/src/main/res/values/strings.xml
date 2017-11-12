@@ -162,5 +162,11 @@
     <string name="seeDetail">See detail</string>
     <string name="purchaseErrorMessage">An error occured! Please try again</string>
     <string name="drink">Drink</string>
+    <string name="updateNeeded">Please update your app!</string>
+    <string name="update">Update</string>
+    <string name="purchaseWithBankTransfer">Purchase with bank transfer</string>
+    <string name="bankTransferGuide1">Send membership fee to Kookmin bank 012501-04-277769 기정환,</string>
+    <string name="bankTransferGuide2">Send transfer confirmation message to Kakao talk plus friend \'드링캣\',</string>
+    <string name="bankTransferGuide3">Membership will be published right after we confirm</string>
 
 </resources>

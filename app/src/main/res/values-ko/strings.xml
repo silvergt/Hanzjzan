@@ -146,5 +146,11 @@
     <string name="seeDetail">자세히 보기</string>
     <string name="purchaseErrorMessage">결제 도중 에러가 발생했습니다</string>
     <string name="drink">술</string>
+    <string name="updateNeeded">앱을 업데이트해 주세요!</string>
+    <string name="update">업데이트</string>
+    <string name="purchaseWithBankTransfer">무통장입금으로 결제하기</string>
+    <string name="bankTransferGuide1">멤버쉽 금액을 012501-04-277769 국민은행 기정환 으로 송금 후,</string>
+    <string name="bankTransferGuide2">카카오톡 플러스친구에 \'드링캣\' 검색하여 송금 확인 메세지 전송하면,</string>
+    <string name="bankTransferGuide3">확인되는 즉시 멤버쉽 발행!</string>
 
 </resources>

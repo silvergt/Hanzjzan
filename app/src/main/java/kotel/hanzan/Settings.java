@@ -200,5 +200,4 @@ public class Settings extends JActivity {
         startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse("https://www.90labs.com")));
     }
 
-
 }
