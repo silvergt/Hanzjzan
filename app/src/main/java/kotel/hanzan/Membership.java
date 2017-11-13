@@ -110,7 +110,7 @@ public class Membership extends JActivity {
                 holder.currentPrice.setText( NumericHelper.toMoneyFormat(Integer.toString(ticketInfo.originalPrice))+getString(R.string.won) );
             }
 
-            Picasso.with(Membership.this).load(ticketInfo.imageAddress).placeholder(R.drawable.ticket).into(holder.ticketImage);
+            Picasso.with(Membership.this).load(ticketInfo.imageAddress).into(holder.ticketImage);
 
             holder.title.setText(ticketInfo.name);
 
@@ -296,7 +296,7 @@ public class Membership extends JActivity {
         purchaseDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
         RelativeLayout layout = (RelativeLayout)getLayoutInflater().inflate(R.layout.membership_purchasepopup,null);
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,StaticData.displayHeight*2/3);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,StaticData.displayHeight*3/4);
 
         ImageView image = layout.findViewById(R.id.membership_purchaseImage);
         TextView name = layout.findViewById(R.id.membership_purchaseMembershipName);

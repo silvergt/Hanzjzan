@@ -20,7 +20,7 @@
             android:layout_height="@dimen/membership_ticketImageWidth"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
-            android:src="@drawable/ticket" />
+            />
 
         <TextView
             android:id="@+id/membership_ticket_saleIcon"
