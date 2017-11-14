@@ -60,33 +60,7 @@ public class Initial extends JActivity {
                 new Handler(getMainLooper()).post(this::openServerCheckingDialog);
             }else{
                 if(map.get("update_required").equals("TRUE")) {
-                    Dialog dialog = new Dialog(this);
-
-                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-
-                    LinearLayout layout = (LinearLayout) getLayoutInflater().inflate(R.layout.popupbox_normal, null);
-                    ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    layout.setLayoutParams(params);
-
-                    TextView text = layout.findViewById(R.id.popupBox_text);
-                    TextView yes = layout.findViewById(R.id.popupBox_yes);
-                    TextView no = layout.findViewById(R.id.popupBox_no);
-
-                    text.setText(getString(R.string.updateNeeded));
-                    yes.setText(getString(R.string.update));
-                    no.setText(getString(R.string.cancel));
-
-                    yes.setOnClickListener(view -> {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=kotel.hanzan")));
-                        finish();
-                    });
-
-                    no.setOnClickListener(view -> {
-                        finish();
-                    });
-
-                    dialog.setContentView(layout);
-                    dialog.show();
+                    new Handler(getMainLooper()).post(this::openUpdateDialog);
                 }else{
                     new Handler(getMainLooper()).post(()->{
                         Intent intent = new Intent(getApplicationContext(),Login.class);
@@ -104,6 +78,36 @@ public class Initial extends JActivity {
                 finish();
             });
         }
+    }
+
+    private void openUpdateDialog(){
+        Dialog dialog = new Dialog(Initial.this);
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        LinearLayout layout = (LinearLayout) getLayoutInflater().inflate(R.layout.popupbox_normal, null);
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layout.setLayoutParams(params);
+
+        TextView text = layout.findViewById(R.id.popupBox_text);
+        TextView yes = layout.findViewById(R.id.popupBox_yes);
+        TextView no = layout.findViewById(R.id.popupBox_no);
+
+        text.setText(getString(R.string.updateNeeded));
+        yes.setText(getString(R.string.update));
+        no.setText(getString(R.string.cancel));
+
+        yes.setOnClickListener(view -> {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=kotel.hanzan")));
+            finish();
+        });
+
+        no.setOnClickListener(view -> {
+            finish();
+        });
+
+        dialog.setContentView(layout);
+        dialog.show();
     }
 
 

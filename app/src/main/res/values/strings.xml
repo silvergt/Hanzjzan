@@ -129,7 +129,7 @@
     <string name="priceNotAccurate">Total cost you saved may not be accurate</string>
     <string name="agree">Agree</string>
     <string name="paymentError">Server error! Please contact out support team</string>
-    <string name="serverChecking">Server is now being checked!</string>
+    <string name="serverChecking">We\'re checking server now!</string>
     <string name="tutorial_pubName">Tutorial pub</string>
     <string name="tutorial_pubCity">Shinchon</string>
     <string name="tutorial_pubAddress">Somewhere in Shinchon</string>
