@@ -555,7 +555,7 @@ public class Home extends JActivity {
         no.setText(getString(R.string.confirm));
 
         yes.setOnClickListener(view -> {
-            startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse("https://www.90labs.com/welcomecoupon")));
+            startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse("https://90labs.com/welcomecoupon")));
         });
 
         no.setOnClickListener(view -> {

@@ -197,7 +197,7 @@ public class Settings extends JActivity {
     }
 
     private void openWebpage(){
-        startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse("https://www.90labs.com")));
+        startActivity(new Intent(Intent.ACTION_VIEW,Uri.parse("https://90labs.com")));
     }
 
 }

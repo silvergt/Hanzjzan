@@ -139,7 +139,11 @@ public class Membership extends JActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_membership);
 
-        inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        try {
+            inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         back = findViewById(R.id.membership_back);
         expireDate = findViewById(R.id.membership_expireDate);
@@ -198,7 +202,7 @@ public class Membership extends JActivity {
         apply.setOnClickListener(view -> {
             try {
                 inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-            }catch (Exception e){}
+            }catch (Exception e){e.printStackTrace();}
 
             String word = editText.getText().toString();
 
@@ -273,7 +277,7 @@ public class Membership extends JActivity {
                         new Handler(getMainLooper()).post(() -> {
                             try{
                                 inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-                            }catch (Exception e){}
+                            }catch (Exception e){e.printStackTrace();}
                             updateMembershipInfo();
                             openPromotionSuccessPopup();
                         });
