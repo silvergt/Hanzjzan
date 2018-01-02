@@ -7,6 +7,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,6 +23,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.anjlab.android.iab.v3.BillingProcessor;
+import com.anjlab.android.iab.v3.TransactionDetails;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -28,6 +32,7 @@ import java.util.HashMap;
 
 import kotel.hanzan.data.StaticData;
 import kotel.hanzan.function.CalendarHelper;
+import kotel.hanzan.function.JLog;
 import kotel.hanzan.function.NumericHelper;
 import kotel.hanzan.function.PaymentHelper;
 import kotel.hanzan.function.ServerConnectionHelper;
@@ -36,7 +41,7 @@ import kotel.hanzan.view.Loading;
 
 import static kotel.hanzan.data.StaticData.currentUser;
 
-public class Membership extends JActivity {
+public class Membership extends JActivity implements BillingProcessor.IBillingHandler {
     final public static int MEMBERSHIP_OPENED = 880;
     final public static int RESULT_MEMBERSHIP_APPLIED = 881;
     private InputMethodManager inputMethodManager;
@@ -51,9 +56,11 @@ public class Membership extends JActivity {
     private MembershipAdapter adapter = new MembershipAdapter();
     private ArrayList<MembershipTicketInfo> ticketArray = new ArrayList<>();
 
+
+    private BillingProcessor billingProcessor;
+
     private int startYYYY, startMM, startDD;
 
-            
     private class MembershipTicketInfo{
         String name,id,imageAddress;
 
@@ -139,6 +146,8 @@ public class Membership extends JActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_membership);
 
+        initGooglePurchase();
+
         try {
             inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         }catch (Exception e){
@@ -174,6 +183,78 @@ public class Membership extends JActivity {
         promotionLowerBar.setOnClickListener(view -> {
             openPromotionPopup();
         });
+    }
+
+
+    private synchronized void retrieveMembershipTicketInfo(){
+        ticketArray.clear();
+        new Thread(()->{
+            HashMap<String,String> map = new HashMap<>();
+            map.put("id_member",Long.toString(currentUser.id));
+            map = ServerConnectionHelper.connect("retrieving membership ticket info","ticketinfo",map);
+
+            int i=0;
+            while (true) {
+                String num = Integer.toString(i++);
+                if (map.get("durationdays_" + num)==null){
+                    break;
+                }
+                String ticketName = map.get("name_ticket_" + num);
+                String ticketID = map.get("id_ticket_" + num);
+                String ticketDue = map.get("new_membershipdue_" + num);
+                int originalPrice = Integer.parseInt(map.get("originalprice_" + num));
+                int discountPrice = Integer.parseInt(map.get("discountprice_" + num));
+                String ticketImage = map.get("imgadd_ticket_" + num);
+
+                ticketArray.add(new MembershipTicketInfo(ticketID,ticketName,ticketImage, CalendarHelper.parseDate(ticketDue),originalPrice,discountPrice));
+            }
+            new Handler(getMainLooper()).post(()->{
+                adapter.notifyDataSetChanged();
+            });
+        }).start();
+    }
+
+    private void updateMembershipInfo(){
+        loading.setLoadingStarted();
+        setResult(RESULT_MEMBERSHIP_APPLIED);
+
+        new Thread(()->{
+            HashMap<String, String> map = new HashMap<>();
+            map.put("id_member",Long.toString(StaticData.currentUser.id));
+            map = ServerConnectionHelper.connect("retrieving membership status","membershipinfo",map);
+
+            if(map.get("availabletoday")==null){
+                loading.setLoadingCompleted();
+                return;
+            }
+            int[] newExpireDate = CalendarHelper.parseDate(map.get("membershipdue"));
+            boolean availableToday = false;
+            if(map.get("availabletoday").equals("TRUE")){
+                availableToday = true;
+            }
+            StaticData.currentUser.expireYYYY = newExpireDate[0];
+            StaticData.currentUser.expireMM = newExpireDate[1];
+            StaticData.currentUser.expireDD = newExpireDate[2];
+            StaticData.currentUser.isHanjanAvailableToday = availableToday;
+
+            new Handler(getMainLooper()).post(()->{
+                if(StaticData.currentUser.expireYYYY == 0){
+                    expireDate.setText(getString(R.string.notMemberYet));
+                }else{
+                    expireDate.setText(Integer.toString(StaticData.currentUser.expireYYYY) + "." + Integer.toString(StaticData.currentUser.expireMM) + "." + Integer.toString(StaticData.currentUser.expireDD));
+                }
+                retrieveMembershipTicketInfo();
+                loading.setLoadingCompleted();
+            });
+        }).start();
+
+    }
+
+    private void initGooglePurchase(){
+        String base64EncodingPublicKey = getString(R.string.googlepurchase_id);
+
+        billingProcessor = BillingProcessor.newBillingProcessor(this, base64EncodingPublicKey, this);
+        billingProcessor.initialize();
     }
 
 
@@ -306,8 +387,9 @@ public class Membership extends JActivity {
         TextView name = layout.findViewById(R.id.membership_purchaseMembershipName);
         TextView purchasePrice = layout.findViewById(R.id.membership_purchaseMembershipPrice);
         TextView expire = layout.findViewById(R.id.membership_purchaseExpireDate);
+        RelativeLayout purchaseWithGoogle = layout.findViewById(R.id.membership_purchaseWithGoogle);
         RelativeLayout purchaseWithToss = layout.findViewById(R.id.membership_purchaseWithToss);
-        RelativeLayout purchaseWithBankTransfer = layout.findViewById(R.id.membership_purchaseWithBankTransfer);
+//        RelativeLayout purchaseWithBankTransfer = layout.findViewById(R.id.membership_purchaseWithBankTransfer);
         TextView cancel = layout.findViewById(R.id.membership_purchaseCancel);
 
         Picasso.with(Membership.this).load(ticketImage).into(image);
@@ -321,11 +403,15 @@ public class Membership extends JActivity {
             purchaseDialog.cancel();
         });
 
-        purchaseWithBankTransfer.setOnClickListener(view -> {
-            openPurchaseBankTransferPopup(price);
+        purchaseWithGoogle.setOnClickListener(view -> {
+            openGooglePurchase(ticketID,ticketName,price);
             purchaseDialog.cancel();
         });
 
+//        purchaseWithBankTransfer.setOnClickListener(view -> {
+//            openPurchaseBankTransferPopup(price);
+//            purchaseDialog.cancel();
+//        });
 
         cancel.setOnClickListener(view -> purchaseDialog.cancel());
 
@@ -333,6 +419,47 @@ public class Membership extends JActivity {
         purchaseDialog.setContentView(layout,params);
         purchaseDialog.show();
     }
+
+
+
+    //GooglePlay purchase
+
+    @Override
+    public void onProductPurchased(@NonNull String productId, @Nullable TransactionDetails details) {
+        JLog.v("PRODUCT ID : ",productId);
+
+        PurchaseSuccess.paymentMethod = PurchaseSuccess.PURCHASE_GOOGLEPLAY;
+        PurchaseSuccess.ticketID = productId;
+        billingProcessor.consumePurchase(productId);
+        Intent intent = new Intent(Membership.this,PurchaseSuccess.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onPurchaseHistoryRestored() {
+
+    }
+
+    @Override
+    public void onBillingError(int errorCode, @Nullable Throwable error) {
+        JLog.e("Google billing error. errorCode : ",errorCode);
+//        Constants.BILLING_RESPONSE_RESULT_ITEM_UNAVAILABLE;
+    }
+
+    @Override
+    public void onBillingInitialized() {
+
+    }
+
+
+    private void openGooglePurchase(String ticketID,String itemName, int price){
+        billingProcessor.purchase(this,ticketID);
+
+    }
+
+
+/*
+    //Bank Transfer
 
     private void openPurchaseBankTransferPopup(int price){
         Dialog bankTransferDialog = new Dialog(Membership.this);
@@ -351,83 +478,12 @@ public class Membership extends JActivity {
         bankTransferDialog.setContentView(layout,params);
         bankTransferDialog.show();
     }
-
-
-    private synchronized void retrieveMembershipTicketInfo(){
-        ticketArray.clear();
-        new Thread(()->{
-            HashMap<String,String> map = new HashMap<>();
-            map.put("id_member",Long.toString(currentUser.id));
-            map = ServerConnectionHelper.connect("retrieving membership ticket info","ticketinfo",map);
-
-            int i=0;
-            while (true) {
-                String num = Integer.toString(i++);
-                if (map.get("durationdays_" + num)==null){
-                    break;
-                }
-                String ticketName = map.get("name_ticket_" + num);
-                String ticketID = map.get("id_ticket_" + num);
-                String ticketDue = map.get("new_membershipdue_" + num);
-                int originalPrice = Integer.parseInt(map.get("originalprice_" + num));
-                int discountPrice = Integer.parseInt(map.get("discountprice_" + num));
-                String ticketImage = map.get("imgadd_ticket_" + num);
-
-                ticketArray.add(new MembershipTicketInfo(ticketID,ticketName,ticketImage, CalendarHelper.parseDate(ticketDue),originalPrice,discountPrice));
-            }
-            new Handler(getMainLooper()).post(()->{
-                adapter.notifyDataSetChanged();
-            });
-        }).start();
-    }
-
-    private void updateMembershipInfo(){
-        loading.setLoadingStarted();
-        setResult(RESULT_MEMBERSHIP_APPLIED);
-
-        new Thread(()->{
-            HashMap<String, String> map = new HashMap<>();
-            map.put("id_member",Long.toString(StaticData.currentUser.id));
-            map = ServerConnectionHelper.connect("retrieving membership status","membershipinfo",map);
-
-            if(map.get("availabletoday")==null){
-                loading.setLoadingCompleted();
-                return;
-            }
-            int[] newExpireDate = CalendarHelper.parseDate(map.get("membershipdue"));
-            boolean availableToday = false;
-            if(map.get("availabletoday").equals("TRUE")){
-                availableToday = true;
-            }
-            StaticData.currentUser.expireYYYY = newExpireDate[0];
-            StaticData.currentUser.expireMM = newExpireDate[1];
-            StaticData.currentUser.expireDD = newExpireDate[2];
-            StaticData.currentUser.isHanjanAvailableToday = availableToday;
-
-            new Handler(getMainLooper()).post(()->{
-                if(StaticData.currentUser.expireYYYY == 0){
-                    expireDate.setText(getString(R.string.notMemberYet));
-                }else{
-                    expireDate.setText(Integer.toString(StaticData.currentUser.expireYYYY) + "." + Integer.toString(StaticData.currentUser.expireMM) + "." + Integer.toString(StaticData.currentUser.expireDD));
-                }
-                retrieveMembershipTicketInfo();
-                loading.setLoadingCompleted();
-            });
-        }).start();
-
-    }
-
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        updateMembershipInfo();
-    }
-
+*/
 
     //TOSS
 
     private void purchaseWithToss(String ticketID,String itemName, int price){
+        PurchaseSuccess.paymentMethod = PurchaseSuccess.PURCHASE_TOSS;
         HashMap<String,String> tossHashMap = PaymentHelper.tossPayment(ticketID,itemName,price);
         if(tossHashMap.get("code") == null) {
             openPurchaseErrorPopup();
@@ -438,6 +494,7 @@ public class Membership extends JActivity {
             startActivity(intent);
         }
     }
+
 
 
     private void openPurchaseErrorPopup(){
@@ -462,5 +519,28 @@ public class Membership extends JActivity {
 
         dialog.setContentView(layout);
         dialog.show();
+    }
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (!billingProcessor.handleActivityResult(requestCode, resultCode, data)) {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateMembershipInfo();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (billingProcessor != null) {
+            billingProcessor.release();
+        }
+        super.onDestroy();
     }
 }

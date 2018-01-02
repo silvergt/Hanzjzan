@@ -1083,7 +1083,6 @@ public class Home extends JActivity {
     }
 
 
-
     //****Favorite Tab****
 
     private synchronized void retrieveFavoriteHistoryList(boolean clearArray){

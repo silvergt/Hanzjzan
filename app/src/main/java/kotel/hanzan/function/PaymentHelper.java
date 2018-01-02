@@ -32,7 +32,7 @@ public class PaymentHelper {
                 connection.setDoInput(true);
 
                 org.json.simple.JSONObject jsonBody = new org.json.simple.JSONObject();
-                String orderNo = StaticData.currentUser.id+"HANJAN"+StaticData.currentUser.name+"HANJAN"+ticketID+"HANJAN"+System.currentTimeMillis();
+                String orderNo = StaticData.currentUser.id+"."+StaticData.currentUser.name+"."+ticketID+"."+System.currentTimeMillis();
                 JLog.v("order number",orderNo);
                 jsonBody.put("orderNo", orderNo);
                 jsonBody.put("amount", amount);

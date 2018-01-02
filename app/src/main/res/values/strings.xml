@@ -168,5 +168,8 @@
     <string name="bankTransferGuide1">Send membership fee to Kookmin bank 012501-04-277769 기정환,</string>
     <string name="bankTransferGuide2">Send transfer confirmation message to Kakao talk plus friend \'드링캣\',</string>
     <string name="bankTransferGuide3">Membership will be published right after we confirm</string>
+    <string name="googlepurchase_id" translatable="false">MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAp/edJXARjA0i2ux9iZvQSV7dqQZCqePBBmcB2c8mOJ05kEBtAbQtuNj+uig+4prqtdchPnsia4oCz1u9c/FThRzUJDb6F66wdT7zPTbV541x0+Kq/WGFw7PSh+kUvAr35/izX/raB2UHc8vgp7JBsuidnkQweEvzgP0iHZbc3hMpj3tlJjrerrRPTBwHJqMP44KgNDYgJFteiLSEov2DEnIoR52u/Jn3A6Cs5ctInudLo5CBUerwsaDphZvWe3GmlC40hl0U69vpBDOEzZmV9i/cxuh178oCFJkiHtozhIC7bPvTvuUwiWZsrP3fHZEtJR0Q+ioFfzT6MHMGZjawqwIDAQAB</string>
+    <string name="purchasewithgoogle">Purchase with GooglePlay</string>
+    <string name="drinkatUsePerStore">1 drinkat membership allowed per 2 people</string>
 
 </resources>
