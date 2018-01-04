@@ -22,12 +22,10 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class JRecyclerView extends TwinklingRefreshLayout {
     private RecyclerView recyclerView;
-
     private JRecyclerViewListener listener;
-
     private boolean isLoadingMore=false,isRefreshing=false;
-
     private ImageView toTopButton;
+
 
     public JRecyclerView(Context context) {
         super(context);
@@ -134,7 +132,7 @@ public class JRecyclerView extends TwinklingRefreshLayout {
         toTopButton.setVisibility(INVISIBLE);
 
         toTopButton.setOnClickListener(view -> {
-            recyclerView.smoothScrollToPosition(0);
+            smoothScrollToTop();
         });
 
 
@@ -150,6 +148,9 @@ public class JRecyclerView extends TwinklingRefreshLayout {
 
 
 
+    public void smoothScrollToTop(){
+        recyclerView.smoothScrollToPosition(0);
+    }
 
     @Override
     public void finishLoadmore() {

@@ -76,6 +76,7 @@ public class Home extends JActivity {
 
     private InputMethodManager inputMethodManager;
 
+    private LinearLayout homeLowerBar,homeFilter,homeToTop;
     private JRecyclerView pubInfoRecyclerView;
     private ArrayList<PubInfo> pubInfoArray = new ArrayList<>();
     private HomeRecyclerViewAdapter homeAdapter = new HomeRecyclerViewAdapter();
@@ -591,8 +592,15 @@ public class Home extends JActivity {
 
         RelativeLayout homeLayout = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.home_home, null);
         pubInfoRecyclerView = homeLayout.findViewById(R.id.home_homeRecycler);
+        homeFilter = homeLayout.findViewById(R.id.home_lowerFilter);
+        homeToTop = homeLayout.findViewById(R.id.home_lowerToTop);
         homeLayout.setBackgroundColor(Color.WHITE);
 
+        homeFilter.setOnClickListener(view -> openLocationFilter());
+
+        homeToTop.setOnClickListener(view -> pubInfoRecyclerView.smoothScrollToTop());
+
+        pubInfoRecyclerView.removeToTopButton();
         pubInfoRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         pubInfoRecyclerView.setAdapter(homeAdapter);
         pubInfoRecyclerView.setOnJRecyclerViewListener(new JRecyclerViewListener() {
@@ -1540,7 +1548,6 @@ public class Home extends JActivity {
         }else if(locationFilterLayoutIsVisible) {
             container.removeView(locationFilterLayout);
             locationFilterLayoutIsVisible = false;
-
         }else {
             if(finishIfBackButtonClickedOnceMore){
                 super.onBackPressed();

@@ -154,5 +154,7 @@
     <string name="bankTransferGuide3">확인되는 즉시 멤버쉽 발행!</string>
     <string name="purchasewithgoogle">구글플레이로 결제하기</string>
     <string name="drinkatUsePerStore">2인당 1명 드링캣 사용 가능한 매장입니다</string>
+    <string name="filter">필터검색</string>
+    <string name="toTop">처음으로</string>
 
 </resources>

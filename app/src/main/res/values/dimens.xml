@@ -36,6 +36,7 @@
 
 
     <dimen name="home_bottomLayoutHeight">55dp</dimen>
+    <dimen name="home_lowerBarWidth">200dp</dimen>
     <dimen name="pubitem_favorite">52dp</dimen>
     <dimen name="pubitem_text1">16sp</dimen>
     <dimen name="pubitem_text2">14sp</dimen>

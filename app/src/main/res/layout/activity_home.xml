@@ -93,7 +93,6 @@
                 android:layout_toLeftOf="@id/home_upperBarMapIcon"
                 />
 
-
         </RelativeLayout>
 
         <RelativeLayout
