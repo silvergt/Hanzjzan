@@ -284,6 +284,9 @@ public class LocationFilterView extends RelativeLayout{
 
     int ilsanClicked = 0;
     private void itemClicked(String name) {
+        if(currentClickedLocationName.equals(name)){
+            selectLocation.callOnClick();
+        }
         if (name.equals("일산")) {
             if (ilsanClicked == 0) {
                 ilsanClicked++;

@@ -156,5 +156,6 @@
     <string name="drinkatUsePerStore">2인당 1명 드링캣 사용 가능한 매장입니다</string>
     <string name="filter">필터검색</string>
     <string name="toTop">처음으로</string>
+    <string name="doubleClickToSelect">위치를 더블클릭하여 선택하세요</string>
 
 </resources>

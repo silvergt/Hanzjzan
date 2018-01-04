@@ -173,5 +173,6 @@
     <string name="drinkatUsePerStore">1 drinkat membership allowed per 2 people</string>
     <string name="filter">Filter</string>
     <string name="toTop">To top</string>
+    <string name="doubleClickToSelect">Double click to select location</string>
 
 </resources>
