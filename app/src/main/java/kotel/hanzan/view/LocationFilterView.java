@@ -12,18 +12,15 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import kotel.hanzan.data.StaticData;
 import kotel.hanzan.R;
+import kotel.hanzan.data.StaticData;
 import kotel.hanzan.function.ColorHelper;
 import kotel.hanzan.function.ServerConnectionHelper;
 import kotel.hanzan.listener.LocationFilterListener;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class LocationFilterView extends RelativeLayout{
     private Context context;
@@ -100,9 +97,8 @@ public class LocationFilterView extends RelativeLayout{
             }
 
             holder.itemView.setOnClickListener(view -> {
-                itemClicked(locationName);
                 if(isActive){
-                    currentClickedLocationName = locationName;
+                    itemClicked(locationName);
                     selectLocation.setBackgroundResource(R.drawable.roundbox_maincolor);
 
                     if(lastClickedTextView!=null){
@@ -283,29 +279,31 @@ public class LocationFilterView extends RelativeLayout{
     }
 
     int ilsanClicked = 0;
-    private void itemClicked(String name) {
-        if(currentClickedLocationName.equals(name)){
+    private void itemClicked(String locationName) {
+        if(currentClickedLocationName.equals(locationName)){
             selectLocation.callOnClick();
+        }else{
+            currentClickedLocationName = locationName;
         }
-        if (name.equals("일산")) {
-            if (ilsanClicked == 0) {
-                ilsanClicked++;
-                new Thread(() -> {
-                    try {
-                        Thread.sleep(5000);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    ilsanClicked = 0;
-                }).start();
-            } else {
-                ilsanClicked++;
-                if (ilsanClicked == 7) {
-                    Toast.makeText(getApplicationContext(), "JJCOP is.......", Toast.LENGTH_SHORT).show();
-                    ilsanClicked = 0;
-                }
-            }
-        }
+//        if (name.equals("일산")) {
+//            if (ilsanClicked == 0) {
+//                ilsanClicked++;
+//                new Thread(() -> {
+//                    try {
+//                        Thread.sleep(5000);
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                    ilsanClicked = 0;
+//                }).start();
+//            } else {
+//                ilsanClicked++;
+//                if (ilsanClicked == 7) {
+//                    Toast.makeText(getApplicationContext(), "JJCOP is.......", Toast.LENGTH_SHORT).show();
+//                    ilsanClicked = 0;
+//                }
+//            }
+//        }
     }
 
 }

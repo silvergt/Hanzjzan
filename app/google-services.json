@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "544773317653",
+    "firebase_url": "https://drinkat-4d419.firebaseio.com",
+    "project_id": "drinkat-4d419",
+    "storage_bucket": "drinkat-4d419.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:544773317653:android:8e2b4316ae61c8a5",
+        "android_client_info": {
+          "package_name": "kotel.hanzan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "544773317653-lp69p5nhelqjd3cpkgds2gob0erk74i3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kotel.hanzan",
+            "certificate_hash": "ff4a10a0f8a0672faab51ee463518f317d64f528"
+          }
+        },
+        {
+          "client_id": "544773317653-uotfpei9fk2oqd9l4tqn77kfusjgrtoo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfkbbUmoYZ1unMLY80HWUruH6ZxPuImfc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "544773317653-uotfpei9fk2oqd9l4tqn77kfusjgrtoo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

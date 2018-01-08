@@ -87,7 +87,7 @@
                         android:layout_weight="1"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/korean"
+                        android:text="한국어"
                         android:textColor="@color/darkGray"
                         />
 
@@ -103,7 +103,7 @@
                         android:layout_weight="1"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="@string/english"
+                        android:text="English"
                         android:textColor="@color/darkGray"
                         />
 

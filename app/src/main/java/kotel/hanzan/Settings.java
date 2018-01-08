@@ -19,12 +19,9 @@ import com.kakao.auth.Session;
 import com.kakao.usermgmt.UserManagement;
 
 import java.util.HashMap;
-import java.util.Locale;
 
 import kotel.hanzan.data.StaticData;
-import kotel.hanzan.function.ColorHelper;
 import kotel.hanzan.function.JLog;
-import kotel.hanzan.function.LocaleHelper;
 import kotel.hanzan.function.ServerConnectionHelper;
 import kotel.hanzan.view.JActivity;
 import kotel.hanzan.view.Loading;
@@ -52,7 +49,7 @@ public class Settings extends JActivity {
         webpage = findViewById(R.id.settings_website);
         buildVersion = findViewById(R.id.settings_buildVersion);
 
-
+/*
         if(Locale.getDefault().getLanguage().equals(Locale.KOREA.getLanguage())){
             korean.setTextColor(ColorHelper.getColor(getResources(),R.color.mainColor_light));
             korean.setBackgroundResource(R.drawable.roundbox_maincolor_hollow);
@@ -61,8 +58,9 @@ public class Settings extends JActivity {
             english.setTextColor(ColorHelper.getColor(getResources(),R.color.mainColor_light));
             english.setBackgroundResource(R.drawable.roundbox_maincolor_hollow);
         }
+*/
 
-
+/*
         korean.setOnClickListener(view -> {
             if(!Locale.getDefault().getLanguage().equals(Locale.KOREA.getLanguage())){
                 LocaleHelper.setLocale(getApplicationContext(), Locale.KOREA.getLanguage());
@@ -80,6 +78,7 @@ public class Settings extends JActivity {
                 startActivity(intent);
             }
         });
+*/
 
         termsConditions.setOnClickListener(view -> {
             Intent intent = new Intent(getApplicationContext(),TermsConditions.class);
