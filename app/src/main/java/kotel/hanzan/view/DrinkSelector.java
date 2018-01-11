@@ -284,7 +284,6 @@ public class DrinkSelector extends RelativeLayout{
 
 
 
-
     private void setItemHeight(int height){
         this.itemHeight=height;
         LinearLayout.LayoutParams typeParams=new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,height);

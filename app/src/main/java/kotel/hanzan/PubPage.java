@@ -320,6 +320,15 @@ public class PubPage extends JActivity {
     }
 
     private void openDrinkSelectDialog(DrinkInfo drinkInfo){
+        new Thread(()->{
+            HashMap<String,String> map = new HashMap<>();
+            map.put("id_member",Long.toString(StaticData.currentUser.id));
+            map.put("id_place",Long.toString(pubInfo.id));
+            map.put("name_drink",drinkInfo.drinkName);
+            map.put("category_drink",drinkInfo.drinkType);
+            ServerConnectionHelper.connect("Temporary voucher usage","clickdrink",map);
+
+        }).start();
         drinkSelectorDialog = new Dialog(this);
         drinkSelectorDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialogStep=0;
