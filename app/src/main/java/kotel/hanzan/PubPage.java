@@ -55,7 +55,7 @@ public class PubPage extends JActivity {
 
     private RelativeLayout mainLayout;
     private TextView upperTitle, title, address, phoneNumber, workingHour_weekday,workingHour_weekend, dayOff, description;
-    private ImageView back, share, menu, favorite, call, location;
+    private ImageView back, share, menu, favorite, call, location, report;
     private HorizontalSlideView pubImage;
     private SlideCountView slideCount;
 
@@ -84,6 +84,7 @@ public class PubPage extends JActivity {
         upperTitle = findViewById(R.id.pubpage_upperTitle);
         title = findViewById(R.id.pubpage_title);
         share = findViewById(R.id.pubpage_share);
+        report = findViewById(R.id.pubpage_report);
         address = findViewById(R.id.pubpage_address);
         phoneNumber = findViewById(R.id.pubpage_phoneNumber);
         workingHour_weekday = findViewById(R.id.pubpage_workingHour_weekday);
@@ -129,6 +130,13 @@ public class PubPage extends JActivity {
 
             startActivity(Intent.createChooser(intent,getString(R.string.share)));
 
+        });
+
+        report.setOnClickListener(view -> {
+            Intent intent = new Intent(PubPage.this,Report.class);
+            intent.putExtra("pubId",pubInfo.id);
+            intent.putExtra("pubName",pubInfo.name);
+            startActivity(intent);
         });
 
         location.setOnClickListener(view -> {

@@ -162,8 +162,12 @@
     <dimen name="tutorial_startButtonContainer">90dp</dimen>
     <dimen name="tutorial_fontSize">18sp</dimen>
 
+    <dimen name="report_subFontSize">16sp</dimen>
+    <dimen name="report_buttonHeight">50dp</dimen>
+    <dimen name="report_buttonWidth">150dp</dimen>
 
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 </resources>

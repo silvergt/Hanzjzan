@@ -44,11 +44,20 @@
                 />
 
             <ImageView
+                android:id="@+id/pubpage_report"
+                android:layout_width="@dimen/upperBarIconWidth"
+                android:layout_height="match_parent"
+                android:src="@drawable/report"
+                android:padding="8dp"
+                />
+
+            <ImageView
                 android:id="@+id/pubpage_share"
                 android:layout_width="@dimen/upperBarIconWidth"
                 android:layout_height="match_parent"
                 android:src="@drawable/share"
                 android:padding="8dp"
+                android:visibility="gone"
                 />
 
             <ImageView
