@@ -66,10 +66,17 @@ dependencies {
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.8'
     compile 'com.anjlab.android.iab.v3:library:1.0.44'
     compile 'com.google.firebase:firebase-messaging:11.8.0'
+    compile 'com.google.vr:sdk-panowidget:1.80.0'
+    compile 'com.makeramen:roundedimageview:2.3.0'
+    compile 'com.yarolegovich:discrete-scrollview:1.4.4'
+
     testCompile 'junit:junit:4.12'
 }
 
 apply plugin: 'com.google.gms.google-services'
+
+
+
 
 
 
