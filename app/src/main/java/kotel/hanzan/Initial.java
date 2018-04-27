@@ -39,6 +39,7 @@ public class Initial extends JActivity {
         StaticData.TOSSKEY = getString(R.string.tossApiKey);
 
 
+
         new Thread(()->{
             try{
                 Thread.sleep(1500);

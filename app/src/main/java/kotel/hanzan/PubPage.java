@@ -22,7 +22,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.stfalcon.frescoimageviewer.ImageViewer;
@@ -229,11 +228,7 @@ public class PubPage extends JActivity {
         drinkSelector.setListener(new DrinkSelectorListener() {
             @Override
             public void itemSelected(DrinkInfo drinkInfo) {
-                if(pubInfo.tutorialPub){
-                    openTutorialDrinkSelectDialog(drinkInfo);
-                }else {
-                    openDrinkSelectDialog(drinkInfo);
-                }
+                openDrinkSelectDialog(drinkInfo);
             }
 
             @Override
@@ -271,60 +266,8 @@ public class PubPage extends JActivity {
             }
 
             retrieveDetailInfo();
-            if (pubInfo.tutorialPub) {
-                openTutorial();
-            }
         }
 
-    }
-
-    private void openTutorial(){
-        RelativeLayout tutorialLayout = (RelativeLayout)getLayoutInflater().inflate(R.layout.pubpage_tutorial,null);
-        layout1 = tutorialLayout.findViewById(R.id.pubpage_tutorial_layout1);
-        layout2 = tutorialLayout.findViewById(R.id.pubpage_tutorial_layout2);
-
-        ObjectAnimator.ofFloat(layout1,"alpha",0,1).setDuration(900).start();
-
-        mainLayout.addView(tutorialLayout);
-    }
-
-    private void openTutorialDrinkSelectDialog(DrinkInfo drinkInfo){
-        Dialog tutorialDrinkSelectorDialog = new Dialog(PubPage.this);
-        tutorialDrinkSelectorDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        tutorialDrinkSelectorDialog.setCancelable(false);
-
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        RelativeLayout dialogLayout = (RelativeLayout) LayoutInflater.from(this).inflate(R.layout.pubpage_tutorial_popup,null);
-        ImageView tutorialDrinkImage = dialogLayout.findViewById(R.id.pubpagePopup_tutorial_drinkImage);
-        TextView tutorialStartApp = dialogLayout.findViewById(R.id.pubpagePopup_tutorial_start);
-
-        Picasso.with(PubPage.this).load(drinkInfo.drinkImageAddress).placeholder(R.drawable.drinkselector_default).into(tutorialDrinkImage);
-
-        tutorialStartApp.setOnClickListener(view -> {
-            new Thread(()->{
-                HashMap<String,String> map = new HashMap<>();
-                map.put("id_member",Long.toString(StaticData.currentUser.id));
-                map = ServerConnectionHelper.connect("tutorial finished","tutorialfinished",map);
-
-                final String returned = map.get("tutorialfinished");
-
-                new Handler(getMainLooper()).post(() -> {
-                    if(returned == null || returned.equals("FALSE")) {
-                        Toast.makeText(getApplicationContext(),getString(R.string.networkFailure),Toast.LENGTH_SHORT).show();
-                        return;
-                    }else if(returned.equals("TRUE")){
-                        StaticData.currentUser.finishedTutorial = true;
-                    }
-                    tutorialDrinkSelectorDialog.cancel();
-                    Intent intent = new Intent(PubPage.this,Home.class);
-                    startActivity(intent);
-                    finishAffinity();
-                });
-            }).start();
-        });
-
-        tutorialDrinkSelectorDialog.setContentView(dialogLayout,params);
-        tutorialDrinkSelectorDialog.show();
     }
 
     private void openDrinkSelectDialog(DrinkInfo drinkInfo){

@@ -1,7 +1,6 @@
 package kotel.hanzan;
 
 import android.Manifest;
-import android.animation.ObjectAnimator;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -141,11 +140,7 @@ public class Home extends JActivity {
                 holder.favorite.setImageResource(R.drawable.favorite_unselected);
             }
 
-            if(StaticData.currentUser.finishedTutorial){
-                holder.text1.setText(pubInfo.name + "  " + distanceString);
-            }else{
-                holder.text1.setText(pubInfo.name);
-            }
+            holder.text1.setText(pubInfo.name + "  " + distanceString);
             holder.text2.setText(pubInfo.drinkTypes);
             holder.text3.setText(pubInfo.district);
             holder.text4.setText(pubInfo.address);
@@ -160,7 +155,6 @@ public class Home extends JActivity {
 
 
             holder.favorite.setOnClickListener(view -> {
-                if(!StaticData.currentUser.finishedTutorial){return;}
                 pubInfoArray.get(position).setFavorite(!pubInfoArray.get(position).getFavorite());
                 if (pubInfoArray.get(position).getFavorite()) {
                     holder.favorite.setImageResource(R.drawable.favorite_selected);
@@ -469,39 +463,17 @@ public class Home extends JActivity {
         if(StaticData.currentUser==null){
             reopenLoginPage();
             return;
-        }else if(StaticData.currentUser.finishedTutorial){
+        }else{
             if(StaticData.currentUser.expireYYYY == 0){
                 openMembershipPopup();
             }else if(StaticData.currentUser.justSignedUp && StaticData.currentUser.expireYYYY != 0){
                 openWelcomeMembershipPopup();
                 StaticData.currentUser.justSignedUp = false;
             }
-        }else if(!StaticData.currentUser.finishedTutorial){
-            openTutorial();
         }
 
         openHomeTab();
         setUpperBarLeftIconStatus();
-    }
-
-    private void openTutorial(){
-        final RelativeLayout tutorialLayout = (RelativeLayout)getLayoutInflater().inflate(R.layout.home_tutorial,null);
-        final RelativeLayout tutorial1 = tutorialLayout.findViewById(R.id.home_tutorial_layout1);
-        final RelativeLayout tutorial2 = tutorialLayout.findViewById(R.id.home_tutorial_layout2);
-        final TextView tutorialNext = tutorialLayout.findViewById(R.id.home_tutorial_next);
-        final View tutorialPubView = tutorialLayout.findViewById(R.id.home_tutorial_pubView);
-
-        LinearLayout.LayoutParams pubViewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, StaticData.displayWidth * 3 / 5 + (int)getResources().getDimension(R.dimen.drinkSelector_height));
-        tutorialPubView.setLayoutParams(pubViewParams);
-        tutorialNext.setOnClickListener(view -> {
-            tutorial1.setVisibility(View.GONE);
-            tutorial2.setVisibility(View.VISIBLE);
-            ObjectAnimator.ofFloat(tutorial2,"alpha",0,1).setDuration(900).start();
-        });
-
-        mainLayout.addView(tutorialLayout);
-
-        ObjectAnimator.ofFloat(tutorial1,"alpha",0,1).setDuration(900).start();
     }
 
     private void openMembershipPopup() {
@@ -811,19 +783,6 @@ public class Home extends JActivity {
     private synchronized void retrievePubList(boolean clearArray) {
         if(clearArray) {
             pubInfoArray.clear();
-        }
-        if(!StaticData.currentUser.finishedTutorial){
-            PubInfo tutorialPub = new PubInfo(Home.this,-1,getString(R.string.tutorial_pubName),getString(R.string.tutorial_pubAddress),
-                    getString(R.string.tutorial_pubCity),"","https://s3.ap-northeast-2.amazonaws.com/hanjan/tutorial_00001.png",
-                    false,0,0);
-            tutorialPub.tutorialPub = true;
-            if(pubInfoArray.size()==0) {
-                pubInfoArray.add(tutorialPub);
-                homeAdapter.notifyDataSetChanged();
-            }
-            pubInfoRecyclerView.finishRefreshing();
-
-            return;
         }
         if(StaticData.myLatestLocation == null )StaticData.myLatestLocation = StaticData.defaultLocation;
         new Thread(() -> {

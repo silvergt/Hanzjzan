@@ -175,8 +175,11 @@
             android:configChanges="density|keyboardHidden|navigation|orientation|screenSize|uiMode"
             android:enableVrMode="@string/gvr_vr_mode_component"
             android:resizeableActivity="false"
-            android:screenOrientation="landscape"></activity>
-        <activity android:name=".Test"></activity>
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            android:screenOrientation="landscape"/>
+        <activity android:name=".Test"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"/>
     </application>
 
 </manifest>

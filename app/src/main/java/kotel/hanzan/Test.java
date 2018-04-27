@@ -1,7 +1,9 @@
 package kotel.hanzan;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
@@ -34,6 +36,11 @@ public class Test extends AppCompatActivity {
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,sliderViewHeight);
         sliderView.setLayoutParams(params);
 
+        sliderView.setClickListener((View view, int position) -> {
+            Intent intent = new Intent(Test.this,VrPage.class);
+            intent.putExtra("src",sliderView.getImageString(position));
+            startActivity(intent);
+        });
 
     }
 }

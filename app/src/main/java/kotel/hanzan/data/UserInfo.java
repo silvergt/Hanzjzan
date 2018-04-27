@@ -7,7 +7,6 @@ public class UserInfo{
     public String name,profileImageAddress,personalCode;
     public int expireYYYY,expireMM,expireDD;
     public boolean isHanjanAvailableToday;
-    public boolean finishedTutorial;
 
     public boolean justSignedUp = false;
 
@@ -17,10 +16,6 @@ public class UserInfo{
         String imageAddress = map.get("imgadd_member");
         String personalCode = map.get("personalcode");
         String membershipDue = map.get("membershipdue");
-        boolean finishedTutorial = false;
-        if(map.get("tutorialfinished_member")!=null && map.get("tutorialfinished_member").equals("TRUE")){
-            finishedTutorial = true;
-        }
         int year = Integer.parseInt(membershipDue.substring(0,4));
         int month = Integer.parseInt(membershipDue.substring(4,6));
         int day = Integer.parseInt(membershipDue.substring(6,8));
@@ -36,6 +31,5 @@ public class UserInfo{
         this.expireMM = month;
         this.expireDD = day;
         this.isHanjanAvailableToday = isAvailableToday;
-        this.finishedTutorial = finishedTutorial;
     }
 }

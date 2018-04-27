@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.kakao.auth.Session;
@@ -91,10 +92,7 @@ public class Settings extends JActivity {
         });
 
         tutorial.setOnClickListener(view -> {
-            StaticData.currentUser.finishedTutorial = false;
-            Intent intent = new Intent(getApplicationContext(),Home.class);
-            startActivity(intent);
-            finishAffinity();
+            Toast.makeText(Settings.this,"준비중입니다",Toast.LENGTH_SHORT).show();
         });
 
         withdrawal.setOnClickListener(view -> openWithdrawalConfirm());

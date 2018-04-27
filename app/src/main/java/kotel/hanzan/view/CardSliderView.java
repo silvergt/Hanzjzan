@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 import kotel.hanzan.R;
 import kotel.hanzan.data.StaticData;
+import kotel.hanzan.listener.CardSliderListener;
 
 /**
  * 1. Create class
@@ -25,13 +26,15 @@ import kotel.hanzan.data.StaticData;
  * 3. setSlideListener()
  */
 
-public class CardSliderView extends RelativeLayout{
+public class CardSliderView extends RelativeLayout implements View.OnClickListener{
     private Context context;
     DiscreteScrollView discreteScrollView;
 
     private int contentWidth=0, contentSpace=0;
 
     private ArrayList<String> imageList = new ArrayList<>();
+    private CardSliderListener listener;
+
 
     private class ImageViewAdapter extends RecyclerView.Adapter<ImageViewAdapter.ViewHolder> {
         final private int VIEWTYPE_HEADER=1;
@@ -80,6 +83,7 @@ public class CardSliderView extends RelativeLayout{
             if(holder.image!=null) {
                 Picasso.with(context).load(imageList.get(position)).placeholder(R.drawable.loading_store).into(holder.image);
             }
+            holder.image.setOnClickListener(CardSliderView.this);
         }
 
         @Override
@@ -98,6 +102,19 @@ public class CardSliderView extends RelativeLayout{
         init(context);
     }
 
+    public void setClickListener(CardSliderListener sliderListener){
+        listener = sliderListener;
+    }
+
+
+    @Deprecated
+    @Override
+    public void onClick(View view) {
+        if(listener!=null){
+            listener.onClick(view,discreteScrollView.getCurrentItem());
+        }
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     private void init(Context context){
         this.context = context;
@@ -106,20 +123,28 @@ public class CardSliderView extends RelativeLayout{
         contentSpace = (int)((float)StaticData.displayWidth*1/80);
 
         discreteScrollView = new DiscreteScrollView(context);
-
         discreteScrollView.setAdapter(new ImageViewAdapter());
-
         discreteScrollView.setOverScrollEnabled(false);
         discreteScrollView.setItemTransitionTimeMillis(200);
 
         RelativeLayout.LayoutParams scrollViewParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         discreteScrollView.setLayoutParams(scrollViewParams);
 
+
+
         addView(discreteScrollView);
     }
 
     public void setImageList(ArrayList<String> arrayList){
         imageList = arrayList;
+    }
+
+    public int getCurrentIndex(){
+        return discreteScrollView.getCurrentItem();
+    }
+
+    public String getImageString(int position){
+        return imageList.get(position);
     }
 
 }
