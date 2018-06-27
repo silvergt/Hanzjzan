@@ -465,9 +465,9 @@ public class Home extends JActivity {
             return;
         }else{
             if(StaticData.currentUser.expireYYYY == 0){
-                openMembershipPopup();
+//                openMembershipPopup();
             }else if(StaticData.currentUser.justSignedUp && StaticData.currentUser.expireYYYY != 0){
-                openWelcomeMembershipPopup();
+//                openWelcomeMembershipPopup();
                 StaticData.currentUser.justSignedUp = false;
             }
         }

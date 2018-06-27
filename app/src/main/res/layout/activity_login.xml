@@ -50,6 +50,7 @@
             android:background="@drawable/roundbox_maingradient"
             android:layout_gravity="center"
             android:layout_margin="@dimen/login_marginBottom"
+            android:visibility="gone"
             >
 
             <TextView

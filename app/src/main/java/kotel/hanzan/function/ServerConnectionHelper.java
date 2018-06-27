@@ -42,6 +42,7 @@ public class ServerConnectionHelper {
             String boundary = "-----KOTEL-----" + System.currentTimeMillis();
             try {
                 URL url = new URL("http://" + serverIP +"/"+phpAddress+".php");
+//                URL url = new URL(serverIP +"/"+phpAddress+".php");
                 HttpURLConnection uc = (HttpURLConnection) url.openConnection();
                 if (uc != null) {
                     uc.setConnectTimeout(connectTimeout);

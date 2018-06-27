@@ -39,13 +39,11 @@ import kotel.hanzan.function.AssetsHelper;
 import kotel.hanzan.function.BitmapHelper;
 import kotel.hanzan.function.JLog;
 import kotel.hanzan.function.ServerConnectionHelper;
-import kotel.hanzan.listener.SlideListener;
 import kotel.hanzan.view.HorizontalSlideView;
 import kotel.hanzan.view.HorizontalSlideViewChild;
 import kotel.hanzan.view.JActivity;
 import kotel.hanzan.view.Loading;
 import kotel.hanzan.view.SlideCountView;
-import pl.droidsonroids.gif.GifImageView;
 
 public class Login extends JActivity {
     private HashMap<String, String> map;
@@ -128,31 +126,30 @@ public class Login extends JActivity {
         addSlideChildViews();
 
         slideCountView.initialize(slideView.getListChildCount(), (int)getResources().getDimension(R.dimen.login_slideCountWidth), 5);
-
-        slideView.setOnSlideListener(new SlideListener() {
-            @Override
-            public void afterSlide() {
-                slideCountView.setCountTo(slideView.getCurrentIndex());
-                setLowerButton(slideView.getCurrentIndex());
-            }
-
-            @Override
-            public void beforeSlide() {
-
-            }
-
-            @Override
-            public void whileSlide() {
-
-            }
-        });
-
-        lowerButton.setOnClickListener(view -> {
-            if (slideView.getCurrentIndex() != 3) {
-                slideView.slideTo(slideView.getCurrentIndex() + 1);
-            }
-            setLowerButton(slideView.getCurrentIndex());
-        });
+//
+//        slideView.setOnSlideListener(new SlideListener() {
+//            @Override
+//            public void afterSlide() {
+//                slideCountView.setCountTo(slideView.getCurrentIndex());
+//                setLowerButton(slideView.getCurrentIndex());
+//            }
+//
+//            @Override
+//            public void beforeSlide() {
+//
+//            }
+//
+//            @Override
+//            public void whileSlide() {
+//
+//            }
+//        });
+//        lowerButton.setOnClickListener(view -> {
+//            if (slideView.getCurrentIndex() != 3) {
+//                slideView.slideTo(slideView.getCurrentIndex() + 1);
+//            }
+//            setLowerButton(slideView.getCurrentIndex());
+//        });
 
     }
 
@@ -189,40 +186,40 @@ public class Login extends JActivity {
 
 
     private void addSlideChildViews() {
-        for (int i = 0; i < 3; i++) {
-            LinearLayout childLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.login_slideviewchild, null);
-            GifImageView gifView = childLayout.findViewById(R.id.login_gif);
-            TextView text1 = childLayout.findViewById(R.id.login_childText1);
-            TextView text2 = childLayout.findViewById(R.id.login_childText2);
-
-            RelativeLayout.LayoutParams childParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            childLayout.setLayoutParams(childParams);
-
-            switch (i) {
-                case 0:
-                    gifView.setImageResource(R.drawable.login_gif1);
-                    text1.setText(getString(R.string.loginText1Main));
-                    text2.setText(getString(R.string.loginText1Sub));
-                    break;
-                case 1:
-                    gifView.setImageResource(R.drawable.login_gif2);
-                    text1.setText(getString(R.string.loginText2Main));
-                    text2.setText(getString(R.string.loginText2Sub));
-                    break;
-                case 2:
-                    gifView.setImageResource(R.drawable.login_gif3);
-                    text1.setText(getString(R.string.loginText3Main));
-                    text2.setText(getString(R.string.loginText3Sub));
-                    break;
-            }
-
-            HorizontalSlideViewChild childContainer = new HorizontalSlideViewChild(this);
-            childContainer.addView(childLayout);
-
-            slideView.setChildWidth(StaticData.displayWidth);
-            slideView.addViewToList(childContainer);
-
-        }
+//        for (int i = 0; i < 3; i++) {
+//            LinearLayout childLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.login_slideviewchild, null);
+//            GifImageView gifView = childLayout.findViewById(R.id.login_gif);
+//            TextView text1 = childLayout.findViewById(R.id.login_childText1);
+//            TextView text2 = childLayout.findViewById(R.id.login_childText2);
+//
+//            RelativeLayout.LayoutParams childParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+//            childLayout.setLayoutParams(childParams);
+//
+//            switch (i) {
+//                case 0:
+//                    gifView.setImageResource(R.drawable.login_gif1);
+//                    text1.setText(getString(R.string.loginText1Main));
+//                    text2.setText(getString(R.string.loginText1Sub));
+//                    break;
+//                case 1:
+//                    gifView.setImageResource(R.drawable.login_gif2);
+//                    text1.setText(getString(R.string.loginText2Main));
+//                    text2.setText(getString(R.string.loginText2Sub));
+//                    break;
+//                case 2:
+//                    gifView.setImageResource(R.drawable.login_gif3);
+//                    text1.setText(getString(R.string.loginText3Main));
+//                    text2.setText(getString(R.string.loginText3Sub));
+//                    break;
+//            }
+//
+//            HorizontalSlideViewChild childContainer = new HorizontalSlideViewChild(this);
+//            childContainer.addView(childLayout);
+//
+//            slideView.setChildWidth(StaticData.displayWidth);
+//            slideView.addViewToList(childContainer);
+//
+//        }
 
         LinearLayout childLayout = (LinearLayout) getLayoutInflater().inflate(R.layout.login_slideviewchild_login, null);
         LinearLayout facebookLogin = childLayout.findViewById(R.id.login_facebookLogin);
@@ -237,7 +234,7 @@ public class Login extends JActivity {
         slideView.addViewToList(childContainer);
 
 
-        setLowerButton(0);
+//        setLowerButton(0);
     }
 
     private void setLowerButton(int num) {

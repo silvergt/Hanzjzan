@@ -75,6 +75,7 @@
                         android:textColor="@color/black"
                         android:text=""
                         android:textSize="@dimen/mypage_profileSubTextFontSize"
+                        android:visibility="gone"
                         />
 
                 </LinearLayout>
@@ -85,6 +86,7 @@
                     android:layout_height="match_parent"
                     android:src="@drawable/ticket"
                     android:layout_margin="15dp"
+                    android:visibility="gone"
                     />
 
             </LinearLayout>
@@ -110,6 +112,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/mypage_itemHeight"
                     android:orientation="horizontal"
+                    android:visibility="gone"
                     >
                     <ImageView
                         android:layout_width="@dimen/mypage_itemWidth"
